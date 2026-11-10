@@ -129,9 +129,13 @@ final class TaxoCommerce_Core_Suite {
 		}
 		$confirm = sprintf(
 			/* translators: %s: module name. */
-			__( '¿Quitar %s? Se borran sus archivos para ahorrar espacio, pero se conservan sus datos. Para volver a usarlo habrá que descargarlo de nuevo.', 'taxocommerce-core' ),
+			__( '¿Quitar %s? Se borran sus archivos para ahorrar espacio, pero se conservan sus datos. Lo que haga en la web pública dejará de funcionar hasta que lo vuelvas a descargar.', 'taxocommerce-core' ),
 			(string) $item['name']
 		);
+		$impact = self::removal_impact( (string) $item['suite_dir'] );
+		if ( '' !== $impact ) {
+			$confirm .= "\n\n" . $impact;
+		}
 		?>
 		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" onsubmit="return window.confirm(<?php echo esc_attr( wp_json_encode( $confirm ) ); ?>);">
 			<input type="hidden" name="action" value="taxocommerce_core_remove_extension">
@@ -140,6 +144,37 @@ final class TaxoCommerce_Core_Suite {
 			<button class="button button-small button-link-delete" type="submit"><?php esc_html_e( 'Quitar', 'taxocommerce-core' ); ?></button>
 		</form>
 		<?php
+	}
+
+	/**
+	 * Extra warning for modules whose removal changes the public site.
+	 *
+	 * @param string $dir Module folder.
+	 * @return string
+	 */
+	public static function removal_impact( $dir ) {
+		global $wpdb;
+		if ( 'taxocommerce-redirects' === $dir && isset( $wpdb ) ) {
+			$table = $wpdb->prefix . 'seo_redirects';
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- One cheap count when rendering the card.
+			if ( $table === $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) ) ) {
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name built from the prefix.
+				$count = (int) $wpdb->get_var( "SELECT COUNT(*) FROM `{$table}`" );
+				if ( $count > 0 ) {
+					return sprintf(
+						/* translators: %d: number of redirects. */
+						_n(
+							'Atención: %d redirección guardada en TaxoCommerce dejará de funcionar (las de OPNV siguen activas).',
+							'Atención: %d redirecciones guardadas en TaxoCommerce dejarán de funcionar (las de OPNV siguen activas).',
+							$count,
+							'taxocommerce-core'
+						),
+						$count
+					);
+				}
+			}
+		}
+		return '';
 	}
 
 	/**

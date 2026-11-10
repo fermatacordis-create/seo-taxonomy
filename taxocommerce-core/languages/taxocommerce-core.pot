@@ -3440,3 +3440,13 @@ msgstr ""
 #: includes/class-taxocommerce-core-suite.php
 msgid "%1$s %2$s descargado y activado."
 msgstr ""
+
+#: includes/class-taxocommerce-core-suite.php
+msgid "¿Quitar %s? Se borran sus archivos para ahorrar espacio, pero se conservan sus datos. Lo que haga en la web pública dejará de funcionar hasta que lo vuelvas a descargar."
+msgstr ""
+
+#: includes/class-taxocommerce-core-suite.php
+msgid "Atención: %d redirección guardada en TaxoCommerce dejará de funcionar (las de OPNV siguen activas)."
+msgid_plural "Atención: %d redirecciones guardadas en TaxoCommerce dejarán de funcionar (las de OPNV siguen activas)."
+msgstr[0] ""
+msgstr[1] ""
