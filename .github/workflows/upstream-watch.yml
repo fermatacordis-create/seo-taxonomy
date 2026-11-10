@@ -1,0 +1,70 @@
+name: Chivato del autor (upstream)
+
+# Avisa (Issue en este fork) cuando el autor de TaxoCommerce publica versiones
+# nuevas de los módulos o módulos nuevos. No actualiza nada por sí solo.
+on:
+  schedule:
+    - cron: '17 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: upstream-watch
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    if: github.repository == 'fermatacordis-create/seo-taxonomy'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+      LABEL: upstream-watch
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: suite
+
+      - name: Traer staging del autor
+        run: |
+          git remote add upstream https://github.com/distribuidordeherramientases-wq/seo-taxonomy.git
+          git fetch --quiet --depth=1 upstream staging
+
+      - name: Índice publicado del canal
+        run: |
+          curl -fsSL -o manifest.json \
+            "https://github.com/${REPO}/releases/latest/download/taxocommerce-suite.json" || echo '{}' > manifest.json
+
+      - name: Comparar
+        run: |
+          python3 .github/scripts/upstream_watch.py FETCH_HEAD manifest.json > report.md
+          cat report.md
+
+      - name: Avisar con un Issue
+        run: |
+          status=$(head -1 report.md)
+          tail -n +2 report.md > body.md
+          printf '\n\n@fermatacordis-create\n' >> body.md
+          gh label create "$LABEL" --repo "$REPO" --color D93F0B \
+            --description "Novedades del autor de TaxoCommerce" 2>/dev/null || true
+          open=$(gh issue list --repo "$REPO" --label "$LABEL" --state open --json number --jq '.[0].number // empty')
+          if [ "$status" = "NONE" ]; then
+            if [ -n "$open" ]; then
+              gh issue close "$open" --repo "$REPO" --comment "Nuestro canal ya está al día con el autor."
+            fi
+            exit 0
+          fi
+          if [ -z "$open" ]; then
+            gh issue create --repo "$REPO" --label "$LABEL" \
+              --title "Novedades del autor de TaxoCommerce" --body-file body.md
+            exit 0
+          fi
+          old=$(gh issue view "$open" --repo "$REPO" --json body --jq .body)
+          if [ "$old" != "$(cat body.md)" ]; then
+            gh issue edit "$open" --repo "$REPO" --body-file body.md
+            gh issue comment "$open" --repo "$REPO" --body "Hay cambios nuevos del autor; la lista de arriba está actualizada. @fermatacordis-create"
+          fi
