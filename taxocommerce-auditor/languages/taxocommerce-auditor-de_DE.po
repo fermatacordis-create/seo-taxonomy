@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: TaxoCommerce Auditor 0.3.12\n"
+"Project-Id-Version: TaxoCommerce Auditor 0.3.18\n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2694,3 +2694,51 @@ msgstr "Die Seite registriert wp_ajax_taxocommerce_auditor_watch, erfordert mana
 #: includes/class-admin.php includes/class-manual.php
 msgid "Un Auto Test satisfactorio significa que los componentes y contratos están disponibles; no sustituye una auditoría completa de prueba ni verifica que se puedan exportar y recuperar datos desde el filesystem real. Para anomalías: verifica permisos, respuesta de admin-ajax.php, nonce, límites de alojamiento, instalación de WooCommerce, espacio para el JSONL y errores PHP. WP-Cron solo es necesario si se desea continuar con la pestaña cerrada. Si falla una fuente opcional de FAQs, consulta las dependencias antes de modificar código."
 msgstr "Ein erfolgreicher Auto Test bestätigt die Verfügbarkeit von Komponenten und Schnittstellen; er ersetzt keine vollständige Testprüfung und verifiziert keine echten Dateiexporte. Bei Problemen prüfen Sie Berechtigungen, die Antwort von admin-ajax.php, Nonce, Hosting-Grenzen, WooCommerce, freien JSONL-Speicherplatz und PHP-Fehler. WP-Cron ist nur erforderlich, wenn die Verarbeitung nach dem Schließen des Tabs weiterlaufen soll. Falls eine optionale FAQ-Quelle ausfällt, prüfen Sie zuerst deren Abhängigkeiten."
+
+#: includes/class-admin.php includes/class-manual.php
+msgid "Ejecución automática con regulación adaptativa de carga."
+msgstr "Automatische Verarbeitung mit adaptiver Laststeuerung."
+
+#: includes/class-admin.php includes/class-manual.php
+msgid "Próximo lote"
+msgstr "Nächster Stapel"
+
+#: includes/class-admin.php includes/class-manual.php
+msgid "No se pudo procesar el siguiente lote. Comprueba la conexión; el sistema lo reintentará."
+msgstr "Der nächste Stapel konnte nicht verarbeitet werden. Prüfen Sie die Verbindung; das System versucht es erneut."
+
+#: includes/class-admin.php includes/class-manual.php
+msgid "El nivel establece la carga máxima. El sistema ajusta automáticamente tamaño y frecuencia según duración y memoria de cada lote. Los cambios no reinician el progreso. No mide el porcentaje global de CPU."
+msgstr "Die Stufe legt die maximale Last fest. Das System passt Stapelgröße und Häufigkeit automatisch an Laufzeit und Speicherbedarf an. Änderungen setzen den Fortschritt nicht zurück. Die gesamte CPU-Auslastung des Servers wird nicht gemessen."
+
+#: includes/class-admin.php includes/class-manual.php
+msgid "Durante la auditoría se muestra el estado, el progreso y el botón Pausar; si está pausada, aparece Reanudar. Los lotes avanzan automáticamente mientras la pestaña permanece abierta, sin pulsar Siguiente lote ni esperar tareas programadas."
+msgstr "Während der Prüfung werden Status, Fortschritt und die Schaltfläche Pausieren angezeigt; bei einer Pause erscheint Fortsetzen. Die Stapel laufen bei geöffnetem Tab automatisch weiter, ohne manuell den nächsten Stapel anzustoßen oder auf geplante Aufgaben zu warten."
+
+#: includes/class-admin.php includes/class-manual.php
+msgid "La velocidad 1–5 define una carga máxima. El sistema mide el tiempo completo de cada lote y la presión de memoria PHP para reducir o aumentar el tamaño del siguiente y la pausa entre peticiones. No mide el porcentaje global de CPU. Mantén la pestaña abierta para ejecutar automáticamente; al cerrarla o suspenderla solo seguirá trabajando un proceso de servidor configurado por el alojamiento."
+msgstr "Die Geschwindigkeitsstufen 1 bis 5 legen eine maximale Last fest. Das System misst die gesamte Stapeldauer und den PHP-Speicherdruck, um die nächste Stapelgröße und die Pause zwischen Anfragen zu erhöhen oder zu verringern. Es misst nicht die gesamte CPU-Auslastung des Servers. Lassen Sie den Tab geöffnet; andernfalls kann nur ein vom Hosting eingerichteter Serverprozess fortfahren."
+
+#: includes/class-admin.php includes/class-manual.php
+msgid "La pantalla utiliza wp_ajax_taxocommerce_auditor_watch con manage_options y nonce y procesa como máximo un lote por petición AJAX. Workload::effective_batch_size() y Workload::adjusted_batch_size() respetan el límite de velocidad seleccionado y toman como señales la duración PHP y la presión de memoria; el navegador ajusta la pausa según estas medidas y la latencia de la petición. El bloqueo taxocommerce_auditor_worker_{scope} evita ejecuciones simultáneas; los errores HTTP se muestran y reintentan con espera creciente. Los eventos de cron son solo un respaldo opcional y nunca se utilizan para decidir el siguiente lote de la pantalla."
+msgstr "Die Seite verwendet wp_ajax_taxocommerce_auditor_watch mit manage_options und Nonce und verarbeitet höchstens einen Stapel pro AJAX-Anfrage. Workload::effective_batch_size() und Workload::adjusted_batch_size() beachten die eingestellte Geschwindigkeitsgrenze und berücksichtigen PHP-Dauer und Speicherdruck; der Browser passt die Pause anhand dieser Werte und der Anfragelatenz an. Die Sperre taxocommerce_auditor_worker_{scope} verhindert gleichzeitige Läufe; HTTP-Fehler werden angezeigt und mit zunehmender Wartezeit erneut versucht. Cron-Ereignisse sind nur ein optionaler Ersatz und bestimmen nie den nächsten Stapel im Browser."
+
+#: includes/class-admin.php includes/class-manual.php
+msgid "CPU PHP"
+msgstr "PHP-CPU"
+
+#: includes/class-admin.php includes/class-manual.php
+msgid "Modo automático: los lotes avanzan solos y se ajustan a la carga disponible. Mantén abierta la pestaña."
+msgstr "Automatikmodus: Stapel laufen selbstständig und passen sich der verfügbaren Kapazität an. Lassen Sie den Tab geöffnet."
+
+#: includes/class-admin.php includes/class-manual.php
+msgid "El nivel establece la carga máxima. Auditor adapta los lotes según duración, CPU del proceso PHP y memoria disponible. No mide el porcentaje global de CPU del servidor. Cambiarlo no reinicia el progreso."
+msgstr "Die Stufe begrenzt die maximale Last. Auditor passt Stapel anhand von Laufzeit, PHP-Prozess-CPU und Speicher an. Die gesamte Server-CPU wird nicht gemessen. Ein Stufenwechsel setzt den Fortschritt nicht zurück."
+
+#: includes/class-admin.php includes/class-manual.php
+msgid "Los cinco niveles establecen techos de 40 a 500 objetos por lote; cada auditoría comienza con consultas conservadoras. El sistema utiliza duración, memoria y CPU consumida por el proceso PHP cuando está disponible para adaptar el siguiente lote y la pausa. No mide el porcentaje global de CPU del alojamiento. Mantén abierta la pestaña para continuar automáticamente; al cerrarla solo un trabajador del servidor puede proseguir."
+msgstr "Die fünf Stufen begrenzen die Stapelgröße auf 40 bis 500 Objekte; jede Prüfung beginnt mit vorsichtigen Abfragen. Laufzeit, Speicher und gegebenenfalls PHP-Prozess-CPU bestimmen die Größe und Pause des nächsten Stapels. Die gesamte CPU-Auslastung des Hostings wird nicht gemessen. Lassen Sie den Tab für die automatische Fortsetzung geöffnet; nach dem Schließen kann nur ein Serverprozess weitermachen."
+
+#: includes/class-admin.php includes/class-manual.php
+msgid "La pantalla utiliza wp_ajax_taxocommerce_auditor_watch con manage_options y nonce, procesando un lote por petición AJAX. Workload::effective_batch_size() respeta el máximo elegido y Workload::adjusted_batch_size() ajusta el próximo lote según tiempo completo, memoria y CPU propia medida mediante getrusage() cuando existe. El navegador regula la pausa según duración, latencia, memoria y CPU PHP; no conoce la CPU total del servidor. La consulta usa el mismo tamaño que la condición de finalización y conserva cursor e informes JSONL. El bloqueo taxocommerce_auditor_worker_{scope} impide solapamientos. Los fallos HTTP se reintentan; Cron queda solo como respaldo opcional."
+msgstr "Die Seite verarbeitet mit wp_ajax_taxocommerce_auditor_watch, manage_options und Nonce einen Stapel je AJAX-Anfrage. Workload::effective_batch_size() beachtet die gewählte Obergrenze und Workload::adjusted_batch_size() passt den nächsten Stapel anhand von Laufzeit, Speicher und ggf. mit getrusage() gemessener PHP-CPU an. Der Browser passt die Pause an Dauer, Latenz, Speicher und PHP-CPU an; die gesamte Server-CPU kennt er nicht. Abfrage und Abschlussprüfung nutzen dieselbe Stapelgröße und bewahren Cursor und JSONL-Berichte. Die Sperre taxocommerce_auditor_worker_{scope} verhindert Überschneidungen. HTTP-Fehler werden wiederholt; Cron bleibt eine optionale Reserve."

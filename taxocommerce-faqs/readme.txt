@@ -4,7 +4,7 @@ Tags: faq, woocommerce, questions, csv, vocabulary
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.1.14
+Stable tag: 0.1.17
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,9 +12,9 @@ Manage product and page FAQs in WordPress and WooCommerce with CSV exchange, sta
 
 == Description ==
 
-* The developer's Plugin URI provides the official plugin information (read-only for shop administrators). Its public excerpt appears to the left of the locally bundled version history, both centered in the three-zone admin header.
+* The admin header reads this plugin's local `Description` and links to `Plugin URI`, without external requests or caching. The version history is bundled in `CHANGELOG.md`.
 
-* Optional collapsible official-page excerpt beside the version history. Administrators can configure an HTTPS WordPress page URL; only that page's published REST excerpt and link are retrieved using a safe request and a transient cache. No URL or service is preset.
+* Collapsible local plugin information beside the independent version history.
 
 
 TaxoCommerce FAQs works with an existing canonical FAQ table on migration and optionally integrates its admin screens into TaxoCommerce Core.
@@ -47,6 +47,15 @@ No. Deactivation and ordinary plugin updates preserve FAQ records.
 On multisite, the cleanup is limited to sites marked as initialized by this module. Removing files manually by FTP does not run `uninstall.php`.
 
 == Changelog ==
+
+= 0.1.16 =
+* Local Description and Plugin URI replace REST excerpt requests and caches in the admin header. Issue #2494.
+
+
+= 0.1.15 =
+* Display the last verified official excerpt from the developer's Plugin URI during HTTP errors; avoid stale negative cache and show bundled author Description on first-install network failure. No dependency on customer content. Issue #2489.
+
+
 
 = 0.1.14 =
 * Three-zone responsive admin header, centered official developer information and own Markdown history; remove shop administrator URL configuration. Issue #2476.
@@ -94,10 +103,6 @@ On multisite, the cleanup is limited to sites marked as initialized by this modu
 * Later migrations protected existing data during installation/uninstallation, updated CSV handling and maintained the Assistant L6 compatibility path.
 * Version 0.1.5 added a dedicated Auto Test and user/technical guide; 0.1.6 concentrated on Plugin Check and clean distribution.
 
-== External Services ==
+== Local plugin information ==
 
-An optional administrator-configured HTTPS WordPress website may be queried at its public `/wp-json/wp/v2/pages` endpoint (page slug, excerpt and link) to display that site's published description. It is not contacted until an administrator supplies its URL; no visitor identifiers or credentials are transmitted. Requests are cached locally for 12 hours (failures for 15 minutes), and outgoing links point to the chosen site. Review that site's privacy policy and terms before configuring it. This plugin requires no predefined external provider.
-
-== Official excerpt ==
-
-The optional admin information panel defaults to this plugin's own `Plugin URI` (public project documentation). It requests the published WordPress page excerpt by safe HTTPS REST with local caching; administrators may override or explicitly clear the URL. No external response is required for the plugin to function.
+The local information panel shows `Description` and the `Plugin URI` link from the main PHP plugin header, without an HTTP request.

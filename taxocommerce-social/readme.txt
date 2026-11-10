@@ -4,7 +4,7 @@ Tags: social-media, scheduling, pinterest, publishing, calendar
 Requires at least: 6.7
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.1.11
+Stable tag: 0.1.14
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,9 +12,9 @@ Manage authorized social connections, publication templates and a content calend
 
 == Description ==
 
-* The developer's Plugin URI provides the official plugin information (read-only for shop administrators). Its public excerpt appears to the left of the locally bundled version history, both centered in the three-zone admin header.
+* The admin header shows the plugin's bundled `Description` and links to its `Plugin URI`, without network requests or caching. Version history uses the bundled `CHANGELOG.md`.
 
-* Optional collapsible official-page excerpt beside the version history. Administrators can configure an HTTPS WordPress page URL; only that page's published REST excerpt and link are retrieved using a safe request and a transient cache. No URL or service is preset.
+* Collapsible local plugin information beside the independent version history.
 
 
 TaxoCommerce Social supports optional Facebook, Instagram, LinkedIn, Pinterest and X connections, manual publication planning, CSV-based scheduling and queue/history views.
@@ -41,6 +41,15 @@ The plugin interacts with selected social network services when an administrator
 Social publishing sends authorized content and associated account data to the selected external social network. Store tokens securely, review provider policies and avoid including personal information in generated posts without permission. Disconnect accounts when the integration is not required.
 
 == Changelog ==
+
+= 0.1.13 =
+* Local Description and Plugin URI replace REST excerpt requests and caches in the header. Issue #2494.
+
+
+= 0.1.12 =
+* Display the last verified official excerpt from the developer's Plugin URI during HTTP errors; avoid stale negative cache and show bundled author Description on first-install network failure. No dependency on customer content. Issue #2489.
+
+
 
 = 0.1.11 =
 * Three-zone responsive admin header, centered official developer information and own Markdown history; remove shop administrator URL configuration. Issue #2476.
@@ -86,10 +95,6 @@ Social publishing sends authorized content and associated account data to the se
 * Staging and deployment work subsequently introduced a separate ZIP workflow and reconciled the canonical shared storage used by the former monolith and the new plugin.
 * Marketing campaign planning and banners belong to Campaigns, while Social owns its authorised publishing actions; no external-network publication is implied merely by installing the module.
 
-== External Services ==
+== Local plugin information ==
 
-An optional administrator-configured HTTPS WordPress website may be queried at its public `/wp-json/wp/v2/pages` endpoint (page slug, excerpt and link) to display that site's published description. It is not contacted until an administrator supplies its URL; no visitor identifiers or credentials are transmitted. Requests are cached locally for 12 hours (failures for 15 minutes), and outgoing links point to the chosen site. Review that site's privacy policy and terms before configuring it. This plugin requires no predefined external provider.
-
-== Official excerpt ==
-
-The optional admin information panel defaults to this plugin's `Plugin URI`, a public project page. Only its published excerpt is retrieved via safe WordPress REST HTTPS and cached locally. Administrators may override or explicitly clear the URL to disable requests. No network dependency for core functionality.
+The developer information panel shows only bundled `Description` metadata and an outbound `Plugin URI` link. No external request is made.

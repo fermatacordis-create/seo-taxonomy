@@ -4,7 +4,7 @@ Tags: woocommerce, mysql, database, backup, seo
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.4.16
+Stable tag: 0.4.19
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,9 +12,9 @@ Standalone migration of the original Clean Database and SEO Data Table tools fro
 
 == Description ==
 
-* The developer's Plugin URI provides the official plugin information (read-only for shop administrators). Its public excerpt appears to the left of the locally bundled version history, both centered in the three-zone admin header.
+* The admin header shows the plugin's bundled `Description` and links to its `Plugin URI`, without network requests or caching. Version history uses the bundled `CHANGELOG.md`.
 
-* Optional collapsible official-page excerpt beside the version history. Administrators can configure an HTTPS WordPress page URL; only that page's published REST excerpt and link are retrieved using a safe request and a transient cache. No URL or service is preset.
+* Collapsible local plugin information beside the independent version history.
 
 
 Version 0.4.5 preserves the two original database tools:
@@ -37,6 +37,15 @@ The newer, additional MySQL diagnostics, replacement table explorer, optimizatio
 4. Download an SQL backup before any irreversible cleanup operation.
 
 == Changelog ==
+
+= 0.4.18 =
+* Local Description and Plugin URI replace REST excerpt requests and caches in the header. Issue #2494.
+
+
+= 0.4.17 =
+* Display the last verified official excerpt from the developer's Plugin URI during HTTP errors; avoid stale negative cache and show bundled author Description on first-install network failure. No dependency on customer content. Issue #2489.
+
+
 
 = 0.4.16 =
 * Three-zone responsive admin header, centered official developer information and own Markdown history; remove shop administrator URL configuration. Issue #2476.
@@ -100,10 +109,6 @@ The newer, additional MySQL diagnostics, replacement table explorer, optimizatio
 * The standalone migration was corrected to restore complete legacy Clean Database and SEO Data Table functions instead of replacing them with a simplified Data Layer design.
 * Later standalone releases brought six sibling tabs, documentation, 17 grouped Auto Test checks and a before/after baseline without removing the legacy cleanup actions.
 
-== External Services ==
+== Local plugin information ==
 
-An optional administrator-configured HTTPS WordPress website may be queried at its public `/wp-json/wp/v2/pages` endpoint (page slug, excerpt and link) to display that site's published description. It is not contacted until an administrator supplies its URL; no visitor identifiers or credentials are transmitted. Requests are cached locally for 12 hours (failures for 15 minutes), and outgoing links point to the chosen site. Review that site's privacy policy and terms before configuring it. This plugin requires no predefined external provider.
-
-== Official excerpt ==
-
-The optional admin information panel defaults to this plugin's `Plugin URI`, a public project page. Only its published excerpt is retrieved via safe WordPress REST HTTPS and cached locally. Administrators may override or explicitly clear the URL to disable requests. No network dependency for core functionality.
+The developer information panel shows only bundled `Description` metadata and an outbound `Plugin URI` link. No external request is made.

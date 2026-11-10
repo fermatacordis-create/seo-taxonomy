@@ -5,7 +5,7 @@ Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 0.4.24
+Stable tag: 0.4.27
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,7 +13,7 @@ Import and export catalog, content and Media for WordPress/WooCommerce.
 
 == Description ==
 
-* The developer's Plugin URI provides the official plugin information (read-only for shop administrators). Its public excerpt appears to the left of the locally bundled version history, both centered in the three-zone admin header.
+* The admin header shows the plugin's bundled `Description` and links to its `Plugin URI`, without network requests or caching. Version history uses the bundled `CHANGELOG.md`.
 
 
 
@@ -54,6 +54,15 @@ A Media export contains:
 The package transports original image files plus title, ALT, caption, description, post_parent and known image relationships.
 
 == Changelog ==
+
+= 0.4.26 =
+* Local Description and Plugin URI replace REST excerpt requests and caches in the header. Issue #2494.
+
+
+= 0.4.25 =
+* Display the last verified official excerpt from the developer's Plugin URI during HTTP errors; avoid stale negative cache and show bundled author Description on first-install network failure. No dependency on customer content. Issue #2489.
+
+
 
 = 0.4.24 =
 * Three-zone responsive admin header, centered official developer information and own Markdown history; remove shop administrator URL configuration. Issue #2476.
@@ -196,10 +205,6 @@ The package transports original image files plus title, ALT, caption, descriptio
 * Monolith: Supplier Import / Sync V2 (2.2.0); supplier CSV/XLSX catalogues (2.3.x); VEVOR CSV and trash-aware content (2.4.0).
 * Standalone: CSV pilot (0.1.x), Media ZIP (0.2.0), multi-file queue (0.3.0), then 0.4.x resumable exports, country codes, adaptive batches and Auto Test.
 
-== External Services ==
+== Local plugin information ==
 
-Optional: if an administrator enters an HTTPS URL to an official WordPress page, the plugin requests that site's public `/wp-json/wp/v2/pages` endpoint with the page slug to read only its published excerpt and link. No visitor identity or credentials are submitted. A 12-hour cache (15 minutes after failure) avoids repeated requests. The administrator chooses and should review the source site's privacy policy and terms. No provider is configured by default.
-
-== Official excerpt ==
-
-The optional admin information panel defaults to this plugin's `Plugin URI`, a public project page. Only its published excerpt is retrieved via safe WordPress REST HTTPS and cached locally. Administrators may override or explicitly clear the URL to disable requests. No network dependency for core functionality.
+The developer information panel shows only bundled `Description` metadata and an outbound `Plugin URI` link. No external request is made.

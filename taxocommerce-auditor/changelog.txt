@@ -1,3 +1,15 @@
+= 0.3.20 (2026-11-10) =
+* Admin subtitle uses bundled Description metadata; static Plugin URI and local version history retained. Issue #2494.
+
+== 0.3.19 ==
+* Local Description and Plugin URI replace remote REST header excerpts. Preserve the 0.3.18 CPU controller and version history. Issue #2494.
+
+== 0.3.18 ==
+* Adaptive batch ceilings of 40/90/180/300/500 records, with conservative first queries and optional measured PHP worker CPU time. Show worker CPU rather than Cron in progress; preserve all cursors, JSONL and fallback. Issues #2496/#2500.
+
+== 0.3.17 ==
+* Adapt browser-driven audit batches to measured PHP duration and memory pressure, without exceeding speeds 1–5. Remove unrelated WP-Cron warnings while preserving genuine AJAX failures. Issue #2498.
+
 == 0.3.14 ==
 * Remove the manual next-batch button in all audit screens and load the AJAX worker reliably from WordPress custom menus. Automatic batches retain progress, five CPU throughput speeds, pause and resume. Issue #2475.
 

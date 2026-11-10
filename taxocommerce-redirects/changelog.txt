@@ -1,3 +1,9 @@
+= 0.1.18 (2026-11-10) =
+* Admin subtitle uses bundled Description metadata; static Plugin URI and local version history retained. Issue #2494.
+
+= 0.1.17 (2026-11-10) =
+* Local metadata replace remote developer excerpt; preserve official link and own history. Issue #2494.
+
 = 0.1.10 (2026-11-07) =
 * Cabecera administrativa con título, versión y fecha de publicación de esta versión, independiente de otras extensiones. Issue #2336.
 

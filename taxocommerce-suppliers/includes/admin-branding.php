@@ -33,7 +33,7 @@ add_action( 'admin_notices', static function () use ( $tc_brand_on_screen, $tc_b
     if ( ! $tc_brand_on_screen() || ! is_readable( $tc_brand_main ) ) {
         return;
     }
-    $plugin = get_file_data( $tc_brand_main, array( 'name' => 'Plugin Name', 'version' => 'Version', 'released' => 'Release Date' ) );
+    $plugin = get_file_data( $tc_brand_main, array( 'name' => 'Plugin Name', 'version' => 'Version', 'released' => 'Release Date', 'description' => 'Description' ) );
     $title = preg_replace( '/\\s+-\\s+.*$/', '', (string) ( $plugin['name'] ?? '' ) );
     $version = (string) ( $plugin['version'] ?? '' );
     $released = (string) ( $plugin['released'] ?? '' );
@@ -115,7 +115,7 @@ add_action( 'admin_notices', static function () use ( $tc_brand_on_screen, $tc_b
         <div class="tc-family-hero__copy">
             <p class="tc-family-hero__eyebrow">TaxoCommerce</p>
             <h1><?php echo esc_html( $title ); ?></h1>
-            <p class="tc-family-hero__desc"><?php esc_html_e( 'Gestiona catálogos, compras, precios y relaciones con proveedores.', 'taxocommerce-suppliers' ); ?></p>
+            <p class="tc-family-hero__desc"><?php echo esc_html( trim( wp_strip_all_tags( (string) ( $plugin['description'] ?? '' ) ) ) ); ?></p>
             <?php $tc_brand_info->render_hero( $tc_brand_slug, $tc_language ); ?>
         </div>
         <div class="tc-family-hero__meta">

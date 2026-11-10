@@ -4,7 +4,7 @@ Tags: woocommerce, catalog, content, management, seo
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.4.68
+Stable tag: 0.4.72
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ Manage WooCommerce catalog structure and WordPress content from a modular dashbo
 
 == Description ==
 
-* The developer's Plugin URI provides the official plugin information (read-only for shop administrators). Its public excerpt appears to the left of the locally bundled version history, both centered in the three-zone admin header.
+* The administration header shows Core's local PHP `Description` and links to its developer `Plugin URI` without HTTP, optional consent actions or cached remote excerpts. The version history is read from the plugin's own `CHANGELOG.md`.
 
 
 
@@ -38,6 +38,10 @@ Editorial guidance does not create or modify content automatically. Only authori
 
 TaxoCommerce Core uses the WordPress gettext domain `taxocommerce-core` and the plugin `/languages` directory. The WordPress administration locale determines the language automatically. Bundled gettext catalogs cover Spanish (Spain), English (US), French, German and Dutch, with full coverage of the strings currently extracted in each gettext template; technical names and catalog content remain unchanged. The untranslated PHP/JavaScript surface and locale-specific administration display still require functional verification. WordPress.org language packs will be supported once translations are approved.
 
+== Local developer information ==
+
+The administration panel reads Core's bundled `Description` and `Plugin URI` fields without contacting the developer's website or storing remote excerpts. Legacy developer-excerpt cache entries from older versions are removed on uninstall. The plugin's normal functions and other external integrations are unaffected.
+
 == Installation ==
 
 1. Install and activate TaxoCommerce Core on WordPress 6.5 or newer.
@@ -61,6 +65,21 @@ No. Editors and guidance preserve manual author control.
 Yes. Administrators may explicitly upload a verified module ZIP through Core's extension panel. Native WordPress installation APIs install the package after temporary validation.
 
 == Changelog ==
+
+= 0.4.71 =
+* Show bundled Description and Plugin URI as static header information without a developer REST request or opt-in button. Keep local version history, existing Core features and legacy cache cleanup. Issue #2494.
+
+
+= 0.4.70 =
+* The developer excerpt requires explicit administrator consent (button, nonce and capability); no HTTP requests occur on ordinary visits, even after cache expiry. Last verified excerpt and bundled Description remain available offline.
+* External API URL, purpose and connection details documented for WordPress.org guideline 7. Issue #2491.
+
+
+
+= 0.4.69 =
+* Display the last verified official excerpt from the developer's Plugin URI during HTTP errors; avoid stale negative cache and show bundled author Description on first-install network failure. No dependency on customer content. Issue #2489.
+
+
 
 = 0.4.68 =
 * WordPress.org pre-review: replace inline admin CSS with WordPress stylesheet APIs; use the native upload handler for administrator-selected extension ZIPs. Keep explicit per-extension activation and deactivation permissions and nonces.
@@ -258,10 +277,6 @@ Yes. Administrators may explicitly upload a verified module ZIP through Core's e
 * Later standalone work refined the Extensions panel, nested menu navigation, WordPress.org compliance and internal Auto Test. Individual learning, images and feeds remain owned by their respective modules.
 * The international storefront uses explicit country-based pages, templates and navigation; the Core layer retains role/menu selection while Templates owns frontend rendering.
 
-== External Services ==
+== Local plugin information ==
 
-Optional: if an administrator enters an HTTPS URL to an official WordPress page, the plugin requests that site's public `/wp-json/wp/v2/pages` endpoint with the page slug to read only its published excerpt and link. No visitor identity or credentials are submitted. A 12-hour cache (15 minutes after failure) avoids repeated requests. The administrator chooses and should review the source site's privacy policy and terms. No provider is configured by default.
-
-== Official excerpt ==
-
-The optional admin information panel defaults to this plugin's `Plugin URI`, a public project page. Only its published excerpt is retrieved via safe WordPress REST HTTPS and cached locally. Administrators may override or explicitly clear the URL to disable requests. No network dependency for core functionality.
+The local information panel shows Core's bundled `Description` and links to the developer's `Plugin URI`. It does not make HTTP requests.

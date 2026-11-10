@@ -1,3 +1,35 @@
+## [1.1.40] — 2026-11-10 — Analysis completo y JSON móvil (#2507)
+
+- La pestaña Analysis activa usa su controlador AJAX y nonce de Insights, evitando rechazos al ejecutar informes.
+- Se incorpora «Ejecutar informe completo» en bloques secuenciales con progreso y cancelación, además de los informes individuales.
+- Conserva «Descargar JSON completo» y ofrece «Abrir JSON en el navegador (móvil)» como alternativa cuando el navegador no maneja la descarga.
+- Se retira exclusivamente la pestaña y los archivos de «Informes ejecutivos»; no se alteran conexiones, informes originales ni datos.
+
+## [1.1.39] — 2026-11-10 — Descripción visible desde el plugin (#2494)
+
+- La descripción inmediatamente debajo del título administrativo procede de `Description:` del archivo principal, sin textos duplicados ni consultas externas.
+- Se mantienen el enlace estático `Plugin URI`, el historial local y las funcionalidades anteriores.
+
+## [1.1.38] - 2026-11-10 - Ficha local sin REST en el encabezado (#2494)
+
+- La cabecera emplea Description y Plugin URI locales, sin REST ni caché externa.
+- Conserva la pestaña Informes ejecutivos de 1.1.37, las conexiones, el Analista, las descargas y el historial.
+
+## [1.1.37] - 2026-11-10 - Informe ejecutivo de snapshots existentes (#2497)
+
+- Nueva pestaña «Informes ejecutivos»: resume señales contrastables de Search Console, GA4 y Bing sin repetir paneles técnicos.
+- Lectura exclusivamente de los snapshots privados que ya guarda Insights: cero peticiones a proveedores, cero nuevas tablas/opciones/copies y ningún recálculo del Plan de acción al abrir.
+- Advertencias de frescura y fechas no alineadas, umbral mínimo de muestras, exclusión de métricas ausentes y acceso directo al informe técnico de origen.
+- Prioridades limitadas a cinco tareas ya existentes en el historial de Analista, excluyendo las ejecutadas y descartadas.
+- Pruebas de ausencia de datos, comparativas, caducidad y no mutación; conservadas todas las pestañas y descargas anteriores.
+
+## [1.1.36] - 2026-11-10 - Resiliencia del extracto oficial (#2489)
+
+- Consulta exclusivamente la API REST pública de la página indicada en Plugin URI (autor del plugin), nunca páginas de la tienda del cliente.
+- Conserva el último extracto oficial comprobado; los fallos de red no borran el texto. Caché de errores reducida a 5 minutos y versión nueva de clave para ignorar fallos antiguos cacheados.
+- Si nunca se ha obtenido un extracto, muestra provisionalmente la Description incluida por el autor en el plugin; permite abrir la ficha oficial. No cambia operaciones comerciales ni requiere Core.
+- Pruebas para recuperación tras fallos HTTP, JSON inválido y caché negativa; compatibles con la familia completa.
+
 ## [1.1.35] — 2026-11-09 — Ficha oficial del desarrollador y cabecera centrada en tres zonas (#2476)
 
 - La cabecera distribuye identificación a la izquierda, dos desplegables alineados y centrados (extracto oficial a la izquierda e historial local a la derecha), y versión y fecha a la derecha; distribución adaptable a móvil.

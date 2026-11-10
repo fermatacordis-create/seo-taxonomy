@@ -1,3 +1,10 @@
+## 2026-11-10 — Extractos oficiales resistentes a errores HTTP en los 20 plugins (#2489)
+
+- La captura de una tienda cliente evidencia «Excerpt temporarily unavailable» pese a que la API REST pública de asociacionfocazul.com sirve la ficha oficial. Ningún cliente define URLs de documentación.
+- Actualizada la plantilla común independiente y sus 20 copias: uso exclusivo de Plugin URI, nuevo espacio de caché para ignorar respuestas vacías antiguas, TTL de fallos de 5 minutos, almacenamiento local del último texto remoto validado y alternativa desde la Description incluida por el desarrollador mientras falla Internet.
+- Extendido el test común para errores 503, JSON malformado, recuperación, caducidad transitoria y protección contra sustitución de contenido por la web del cliente. Incrementadas las versiones y readme/CHANGELOG propios; changelog.txt conservados.
+- La alternativa de emergencia es de autoría del desarrollador, nunca procede de la base de datos del comercio. El enlace a la ficha oficial se mantiene disponible.
+
 ## 2026-11-09 — Cabeceras TaxoCommerce en tres zonas (#2476)
 
 - Actualizados los veinte plugins autónomos: identificación a la izquierda, información oficial y cambios históricos centrados en la misma línea, y versión y fecha a la derecha. Reorganización adaptable para pantallas estrechas.

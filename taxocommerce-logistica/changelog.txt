@@ -1,3 +1,9 @@
+= 0.2.17 (2026-11-10) =
+* Admin subtitle uses bundled Description metadata; static Plugin URI and local version history retained. Issue #2494.
+
+= 0.2.16 (2026-11-10) =
+* Local Description and Plugin URI replace developer excerpt requests and caching. Issue #2494.
+
 = 0.2.11 (2026-11-08) =
 * Translate 23 new Supplier purchases gettext messages in the five supported language catalogs and recompile GNU MO files. Issue #2062.
 * Preserve shipping calculations and independent, optional supplier purchasing UI; include compiled-catalog regression check.

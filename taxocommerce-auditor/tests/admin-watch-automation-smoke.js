@@ -47,10 +47,11 @@ async function scenario(responses, options = {}) {
         nonce: 'first-nonce',
         latest: 'Último lote',
         none: 'Sin datos',
-        continuous: 'Siguiente lote automático',
-        overdue: 'Cron retrasado',
-        disabled: 'Cron opcional desactivado',
-        failure: 'No se pudo consultar el progreso'
+        continuous: 'Ritmo adaptativo',
+        nextBatch: 'Próximo lote',
+        duration: 'Duración',
+        cpu: 'CPU PHP',
+        failure: 'No se pudo procesar el siguiente lote'
     };
 
     const windowStub = {
@@ -172,11 +173,38 @@ async function run() {
     assert.equal(failed.fetchCount, 2, 'The worker retries without a manual click');
     assert.equal(failed.reloads, 1);
 
+    const healthyNoCron = await scenario([
+        { status: 'running', processed: 15, total: 100, status_label: 'En curso',
+            batch_processed: 15, client_delay_ms: 2000, batch_budget_ms: 5000,
+            batch_duration_ms: 100, batch_cpu_ms: 75, effective_batch_size: 19,
+            memory_pressure_percent: 25, cron_disabled: true, cron_overdue: true },
+        { status: 'completed', processed: 100, total: 100, status_label: 'Completado', batch_processed: 85 }
+    ]);
+    await healthyNoCron.tick();
+    assert.equal(healthyNoCron.elements.warning.hidden, true, 'Cron health is not a browser audit warning');
+    assert.ok(healthyNoCron.scheduled.includes(1300), 'Fast PHP batch accelerates AJAX within its configured cap');
+    assert.match(healthyNoCron.elements.progress.textContent, /Próximo lote: 19/, 'Adaptive batch size is visible');
+    assert.match(healthyNoCron.elements.progress.textContent, /CPU PHP: 75 ms/, 'Measured PHP CPU time is visible');
+    await healthyNoCron.tick();
+    assert.equal(healthyNoCron.reloads, 1, 'Cron-disabled audits complete autonomously');
+
+    const overloaded = await scenario([
+        { status: 'running', processed: 8, total: 100, status_label: 'En curso',
+            batch_processed: 8, client_delay_ms: 2000, batch_budget_ms: 5000,
+            batch_duration_ms: 4200, effective_batch_size: 6, memory_pressure_percent: 85 },
+        { status: 'paused', processed: 8, total: 100, status_label: 'Pausado', batch_processed: 0 }
+    ]);
+    await overloaded.tick();
+    assert.ok(overloaded.scheduled.includes(5000), 'Slow/high-memory batch backs off to protect hosting');
+    await overloaded.tick();
+    assert.equal(overloaded.fetchCount, 2, 'Backoff still resumes the next batch automatically');
+    assert.equal(overloaded.timers.size, 0, 'Pausing disables scheduling after backoff');
+
     const unsupported = await scenario([], { noFetch: true });
     assert.equal(unsupported.timers.size, 0, 'An unsupported browser cannot busy-loop');
     assert.equal(unsupported.elements.warning.hidden, false, 'Unsupported browser reports its failure');
 
-    process.stdout.write('Auditor AJAX auto-chain smoke passed (success, speed, nonce, pause, retry, browser support).\n');
+    process.stdout.write('Auditor AJAX auto-chain smoke passed (success, adaptive load, cron-free UI, nonce, pause, retry, browser support).\n');
 }
 
 run().catch((error) => {

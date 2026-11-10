@@ -3,8 +3,8 @@
  * Plugin Name: TaxoCommerce Social
  * Plugin URI: https://asociacionfocazul.com/taxocommerce-social/
  * Description: Social network connections, publishing templates and calendar for the TaxoCommerce family.
- * Version: 0.1.11
- * Release Date: 2026-11-09
+ * Version: 0.1.14
+ * Release Date: 2026-11-10
  * Requires at least: 6.7
  * Requires PHP: 7.4
  * Author: David Perez
@@ -20,7 +20,7 @@ require_once __DIR__ . '/includes/admin-branding.php';
 require_once __DIR__ . '/includes/class-taxocommerce-autotest-code.php';
 \TaxoCommerce_Social_Autotest_Code::boot();
 
-define( 'TAXOCOMMERCE_SOCIAL_VERSION', '0.1.11' );
+define( 'TAXOCOMMERCE_SOCIAL_VERSION', '0.1.14' );
 define( 'TAXOCOMMERCE_SOCIAL_PATH', plugin_dir_path( __FILE__ ) );
 define( 'TAXOCOMMERCE_SOCIAL_URL', plugin_dir_url( __FILE__ ) );
 

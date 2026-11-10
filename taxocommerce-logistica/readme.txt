@@ -4,14 +4,14 @@ Tags: woocommerce, logistics, shipping, weight, orders
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.2.14
+Stable tag: 0.2.17
 License: MIT
 
 Manage shipping costs, package weight and dimensions in WooCommerce with manual rules and shipment audits.
 
 == Description ==
 
-* The developer's Plugin URI provides the official plugin information (read-only for shop administrators). Its public excerpt appears to the left of the locally bundled version history, both centered in the three-zone admin header.
+* The admin header shows the plugin's bundled `Description` and links to its `Plugin URI`, without network requests or caching. Version history uses the bundled `CHANGELOG.md`.
 
 
 
@@ -36,6 +36,15 @@ It retains shipping as its core function. Its optional Supplier purchases screen
 The WordPress administration locale automatically selects the gettext language. Bundled Spanish (es_ES), English (en_US), French (fr_FR), German (de_DE) and Dutch (nl_NL) PO/MO files cover every string in the current translation template. This does not translate store products, orders or editorial content.
 
 == Changelog ==
+
+= 0.2.16 =
+* Local Description and Plugin URI replace REST excerpt requests and caches in the header. Issue #2494.
+
+
+= 0.2.15 =
+* Display the last verified official excerpt from the developer's Plugin URI during HTTP errors; avoid stale negative cache and show bundled author Description on first-install network failure. No dependency on customer content. Issue #2489.
+
+
 
 = 0.2.14 =
 * Three-zone responsive admin header, centered official developer information and own Markdown history; remove shop administrator URL configuration. Issue #2476.
@@ -108,10 +117,6 @@ The WordPress administration locale automatically selects the gettext language. 
 * Supplier purchasing operations were moved from Logistics into Suppliers so shipping rules and procurement have separate owners.
 * Later standalone releases added grouped Auto Test checks, before/after comparison, user/technical manuals, and integration into the Core family menu without claiming independent checkout behavior.
 
-== External Services ==
+== Local plugin information ==
 
-Optional: if an administrator enters an HTTPS URL to an official WordPress page, the plugin requests that site's public `/wp-json/wp/v2/pages` endpoint with the page slug to read only its published excerpt and link. No visitor identity or credentials are submitted. A 12-hour cache (15 minutes after failure) avoids repeated requests. The administrator chooses and should review the source site's privacy policy and terms. No provider is configured by default.
-
-== Official excerpt ==
-
-The optional admin information panel defaults to this plugin's `Plugin URI`, a public project page. Only its published excerpt is retrieved via safe WordPress REST HTTPS and cached locally. Administrators may override or explicitly clear the URL to disable requests. No network dependency for core functionality.
+The developer information panel shows only bundled `Description` metadata and an outbound `Plugin URI` link. No external request is made.

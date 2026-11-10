@@ -157,6 +157,9 @@ jobs:
           php taxocommerce-google-bing/tests/consent-smoke.php
           php taxocommerce-google-bing/tests/analysis-standalone-smoke.php
           php taxocommerce-google-bing/tests/analysis-unified-smoke.php
+          php -l taxocommerce-google-bing/tests/analysis-mobile-smoke.php
+          php taxocommerce-google-bing/tests/analysis-mobile-smoke.php
+          node --check taxocommerce-google-bing/includes/analysis/assets/analista-lazy.js
           php taxocommerce-google-bing/tests/geo-bridge-smoke.php
           node taxocommerce-google-bing/tests/head-tags-browser-smoke.js
           php taxocommerce-google-bing/tests/indexnow-smoke.php
@@ -255,6 +258,8 @@ jobs:
           php .github/tests/taxocommerce-core/anomalies-configured-smoke.php
           php .github/tests/taxocommerce-core/block-navigation-smoke.php
           php .github/tests/taxocommerce-core/sidebar-plugins-smoke.php
+          php .github/tests/taxocommerce-core/official-info-static-smoke.php
+          php .github/tests/taxocommerce-core/uninstall-excerpt-smoke.php
           php -l .github/tests/taxocommerce-core/family-catalog-availability-smoke.php
           php .github/tests/taxocommerce-core/family-catalog-availability-smoke.php
           php .github/tests/taxocommerce-core/block-navigation-editor-ui-smoke.php

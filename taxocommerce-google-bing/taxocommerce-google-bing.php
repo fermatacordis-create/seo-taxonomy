@@ -3,8 +3,8 @@
  * Plugin Name: TaxoCommerce Insights
  * Plugin URI: https://asociacionfocazul.com/taxocommerce-google-bing/
  * Description: External connections, provider data downloads, and the restored legacy Analysis dashboard.
- * Version: 1.1.35
- * Release Date: 2026-11-09
+ * Version: 1.1.40
+ * Release Date: 2026-11-10
  * Requires at least: 5.8
  * Requires PHP: 7.4
  * Author: David Perez
@@ -19,7 +19,7 @@ require_once __DIR__ . '/includes/admin-branding.php';
 require_once __DIR__ . '/includes/class-taxocommerce-autotest-code.php';
 \TaxoCommerce_Insights_Autotest_Code::boot();
 
-define( 'TAXOCOMMERCE_GOOGLE_BING_VERSION', '1.1.35' );
+define( 'TAXOCOMMERCE_GOOGLE_BING_VERSION', '1.1.40' );
 define( 'TAXOCOMMERCE_GOOGLE_BING_FILE', __FILE__ );
 define( 'TAXOCOMMERCE_GOOGLE_BING_PATH', plugin_dir_path( __FILE__ ) );
 define( 'TAXOCOMMERCE_GOOGLE_BING_URL', plugin_dir_url( __FILE__ ) );
@@ -201,7 +201,7 @@ function taxocommerce_google_bing_screen() {
     } elseif ( 'user_guide' === $tab ) {
         TaxoCommerce_Google_Bing_User_Guide::render();
     } elseif ( 'analysis' === $tab ) {
-        seo_analista_render_report();
+        taxocommerce_google_bing_analysis_screen();
     } elseif ( 'google_trends' === $tab ) {
         TaxoCommerce_Google_Bing_Trends::render();
     } else {
@@ -277,13 +277,19 @@ function taxocommerce_google_bing_analysis_screen() {
     }
     echo '</select>' . '<button type="submit" class="button">' . esc_html__( 'Cambiar periodo', 'taxocommerce-google-bing' ) . '</button>';
     if ( function_exists( 'seo_analista_export_json_url' ) ) {
-        echo ' <a class="button" href="' . esc_url( seo_analista_export_json_url( $days ) ) . '">Generar JSON completo</a>';
+        $json_url = seo_analista_export_json_url( $days );
+        echo ' <a class="button" href="' . esc_url( $json_url ) . '">' . esc_html__( 'Descargar JSON completo', 'taxocommerce-google-bing' ) . '</a>';
+        echo ' <a class="button" href="' . esc_url( add_query_arg( 'analista_view_json', '1', $json_url ) ) . '" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Abrir JSON en el navegador (móvil)', 'taxocommerce-google-bing' ) . '</a>';
     }
     echo '</form></div>';
 
     // Do not call seo_analista_lazy_render_shell: it would enqueue the same
     // click handler again and issue two AJAX requests per button click.
     $reports = taxocommerce_google_bing_analysis_reports();
+    echo '<div class="seo-analista-lazy-controls">';
+    echo '<button type="button" id="tgb-analysis-run-all" class="button button-primary">' . esc_html__( 'Ejecutar informe completo', 'taxocommerce-google-bing' ) . '</button>';
+    echo '<button type="button" id="tgb-analysis-cancel" class="button" disabled>' . esc_html__( 'Detener', 'taxocommerce-google-bing' ) . '</button>';
+    echo '</div>';
     echo '<div class="seo-analista-lazy-intro"><strong>Analista '
         . esc_html( defined( 'SEO_ANALISTA_VERSION' ) ? SEO_ANALISTA_VERSION : '' )
         . '</strong> · carga bajo demanda<p>Ejecuta únicamente el informe elegido.</p></div>';

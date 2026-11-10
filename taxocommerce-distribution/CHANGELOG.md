@@ -1,3 +1,20 @@
+## [0.1.17] — 2026-11-10 — Descripción visible desde el plugin (#2494)
+
+- La descripción inmediatamente debajo del título administrativo procede de `Description:` del archivo principal, sin textos duplicados ni consultas externas.
+- Se mantienen el enlace estático `Plugin URI`, el historial local y las funcionalidades anteriores.
+
+## [0.1.16] — 2026-11-10 — Ficha local en el encabezado (#2494)
+
+- Elimina consultas REST/caché del extracto y usa `Description` y `Plugin URI` locales.
+- Conserva el enlace oficial y el historial, sin alterar servicios existentes.
+
+## [0.1.15] - 2026-11-10 - Resiliencia del extracto oficial (#2489)
+
+- Consulta exclusivamente la API REST pública de la página indicada en Plugin URI (autor del plugin), nunca páginas de la tienda del cliente.
+- Conserva el último extracto oficial comprobado; los fallos de red no borran el texto. Caché de errores reducida a 5 minutos y versión nueva de clave para ignorar fallos antiguos cacheados.
+- Si nunca se ha obtenido un extracto, muestra provisionalmente la Description incluida por el autor en el plugin; permite abrir la ficha oficial. No cambia operaciones comerciales ni requiere Core.
+- Pruebas para recuperación tras fallos HTTP, JSON inválido y caché negativa; compatibles con la familia completa.
+
 ## [0.1.14] — 2026-11-09 — Ficha oficial del desarrollador y cabecera centrada en tres zonas (#2476)
 
 - La cabecera distribuye identificación a la izquierda, dos desplegables alineados y centrados (extracto oficial a la izquierda e historial local a la derecha), y versión y fecha a la derecha; distribución adaptable a móvil.

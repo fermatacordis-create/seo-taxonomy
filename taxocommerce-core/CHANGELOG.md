@@ -1,3 +1,30 @@
+## [0.4.72] — 2026-11-10 — Descripción visible desde el plugin (#2494)
+
+- La descripción inmediatamente debajo del título administrativo procede de `Description:` del archivo principal, sin textos duplicados ni consultas externas.
+- Se mantienen el enlace estático `Plugin URI`, el historial local y las funcionalidades anteriores.
+
+## [0.4.71] — 2026-11-10 — Ficha estática sin conexión remota (#2494)
+
+- El encabezado muestra únicamente `Description` y `Plugin URI` de Core, sin consultas REST, botones de consentimiento ni caché de extractos.
+- Mantiene el enlace a la ficha oficial, historial local y todas las funciones, sin dependencias nuevas.
+- `uninstall.php` conserva la eliminación de los cachés históricos de versiones anteriores.
+
+## [0.4.70] — 2026-11-10 — Consentimiento en la ficha del desarrollador (#2491)
+
+- La portada Core no consulta servidores externos al abrirse, aunque expire el caché.
+- La carga del extracto exige acción explícita, `manage_options` y nonce válido; no hay llamadas con peticiones no autorizadas.
+- Se conserva el extracto de la caché, el último extracto verificado por #2489 y el fallback a Description de autor sin llamadas externas.
+- `readme.txt` declara el endpoint, propósito y datos recibidos por el proveedor; se conserva el enlace y la cabecera de tres zonas.
+- Regresión nueva para permisos, nonce, caché y funcionamiento offline.
+- Al desinstalar, elimina exclusivamente la opción del último extracto verificado y sus cachés Core (incluidos los históricos); conserva los datos canónicos de WordPress y WooCommerce.
+
+## [0.4.69] - 2026-11-10 - Resiliencia del extracto oficial (#2489)
+
+- Consulta exclusivamente la API REST pública de la página indicada en Plugin URI (autor del plugin), nunca páginas de la tienda del cliente.
+- Conserva el último extracto oficial comprobado; los fallos de red no borran el texto. Caché de errores reducida a 5 minutos y versión nueva de clave para ignorar fallos antiguos cacheados.
+- Si nunca se ha obtenido un extracto, muestra provisionalmente la Description incluida por el autor en el plugin; permite abrir la ficha oficial. No cambia operaciones comerciales ni requiere Core.
+- Pruebas para recuperación tras fallos HTTP, JSON inválido y caché negativa; compatibles con la familia completa.
+
 ## [0.4.68] — 2026-11-09 — WordPress.org pre-review: styles, ZIP uploads, security (#2481)
 
 - Move three in-page CSS blocks (Autocheck, classic hierarchy, SEO hierarchy) to the existing enqueued `assets/admin.css` while preserving selectors, styles and responsive rules.

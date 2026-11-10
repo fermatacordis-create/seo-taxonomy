@@ -31,26 +31,14 @@ function admin_url( $path ) { return 'https://example.test/wp-admin/' . $path; }
 function current_user_can( $capability ) { return 'manage_options' === $capability; }
 function wp_nonce_field( $name ) { echo '<input type="hidden" name="_wpnonce" value="test">'; }
 function get_option( $key, $default = '' ) { return $GLOBALS['tc_test_options'][ $key ] ?? $default; }
-function get_transient( $key ) { return $GLOBALS['tc_test_transients'][ $key ] ?? false; }
-function set_transient( $key, $value, $ttl ) { $GLOBALS['tc_test_transients'][ $key ] = $value; return true; }
-function wp_parse_url( $url, $component = -1 ) { return parse_url( $url, $component ); }
-function sanitize_title( $text ) { return strtolower( preg_replace( '/[^a-z0-9-]/', '-', $text ) ); }
-function add_query_arg( $args, $url ) { return $url . '?' . http_build_query( $args ); }
-function wp_safe_remote_get( $url, $args = array() ) {
-    $GLOBALS['tc_test_remote_calls'][] = $url;
-    $url_parts = parse_url( $url );
-    parse_str( $url_parts['query'] ?? '', $query_parts );
-    $slug = $query_parts['slug'] ?? '';
-    $source_link = $url_parts['scheme'] . '://' . $url_parts['host'] . '/' . $slug . '/';
-    return array( 'code' => 200, 'body' => wp_json_encode( array( array(
-        'link' => $source_link,
-        'excerpt' => array( 'rendered' => '<p>Dynamic &amp; safe excerpt</p>' ),
-    ) ) ) );
+function update_option( $key, $value, $autoload = null ) {
+    $GLOBALS['tc_test_options'][ $key ] = $value;
+    return true;
 }
-function is_wp_error( $value ) { return false; }
-function wp_remote_retrieve_response_code( $response ) { return $response['code']; }
-function wp_remote_retrieve_body( $response ) { return $response['body']; }
-function wp_json_encode( $value ) { return json_encode( $value ); }
+function wp_safe_remote_get( $url, $args = array() ) {
+    ++$GLOBALS['tc_test_remote_calls'];
+    throw new RuntimeException( 'Plugin admin header must never send an HTTP request.' );
+}
 function wp_strip_all_tags( $text ) { return strip_tags( $text ); }
 function wp_html_excerpt( $text, $max, $more = '' ) { return strlen( $text ) > $max ? substr( $text, 0, $max ) . $more : $text; }
 function absint( $value ) { return abs( (int) $value ); }
@@ -82,7 +70,7 @@ function wp_add_inline_style( $handle, $css ) {
     global $tc_test_styles;
     $tc_test_styles[ $handle ]['css'] = $css;
 }
-function get_file_data( $file, $fields ) {
+function get_file_data( $file, $fields, $context = '' ) {
     $source = file_get_contents( $file );
     $result = array();
     foreach ( $fields as $field => $name ) {
@@ -134,11 +122,14 @@ foreach ( $slugs as $slug ) {
     tc_test_assert( 1 === substr_count( $html, '<details class="tc-family-info">' ), 'One official excerpt panel: ' . $slug );
     tc_test_assert( 1 === substr_count( $html, '<div class="tc-family-panels">' ), 'One centered header controls zone: ' . $slug );
     tc_test_assert( false === strpos( $html, 'name="tc_official_url"' ), 'The developer-owned link cannot be changed by a shop administrator: ' . $slug );
-    tc_test_assert( false !== strpos( $html, 'Dynamic &amp; safe excerpt' ), 'Default official Plugin URI must load dynamic excerpt: ' . $slug );
+    $headers = get_file_data( $root . '/taxocommerce-' . $slug . '/taxocommerce-' . $slug . '.php', array( 'uri' => 'Plugin URI', 'description' => 'Description' ) );
+    tc_test_assert( false !== strpos( $html, esc_html( wp_strip_all_tags( $headers['description'] ) ) ), 'Local plugin Description shown: ' . $slug );
+    tc_test_assert( false !== strpos( $html, '<p class="tc-family-hero__desc">' . esc_html( wp_strip_all_tags( $headers['description'] ) ) . '</p>' ), 'Visible subtitle follows local plugin Description: ' . $slug );
+    tc_test_assert( false !== strpos( $html, esc_html( $headers['uri'] ) ), 'Local Plugin URI linked: ' . $slug );
     tc_test_assert( strpos( $html, '<details class="tc-family-info">' ) < strpos( $html, '<details class="tc-family-history">' ), 'Official excerpt at left of local history: ' . $slug );
     tc_test_assert( false !== strpos( $html, '<summary>Información del plugin</summary>' ), 'Official excerpt translated in Spanish: ' . $slug );
     tc_test_assert( false === strpos( $html, 'tc-family-info" open' ), 'Official excerpt closed by default: ' . $slug );
-    tc_test_assert( is_readable( $root . '/taxocommerce-' . $slug . '/includes/official-excerpt.php' ), 'Independent REST excerpt source: ' . $slug );
+    tc_test_assert( is_readable( $root . '/taxocommerce-' . $slug . '/includes/official-excerpt.php' ), 'Independent local plugin metadata renderer: ' . $slug );
     $changelog = $root . '/taxocommerce-' . $slug . '/CHANGELOG.md';
     tc_test_assert( is_readable( $changelog ), 'Bundled history is required: ' . $slug );
     $first_line = strtok( file_get_contents( $changelog ), "\n" );
@@ -198,25 +189,34 @@ foreach ( array(
     tc_test_assert( false !== strpos( $markup, '<summary>' . esc_html( $label ) . '</summary>' ), 'History respects site locale: ' . $locale );
 }
 $GLOBALS['tc_test_remote_calls'] = array();
-// Developer Plugin URI is authoritative, even if an old shop-specific option exists.
-$GLOBALS['tc_test_transients'] = array();
-$GLOBALS['tc_test_remote_calls'] = array();
+// The client cannot override the official local developer link, including
+// on a fresh installation or when stale remote cache options still exist.
 $GLOBALS['tc_test_options']['tc_official_page_taxocommerce-auditor'] = 'https://client.example/override/';
+$GLOBALS['tc_test_options']['tc_official_excerpt_good_fake'] = 'Stale remote content';
 $_GET['page'] = 'taxocommerce-auditor';
 $GLOBALS['tc_test_locale'] = 'es_ES';
-$official = get_file_data( $root . '/taxocommerce-auditor/taxocommerce-auditor.php', array( 'uri' => 'Plugin URI' ) );
+$official = get_file_data(
+    $root . '/taxocommerce-auditor/taxocommerce-auditor.php',
+    array( 'uri' => 'Plugin URI', 'description' => 'Description' )
+);
 ob_start();
-foreach ( $tc_test_actions['admin_notices'] as $callback ) { $callback(); }
-$remote_markup = ob_get_clean();
-tc_test_assert( 1 === count( $GLOBALS['tc_test_remote_calls'] ), 'The developer page loads through one safe WordPress REST request.' );
-tc_test_assert( false !== strpos( $remote_markup, 'Dynamic &amp; safe excerpt' ), 'Excerpt must be escaped and HTML removed.' );
-tc_test_assert( false !== strpos( $remote_markup, esc_html( $official['uri'] ) ), 'The developer Plugin URI link is visible.' );
-tc_test_assert( false === strpos( $remote_markup, 'https://client.example' ), 'Legacy shop option cannot override the official Plugin URI.' );
-tc_test_assert( false === strpos( $remote_markup, 'tc_official_url' ), 'No customer-visible official URL edit field.' );
+foreach ( $tc_test_actions['admin_notices'] as $callback ) {
+    $callback();
+}
+$static_markup = ob_get_clean();
+tc_test_assert( 0 === count( $GLOBALS['tc_test_remote_calls'] ), 'No HTTP requests for plugin information.' );
+tc_test_assert( false !== strpos( $static_markup, esc_html( $official['description'] ) ), 'The PHP plugin Description is authoritative.' );
+tc_test_assert( false !== strpos( $static_markup, esc_html( $official['uri'] ) ), 'The official developer URL is linked.' );
+tc_test_assert( false === strpos( $static_markup, 'https://client.example' ), 'Shop-specific legacy options cannot override the developer URL.' );
+tc_test_assert( false === strpos( $static_markup, 'Stale remote content' ), 'Legacy network caches are never used.' );
+tc_test_assert( false === strpos( $static_markup, 'tc_official_url' ), 'No legacy editable URL control.' );
 ob_start();
-foreach ( $tc_test_actions['admin_notices'] as $callback ) { $callback(); }
+foreach ( $tc_test_actions['admin_notices'] as $callback ) {
+    $callback();
+}
 ob_end_clean();
-tc_test_assert( 1 === count( $GLOBALS['tc_test_remote_calls'] ), 'Repeated visits read from transient cache.' );
+tc_test_assert( 0 === count( $GLOBALS['tc_test_remote_calls'] ), 'Repeated admin visits cannot contact the developer website.' );
+
 unset( $GLOBALS['tc_test_locale'] );
 unset( $_GET['page'] );
 ob_start();
@@ -241,6 +241,8 @@ tc_test_assert( false !== strpos( $core_ui, 'tcc-hero__metadata' ) && false !== 
 tc_test_assert( false !== strpos( $core_ui, 'tcc-hero__panels' ), 'Core presents the developer information and local changelog in a separate centered zone.' );
 tc_test_assert( false !== strpos( $core_ui, '<details class="tcc-hero__history">' ), 'Core has a collapsed history on its own dashboard.' );
 tc_test_assert( false !== strpos( $core_ui, "dirname( __DIR__ ) . '/CHANGELOG.md'" ), 'Core reads its own local changelog.' );
+tc_test_assert( false !== strpos( $core_ui, "'description' => 'Description'" ), 'Core title subtitle reads bundled plugin Description.' );
+tc_test_assert( false !== strpos( $core_ui, 'esc_html( $tc_plugin_description )' ), 'Core renders local Description under the title.' );
 tc_test_assert( false !== strpos( $core_ui, 'esc_html( $tc_history )' ), 'Core history is HTML-escaped.' );
 tc_test_assert( is_readable( $root . '/taxocommerce-core/CHANGELOG.md' ), 'Core changelog must be included in the release.' );
 tc_test_assert( false !== strpos( $tasks_ui, "require_once __DIR__ . '/includes/admin-branding.php';" ), 'Tasks loads the shared autonomous visual header' );
@@ -248,5 +250,5 @@ tc_test_assert( false === strpos( $tasks_ui, '<div class="wrap"><h1>' ), 'Tasks 
 tc_test_assert( false !== strpos( $tasks_ui, '<div class="wrap"><nav class="nav-tab-wrapper">' ), 'Tasks keeps its seven-tab navigation below the hero' );
 $tasks_data = get_file_data( $root . '/taxocommerce-tasks/taxocommerce-tasks.php', array( 'version' => 'Version', 'released' => 'Release Date' ) );
 tc_test_assert( false !== strpos( file_get_contents( $root . '/taxocommerce-tasks/readme.txt' ), 'Stable tag: ' . $tasks_data['version'] ), 'Tasks release version matches readme' );
-tc_test_assert( false !== strpos( $core_ui, "'/official-excerpt.php'" ), 'Core must load standalone official excerpt.' );
-echo "PASS: 20 local version histories + optional safe REST excerpts (cached) + Core." . PHP_EOL;
+tc_test_assert( false !== strpos( $core_ui, "'/official-excerpt.php'" ), 'Core must load standalone developer metadata.' );
+echo "PASS: 20 local version histories + static Description / Plugin URI panels + Core." . PHP_EOL;

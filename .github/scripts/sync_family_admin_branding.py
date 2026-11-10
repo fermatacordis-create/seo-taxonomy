@@ -49,7 +49,6 @@ def main():
         result = (template
                   .replace("__TC_DOMAIN__", "taxocommerce-" + slug)
                   .replace("__TC_ICON__", icon)
-                  .replace("__TC_DESCRIPTION__", description)
                   .replace("__TC_HISTORY_CSS__", history_css)
                   .replace("__TC_HISTORY_PHP__", history_php)
                   .replace("__TC_HISTORY_HTML__", history_html)

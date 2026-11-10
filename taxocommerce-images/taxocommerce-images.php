@@ -3,8 +3,8 @@
  * Plugin Name: TaxoCommerce Images - Image Management for WooCommerce
  * Plugin URI: https://asociacionfocazul.com/taxocommerce-images/
  * Description: Gestiona, audita y optimiza imágenes de WordPress/WooCommerce manteniendo Media como fuente de verdad.
- * Version: 0.2.24
- * Release Date: 2026-11-09
+ * Version: 0.2.27
+ * Release Date: 2026-11-10
  * Requires at least: 6.5
  * Requires PHP: 7.4
  * Author: David Perez
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once __DIR__ . '/includes/admin-branding.php';
 
-define( 'TAXOCOMMERCE_IMAGES_VERSION', '0.2.24' );
+define( 'TAXOCOMMERCE_IMAGES_VERSION', '0.2.27' );
 define( 'TAXOCOMMERCE_IMAGES_FILE', __FILE__ );
 define( 'TAXOCOMMERCE_IMAGES_PATH', plugin_dir_path( __FILE__ ) );
 define( 'TAXOCOMMERCE_IMAGES_BASENAME', plugin_basename( __FILE__ ) );

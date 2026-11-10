@@ -4,7 +4,7 @@ Tags: analytics, search-console, bing, ecommerce, reporting
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.1.35
+Stable tag: 1.1.40
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,9 @@ External connections, manual provider data downloads, and the restored legacy An
 
 == Description ==
 
-* The developer's Plugin URI provides the official plugin information (read-only for shop administrators). Its public excerpt appears to the left of the locally bundled version history, both centered in the three-zone admin header.
+* Analysis: individual reports or a complete sequential run (mobile-friendly) using authenticated AJAX, and unified JSON download or browser-view fallback.
+
+* The admin header shows the local bundled Description and Plugin URI metadata without external requests or excerpt caching. CHANGELOG.md provides independent version history.
 
 
 
@@ -57,6 +59,15 @@ Only previously saved local information may be available. Live Google/Bing metri
 It is the continued plugin under the historical slug taxocommerce-google-bing, renamed to Insights and focused on unified connections and provider data downloads.
 
 == Changelog ==
+
+= 1.1.38 =
+* Local Description and Plugin URI replace the REST excerpt in the header, preserving executive reports and data integrations. Issue #2494.
+
+
+= 1.1.36 =
+* Display the last verified official excerpt from the developer's Plugin URI during HTTP errors; avoid stale negative cache and show bundled author Description on first-install network failure. No dependency on customer content. Issue #2489.
+
+
 
 = 1.1.35 =
 * Three-zone responsive admin header, centered official developer information and own Markdown history; remove shop administrator URL configuration. Issue #2476.
@@ -218,10 +229,6 @@ It is the continued plugin under the historical slug taxocommerce-google-bing, r
 * The legacy Analysis dashboards were restored after an experimental executive-report replacement proved incomplete; original reporting workflows remained the baseline.
 * Standalone Insights then added country-scoped Trends reports, user/technical manuals, non-destructive Auto Test, before/after comparisons and WordPress.org security/packaging corrections.
 
-== External Services ==
+== Local plugin information ==
 
-Optional: if an administrator enters an HTTPS URL to an official WordPress page, the plugin requests that site's public `/wp-json/wp/v2/pages` endpoint with the page slug to read only its published excerpt and link. No visitor identity or credentials are submitted. A 12-hour cache (15 minutes after failure) avoids repeated requests. The administrator chooses and should review the source site's privacy policy and terms. No provider is configured by default.
-
-== Official excerpt ==
-
-The optional admin information panel defaults to this plugin's `Plugin URI`, a public project page. Only its published excerpt is retrieved via safe WordPress REST HTTPS and cached locally. Administrators may override or explicitly clear the URL to disable requests. No network dependency for core functionality.
+The header displays locally bundled Description and a link to the developer Plugin URI, without external requests. Google, Bing and other actual data connections remain independent and documented in the sections above.

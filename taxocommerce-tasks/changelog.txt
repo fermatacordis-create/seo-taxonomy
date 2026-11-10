@@ -1,3 +1,9 @@
+= 0.1.16 (2026-11-10) =
+* Admin subtitle uses bundled Description metadata; static Plugin URI and local version history retained. Issue #2494.
+
+= 0.1.15 (2026-11-10) =
+* Local Description and Plugin URI replace developer excerpt requests and caching. Issue #2494.
+
 = 0.1.6 (2026-11-07) =
 * Cabecera uniforme con título, versión y fecha; se elimina el título sencillo duplicado sin modificar las siete pestañas ni los datos de Tasks. Issue #2336.
 

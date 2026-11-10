@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: TaxoCommerce Auditor 0.3.12\n"
+"Project-Id-Version: TaxoCommerce Auditor 0.3.18\n"
 "Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2666,3 +2666,51 @@ msgstr "De pagina registreert wp_ajax_taxocommerce_auditor_watch, vereist manage
 #: includes/class-admin.php includes/class-manual.php
 msgid "Un Auto Test satisfactorio significa que los componentes y contratos están disponibles; no sustituye una auditoría completa de prueba ni verifica que se puedan exportar y recuperar datos desde el filesystem real. Para anomalías: verifica permisos, respuesta de admin-ajax.php, nonce, límites de alojamiento, instalación de WooCommerce, espacio para el JSONL y errores PHP. WP-Cron solo es necesario si se desea continuar con la pestaña cerrada. Si falla una fuente opcional de FAQs, consulta las dependencias antes de modificar código."
 msgstr "Een geslaagde Auto Test bevestigt dat onderdelen en contracten beschikbaar zijn; dit vervangt geen volledige proefaudit en controleert geen echte bestandsuitvoer. Controleer bij problemen de rechten, het antwoord van admin-ajax.php, de nonce, hostinglimieten, WooCommerce, JSONL-opslagruimte en PHP-fouten. WP-Cron is alleen nodig als de verwerking na het sluiten van het tabblad moet doorgaan. Als een optionele FAQ-bron faalt, controleer dan de afhankelijkheden voordat je code wijzigt."
+
+#: includes/class-admin.php includes/class-manual.php
+msgid "Ejecución automática con regulación adaptativa de carga."
+msgstr "Automatische verwerking met adaptieve belastingregeling."
+
+#: includes/class-admin.php includes/class-manual.php
+msgid "Próximo lote"
+msgstr "Volgende batch"
+
+#: includes/class-admin.php includes/class-manual.php
+msgid "No se pudo procesar el siguiente lote. Comprueba la conexión; el sistema lo reintentará."
+msgstr "De volgende batch kon niet worden verwerkt. Controleer de verbinding; het systeem probeert het opnieuw."
+
+#: includes/class-admin.php includes/class-manual.php
+msgid "El nivel establece la carga máxima. El sistema ajusta automáticamente tamaño y frecuencia según duración y memoria de cada lote. Los cambios no reinician el progreso. No mide el porcentaje global de CPU."
+msgstr "Het niveau bepaalt de maximale belasting. Het systeem past batchgrootte en frequentie automatisch aan op basis van duur en geheugengebruik. Wijzigingen resetten de voortgang niet. Het totale CPU-gebruik van de server wordt niet gemeten."
+
+#: includes/class-admin.php includes/class-manual.php
+msgid "Durante la auditoría se muestra el estado, el progreso y el botón Pausar; si está pausada, aparece Reanudar. Los lotes avanzan automáticamente mientras la pestaña permanece abierta, sin pulsar Siguiente lote ni esperar tareas programadas."
+msgstr "Tijdens de audit verschijnen de status, de voortgang en de knop Pauzeren; bij pauze verschijnt Hervatten. Batches gaan automatisch verder zolang het tabblad open is, zonder handmatig op Volgende batch te klikken of op geplande taken te wachten."
+
+#: includes/class-admin.php includes/class-manual.php
+msgid "La velocidad 1–5 define una carga máxima. El sistema mide el tiempo completo de cada lote y la presión de memoria PHP para reducir o aumentar el tamaño del siguiente y la pausa entre peticiones. No mide el porcentaje global de CPU. Mantén la pestaña abierta para ejecutar automáticamente; al cerrarla o suspenderla solo seguirá trabajando un proceso de servidor configurado por el alojamiento."
+msgstr "De snelheden 1–5 bepalen de maximale belasting. Het systeem meet de totale batchduur en PHP-geheugendruk om de volgende batchgrootte en de pauze tussen verzoeken te verhogen of te verlagen. Het meet niet het totale CPU-gebruik van de server. Houd het tabblad open; na sluiten of onderbreken kan alleen een door de hosting ingestelde servertaak doorgaan."
+
+#: includes/class-admin.php includes/class-manual.php
+msgid "La pantalla utiliza wp_ajax_taxocommerce_auditor_watch con manage_options y nonce y procesa como máximo un lote por petición AJAX. Workload::effective_batch_size() y Workload::adjusted_batch_size() respetan el límite de velocidad seleccionado y toman como señales la duración PHP y la presión de memoria; el navegador ajusta la pausa según estas medidas y la latencia de la petición. El bloqueo taxocommerce_auditor_worker_{scope} evita ejecuciones simultáneas; los errores HTTP se muestran y reintentan con espera creciente. Los eventos de cron son solo un respaldo opcional y nunca se utilizan para decidir el siguiente lote de la pantalla."
+msgstr "Het scherm gebruikt wp_ajax_taxocommerce_auditor_watch met manage_options en een nonce en verwerkt maximaal één batch per AJAX-verzoek. Workload::effective_batch_size() en Workload::adjusted_batch_size() respecteren de geselecteerde snelheidslimiet en gebruiken PHP-duur en geheugendruk; de browser past de pauze aan op basis van die waarden en de verzoeklatentie. De vergrendeling taxocommerce_auditor_worker_{scope} voorkomt gelijktijdige uitvoering; HTTP-fouten worden getoond en met oplopende wachttijd opnieuw geprobeerd. Cron-taken zijn alleen een optionele terugval en bepalen nooit de volgende batch in de browser."
+
+#: includes/class-admin.php includes/class-manual.php
+msgid "CPU PHP"
+msgstr "PHP-CPU"
+
+#: includes/class-admin.php includes/class-manual.php
+msgid "Modo automático: los lotes avanzan solos y se ajustan a la carga disponible. Mantén abierta la pestaña."
+msgstr "Automatische modus: batches gaan zelfstandig door en passen zich aan de beschikbare capaciteit aan. Houd het tabblad open."
+
+#: includes/class-admin.php includes/class-manual.php
+msgid "El nivel establece la carga máxima. Auditor adapta los lotes según duración, CPU del proceso PHP y memoria disponible. No mide el porcentaje global de CPU del servidor. Cambiarlo no reinicia el progreso."
+msgstr "Het niveau beperkt de maximale belasting. Auditor past batches aan op basis van looptijd, PHP-proces-CPU en geheugen. Het totale CPU-gebruik van de server wordt niet gemeten. Het niveau wijzigen reset de voortgang niet."
+
+#: includes/class-admin.php includes/class-manual.php
+msgid "Los cinco niveles establecen techos de 40 a 500 objetos por lote; cada auditoría comienza con consultas conservadoras. El sistema utiliza duración, memoria y CPU consumida por el proceso PHP cuando está disponible para adaptar el siguiente lote y la pausa. No mide el porcentaje global de CPU del alojamiento. Mantén abierta la pestaña para continuar automáticamente; al cerrarla solo un trabajador del servidor puede proseguir."
+msgstr "De vijf niveaus begrenzen de batchgrootte tot 40 à 500 objecten; elke audit begint met voorzichtige verzoeken. Het systeem gebruikt looptijd, geheugen en PHP-proces-CPU indien beschikbaar om de volgende batch en pauze aan te passen. Het meet niet het totale CPU-gebruik van de hosting. Houd het tabblad open voor automatische voortgang; na sluiten kan alleen een servertaak doorgaan."
+
+#: includes/class-admin.php includes/class-manual.php
+msgid "La pantalla utiliza wp_ajax_taxocommerce_auditor_watch con manage_options y nonce, procesando un lote por petición AJAX. Workload::effective_batch_size() respeta el máximo elegido y Workload::adjusted_batch_size() ajusta el próximo lote según tiempo completo, memoria y CPU propia medida mediante getrusage() cuando existe. El navegador regula la pausa según duración, latencia, memoria y CPU PHP; no conoce la CPU total del servidor. La consulta usa el mismo tamaño que la condición de finalización y conserva cursor e informes JSONL. El bloqueo taxocommerce_auditor_worker_{scope} impide solapamientos. Los fallos HTTP se reintentan; Cron queda solo como respaldo opcional."
+msgstr "De pagina verwerkt via wp_ajax_taxocommerce_auditor_watch met manage_options en nonce één batch per AJAX-verzoek. Workload::effective_batch_size() respecteert het gekozen maximum en Workload::adjusted_batch_size() past de volgende batch aan op basis van duur, geheugen en via getrusage() gemeten PHP-CPU indien beschikbaar. De browser past de pauze aan met duur, latentie, geheugen en PHP-CPU; het totale server-CPU-gebruik is onbekend. Verzoek en voltooiingscontrole gebruiken dezelfde batchgrootte en bewaren cursors en JSONL-rapporten. Het slot taxocommerce_auditor_worker_{scope} voorkomt overlap. HTTP-fouten worden opnieuw geprobeerd; Cron blijft optionele terugval."

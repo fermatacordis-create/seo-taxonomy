@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 final class Runner {
     const HOOK       = 'taxocommerce_auditor_process_batch';
-    const BATCH_SIZE = 40;
+    const BATCH_SIZE = 500;
     const MAX_STORED_FINDINGS = 400;
     const MAX_QUALITY_ROWS    = 100;
     const MAX_INDEXED_TITLES  = 25000;
@@ -142,6 +142,12 @@ final class Runner {
             'next_event_timestamp'=> $next,
             'speed_delay_seconds' => Workload::delay_seconds( $scope ),
             'client_delay_ms'     => Workload::client_delay_ms( $scope ),
+            'batch_budget_ms'     => Workload::budget_seconds( $scope ) * 1000,
+            'batch_duration_ms'   => absint( $state['last_batch_duration_ms'] ?? 0 ),
+            'batch_cpu_ms'        => isset( $state['last_batch_cpu_ms'] ) ? absint( $state['last_batch_cpu_ms'] ) : null,
+            'last_batch_objects'  => absint( $state['last_batch_objects'] ?? 0 ),
+            'effective_batch_size'=> Workload::effective_batch_size( $scope, $state ),
+            'memory_pressure_percent' => absint( $state['memory_pressure_percent'] ?? 0 ),
             'cron_disabled'       => defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON,
             'cron_overdue'        => $running && $next > 0 && $next < time() - 60,
             'reason'              => sanitize_text_field( (string) ( $state['reason'] ?? '' ) ),
@@ -324,9 +330,11 @@ final class Runner {
      * Seek by post ID to avoid large OFFSET queries for 10k+ products.
      * The filter applies exclusively to this one WP_Query instance.
      */
-    private static function batch( $scope, $cursor, $filters = array(), $remaining = null ) {
+    private static function batch( $scope, $cursor, $filters = array(), $remaining = null, $requested_size = null ) {
         $filters = self::sanitize_filters( $scope, $filters );
-        $speed_batch = Workload::batch_size( $scope );
+        $speed_batch = null === $requested_size
+            ? Workload::batch_size( $scope )
+            : min( Workload::batch_size( $scope ), max( 1, absint( $requested_size ) ) );
         $batch_size = min( $speed_batch, null === $remaining ? $speed_batch : max( 1, absint( $remaining ) ) );
         if ( 'faqs' === $scope && FAQ_Source::available() ) {
             return FAQ_Source::batch(
@@ -809,9 +817,13 @@ final class Runner {
                 self::complete( $scope, $state );
                 return;
             }
-            $requested_batch = min( Workload::batch_size( $scope ), null === $remaining ? Workload::batch_size( $scope ) : max( 1, $remaining ) );
-            $objects = self::batch( $scope, absint( $state['cursor'] ), (array) ( $state['filters'] ?? array() ), $remaining );
+            $maximum_batch = Workload::effective_batch_size( $scope, $state );
+            $requested_batch = min( $maximum_batch, null === $remaining ? $maximum_batch : max( 1, $remaining ) );
+            // Include query and object hydration, not just per-item inspection,
+            // when measuring load and enforcing the existing time budget.
+            $batch_cpu_started = Workload::process_cpu_ms();
             $batch_started = microtime( true );
+            $objects = self::batch( $scope, absint( $state['cursor'] ), (array) ( $state['filters'] ?? array() ), $remaining, $requested_batch );
             $processed_batch = 0;
             $fetched_batch = count( $objects );
             foreach ( $objects as $object ) {
@@ -1008,6 +1020,20 @@ final class Runner {
             }
 
             $state['last_batch_timestamp'] = time();
+            $state['last_batch_duration_ms'] = max( 1, (int) round( ( microtime( true ) - $batch_started ) * 1000 ) );
+            $batch_cpu_finished = Workload::process_cpu_ms();
+            $state['last_batch_cpu_ms'] = null !== $batch_cpu_started && null !== $batch_cpu_finished
+                ? max( 0, $batch_cpu_finished - $batch_cpu_started ) : null;
+            $state['last_batch_objects'] = absint( $processed_batch );
+            $state['memory_pressure_percent'] = Workload::memory_pressure_percent();
+            $state['adaptive_batch_size'] = Workload::adjusted_batch_size(
+                $scope,
+                $requested_batch,
+                $state['last_batch_duration_ms'],
+                $state['memory_pressure_percent'],
+                $processed_batch,
+                $state['last_batch_cpu_ms']
+            );
             self::trim_samples( $state );
             $full = 'full' === (string) ( $state['filters']['mode'] ?? 'filtered' );
             $limit_reached = ! $full && absint( $state['processed'] ) >= absint( $state['filters']['rows'] ?? 25 );

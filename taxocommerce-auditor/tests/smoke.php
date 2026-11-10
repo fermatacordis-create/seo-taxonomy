@@ -284,7 +284,8 @@ verify( false !== strpos( $admin_source, 'absint( wp_unslash( (string) $_POST[\'
 verify( false !== strpos( $admin_source, 'absint( wp_unslash( (string) $_POST[\'rows\'] ) )' ), 'POST row limit sanitized at ingress' );
 verify( 1 === substr_count( $runner_source, 'phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query' ), 'Filtered cursor batch has one justified query annotation' );
 verify( 1 === substr_count( $category_source, 'phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query' ), 'Bounded category cohort has one justified query annotation' );
-verify( false !== strpos( $runner_source, 'const BATCH_SIZE = 40;' ), 'Category-filtered cursor batch stays bounded' );
+verify( false !== strpos( $runner_source, 'const BATCH_SIZE = 500;' ), 'Category-filtered cursor batches retain a bounded ceiling' );
+verify( false !== strpos( $runner_source, 'Workload::effective_batch_size( $scope, $state )' ), 'Actual batch limit is adaptive, not always 500' );
 verify( false !== strpos( $category_source, 'const SAMPLE_MAX = 200;' ), 'Category cohort sample stays bounded' );
 verify( 1 === preg_match( '/^Tags:\\s*([^\\r\\n]+)/m', $readme_source, $readme_tags ), 'Plugin readme declares tags' );
 verify( count( array_filter( array_map( 'trim', explode( ',', $readme_tags[1] ) ) ) ) <= 5, 'WordPress.org tag count at most five' );

@@ -43,12 +43,50 @@
         }, milliseconds);
     }
 
+    function adaptiveDelay(data, totalRequestMs) {
+        var baseline = Number(data.client_delay_ms);
+        if (!Number.isFinite(baseline)) {
+            baseline = 2000;
+        }
+        baseline = Math.max(200, Math.min(10000, baseline));
+
+        var budgetMs = Number(data.batch_budget_ms);
+        var workMs = Number(data.batch_duration_ms);
+        var cpuMs = data.batch_cpu_ms === null || data.batch_cpu_ms === undefined
+            ? NaN : Number(data.batch_cpu_ms);
+        var memoryPercent = Number(data.memory_pressure_percent);
+        var observed = Math.max(
+            Number.isFinite(workMs) ? workMs : 0,
+            Number.isFinite(totalRequestMs) ? totalRequestMs : 0
+        );
+
+        if (!Number.isFinite(budgetMs) || budgetMs <= 0 || observed <= 0) {
+            return baseline;
+        }
+
+        // Execution time + PHP memory are observable resource proxies, not
+        // global server CPU percentage. The selected speed is the upper cap.
+        var ratio = Math.max(observed / budgetMs,
+            Number.isFinite(cpuMs) ? (cpuMs / budgetMs) * 1.15 : 0);
+        if ((Number.isFinite(memoryPercent) && memoryPercent >= 80) || ratio >= 0.8) {
+            return Math.min(30000, Math.ceil(baseline * 2.5));
+        }
+        if ((Number.isFinite(memoryPercent) && memoryPercent >= 70) || ratio >= 0.45) {
+            return Math.min(30000, Math.ceil(baseline * 1.5));
+        }
+        if ((!Number.isFinite(memoryPercent) || memoryPercent < 65) && ratio <= 0.25) {
+            return Math.max(200, Math.ceil(baseline * 0.65));
+        }
+        return baseline;
+    }
+
     function poll() {
         if (stopped || busy) {
             return;
         }
 
         busy = true;
+        var requestedAt = Date.now();
         var nextDelay = 2000;
         var body = new window.URLSearchParams();
         body.set('action', 'taxocommerce_auditor_watch');
@@ -97,17 +135,21 @@
                 ' / ' + (data.total === null ? '—' : data.total) +
                 ' · ' + config.latest + ': ' + readableTime(data.last_batch_timestamp) +
                 ' · ' + config.continuous;
+            if (Number(data.batch_duration_ms) > 0 && Number(data.effective_batch_size) > 0) {
+                progress.textContent += ' · ' + config.nextBatch + ': ' +
+                    Number(data.effective_batch_size) + ' · ' + config.duration + ': ' +
+                    (Number(data.batch_duration_ms) / 1000).toFixed(1) + ' s';
+                if (data.batch_cpu_ms !== null && data.batch_cpu_ms !== undefined) {
+                    progress.textContent += ' · ' + config.cpu + ': ' + Number(data.batch_cpu_ms) + ' ms';
+                }
+            }
 
             warning.hidden = true;
             warning.textContent = '';
+            // WP-Cron health does not govern the browser worker and must not
+            // generate a warning during a healthy AJAX audit.
             if (data.reason) {
                 warning.textContent = data.reason;
-                warning.hidden = false;
-            } else if (data.cron_disabled) {
-                warning.textContent = config.disabled;
-                warning.hidden = false;
-            } else if (data.cron_overdue) {
-                warning.textContent = config.overdue;
                 warning.hidden = false;
             }
 
@@ -121,13 +163,10 @@
                 return;
             }
 
-            // Speed is persisted per scope. It controls both server batch
-            // limits and the idle time between consecutive AJAX requests.
-            var pauseMs = Number(data.client_delay_ms);
-            if (!Number.isFinite(pauseMs)) {
-                pauseMs = 2000;
-            }
-            nextDelay = Math.min(10000, Math.max(300, pauseMs));
+            // Actual server duration, observed request latency and PHP memory
+            // pressure adapt the pause. A faster response gets more throughput
+            // without exceeding the selected speed's server-side batch cap.
+            nextDelay = adaptiveDelay(data, Date.now() - requestedAt);
             if (Number(data.batch_processed) <= 0) {
                 idleRuns += 1;
                 // Another worker may own the atomic lock. Never busy-loop.

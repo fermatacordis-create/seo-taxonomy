@@ -1,57 +1,134 @@
-/* TaxoCommerce SEO: Analista report panels (loaded via wp_enqueue_script). */
-jQuery(function($) {
-            var running = false;
-            var ajaxUrl = window.seoAnalistaLazyConfig.ajaxUrl;
-            var nonce = window.seoAnalistaLazyConfig.nonce;
-            var days = window.seoAnalistaLazyConfig.days;
+/* TaxoCommerce Insights: sequential Analysis reports, including mobile browsers. */
+jQuery(function ($) {
+    'use strict';
 
-            $('.seo-analista-lazy-button').on('click', function() {
-                if (running) {
+    var config = window.seoAnalistaLazyConfig || {};
+    var buttons = $('.seo-analista-lazy-button');
+    var fullButton = $('#tgb-analysis-run-all');
+    var stopButton = $('#tgb-analysis-cancel');
+    var status = $('#seo-analista-lazy-status');
+    var result = $('#seo-analista-lazy-result');
+    var running = false;
+    var cancelled = false;
+    var pending = null;
+
+    function setBusy(busy) {
+        running = busy;
+        buttons.prop('disabled', busy);
+        fullButton.prop('disabled', busy);
+        stopButton.prop('disabled', !busy);
+    }
+
+    function showStatus(message, failed) {
+        status.empty().append(
+            $('<div>').toggleClass('notice notice-error inline', !!failed).append(
+                $('<p>').text(message)
+            )
+        );
+    }
+
+    function items() {
+        return buttons.map(function () {
+            var button = $(this);
+            return {
+                report: String(button.attr('data-report') || ''),
+                label: button.find('strong').first().text()
+            };
+        }).get().filter(function (item) { return item.report !== ''; });
+    }
+
+    function run(queue, complete) {
+        if (running || !queue.length) {
+            return;
+        }
+        if (!config.ajaxUrl || !config.nonce) {
+            showStatus('No se ha podido inicializar Analista. Recarga la página e inténtalo de nuevo.', true);
+            return;
+        }
+
+        cancelled = false;
+        setBusy(true);
+        result.empty();
+        var finished = 0;
+        var total = queue.length;
+
+        function finish(message, error) {
+            pending = null;
+            setBusy(false);
+            showStatus(message, error);
+        }
+
+        function next() {
+            if (cancelled) {
+                finish('Proceso detenido. Se conservan los ' + finished + ' bloques completados; el informe NO está completo.', true);
+                return;
+            }
+            if (finished === total) {
+                finish((complete ? 'Informe completo generado: ' : 'Informe generado: ') + finished + ' de ' + total + ' bloques.', false);
+                return;
+            }
+
+            var item = queue[finished];
+            showStatus('Generando ' + (finished + 1) + ' de ' + total + ': ' + item.label + '…', false);
+            pending = $.ajax({
+                url: config.ajaxUrl,
+                method: 'POST',
+                dataType: 'json',
+                timeout: 240000,
+                data: {
+                    action: 'taxocommerce_insights_analysis',
+                    nonce: config.nonce,
+                    report: item.report,
+                    days: config.days
+                }
+            }).done(function (response) {
+                if (cancelled) {
                     return;
                 }
-
-                var button = $(this);
-                var report = button.data('report');
-                var label = button.find('strong').first().text();
-
-                running = true;
-                $('.seo-analista-lazy-button').prop('disabled', true).removeClass('is-running');
-                button.addClass('is-running');
-                $('#seo-analista-lazy-result').empty();
-                $('#seo-analista-lazy-status').html('<span class="spinner is-active"></span><strong>Generando ' + $('<div>').text(label).html() + '…</strong> Solo se está ejecutando este bloque.');
-
-                $.ajax({
-                    url: ajaxUrl,
-                    method: 'POST',
-                    dataType: 'json',
-                    timeout: 240000,
-                    data: {
-                        action: 'taxocommerce_insights_analysis',
-                        nonce: nonce,
-                        report: report,
-                        days: days
-                    }
-                }).done(function(response) {
-                    if (response && response.success) {
-                        var seconds = response.data && response.data.seconds ? response.data.seconds : 0;
-                        var version = response.data && response.data.version ? response.data.version : '';
-                        $('#seo-analista-lazy-status').html('<strong>' + $('<div>').text(label).html() + ' completado.</strong> ' + seconds + ' s' + (version ? ' · Analista ' + $('<div>').text(version).html() : ''));
-                        $('#seo-analista-lazy-result').html(response.data.html || '');
-                    } else {
-                        var message = response && response.data && response.data.message ? response.data.message : 'No se pudo generar el informe.';
-                        $('#seo-analista-lazy-status').html('<div class="notice notice-error inline"><p>' + $('<div>').text(message).html() + '</p></div>');
-                    }
-                }).fail(function(xhr, textStatus) {
-                    var message = 'Error AJAX al generar el informe.';
-                    if (textStatus === 'timeout') {
-                        message = 'El informe superó 240 segundos. Este bloque necesita dividirse todavía más.';
-                    } else if (xhr && xhr.responseJSON && xhr.responseJSON.data && xhr.responseJSON.data.message) {
-                        message = xhr.responseJSON.data.message;
-                    }
-                    $('#seo-analista-lazy-status').html('<div class="notice notice-error inline"><p>' + $('<div>').text(message).html() + '</p></div>');
-                }).always(function() {
-                    running = false;
-                    $('.seo-analista-lazy-button').prop('disabled', false).removeClass('is-running');
-                });
+                if (!response || !response.success || !response.data || typeof response.data.html !== 'string') {
+                    var explanation = response && response.data && response.data.message ?
+                        response.data.message : 'Respuesta del servidor no válida.';
+                    finish('Error en ' + item.label + ': ' + explanation + ' (' + finished + '/' + total + ' completados).', true);
+                    return;
+                }
+                result.append(
+                    $('<div>').addClass('tgb-analysis-report').attr('data-report', item.report).html(response.data.html)
+                );
+                finished++;
+                next();
+            }).fail(function (xhr, reason) {
+                if (cancelled || reason === 'abort') {
+                    finish('Proceso detenido. Se conservan ' + finished + ' de ' + total + ' bloques; el informe NO está completo.', true);
+                    return;
+                }
+                var message = reason === 'timeout' ? 'Tiempo de espera agotado.' :
+                    (xhr && xhr.responseJSON && xhr.responseJSON.data && xhr.responseJSON.data.message) ||
+                    'Error de conexión o servidor.';
+                finish('Error en ' + item.label + ': ' + message + ' (' + finished + '/' + total + ' completados).', true);
             });
-        });
+        }
+        next();
+    }
+
+    buttons.on('click', function () {
+        var button = $(this);
+        run([{
+            report: String(button.attr('data-report') || ''),
+            label: button.find('strong').first().text()
+        }], false);
+    });
+
+    fullButton.on('click', function () {
+        run(items(), true);
+    });
+
+    stopButton.on('click', function () {
+        if (!running) {
+            return;
+        }
+        cancelled = true;
+        if (pending && typeof pending.abort === 'function') {
+            pending.abort();
+        }
+    });
+});

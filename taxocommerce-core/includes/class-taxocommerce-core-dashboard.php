@@ -103,6 +103,8 @@ final class TaxoCommerce_Core_Dashboard {
             }
         }
         $tc_official_info = require __DIR__ . '/official-excerpt.php';
+        $tc_plugin_headers = get_file_data( dirname( __DIR__ ) . '/taxocommerce-core.php', array( 'description' => 'Description' ), 'plugin' );
+        $tc_plugin_description = trim( wp_strip_all_tags( (string) ( $tc_plugin_headers['description'] ?? '' ) ) );
         // The version history is bundled with this plugin, not fetched from GitHub.
         $tc_history_file = dirname( __DIR__ ) . '/CHANGELOG.md';
         $tc_history = is_readable( $tc_history_file ) ? file_get_contents( $tc_history_file ) : '';
@@ -157,7 +159,7 @@ final class TaxoCommerce_Core_Dashboard {
 					<div class="tcc-hero__copy">
 						<p class="tcc-eyebrow"><?php esc_html_e( 'TaxoCommerce Core', 'taxocommerce-core' ); ?></p>
 						<h1 id="tcc-dashboard-title"><?php esc_html_e( 'TaxoCommerce Core', 'taxocommerce-core' ); ?></h1>
-						<p><?php esc_html_e( 'El núcleo modular para gestionar la arquitectura, los contenidos y las operaciones de tu tienda WooCommerce.', 'taxocommerce-core' ); ?></p>
+						<p><?php echo esc_html( $tc_plugin_description ); ?></p>
 						<?php $tc_official_info->render_hero( 'taxocommerce-core', $tc_locale ); ?>
 					</div>
 				</div>

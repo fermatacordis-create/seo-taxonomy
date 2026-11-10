@@ -4,16 +4,16 @@ Tags: redirects, redirection, seo, woocommerce, delete
 Requires at least: 6.5
 Requires PHP: 7.4
 Tested up to: 7.1
-Stable tag: 0.1.15
+Stable tag: 0.1.18
 License: GPLv2 or later
 
 Manage SEO redirects and assisted content deletion for WordPress and WooCommerce.
 
 == Description ==
 
-* The developer's Plugin URI provides the official plugin information (read-only for shop administrators). Its public excerpt appears to the left of the locally bundled version history, both centered in the three-zone admin header.
+* The admin header reads this plugin's local `Description` and links to `Plugin URI`, without external requests or caching. The version history is bundled in `CHANGELOG.md`.
 
-* Optional collapsible official-page excerpt beside the version history. Administrators can configure an HTTPS WordPress page URL; only that page's published REST excerpt and link are retrieved using a safe request and a transient cache. No URL or service is preset.
+* Collapsible local plugin information beside the independent version history.
 
 
 Independent WordPress/WooCommerce 301/302 manager with assisted deletion.
@@ -86,6 +86,15 @@ retired and all native relationships have been verified.
 
 == Changelog ==
 
+= 0.1.17 =
+* Local Description and Plugin URI replace REST excerpt requests and caches in the admin header. Issue #2494.
+
+
+= 0.1.16 =
+* Display the last verified official excerpt from the developer's Plugin URI during HTTP errors; avoid stale negative cache and show bundled author Description on first-install network failure. No dependency on customer content. Issue #2489.
+
+
+
 = 0.1.15 =
 * Three-zone responsive admin header, centered official developer information and own Markdown history; remove shop administrator URL configuration. Issue #2476.
 
@@ -146,6 +155,5 @@ retired and all native relationships have been verified.
 
 == External Services ==
 
-An optional administrator-configured HTTPS WordPress website may be queried at its public `/wp-json/wp/v2/pages` endpoint (page slug, excerpt and link) to display that site's published description. It is not contacted until an administrator supplies its URL; no visitor identifiers or credentials are transmitted. Requests are cached locally for 12 hours (failures for 15 minutes), and outgoing links point to the chosen site. Review that site's privacy policy and terms before configuring it. This plugin requires no predefined external provider.
 
-The optional admin information panel defaults to this plugin's `Plugin URI`, the public project page. WordPress retrieves only its published excerpt via the WordPress REST API using a safe HTTPS request and transient cache. The administrator may replace the URL or explicitly clear it to disable remote requests; this does not affect plugin functionality.
+The local information panel shows `Description` and the `Plugin URI` link from the main PHP plugin header, without an HTTP request.
