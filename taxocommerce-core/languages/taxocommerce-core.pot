@@ -3352,3 +3352,91 @@ msgstr ""
 #: includes/class-taxocommerce-core.php
 msgid "Private task agenda, calendar, categories and indicators."
 msgstr ""
+
+#: includes/class-taxocommerce-core-suite.php
+msgid "¿Quitar %s? Se borran sus archivos para ahorrar espacio, pero se conservan sus datos. Para volver a usarlo habrá que descargarlo de nuevo."
+msgstr ""
+
+#: includes/class-taxocommerce-core-suite.php
+msgid "Quitado de esta web (versión %s). Sus datos se conservan."
+msgstr ""
+
+#: includes/class-taxocommerce-core-suite.php
+msgid "Se descargará %s desde el canal de la suite TaxoCommerce y se activará. ¿Continuar?"
+msgstr ""
+
+#: includes/class-taxocommerce-core-suite.php
+msgid "Descargar y activar"
+msgstr ""
+
+#: includes/class-taxocommerce-core-suite.php
+msgid "No tienes permisos para esta acción."
+msgstr ""
+
+#: includes/class-taxocommerce-core-suite.php
+msgid "El módulo no está instalado."
+msgstr ""
+
+#: includes/class-taxocommerce-core-suite.php
+msgid "La carpeta del módulo no está donde se esperaba; no se ha borrado nada."
+msgstr ""
+
+#: includes/class-taxocommerce-core-suite.php
+msgid "WordPress no tiene acceso de escritura a los plugins; el módulo está desactivado pero no se ha borrado."
+msgstr ""
+
+#: includes/class-taxocommerce-core-suite.php
+msgid "No se pudieron borrar los archivos del módulo; ha quedado desactivado."
+msgstr ""
+
+#: includes/class-taxocommerce-core-suite.php
+msgid "%s quitado. Sus datos se conservan; puedes volver a descargarlo desde esta misma tarjeta."
+msgstr ""
+
+#: includes/class-taxocommerce-core-suite.php
+msgid "El canal de descarga de la suite no está configurado o no es de confianza."
+msgstr ""
+
+#: includes/class-taxocommerce-core-suite.php
+msgid "El canal de la suite no ha respondido correctamente."
+msgstr ""
+
+#: includes/class-taxocommerce-core-suite.php
+msgid "El índice de la suite no es válido."
+msgstr ""
+
+#: includes/class-taxocommerce-core-suite.php
+msgid "El módulo ya está instalado."
+msgstr ""
+
+#: includes/class-taxocommerce-core-suite.php
+msgid "Este módulo no está disponible en el canal de la suite."
+msgstr ""
+
+#: includes/class-taxocommerce-core-suite.php
+msgid "Para volver a añadir este módulo, actualiza primero TaxoCommerce Core a la versión %1$s o superior (tienes la %2$s)."
+msgstr ""
+
+#: includes/class-taxocommerce-core-suite.php
+msgid "El archivo descargado no coincide con su huella; no se ha instalado."
+msgstr ""
+
+#: includes/class-taxocommerce-core-suite.php
+msgid "El paquete descargado no corresponde a este módulo."
+msgstr ""
+
+#: includes/class-taxocommerce-core-suite.php
+msgid "WordPress no pudo instalar el módulo."
+msgstr ""
+
+#: includes/class-taxocommerce-core-suite.php
+msgid "El paquete se procesó, pero el módulo no quedó en la carpeta esperada."
+msgstr ""
+
+#: includes/class-taxocommerce-core-suite.php
+msgid "Módulo descargado, pero no se pudo activar: "
+msgstr ""
+
+#: includes/class-taxocommerce-core-suite.php
+msgid "%1$s %2$s descargado y activado."
+msgstr ""

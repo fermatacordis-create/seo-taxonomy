@@ -26,6 +26,9 @@ final class TaxoCommerce_Core_Suite {
 	/** Default suite channel: latest release of the fork that builds the suite. */
 	const DEFAULT_MANIFEST_URL = 'https://github.com/fermatacordis-create/seo-taxonomy/releases/latest/download/taxocommerce-suite.json';
 
+	/** First OPNV version whose automatic translation handles wrapped PO entries. */
+	const OPNV_MIN_I18N = '1.0.260';
+
 	/** Nonce action shared with the Core extension forms. */
 	const NONCE_ACTION = 'taxocommerce_core_extension_action';
 
@@ -37,6 +40,8 @@ final class TaxoCommerce_Core_Suite {
 	public static function register_hooks() {
 		add_action( 'admin_post_taxocommerce_core_remove_extension', array( __CLASS__, 'handle_remove' ) );
 		add_action( 'admin_post_taxocommerce_core_download_extension', array( __CLASS__, 'handle_download' ) );
+		// OPNV automatic translation: translate the family into the admin's language.
+		add_filter( 'opnv_plugin_i18n_auto_targets', array( __CLASS__, 'opnv_i18n_targets' ) );
 	}
 
 	/**
@@ -174,6 +179,46 @@ final class TaxoCommerce_Core_Suite {
 			<button class="button button-primary button-small" type="submit"><?php esc_html_e( 'Descargar y activar', 'taxocommerce-core' ); ?></button>
 		</form>
 		<?php
+	}
+
+	/**
+	 * Offers every active TaxoCommerce plugin with a .pot to OPNV's automatic
+	 * admin translation. Source is "auto" because the catalogs mix Spanish and
+	 * English msgids. OPNV writes <domain>-<locale>.po/.mo in the module's
+	 * languages folder, which is exactly what TaxoCommerce loads.
+	 *
+	 * @param array $targets OPNV targets.
+	 * @return array
+	 */
+	public static function opnv_i18n_targets( $targets ) {
+		$targets = is_array( $targets ) ? $targets : array();
+		// OPNV before 1.0.260 mangled wrapped msgstr lines: do not hand it our catalogs.
+		if ( ! defined( 'OPNV_VERSION' ) || version_compare( (string) OPNV_VERSION, self::OPNV_MIN_I18N, '<' ) ) {
+			return $targets;
+		}
+		if ( ! function_exists( 'get_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		$seen = array();
+		foreach ( $targets as $target ) {
+			$seen[ (string) ( $target['slug'] ?? '' ) ] = true;
+		}
+		foreach ( get_plugins() as $basename => $meta ) {
+			$dir = strtok( (string) $basename, '/' );
+			if ( isset( $seen[ $basename ] ) || 0 !== strpos( (string) $dir, 'taxocommerce-' ) || ! is_plugin_active( $basename ) ) {
+				continue;
+			}
+			if ( ! glob( trailingslashit( WP_PLUGIN_DIR ) . $dir . '/languages/*.pot' ) ) {
+				continue;
+			}
+			$targets[] = array(
+				'slug'        => $basename,
+				'label'       => (string) ( $meta['Name'] ?? $dir ),
+				'source_lang' => 'auto',
+				'type'        => 'plugin',
+			);
+		}
+		return $targets;
 	}
 
 	/**
@@ -354,6 +399,12 @@ final class TaxoCommerce_Core_Suite {
 		if ( is_wp_error( $activated ) ) {
 			self::result( 'error', __( 'Módulo descargado, pero no se pudo activar: ', 'taxocommerce-core' ) . $activated->get_error_message() );
 		}
+
+		/**
+		 * A module was installed: ask OPNV (when present) to translate it into
+		 * the administrator's language.
+		 */
+		do_action( 'opnv_plugin_i18n_auto_request', $plugin_file );
 
 		self::result(
 			'ok',
