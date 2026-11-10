@@ -352,3 +352,16 @@ body.tcc-family-admin .tcc-guide-article h3{font-size:17px;line-height:1.35;marg
 .tcc-dashboard .tc-family-history-panel__body li{margin:0 0 4px}
 .tcc-dashboard .tc-family-history-panel__body p{margin:0 0 8px}
 @media(max-width:700px){.tcc-hero{grid-template-columns:minmax(0,1fr)}.tcc-hero__metadata{justify-self:start;align-items:flex-start}}
+
+/* Historial como tarjeta de panel (estilo OPNV). */
+.tcc-dashboard .tc-family-history-panel{padding:0;overflow:hidden;border-radius:16px;background:#fff}
+.tcc-dashboard .tc-family-history-panel>summary{list-style:none}
+.tcc-dashboard .tc-family-history-panel>summary::-webkit-details-marker{display:none}
+.tcc-dashboard .tc-family-history-panel__header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 22px;cursor:pointer;border-bottom:1px solid #e4e9f0}
+.tcc-dashboard .tc-family-history-panel:not([open]) .tc-family-history-panel__header{border-bottom:0}
+.tcc-dashboard .tc-family-history-panel__header:focus-visible{outline:2px solid #1769de;outline-offset:-2px}
+.tcc-dashboard .tc-family-history-panel__title{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#122038}
+.tcc-dashboard .tc-family-history-panel__title .dashicons{width:18px;height:18px;font-size:18px;color:#1769de}
+.tcc-dashboard .tc-family-history-panel__chevron{width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid #1769de;transition:transform .15s}
+.tcc-dashboard .tc-family-history-panel:not([open]) .tc-family-history-panel__chevron{transform:rotate(-90deg)}
+.tcc-dashboard .tc-family-history-panel__body{max-height:360px;overflow:auto;padding:18px 28px;background:#fbfcfe}
