@@ -168,7 +168,7 @@ final class TaxoCommerce_Core_Dashboard {
 				<div class="tcc-hero__art" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
 			</header>
 			<?php if ( is_string( $tc_history ) && '' !== trim( $tc_history ) ) : ?>
-			<details class="tc-family-history-panel" open><summary class="tc-family-history-panel__header"><span class="tc-family-history-panel__title"><span class="dashicons dashicons-backup" aria-hidden="true"></span><?php echo esc_html( $tc_history_label ); ?></span><span class="tc-family-history-panel__chevron" aria-hidden="true"></span></summary><div class="tc-family-history-panel__body"><?php echo $tc_md( $tc_history ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Built from esc_html() text in $tc_md. ?></div></details>
+			<details class="tc-family-history-panel" open><summary class="tc-family-history-panel__header"><span class="tc-family-history-panel__title"><span class="dashicons dashicons-backup" aria-hidden="true"></span><?php echo esc_html( $tc_history_label ); ?></span><span class="tc-family-history-panel__chevron" aria-hidden="true"></span></summary><div class="tc-family-history-panel__body"><div class="tc-family-history-panel__content"><?php echo $tc_md( $tc_history ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Built from esc_html() text in $tc_md. ?></div></div></details>
 			<?php endif; ?>
 			<hr class="wp-header-end">
 
