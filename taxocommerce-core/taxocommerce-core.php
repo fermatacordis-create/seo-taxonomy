@@ -42,6 +42,7 @@ require_once TAXOCOMMERCE_CORE_PATH . 'includes/class-taxocommerce-core-anomalie
 require_once TAXOCOMMERCE_CORE_PATH . 'includes/class-taxocommerce-core-auto-test.php';
 require_once TAXOCOMMERCE_CORE_PATH . 'includes/class-taxocommerce-core.php';
 require_once TAXOCOMMERCE_CORE_PATH . 'includes/class-taxocommerce-core-dashboard.php';
+require_once TAXOCOMMERCE_CORE_PATH . 'includes/class-taxocommerce-core-suite.php';
 require_once TAXOCOMMERCE_CORE_PATH . 'includes/class-taxocommerce-core-user-guide.php';
 require_once TAXOCOMMERCE_CORE_PATH . 'includes/class-taxocommerce-core-technical-guide.php';
 

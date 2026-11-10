@@ -122,6 +122,7 @@ final class TaxoCommerce_Core {
 		add_action( 'admin_post_taxocommerce_core_upload_extension', array( $this, 'upload_extension' ) );
 		add_action( 'admin_post_taxocommerce_core_activate_extension', array( $this, 'activate_extension' ) );
 		add_action( 'admin_post_taxocommerce_core_deactivate_extension', array( $this, 'deactivate_extension' ) );
+		TaxoCommerce_Core_Suite::register_hooks();
 		add_filter( 'plugin_action_links_' . TAXOCOMMERCE_CORE_BASENAME, array( $this, 'plugin_action_links' ) );
 
 		TaxoCommerce_Core_Country::register_hooks();
@@ -414,6 +415,15 @@ final class TaxoCommerce_Core {
 	 *
 	 * Inactive extensions cannot execute hooks, so Core keeps the minimal
 	 * identity needed to discover, activate, deactivate, or search for them.
+	 *
+	 * @return array
+	 */
+	public function extension_catalog() {
+		return $this->family_extensions();
+	}
+
+	/**
+	 * Family catalog (private source).
 	 *
 	 * @return array
 	 */
@@ -1255,6 +1265,7 @@ final class TaxoCommerce_Core {
 				'installed' => $installed,
 				'active' => $active,
 				'zip' => (bool) $local_package,
+				'suite_dir' => TaxoCommerce_Core_Suite::module_dir( $extension ),
 				'admin_url' => $admin_url,
 				'search_url' => add_query_arg(
 					array( 's' => (string) ( $extension['search_term'] ?? $extension['name'] ?? $extension_id ), 'tab' => 'search', 'type' => 'term' ),
@@ -1314,6 +1325,7 @@ final class TaxoCommerce_Core {
 										<button class="button button-small" type="submit"><?php esc_html_e( 'Desactivar', 'taxocommerce-core' ); ?></button>
 									</form>
 								<?php endif; ?>
+								<?php TaxoCommerce_Core_Suite::render_remove_button( $item ); ?>
 							<?php elseif ( $item['installed'] ) : ?>
 								<?php if ( current_user_can( 'activate_plugins' ) ) : ?>
 									<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
@@ -1323,8 +1335,12 @@ final class TaxoCommerce_Core {
 										<button class="button button-primary button-small" type="submit"><?php esc_html_e( 'Activar', 'taxocommerce-core' ); ?></button>
 									</form>
 								<?php endif; ?>
+								<?php TaxoCommerce_Core_Suite::render_remove_button( $item ); ?>
 							<?php else : ?>
-								<a class="button button-small" href="<?php echo esc_url( $item['search_url'] ); ?>"><?php esc_html_e( 'Buscar en WordPress.org', 'taxocommerce-core' ); ?></a>
+								<?php TaxoCommerce_Core_Suite::render_download_button( $item ); ?>
+								<?php if ( empty( $item['suite_dir'] ) ) : ?>
+									<a class="button button-small" href="<?php echo esc_url( $item['search_url'] ); ?>"><?php esc_html_e( 'Buscar en WordPress.org', 'taxocommerce-core' ); ?></a>
+								<?php endif; ?>
 								<?php if ( $item['zip'] && current_user_can( 'install_plugins' ) ) : ?>
 									<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 										<input type="hidden" name="action" value="taxocommerce_core_install_extension">
