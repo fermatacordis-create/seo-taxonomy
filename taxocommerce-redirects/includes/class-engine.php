@@ -16,6 +16,56 @@ final class Engine {
     public static function register() {
         add_action( 'init', array( __CLASS__, 'disable_legacy_runtime' ), 100 );
         add_action( 'template_redirect', array( __CLASS__, 'maybe_redirect' ), 0 );
+        add_filter( 'opnv_redirects_owner', array( __CLASS__, 'claim_opnv_redirects' ) );
+        add_action( 'opnv_redirect_slug_changed', array( __CLASS__, 'save_from_opnv' ), 10, 3 );
+    }
+
+    /**
+     * OPNV still notices slug changes; while this plugin owns redirects it hands
+     * them over here instead of storing them itself. Store::save() validates
+     * duplicates and cycles; a rejected rule is simply not added.
+     *
+     * @param string $from Old path.
+     * @param string $to   New path.
+     * @param int    $code HTTP status.
+     * @return void
+     */
+    public static function save_from_opnv( $from, $to, $code = 301 ) {
+        if ( 'taxocommerce' !== self::claim_opnv_redirects( 'opnv' ) ) {
+            return;
+        }
+        Store::save( (string) $from, (string) $to, (int) $code );
+    }
+
+    /**
+     * Tell OPNV that this plugin serves the redirects, so OPNV's own redirect
+     * manager stands down and one request is never answered by two engines.
+     * Only claimed once the storage is ready: until then OPNV keeps redirecting.
+     *
+     * @param mixed $owner Current owner id ('opnv' by default).
+     * @return mixed
+     */
+    public static function claim_opnv_redirects( $owner ) {
+        if ( '' !== self::external_owner() ) {
+            return $owner; // The admin gave redirects to another plugin.
+        }
+        if ( '1' !== (string) get_option( 'tc_redirects_schema_ready', '' ) || ! Store::table_exists() ) {
+            return $owner;
+        }
+
+        return 'taxocommerce';
+    }
+
+    /**
+     * Another plugin serving redirects by the admin's choice, asked through
+     * `taxocommerce_redirects_owner` (OPNV answers 'opnv' when chosen there).
+     *
+     * @return string '' when this plugin serves redirects, otherwise the owner id.
+     */
+    public static function external_owner() {
+        $owner = sanitize_key( (string) apply_filters( 'taxocommerce_redirects_owner', 'taxocommerce' ) );
+
+        return ( '' === $owner || 'taxocommerce' === $owner ) ? '' : $owner;
     }
 
     public static function disable_legacy_runtime() {
@@ -34,6 +84,9 @@ final class Engine {
     }
 
     public static function maybe_redirect() {
+        if ( '' !== self::external_owner() ) {
+            return;
+        }
         if ( is_admin() || wp_doing_ajax() || wp_doing_cron()
             || ( defined( 'REST_REQUEST' ) && REST_REQUEST )
             || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
