@@ -1061,7 +1061,8 @@ final class TaxoCommerce_Core {
 			'taxocommerce-core-admin',
 			plugins_url( 'assets/admin.css', TAXOCOMMERCE_CORE_FILE ),
 			array(),
-			TAXOCOMMERCE_CORE_VERSION
+			// File time in the version: browsers drop the cached copy whenever the CSS changes.
+			TAXOCOMMERCE_CORE_VERSION . '.' . (int) filemtime( plugin_dir_path( TAXOCOMMERCE_CORE_FILE ) . 'assets/admin.css' )
 		);
 	}
 
