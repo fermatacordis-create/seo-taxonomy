@@ -84,6 +84,31 @@ return new class() {
         return $text;
     }
 
+    /**
+     * Same official excerpt, shown inside the hero (no <details>).
+     * Nothing is printed when the plugin has no official page.
+     */
+    public function render_hero( $slug, $locale ) {
+        $words = $this->labels( $locale );
+        $plugin_file = dirname( __DIR__ ) . '/' . basename( dirname( __DIR__ ) ) . '.php';
+        $page = '';
+        if ( is_readable( $plugin_file ) ) {
+            $headers = get_file_data( $plugin_file, array( 'uri' => 'Plugin URI' ), 'plugin' );
+            $page = isset( $headers['uri'] ) && is_string( $headers['uri'] ) ? $headers['uri'] : '';
+        }
+        $page = $page ? esc_url_raw( $page, array( 'https' ) ) : '';
+        if ( ! $page ) {
+            return;
+        }
+        $excerpt = $this->excerpt( $page );
+        echo '<div class="tc-family-hero__info">';
+        if ( $excerpt ) {
+            echo '<p class="tc-family-hero__excerpt">' . esc_html( $excerpt ) . '</p>';
+        }
+        echo '<a class="tc-family-hero__link" href="' . esc_url( $page ) . '" target="_blank" rel="noopener noreferrer">' . esc_html( $words[1] ) . '</a>';
+        echo '</div>';
+    }
+
     public function render( $slug, $locale ) {
         $words = $this->labels( $locale );
         // Plugin URI belongs to the plugin developer. A store administrator

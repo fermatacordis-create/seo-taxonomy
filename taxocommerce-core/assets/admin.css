@@ -333,3 +333,22 @@ body.tcc-family-admin .tcc-guide-article h3{font-size:17px;line-height:1.35;marg
 					.taxocommerce-hierarchy-admin .nav-tab{padding:10px 11px}
 					.tc-hierarchy-panel .widefat{display:block;overflow-x:auto}
 				}
+
+/* Hero sin desplegables: ficha oficial a la vista y panel de historial debajo. */
+.tcc-hero{display:grid;grid-template-columns:minmax(0,1fr) max-content;align-items:center;gap:22px}
+.tcc-hero__identity{min-width:0;max-width:none}
+.tcc-hero__metadata{margin:0;flex-direction:column;align-items:flex-end;flex-wrap:nowrap;justify-self:end;white-space:nowrap}
+.tcc-dashboard hr.wp-header-end{margin:0;border:0}
+.tcc-hero .tc-family-hero__info{margin-top:10px;max-width:900px}
+.tcc-hero .tc-family-hero__excerpt{margin:0 0 6px;font-size:13px;line-height:1.6;color:#47576f}
+.tcc-hero .tc-family-hero__link{font-size:13px;font-weight:600;text-decoration:none}
+.tcc-hero .tc-family-hero__link:hover{text-decoration:underline}
+.tcc-dashboard .tc-family-history-panel{margin:0 0 17px;padding:18px 22px;border:1px solid #dfe6ef;border-radius:13px;background:#fff;box-shadow:0 3px 14px rgba(20,45,85,.04);color:#26354c}
+.tcc-dashboard .tc-family-history-panel__title{margin:0 0 10px;padding:0;font-size:15px;font-weight:700;color:#122038}
+.tcc-dashboard .tc-family-history-panel__body{max-height:320px;overflow:auto;padding-right:8px;font-size:13px;line-height:1.6}
+.tcc-dashboard .tc-family-history-panel__body h3{margin:16px 0 6px;font-size:13px;font-weight:700;color:#122038}
+.tcc-dashboard .tc-family-history-panel__body h3:first-child{margin-top:0}
+.tcc-dashboard .tc-family-history-panel__body ul{margin:0 0 8px 18px;list-style:disc}
+.tcc-dashboard .tc-family-history-panel__body li{margin:0 0 4px}
+.tcc-dashboard .tc-family-history-panel__body p{margin:0 0 8px}
+@media(max-width:700px){.tcc-hero{grid-template-columns:minmax(0,1fr)}.tcc-hero__metadata{justify-self:start;align-items:flex-start}}

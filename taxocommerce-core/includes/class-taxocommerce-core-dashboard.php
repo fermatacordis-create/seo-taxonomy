@@ -117,6 +117,38 @@ final class TaxoCommerce_Core_Dashboard {
         if ( 'Version history and improvements' === $tc_history_label && isset( $tc_history_names[ $tc_locale ] ) ) {
             $tc_history_label = $tc_history_names[ $tc_locale ];
         }
+    // CHANGELOG.md as headings and lists. Every piece of text is escaped first.
+        $tc_md = static function ( $md ) {
+            $html = '';
+            $list = false;
+            $inline = static function ( $text ) {
+                $text = esc_html( $text );
+                $text = preg_replace( '/`([^`]+)`/', '<code>$1</code>', $text );
+                return preg_replace( '/\*\*([^*]+)\*\*/', '<strong>$1</strong>', $text );
+            };
+            foreach ( preg_split( '/\r\n|\r|\n/', (string) $md ) as $line ) {
+                $line = rtrim( $line );
+                if ( preg_match( '/^\s*[-*]\s+(.*)$/', $line, $m ) ) {
+                    $html .= ( $list ? '' : '<ul>' ) . '<li>' . $inline( $m[1] ) . '</li>';
+                    $list = true;
+                    continue;
+                }
+                if ( $list ) {
+                    $html .= '</ul>';
+                    $list = false;
+                }
+                if ( '' === trim( $line ) || preg_match( '/^#\s/', $line ) ) {
+                    continue;
+                }
+                if ( preg_match( '/^#{2,3}\s+(.*)$/', $line, $m ) ) {
+                    $html .= '<h3>' . $inline( $m[1] ) . '</h3>';
+                } else {
+                    $html .= '<p>' . $inline( $line ) . '</p>';
+                }
+            }
+            return $list ? $html . '</ul>' : $html;
+        };
+
 		?>
 		<div class="wrap tcc-dashboard" id="taxocommerce-core-dashboard">
 			<header class="tcc-hero" aria-labelledby="tcc-dashboard-title">
@@ -126,23 +158,22 @@ final class TaxoCommerce_Core_Dashboard {
 						<p class="tcc-eyebrow"><?php esc_html_e( 'TaxoCommerce Core', 'taxocommerce-core' ); ?></p>
 						<h1 id="tcc-dashboard-title"><?php esc_html_e( 'TaxoCommerce Core', 'taxocommerce-core' ); ?></h1>
 						<p><?php esc_html_e( 'El núcleo modular para gestionar la arquitectura, los contenidos y las operaciones de tu tienda WooCommerce.', 'taxocommerce-core' ); ?></p>
+						<?php $tc_official_info->render_hero( 'taxocommerce-core', $tc_locale ); ?>
 					</div>
 				</div>
-                        <div class="tcc-hero__panels">
-                            <?php $tc_official_info->render( 'taxocommerce-core', $tc_locale ); ?>
-                        <?php if ( is_string( $tc_history ) && '' !== trim( $tc_history ) ) : ?>
-                            <details class="tcc-hero__history">
-                                <summary><?php echo esc_html( $tc_history_label ); ?></summary>
-                                <div class="tcc-hero__history-content"><?php echo esc_html( $tc_history ); ?></div>
-                            </details>
-                        <?php endif; ?>
-                        </div>
 				<div class="tcc-hero__metadata">
                     <span><?php echo esc_html( $tc_version_label . ' ' . TAXOCOMMERCE_CORE_VERSION ); ?></span>
                     <span><?php echo esc_html( $tc_updated_label . ': ' . TAXOCOMMERCE_CORE_RELEASE_DATE ); ?></span>
                 </div>
 				<div class="tcc-hero__art" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
 			</header>
+			<?php if ( is_string( $tc_history ) && '' !== trim( $tc_history ) ) : ?>
+			<section class="tc-family-history-panel">
+				<h2 class="tc-family-history-panel__title"><?php echo esc_html( $tc_history_label ); ?></h2>
+				<div class="tc-family-history-panel__body"><?php echo $tc_md( $tc_history ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Built from esc_html() text in $tc_md. ?></div>
+			</section>
+			<?php endif; ?>
+			<hr class="wp-header-end">
 
 			<nav class="nav-tab-wrapper" aria-label="<?php esc_attr_e( 'Navegación de TaxoCommerce Core', 'taxocommerce-core' ); ?>">
 				<a class="nav-tab nav-tab-active" aria-current="page" href="<?php echo esc_url( admin_url( 'admin.php?page=taxocommerce-core' ) ); ?>"><?php esc_html_e( 'Overview', 'taxocommerce-core' ); ?></a>
