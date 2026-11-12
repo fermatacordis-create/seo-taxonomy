@@ -12,13 +12,13 @@ Active areas:
 
 - **Connections** — Google, Bing, Merchant, Amazon, Pinterest, YouTube, and SerpApi credentials/OAuth used by Insights and other TaxoCommerce modules.
 
-- **Analyst** — concise commercial directives and KPIs first, with funnel event visualization; full SEO/Market diagnostics and now/next/investigate/watch sections remain below. Read-only saved data, with explicit caveats about off-site affiliate conversions.
+- **Analyst** — executive market opportunities from measured Search Console, GA4 and Trends growth, official Merchant competitive visibility when eligible and assistant-referral comparison; specialist legacy SEO/Market diagnostics remain separately available. Read-only saved data, with explicit caveats about off-site affiliate conversions.
 - **Executive Report** — consolidated local view across Search Console, GA4, Bing, Trends, and Market.
 - **Google Search** — clicks, impressions, CTR, average position, countries, devices, queries, and pages.
 - **Google Analytics** — sessions, active/new/returning users, views, engagement, channels, countries, devices, key events, and purchases.
 - **Bing** — search traffic, queries, pages, crawl health, and index visibility.
 - **Google Trends** — manual trend exploration and saved trend snapshots.
-- **Market** — category-first external evidence, Merchant context, optional YouTube/SerpApi sources, and opportunity support.
+- **Market** — category-first demand evidence from Merchant and saved Trends, with Search Console and Bing signals. The Competition report does not crawl competitors or use paid SERP services.
 
 ## Connections
 

@@ -243,10 +243,9 @@ if (!function_exists('seo_analista_lazy_render_catalog')) {
 if (!function_exists('seo_analista_lazy_render_competition')) {
     // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound -- Legacy callable name is used by existing modules; changing it requires a coordinated migration.
     function seo_analista_lazy_render_competition($days) {
-        $data = seo_analista_get_data($days);
-        $competition = seo_analista_competition_snapshot(100);
-        $market = seo_analista_market_signals(30);
-        seo_analista_render_comparison($competition, $market, $data);
+        // The market competition report is manually generated and cached.
+        // Do not run legacy rankings adapters or scrapers when opening this tab.
+        taxocommerce_insights_competitive_render_panel($days);
     }
 }
 

@@ -5,6 +5,8 @@
  */
 defined( 'ABSPATH' ) || exit;
 
+require_once __DIR__ . '/analista-mercado-ejecutivo.php';
+
 /**
  * The executive action and the detailed roadmap are one report in Insights.
  * Do not mutate the historical list used by the old SEO plugin.
@@ -65,12 +67,15 @@ function taxocommerce_insights_action_plan_export( array $plan, $days ) {
         if ( ! is_array( $row ) ) {
             continue;
         }
-        $contract = function_exists( 'seo_analista_task_contract' )
-            ? (array) seo_analista_task_contract( $row )
-            : array(
-                'work_bucket'  => (string) ( $row['work_bucket'] ?? '' ),
-                'primary_action'=> (array) ( $row['primary_action'] ?? array() ),
-            );
+        // Market opportunities are evidence, not legacy editorial validation tasks.
+        $contract = ! empty( $row['market_signal'] )
+            ? $row
+            : ( function_exists( 'seo_analista_task_contract' )
+                ? (array) seo_analista_task_contract( $row )
+                : array(
+                    'work_bucket'   => (string) ( $row['work_bucket'] ?? '' ),
+                    'primary_action'=> (array) ( $row['primary_action'] ?? array() ),
+                ) );
         $actions[] = array_merge(
             array(
                 'topic'               => (string) ( $row['topic'] ?? '' ),
@@ -89,7 +94,14 @@ function taxocommerce_insights_action_plan_export( array $plan, $days ) {
         'generated_at' => gmdate( 'c' ),
         'period_days'  => absint( $days ),
         'total'        => count( $actions ),
-        'summary'      => function_exists( 'seo_analista_plan_summary' ) ? seo_analista_plan_summary( $plan ) : array(),
+        'summary'      => ( ! empty( $plan ) && ! empty( $plan[0]['market_signal'] ) )
+            ? array(
+                'total'         => count( $plan ),
+                'hacer_ahora'   => 0,
+                'hacer_despues' => count( array_filter( $plan, static function ( $row ) { return 'HACER_DESPUES' === ( $row['final_bucket'] ?? '' ); } ) ),
+                'investigar'    => count( array_filter( $plan, static function ( $row ) { return 'INVESTIGAR' === ( $row['final_bucket'] ?? '' ); } ) ),
+            )
+            : ( function_exists( 'seo_analista_plan_summary' ) ? seo_analista_plan_summary( $plan ) : array() ),
         'plan_accion'  => $actions,
     );
 
@@ -271,16 +283,15 @@ function taxocommerce_insights_analysis_ajax() {
         seo_analista_lazy_render_partial( $report, $days );
 
         if ( 'directrices' === $report ) {
-            // Shared decision portfolio: do not run it once for GEO and again
-            // for the action-plan dashboard.
-            $plan = seo_analista_decision_plan( $days, 40 );
-            if ( function_exists( 'taxocommerce_google_bing_geo_render_summary' ) ) {
-                // This reads the existing snapshot; it never refreshes GA4.
-                $google = seo_analista_google_snapshot( $days, false );
-                $ga4 = (array) ( $google['ga4'] ?? array() );
-                taxocommerce_google_bing_geo_render_summary( $days, $ga4, $plan );
-            }
-            taxocommerce_google_bing_analysis_render_work( $days, $plan );
+            // Market view: external demand, commercial outcomes and GA4 assistant
+            // referrals. Preserve the legacy editorial engine for specialist
+            // reports, but never run it as the executive action plan.
+            $google = function_exists( 'seo_analista_google_snapshot' )
+                ? (array) seo_analista_google_snapshot( $days, false )
+                : array();
+            $market = taxocommerce_insights_market_plan( $days, $google );
+            $plan = (array) ( $market['plan'] ?? array() );
+            taxocommerce_insights_market_render( $market );
             $plan_export = taxocommerce_insights_action_plan_export( $plan, $days );
         }
         $html = ob_get_clean();

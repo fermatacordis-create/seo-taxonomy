@@ -11,11 +11,11 @@ $checks = array(
     strpos( $client, "action: 'taxocommerce_insights_analysis'" ) !== false,
     strpos( $bridge, "add_action( 'wp_ajax_taxocommerce_insights_analysis'" ) !== false,
     strpos( $bridge, "seo_analista_lazy_render_partial( \$report, \$days )" ) !== false,
-    strpos( $bridge, "taxocommerce_google_bing_geo_render_summary( \$days, \$ga4, \$plan )" ) !== false,
+    strpos( $bridge, "taxocommerce_insights_market_render( \$market )" ) !== false,
     strpos( $bridge, "check_ajax_referer( 'taxocommerce_insights_analysis'" ) !== false,
     strpos( $bridge, "unset( \$reports['trabajo'] )" ) !== false,
-    strpos( $bridge, "seo_analista_decision_plan( \$days, 40 )" ) !== false,
-    strpos( $bridge, "taxocommerce_google_bing_analysis_render_work( \$days, \$plan )" ) !== false,
+    strpos( $bridge, "taxocommerce_insights_market_plan( \$days, \$google )" ) !== false,
+    strpos( $bridge, "require_once __DIR__ . '/analista-mercado-ejecutivo.php'" ) !== false,
 );
 foreach ( $checks as $i => $ok ) {
     if ( ! $ok ) {

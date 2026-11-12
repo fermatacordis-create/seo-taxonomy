@@ -4,17 +4,17 @@ Tags: analytics, search-console, bing, ecommerce, reporting
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.1.49
+Stable tag: 1.1.52
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-External connections, manual provider data downloads, and the restored legacy Analysis dashboard.
+External connections, manual provider data downloads, and market intelligence for WooCommerce.
 
 == Description ==
 
 * Admin header: plugin title, a single local `Description` with the static `Plugin URI` link below it (left); a wider collapsed `CHANGELOG.md` history (center); local version and release date (right). No duplicated information panel or external requests.
 
-* Analysis: individual reports or a complete sequential run (mobile-friendly) using authenticated AJAX, and unified JSON download or browser-view fallback.
+* Analysis: individual reports and full report generation via authenticated AJAX. The complete unified JSON is assembled from authenticated, sequential, bounded requests in a private temporary file and streamed after validation. No one-shot heavy export, cron or browser-side Blob.
 
 * The admin header shows the local bundled Description and Plugin URI metadata without external requests or excerpt caching. CHANGELOG.md provides independent version history.
 
@@ -28,7 +28,7 @@ TaxoCommerce Insights keeps external service connections and manual data downloa
 * Bing downloads.
 * Optional IndexNow notifications for public URL changes, independent of Cloudflare; disabled by default to avoid duplicate providers. Configure in Connections > Bing. Uses WP-Cron, so regular scheduled execution is required.
 * Google Trends automatically compares all Spanish clusters (up to 5 per chart), then separately compares each cluster's primary hubs on page load. The underlying SEO hierarchy is dynamic, category and secondary-hub consultations remain manual; five-speed browser load controller, pause/resume/stop, and links to Google Explore. Charts are visual and do not provide machine-readable growth scores or verification of search term meaning. Historical RSS snapshots remain supported.
-* Analysis restores the previous working Analista engine inside Insights, including summary, content, structure, trends, comparison and work-plan views. Its historical GSC tables are refreshed by the separate Google Search synchronization button without WP-Cron. The GA4 Analysis adapter queries the live Data API through current Connections credentials.
+* Analysis offers an executive market opportunity plan based on Search Console, GA4, Google Trends and available competitor evidence, without auditing catalog quality. AI referral sessions are compared across equal-length periods when GA4 has data; these do not represent AI citations. Historical specialized content, structure, trends and comparison reports remain available. Its historical GSC tables are refreshed by the separate Google Search synchronization button without WP-Cron. The GA4 Analysis adapter queries the live Data API through current Connections credentials.
 * User Guide contains read-only User Manual and Technical Manual explaining active features, integrations, data and maintenance.
 * The main technical folder remains taxocommerce-google-bing for compatibility; the displayed product name is TaxoCommerce Insights.
 
@@ -262,3 +262,5 @@ It is the continued plugin under the historical slug taxocommerce-google-bing, r
 == Local plugin information ==
 
 The header displays locally bundled Description and a link to the developer Plugin URI, without external requests. Google, Bing and other actual data connections remain independent and documented in the sections above.
+
+* Competition: read-only Merchant best sellers and eligible category-level official competitor visibility, existing Trends and own Search Console/Bing. No scrapers, paid SERP providers or automatic competitor crawls; historical JSON remains available.

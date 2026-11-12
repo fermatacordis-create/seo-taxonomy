@@ -1,3 +1,11 @@
+## [0.2.29] — 2026-11-12 — Escaneo completo de imágenes sin WP-Cron (#2580)
+
+- «Sin uso y duplicadas» encadena lotes desde peticiones internas firmadas, sin dependencia de WP-Cron. Se limita a trabajo de lectura y marcado de resultados; ningún archivo se elimina ni sustituye durante el análisis.
+- Si el alojamiento bloquea las llamadas internas, la pestaña de Images abierta realiza una continuación AJAX autenticada con nonce y permisos de administrador. El progreso, el cursor guardado y las acciones Pausar/Reanudar/Detener se mantienen.
+- El análisis costoso de referencias globales se reutiliza durante ventanas de 512 adjuntos por ejecución, sin repetir todas las consultas de contenido y metadatos en cada lote adaptativo. Cada inicio nuevo invalida la ventana anterior y un informe incompleto no marca imágenes como sin uso.
+- Conserva el regulador de carga 1–5, la detección conservadora de referencias y los duplicados exactos por SHA-256; el resto de trabajos de Images sigue con el mecanismo anterior.
+- Pruebas específicas de ventana, firma de continuación, seguridad, recuperación y navegador. Sin cambios en otros plugins ni en datos existentes.
+
 ## [0.2.28] — 2026-11-10 — Cabecera en tres zonas sin contenido duplicado (#2521)
 
 - Izquierda: nombre, descripción local del plugin y un único enlace estático `Plugin URI` bajo el texto.

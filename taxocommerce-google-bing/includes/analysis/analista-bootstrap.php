@@ -31,6 +31,7 @@ $seo_analista_files = array(
     __DIR__ . '/analista-decisiones.php',
     __DIR__ . '/analista-campanas.php',
     __DIR__ . '/analista-json.php',
+    __DIR__ . '/analista-chunked-export.php',
     __DIR__ . '/analista-tests.php',
     __DIR__ . '/analista-informe.php',
     __DIR__ . '/analista-lazy.php',

@@ -1,7 +1,7 @@
 /* global taxocommerceImagesBackground */
 /**
- * Polls persisted server jobs. This script never performs image batches.
- * Closing the tab stops polling, not the worker.
+ * Polls persisted server jobs and recovers read-only cleanup batches when
+ * hosting blocks signed internal requests. Other modes remain status-only.
  */
 (function () {
     'use strict';
@@ -38,6 +38,8 @@
         });
     }
 
+    function modeMessage(mode) { return mode === 'cleanup' ? ' · sin actividad reciente: reintentando lote sin WP-Cron' : ' · sin actividad reciente: revisar WP-Cron'; }
+
     function render(panel, job) {
         var status = job.status || 'not-started';
         var label = panel.querySelector('[data-tci-bg-status]');
@@ -53,7 +55,7 @@
         if (job.last_tick) {
             text += ' · última actividad ' + new Date(1000 * job.last_tick).toLocaleString('es-ES');
         }
-        if (job.stalled) { text += ' · sin actividad reciente: revisar WP-Cron'; }
+        if (job.stalled) { text += modeMessage(panel.getAttribute('data-tci-bg-mode')); }
         if (job.cron_disabled) { text += ' · WP-Cron interno desactivado: necesita cron del hosting'; }
         if (job.message) { text += ' · ' + job.message; }
         if (progress) { progress.textContent = text; }
@@ -80,6 +82,14 @@
             updating = true;
             request(mode, 'status').then(function (job) {
                 render(panel, job);
+                // The signed loopback worker is primary; an open admin tab
+                // can recover the same bounded job if the hosting blocks it.
+                if (mode === 'cleanup' && job.status === 'running'
+                    && (!job.last_tick || Date.now() / 1000 - Number(job.last_tick) > 25)) {
+                    return request(mode, 'drive').then(function (updated) {
+                        render(panel, updated);
+                    });
+                }
             }).catch(function (error) {
                 var text = panel.querySelector('[data-tci-bg-progress]');
                 if (text) { text.textContent = error.message; }

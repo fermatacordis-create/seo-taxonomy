@@ -21,6 +21,7 @@ delete_option( 'taxocommerce_images_disabled_thumbnail_sizes' );
 delete_option( 'taxocommerce_images_cpu_limit' );
 delete_option( 'taxocommerce_images_cpu_sample' );
 delete_option( 'taxocommerce_images_cpu_last' );
+delete_option( 'taxocommerce_images_cleanup_usage_window' );
 
 delete_option( 'taxocommerce_images_work_priority' );
 foreach ( array( 'cleanup', 'labels' ) as $taxocommerce_images_process ) {

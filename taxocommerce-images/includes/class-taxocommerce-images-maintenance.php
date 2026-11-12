@@ -8,6 +8,9 @@ defined( 'ABSPATH' ) || exit;
 
 final class TaxoCommerce_Images_Maintenance {
 	const BATCH = 25;
+	// One reference lookup covers several CPU-regulated hash batches.
+	const CLEANUP_USAGE_WINDOW = 512;
+	const CLEANUP_USAGE_OPTION = 'taxocommerce_images_cleanup_usage_window';
 	const LOCK_PREFIX = 'taxocommerce_images_process_lock_';
 	private static $tokens = array();
 
@@ -119,6 +122,9 @@ final class TaxoCommerce_Images_Maintenance {
 				? __( 'Escaneo completo iniciado. Los lotes internos se regulan automáticamente hasta recorrer toda la biblioteca.', 'taxocommerce-images' )
 				: __( 'Escaneo completo de etiquetas iniciado. Los lotes internos se regulan automáticamente hasta recorrer toda la biblioteca.', 'taxocommerce-images' ),
 		);
+		if ( 'cleanup' === $mode ) {
+			delete_option( self::CLEANUP_USAGE_OPTION );
+		}
 		self::save_state( $mode, $state );
 		return $state;
 	}
@@ -153,15 +159,55 @@ final class TaxoCommerce_Images_Maintenance {
 		if ( ! is_string( $file ) || ! is_file( $file ) ) { $flags[] = 'missing_file'; }
 		return $flags;
 	}
+	/**
+	 * Reuse the complete cross-content reference check for a bounded ID window.
+	 * The previous implementation repeated all global post/meta/term scans on
+	 * every 1-5-image hash batch. Cache is tied to this scan UUID, not a site
+	 * transient, and never reused after a fresh start.
+	 *
+	 * @param array $state Current scan snapshot.
+	 * @param array $ids   IDs for the small adaptive hash batch.
+	 * @return array
+	 */
+	private static function cleanup_usage( $state, $ids ) {
+		if ( ! $ids ) {
+			return array();
+		}
+		$cached = get_option( self::CLEANUP_USAGE_OPTION, array() );
+		$valid = is_array( $cached )
+			&& ( $cached['run'] ?? '' ) === ( $state['run'] ?? '' )
+			&& isset( $cached['usage'] )
+			&& is_array( $cached['usage'] );
+		if ( $valid ) {
+			foreach ( $ids as $id ) {
+				if ( ! array_key_exists( $id, $cached['usage'] ) ) {
+					$valid = false;
+					break;
+				}
+			}
+		}
+		if ( ! $valid ) {
+			$window_ids = self::ids_after( $state['last'], $state['max'], self::CLEANUP_USAGE_WINDOW );
+			$posts = array_filter( array_map( 'get_post', $window_ids ) );
+			$usage = taxocommerce_images_refs_build_usage_report( $posts );
+			// Do not cache incomplete reports as authoritative "unused" results.
+			if ( ! is_array( $usage ) || count( $usage ) !== count( $window_ids ) ) {
+				return new WP_Error( 'tci_cleanup_usage', __( 'No se pudo verificar el uso de todas las imágenes del lote.', 'taxocommerce-images' ) );
+			}
+			$cached = array( 'run' => $state['run'], 'usage' => $usage );
+			update_option( self::CLEANUP_USAGE_OPTION, $cached, false );
+		}
+		return $cached['usage'];
+	}
+
 	public static function scan( $mode ) {
 		if ( ! current_user_can( 'manage_options' ) ) { return new WP_Error( 'permission', 'Sin permisos.' ); }
 		$state = self::state( $mode );
 		if ( ! $state || 'running' !== $state['status'] ) { return $state; }
 		$ids = self::ids_after( $state['last'], $state['max'], TaxoCommerce_Images_Load::batch_size( $mode ) );
-		$usage = array();
-		if ( 'cleanup' === $mode && $ids ) {
-			$posts = array_map( 'get_post', $ids );
-			$usage = taxocommerce_images_refs_build_usage_report( $posts );
+		$usage = 'cleanup' === $mode ? self::cleanup_usage( $state, $ids ) : array();
+		if ( is_wp_error( $usage ) ) {
+			return $usage;
 		}
 		foreach ( $ids as $id ) {
 			if ( 'labels' === $mode ) {

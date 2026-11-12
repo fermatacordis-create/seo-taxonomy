@@ -166,6 +166,17 @@ jobs:
             php "$PLUGIN/tests/consent-wpoptions-seed-smoke.php"
             php "$PLUGIN/tests/consent-smoke.php"
           fi
+          # Images read-only cleanup: no WP-Cron, bounded reference caching,
+          # signed server runner and authenticated browser recovery.
+          if [ "$PLUGIN" = 'taxocommerce-images' ]; then
+            php -l "$PLUGIN/includes/class-taxocommerce-images-background.php"
+            php -l "$PLUGIN/includes/class-taxocommerce-images-maintenance.php"
+            php "$PLUGIN/tests/cleanup-window-smoke.php"
+            php "$PLUGIN/tests/cleanup-worker-smoke.php"
+            node --check "$PLUGIN/assets/background.js"
+            node --check "$PLUGIN/assets/maintenance.js"
+            node "$PLUGIN/tests/cleanup-browser-smoke.js"
+          fi
           python3 .github/scripts/taxocommerce_family_readme_check.py "$PLUGIN" "build/$TARGET_SLUG"
           ( cd build && zip -qr "../$PLUGIN-plugin-check.zip" "$TARGET_SLUG" )
           unzip -t "$PLUGIN-plugin-check.zip"

@@ -39,8 +39,12 @@ tgb_assert_mobile( false !== strpos( $main, 'id="tgb-analysis-cancel"' ), 'Cance
 tgb_assert_mobile( false !== strpos( $client, 'finished === total' ), 'Complete report verifies every block.' );
 tgb_assert_mobile( false !== strpos( $client, 'next();' ), 'Reports execute sequentially.' );
 tgb_assert_mobile( false !== strpos( $client, "el informe NO está completo." ), 'Partial runs are not presented as complete.' );
-tgb_assert_mobile( false !== strpos( $export, 'seo_analista_build_json_export($days)' ), 'JSON keeps full existing builder.' );
-tgb_assert_mobile( false !== strpos( $main, 'analista_view_json' ), 'Mobile JSON browser fallback displayed.' );
+tgb_assert_mobile( false !== strpos( $export, 'function seo_analista_build_json_export($days = 28, $requested_section = \'\', $requested_part = \'\')' ), 'Builder accepts bounded sections while retaining the complete legacy mode.' );
+tgb_assert_mobile( false !== strpos( $main, 'id="tgb-chunked-json-start"' ), 'Complete JSON uses chunked export control.' );
+tgb_assert_mobile( false !== strpos( $main, 'id="tgb-chunked-json-download"' ), 'JSON download appears after server-side assembly.' );
+tgb_assert_mobile( false !== strpos( $client, "exportAjax('step')" ), 'Complete JSON requests independent blocks.' );
+tgb_assert_mobile( false !== strpos( $client, 'exportTimer = setTimeout(exportNext' ), 'Client respects server workload backoff.' );
+tgb_assert_mobile( false === strpos( $main, 'analista_view_json' ), 'One-shot mobile JSON route is no longer exposed in Insights UI.' );
 tgb_assert_mobile( false !== strpos( $export, "check_admin_referer('seo_analista_export_json', 'seo_analista_nonce')" ), 'JSON requires signed administrator access.' );
 tgb_assert_mobile( false !== strpos( $export, "'inline' : 'attachment'" ), 'Export can be viewed without overriding normal download.' );
 tgb_assert_mobile( false === strpos( $main, "'executive'        =>" ), 'Redundant executive navigation removed.' );
@@ -62,4 +66,4 @@ tgb_assert_mobile( false !== strpos( $styles, '.seo-analista-wrap .seo-analista-
 tgb_assert_mobile( false !== strpos( $styles, '.seo-analista-wrap .seo-analista-report-actions .button.disabled{color:#646970;background:#f6f7f7;border-color:#c3c4c7;opacity:1}' ), 'Disabled JSON downloads remain readable.' );
 tgb_assert_mobile( false !== strpos( $client, "label: button.closest('.seo-analista-report-card').find('h3').first().text()" ), 'Running an individual report uses its visible card heading for status.' );
 tgb_assert_mobile( false === strpos( $client, "label: button.find('strong').first().text()" ), 'No stale title lookup from the old full-card buttons.' );
-echo "PASS: unified mobile Analysis, matching AJAX nonce, sequential reports and full JSON export.\n";
+echo "PASS: unified mobile Analysis, matching AJAX nonce, sequential reports and chunked full JSON export.\n";

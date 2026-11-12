@@ -3,8 +3,8 @@
  * Plugin Name: TaxoCommerce Insights
  * Plugin URI: https://asociacionfocazul.com/taxocommerce-google-bing/
  * Description: External connections, provider data downloads, and the restored legacy Analysis dashboard.
- * Version: 1.1.49
- * Release Date: 2026-11-11
+ * Version: 1.1.52
+ * Release Date: 2026-11-12
  * Requires at least: 5.8
  * Requires PHP: 7.4
  * Author: David Perez
@@ -19,7 +19,7 @@ require_once __DIR__ . '/includes/admin-branding.php';
 require_once __DIR__ . '/includes/class-taxocommerce-autotest-code.php';
 \TaxoCommerce_Insights_Autotest_Code::boot();
 
-define( 'TAXOCOMMERCE_GOOGLE_BING_VERSION', '1.1.49' );
+define( 'TAXOCOMMERCE_GOOGLE_BING_VERSION', '1.1.52' );
 define( 'TAXOCOMMERCE_GOOGLE_BING_FILE', __FILE__ );
 define( 'TAXOCOMMERCE_GOOGLE_BING_PATH', plugin_dir_path( __FILE__ ) );
 define( 'TAXOCOMMERCE_GOOGLE_BING_URL', plugin_dir_url( __FILE__ ) );
@@ -276,6 +276,7 @@ function taxocommerce_google_bing_analysis_screen() {
             'window.seoAnalistaLazyConfig = ' . wp_json_encode( array(
                 'ajaxUrl' => admin_url( 'admin-ajax.php' ),
                 'nonce'   => wp_create_nonce( 'taxocommerce_insights_analysis' ),
+                'chunkNonce' => wp_create_nonce( TaxoCommerce_Insights_Chunked_Export::NONCE ),
                 'days'    => $days,
                 'planDownloadLabel' => __( 'Descargar JSON del plan de acción', 'taxocommerce-google-bing' ),
                 'planDownloadUrl' => taxocommerce_insights_plan_json_download_url(),
@@ -300,10 +301,17 @@ function taxocommerce_google_bing_analysis_screen() {
     echo '</select>' . '<button type="submit" class="button">' . esc_html__( 'Cambiar periodo', 'taxocommerce-google-bing' ) . '</button>';
     if ( function_exists( 'seo_analista_export_json_url' ) ) {
         $json_url = seo_analista_export_json_url( $days );
-        echo ' <a class="button" href="' . esc_url( $json_url ) . '">' . esc_html__( 'Descargar JSON completo', 'taxocommerce-google-bing' ) . '</a>';
-        echo ' <a class="button" href="' . esc_url( add_query_arg( 'analista_view_json', '1', $json_url ) ) . '" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Abrir JSON en el navegador (móvil)', 'taxocommerce-google-bing' ) . '</a>';
+        // This button uses bounded authenticated AJAX chunks, never one long HTTP request.
+        echo ' <label for="tgb-chunked-json-speed">' . esc_html__( 'Velocidad JSON', 'taxocommerce-google-bing' ) . '</label>';
+        echo ' <select id="tgb-chunked-json-speed" aria-label="' . esc_attr__( 'Velocidad de exportación', 'taxocommerce-google-bing' ) . '">';
+        for ( $speed = 1; $speed <= 5; $speed++ ) {
+            echo '<option value="' . esc_attr( (string) $speed ) . '"' . selected( $speed, 3, false ) . '>' . esc_html( (string) $speed ) . '</option>';
+        }
+        echo '</select>';
+        echo ' <button type="button" id="tgb-chunked-json-start" class="button">' . esc_html__( 'Preparar JSON completo por bloques', 'taxocommerce-google-bing' ) . '</button>';
+        echo ' <button type="button" id="tgb-chunked-json-stop" class="button" disabled>' . esc_html__( 'Detener exportación', 'taxocommerce-google-bing' ) . '</button>';
     }
-    echo '</form></div>';
+    echo '</form><div id="tgb-chunked-json-status" role="status" aria-live="polite"></div><a id="tgb-chunked-json-download" class="button button-primary" style="display:none" href="#">' . esc_html__( 'Descargar JSON completo', 'taxocommerce-google-bing' ) . '</a></div>';
 
     // Do not call seo_analista_lazy_render_shell: it would enqueue the same
     // click handler again and issue two AJAX requests per button click.

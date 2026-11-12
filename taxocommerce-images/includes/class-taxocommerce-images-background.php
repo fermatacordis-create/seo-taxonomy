@@ -2,8 +2,8 @@
 /**
  * Persistent, browser-independent processing for TaxoCommerce Images.
  *
- * Uses native WordPress cron, not Action Scheduler. For unattended execution
- * without site traffic configure a real hosting cron to invoke wp-cron.php.
+ * Cleanup runs via signed, bounded internal requests without WP-Cron.
+ * Other modes retain native WordPress scheduling.
  *
  * @package TaxoCommerceImages
  */
@@ -16,6 +16,8 @@ final class TaxoCommerce_Images_Background {
 	public static function boot() {
 		add_action( self::HOOK, array( __CLASS__, 'tick' ) );
 		add_action( 'wp_ajax_taxocommerce_images_background_control', array( __CLASS__, 'ajax' ) );
+		add_action( 'wp_ajax_taxocommerce_images_cleanup_worker', array( __CLASS__, 'cleanup_worker' ) );
+		add_action( 'wp_ajax_nopriv_taxocommerce_images_cleanup_worker', array( __CLASS__, 'cleanup_worker' ) );
 		add_action( 'init', array( __CLASS__, 'watchdog' ), 99 );
 	}
 
@@ -66,7 +68,18 @@ final class TaxoCommerce_Images_Background {
 			return new WP_Error( 'tci_background_access', __( 'Administrador sin permisos para ejecutar el proceso.', 'taxocommerce-images' ) );
 		}
 		$old = self::state( $mode );
-		if ( 'running' === ( $old['status'] ?? '' ) ) {
+		$scan = 'cleanup' === $mode ? TaxoCommerce_Images_Maintenance::state( 'cleanup' ) : array();
+		$scan_run = (string) ( $scan['run'] ?? '' );
+		if ( 'running' === ( $old['status'] ?? '' )
+			&& ( 'cleanup' !== $mode || '' === (string) ( $old['scan_run'] ?? '' )
+				|| $scan_run === (string) $old['scan_run'] ) ) {
+			if ( 'cleanup' === $mode ) {
+				$old['scan_run'] = $scan_run;
+				$old['processed'] = absint( $scan['scanned'] ?? 0 );
+				$old['total'] = absint( $scan['total'] ?? 0 );
+				self::save( $mode, $old );
+				self::dispatch_cleanup( $old );
+			}
 			return $old;
 		}
 		global $wpdb;
@@ -85,7 +98,9 @@ final class TaxoCommerce_Images_Background {
 		}
 		// A paused scan resumes from its saved cursor; completed/stopped
 		// mutation jobs require an explicit fresh start.
-		$resume = in_array( (string) ( $old['status'] ?? '' ), array( 'paused', 'error' ), true );
+		$resume = in_array( (string) ( $old['status'] ?? '' ), array( 'paused', 'error' ), true )
+			&& ( 'cleanup' !== $mode || '' === (string) ( $old['scan_run'] ?? '' )
+				|| $scan_run === (string) $old['scan_run'] );
 		$job = $resume ? $old : array(
 			'mode' => $mode,
 			'run' => wp_generate_uuid4(),
@@ -102,10 +117,74 @@ final class TaxoCommerce_Images_Background {
 		);
 		$job['actor'] = $actor_id;
 		$job['status'] = 'running';
-		$job['next_run'] = time();
+		$job['next_run'] = time() + ( 'cleanup' === $mode ? 2 : 0 );
+		if ( 'cleanup' === $mode ) {
+			$job['scan_run'] = $scan_run;
+			$job['processed'] = absint( $scan['scanned'] ?? 0 );
+			$job['total'] = absint( $scan['total'] ?? 0 );
+		}
 		self::save( $mode, $job );
-		self::schedule( 0 );
+		if ( 'cleanup' === $mode ) {
+			self::dispatch_cleanup( $job );
+		} else {
+			self::schedule( 0 );
+		}
 		return $job;
+	}
+
+	/**
+	 * Run only the current read-only cleanup scan. This signed URL cannot
+	 * start a scan, delete files, or mutate arbitrary WordPress content.
+	 */
+	private static function dispatch_cleanup( $job ) {
+		if ( 'running' !== ( $job['status'] ?? '' ) || empty( $job['run'] ) ) {
+			return;
+		}
+		$live = self::state( 'cleanup' );
+		if ( ( $live['run'] ?? '' ) !== ( $job['run'] ?? '' ) ) {
+			return;
+		}
+		$live['last_dispatch'] = time();
+		self::save( 'cleanup', $live );
+		$run = (string) $job['run'];
+		wp_remote_post(
+			admin_url( 'admin-ajax.php' ),
+			array(
+				'timeout' => 1,
+				'blocking' => false,
+				'redirection' => 0,
+				'body' => array(
+					'action' => 'taxocommerce_images_cleanup_worker',
+					'run' => $run,
+					'signature' => hash_hmac( 'sha256', $run, wp_salt( 'auth' ) ),
+				),
+			)
+		);
+	}
+
+	/** Authenticated-by-HMAC server continuation independent of WP-Cron. */
+	public static function cleanup_worker() {
+		// phpcs:disable WordPress.Security.NonceVerification.Missing -- This is not a browser submission: both fields are immediately checked against a server-secret HMAC, the saved job UUID and the current scan UUID before any work can execute.
+		$run = isset( $_POST['run'] ) && is_scalar( $_POST['run'] )
+			? sanitize_text_field( wp_unslash( $_POST['run'] ) ) : '';
+		$signature = isset( $_POST['signature'] ) && is_scalar( $_POST['signature'] )
+			? sanitize_text_field( wp_unslash( $_POST['signature'] ) ) : '';
+		// phpcs:enable WordPress.Security.NonceVerification.Missing
+		$job = self::state( 'cleanup' );
+		$scan = TaxoCommerce_Images_Maintenance::state( 'cleanup' );
+		$expected = hash_hmac( 'sha256', $run, wp_salt( 'auth' ) );
+		if ( '' === $run || ! hash_equals( $expected, $signature )
+			|| 'running' !== ( $job['status'] ?? '' ) || $run !== (string) ( $job['run'] ?? '' )
+			|| (string) ( $job['scan_run'] ?? '' ) !== (string) ( $scan['run'] ?? '' ) ) {
+			status_header( 403 );
+			wp_die();
+		}
+		$next_run = absint( $job['next_run'] ?? 0 );
+		if ( $next_run > time() ) {
+			sleep( min( 15, $next_run - time() ) );
+		}
+		self::tick( 'cleanup' );
+		wp_die();
 	}
 
 	private static function schedule( $delay ) {
@@ -131,6 +210,23 @@ final class TaxoCommerce_Images_Background {
 				continue;
 			}
 			$next = absint( $job['next_run'] ?? 0 );
+			if ( 'cleanup' === (string) ( $job['mode'] ?? '' ) ) {
+				// Upgrade old persisted jobs without discarding their Media cursor.
+				if ( empty( $job['scan_run'] ) ) {
+					$scan = TaxoCommerce_Images_Maintenance::state( 'cleanup' );
+					if ( 'running' === ( $scan['status'] ?? '' ) && ! empty( $scan['run'] ) ) {
+						$job['scan_run'] = (string) $scan['run'];
+						$job['processed'] = absint( $scan['scanned'] ?? 0 );
+						$job['total'] = absint( $scan['total'] ?? 0 );
+						self::save( 'cleanup', $job );
+					}
+				}
+				if ( ! wp_doing_ajax() && time() >= $next
+					&& time() - absint( $job['last_dispatch'] ?? 0 ) >= 20 ) {
+					self::dispatch_cleanup( $job );
+				}
+				continue;
+			}
 			$soonest = null === $soonest ? $next : min( $soonest, $next );
 		}
 		if ( null !== $soonest && ! wp_next_scheduled( self::HOOK ) ) {
@@ -142,9 +238,12 @@ final class TaxoCommerce_Images_Background {
 	 * One bounded chunk per cron tick. The actor is checked again before
 	 * executing and the former current user is always restored.
 	 */
-	public static function tick() {
+	public static function tick( $only_mode = '' ) {
+		$only_mode = 'cleanup' === $only_mode ? 'cleanup' : '';
 		if ( ! TaxoCommerce_Images_Maintenance::lock( 'background_worker' ) ) {
-			self::schedule( 15 );
+			if ( '' === $only_mode ) {
+				self::schedule( 15 );
+			}
 			return;
 		}
 		$previous_user = get_current_user_id();
@@ -153,6 +252,10 @@ final class TaxoCommerce_Images_Background {
 			$selected = '';
 			$soonest = null;
 			foreach ( $jobs as $mode => $job ) {
+				if ( ( '' === $only_mode && 'cleanup' === $mode )
+					|| ( '' !== $only_mode && $only_mode !== $mode ) ) {
+					continue;
+				}
 				if ( 'running' !== ( $job['status'] ?? '' ) ) {
 					continue;
 				}
@@ -163,7 +266,7 @@ final class TaxoCommerce_Images_Background {
 				$soonest = null === $soonest ? $next : min( $soonest, $next );
 			}
 			if ( '' === $selected ) {
-				if ( null !== $soonest ) {
+				if ( '' === $only_mode && null !== $soonest ) {
 					self::schedule( max( 1, $soonest - time() ) );
 				}
 				return;
@@ -212,19 +315,27 @@ final class TaxoCommerce_Images_Background {
 			self::save( $selected, $job );
 			$next = null;
 			foreach ( self::all() as $item ) {
-				if ( 'running' !== ( $item['status'] ?? '' ) ) {
+				if ( 'cleanup' === (string) ( $item['mode'] ?? '' )
+					|| 'running' !== ( $item['status'] ?? '' ) ) {
 					continue;
 				}
 				$when = absint( $item['next_run'] ?? time() );
 				$next = null === $next ? $when : min( $next, $when );
 			}
-			if ( null !== $next ) {
+			if ( '' === $only_mode && null !== $next ) {
 				self::schedule( max( 1, $next - time() ) );
 			}
 		} finally {
 			wp_set_current_user( $previous_user );
 			TaxoCommerce_Images_Maintenance::unlock( 'background_worker' );
-			self::watchdog();
+			if ( 'cleanup' === $only_mode ) {
+				$latest = self::state( 'cleanup' );
+				if ( 'running' === ( $latest['status'] ?? '' ) ) {
+					self::dispatch_cleanup( $latest );
+				}
+			} else {
+				self::watchdog();
+			}
 		}
 	}
 
@@ -364,11 +475,19 @@ final class TaxoCommerce_Images_Background {
 		check_ajax_referer( 'taxocommerce_images_background', 'nonce' );
 		$mode = isset( $_POST['mode'] ) && is_scalar( $_POST['mode'] ) ? sanitize_key( wp_unslash( $_POST['mode'] ) ) : '';
 		$operation = isset( $_POST['operation'] ) && is_scalar( $_POST['operation'] ) ? sanitize_key( wp_unslash( $_POST['operation'] ) ) : 'status';
-		if ( ! in_array( $mode, self::modes(), true ) || ! in_array( $operation, array( 'status', 'start', 'pause', 'resume', 'stop' ), true ) ) {
+		if ( ! in_array( $mode, self::modes(), true ) || ! in_array( $operation, array( 'status', 'start', 'pause', 'resume', 'stop', 'drive' ), true ) ) {
 			wp_send_json_error( array( 'message' => 'Operación no válida.' ), 400 );
 		}
 		$job = self::state( $mode );
-		if ( 'start' === $operation ) {
+		if ( 'drive' === $operation ) {
+			if ( 'cleanup' !== $mode ) {
+				wp_send_json_error( array( 'message' => 'Operación no disponible para este proceso.' ), 400 );
+			}
+			if ( 'running' === ( $job['status'] ?? '' ) ) {
+				self::tick( 'cleanup' );
+			}
+			$job = self::state( $mode );
+		} elseif ( 'start' === $operation ) {
 			if ( ! in_array( $mode, array( 'optimize', 'webp' ), true ) ) {
 				wp_send_json_error( array( 'message' => 'Inicia este análisis desde su botón habitual.' ), 400 );
 			}
@@ -401,8 +520,10 @@ final class TaxoCommerce_Images_Background {
 		if ( is_wp_error( $job ) ) {
 			wp_send_json_error( array( 'message' => $job->get_error_message() ), 400 );
 		}
-		$job['cron_disabled'] = defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON;
-		$job['stalled'] = 'running' === ( $job['status'] ?? '' ) && ! empty( $job['last_tick'] ) && ( time() - (int) $job['last_tick'] > 240 );
+		$job['cron_disabled'] = 'cleanup' !== $mode && defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON;
+		$last_activity = max( absint( $job['last_tick'] ?? 0 ), absint( $job['last_dispatch'] ?? 0 ) );
+		$job['stalled'] = 'running' === ( $job['status'] ?? '' )
+			&& ( 0 === $last_activity || time() - $last_activity > 120 );
 		wp_send_json_success( array( 'job' => $job ) );
 	}
 
@@ -411,7 +532,11 @@ final class TaxoCommerce_Images_Background {
 		$status = isset( $job['status'] ) ? sanitize_key( $job['status'] ) : 'not-started';
 		echo '<div class="tci-background-panel" data-tci-bg-mode="' . esc_attr( $mode ) . '">';
 		echo '<p><strong>' . esc_html__( 'Ejecución en segundo plano:', 'taxocommerce-images' ) . '</strong> <span data-tci-bg-status>' . esc_html( $status ) . '</span></p>';
-		echo '<p class="description" data-tci-bg-progress>' . esc_html__( 'Este trabajo continuará en el servidor sin mantener esta pestaña abierta, siempre que WordPress Cron esté operativo.', 'taxocommerce-images' ) . '</p>';
+		echo '<p class="description" data-tci-bg-progress>' . esc_html(
+			'cleanup' === $mode
+				? __( 'Escaneo por peticiones internas sin WP-Cron. Si el alojamiento bloquea conexiones internas, mantén esta pestaña abierta para continuar automáticamente.', 'taxocommerce-images' )
+				: __( 'Este trabajo continuará en el servidor sin mantener esta pestaña abierta, siempre que WordPress Cron esté operativo.', 'taxocommerce-images' )
+		) . '</p>';
 		echo '<button type="button" class="button" data-tci-bg-control="pause">' . esc_html__( 'Pausar servidor', 'taxocommerce-images' ) . '</button> ';
 		echo '<button type="button" class="button" data-tci-bg-control="resume">' . esc_html__( 'Reanudar', 'taxocommerce-images' ) . '</button> ';
 		echo '<button type="button" class="button" data-tci-bg-control="stop">' . esc_html__( 'Detener', 'taxocommerce-images' ) . '</button>';

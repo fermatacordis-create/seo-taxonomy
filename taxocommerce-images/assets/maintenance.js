@@ -146,8 +146,11 @@
                         }
                         output.textContent = 'Escaneo completo: ' + scanned + ' / ' + total + ' (' + percent + ' %)' + summary + '. Último lote interno: ' + (load.items || 0) + ' elementos · ' + cpu + ' · ' + (load.elapsed || 0) + ' s · siguiente lote ' + next + '.';
                         if (result.data.done) { window.location.reload(); return; }
-                        // The persistent cron worker owns all subsequent batches.
-                        output.textContent += ' Continúa en segundo plano; puedes cerrar la pestaña.';
+                        // Cleanup continues via signed internal requests (no WP-Cron);
+                        // the open tab also recovers progress if loopback is blocked.
+                        output.textContent += section.dataset.tciMaintenance === 'cleanup'
+                            ? ' Continúa sin WP-Cron. Mantén la pestaña abierta si el alojamiento bloquea peticiones internas.'
+                            : ' Continúa en segundo plano; puedes cerrar la pestaña.';
                         return;
                     }
                     output.textContent += ' Pausado al finalizar el lote. Puedes continuar sin repetir lo analizado.';

@@ -4,7 +4,7 @@ Tags: images, media, thumbnails, optimization, webp
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.2.28
+Stable tag: 0.2.29
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -47,16 +47,21 @@ Current functionality includes:
 2. Activate the standalone plugin in Plugins. WooCommerce and TaxoCommerce Core are optional integrations.
 3. Open the Images administration menu to review the Media inventory and run the read-only Auto Test.
 4. Before starting real image transformations, inspect the workload settings and back up the WordPress Media library.
-5. For independent execution after closing the browser, enable WP-Cron or configure a hosting cron calling wp-cron.php.
+5. The read-only unused/duplicate scan does not require WP-Cron; it uses signed local HTTP requests. Keep the admin tab open if the host blocks those loopbacks. Other background tools may still require a hosting cron.
 
 == Background execution ==
 
-* Scans and image transformations now use independent persisted WordPress Cron tasks. The browser only starts a task or displays its status.
-* WordPress Cron requires site visits unless a hosting cron regularly invokes wp-cron.php. To guarantee unattended progression even with no visitors, configure a real hosting cron (for example, once per minute). The plugin does not use Action Scheduler.
+* The read-only unused/duplicate Media scan now uses a signed, bounded local HTTP worker without WordPress Cron, with an authenticated admin-tab fallback for hosts that reject internal requests. It retains the persisted cursor and adaptive workload regulation.
+* For cleanup reporting, expensive references across products, posts and metadata are checked once per bounded 512-image window rather than again for each 1-5-image hashing batch. Each new scan invalidates its cache; suspected unused or duplicate Media are never deleted automatically.
+* Other image tasks retain their existing persisted WordPress Cron workers.
+* For other tasks, WordPress Cron requires site visits unless a hosting cron invokes wp-cron.php. The unused/duplicate scan is independent of WP-Cron but uninterrupted unattended execution still depends on successful local loopback requests. No Action Scheduler is required.
 * Each task stores its own cursor, state, owner, errors and last heartbeat. Administrators can pause, resume or stop from Images without leaving the tab open.
 * The reported CPU percentage is limited to the PHP request; it is not the server-wide CPU utilization.
 
 == Changelog ==
+
+= 0.2.29 =
+* Fixed the complete unused/duplicate Media scan: safe server-side continuation without WP-Cron, browser fallback if the host blocks loopbacks, bounded reusable reference checks, persistent cursor and no automatic deletion. Issue #2580.
 
 = 0.2.26 =
 * Local Description and Plugin URI replace REST excerpt requests and caches in the header. Issue #2494.

@@ -169,6 +169,7 @@ final class TaxoCommerce_Google_Bing_Merchant {
         return array(
             'key'=>$key,'title'=>$title,'brand'=>$brand,
             'category'=>sanitize_text_field((string)($row['categoryL1']??'')),
+            'category_id'=>absint($row['reportCategoryId']??0),
             'subcategory'=>sanitize_text_field((string)($row['categoryL2']??'')),
             'report_date'=>is_array($row['reportDate']??null) ? sprintf('%04d-%02d-%02d',absint($row['reportDate']['year']??0),absint($row['reportDate']['month']??0),absint($row['reportDate']['day']??0)) : sanitize_text_field((string)($row['reportDate']??'')),
             'rank'=>absint($row['rank']??0),
@@ -296,6 +297,92 @@ final class TaxoCommerce_Google_Bing_Merchant {
         });
         return array('baseline'=>count($stars),'covered'=>$covered,'comparable'=>$comparable,
             'agree_10_pct'=>$agree,'rows'=>$out,'snapshot_rows'=>count($prices));
+    }
+
+    /**
+     * Official Merchant Competitive Visibility. Explicit report generation only.
+     * Up to three categories from actual Best Sellers data; no scraper fallback.
+     *
+     * @param array $category_ids Google taxonomy category IDs already observed.
+     * @param int   $days         Days requested.
+     * @return array Status and normalized evidence.
+     */
+    public static function competitive_visibility( array $category_ids, $days = 28 ) {
+        $account = self::account();
+        if ( '' === $account ) {
+            return array( 'status' => 'unavailable', 'rows' => array(), 'errors' => array( 'Merchant Center no configurado.' ) );
+        }
+        $category_ids = array_slice( array_values( array_unique( array_filter( array_map( 'absint', $category_ids ) ) ) ), 0, 3 );
+        if ( ! $category_ids ) {
+            return array( 'status' => 'unavailable', 'rows' => array(), 'errors' => array( 'Sin categorías Google verificadas.' ) );
+        }
+        $days = in_array( absint( $days ), array( 28, 90 ), true ) ? absint( $days ) : 28;
+        $cache_key = 'tci_merchant_visibility_' . md5( $account . '|' . implode( ',', $category_ids ) . '|' . $days );
+        $cached = get_transient( $cache_key );
+        if ( is_array( $cached ) ) {
+            return $cached;
+        }
+        $token = self::access_token();
+        if ( is_wp_error( $token ) ) {
+            return array( 'status' => 'unavailable', 'rows' => array(), 'errors' => array( $token->get_error_message() ) );
+        }
+        $start = gmdate( 'Y-m-d', time() - $days * DAY_IN_SECONDS );
+        $end = gmdate( 'Y-m-d', time() - DAY_IN_SECONDS );
+        $rows = array();
+        $errors = array();
+        foreach ( $category_ids as $category_id ) {
+            $query = "SELECT report_country_code, report_category_id, traffic_source, domain, is_your_domain, rank, page_overlap_rate, higher_position_rate, relative_visibility FROM competitive_visibility_competitor_view WHERE date BETWEEN '" .
+                $start . "' AND '" . $end . "' AND report_country_code = 'ES' AND report_category_id = " . $category_id . " AND traffic_source = 'ORGANIC' ORDER BY rank";
+            $response = wp_safe_remote_post(
+                'https://merchantapi.googleapis.com/reports/v1/accounts/' . $account . '/reports:search',
+                array(
+                    'timeout' => 35,
+                    'redirection' => 0,
+                    'headers' => array(
+                        'Authorization' => 'Bearer ' . $token,
+                        'Content-Type' => 'application/json',
+                        'Accept' => 'application/json',
+                    ),
+                    'body' => wp_json_encode( array( 'query' => $query, 'pageSize' => 100 ) ),
+                )
+            );
+            if ( is_wp_error( $response ) ) {
+                $errors[] = $response->get_error_message();
+                continue;
+            }
+            $code = (int) wp_remote_retrieve_response_code( $response );
+            $json = json_decode( (string) wp_remote_retrieve_body( $response ), true );
+            if ( $code < 200 || $code >= 300 || ! is_array( $json ) ) {
+                $errors[] = 'Merchant categoría ' . $category_id . ': HTTP ' . $code;
+                continue;
+            }
+            foreach ( (array) ( $json['results'] ?? array() ) as $item ) {
+                $entry = (array) ( $item['competitiveVisibilityCompetitorView'] ?? array() );
+                $domain = sanitize_text_field( (string) ( $entry['domain'] ?? '' ) );
+                if ( '' === $domain ) {
+                    continue;
+                }
+                $rows[] = array(
+                    'domain' => $domain,
+                    'category_id' => absint( $entry['reportCategoryId'] ?? $category_id ),
+                    'traffic_source' => sanitize_key( (string) ( $entry['trafficSource'] ?? 'ORGANIC' ) ),
+                    'is_own' => ! empty( $entry['isYourDomain'] ),
+                    'rank' => absint( $entry['rank'] ?? 0 ),
+                    'overlap' => isset( $entry['pageOverlapRate'] ) ? (float) $entry['pageOverlapRate'] : null,
+                    'higher_position' => isset( $entry['higherPositionRate'] ) ? (float) $entry['higherPositionRate'] : null,
+                    'relative_visibility' => isset( $entry['relativeVisibility'] ) ? (float) $entry['relativeVisibility'] : null,
+                );
+            }
+        }
+        $result = array(
+            'status' => $rows ? 'available' : ( $errors ? 'unavailable' : 'no_data' ),
+            'rows' => $rows,
+            'errors' => array_slice( $errors, 0, 3 ),
+            'country' => 'ES',
+            'period_days' => $days,
+        );
+        set_transient( $cache_key, $result, 6 * HOUR_IN_SECONDS );
+        return $result;
     }
 
     public static function render() {

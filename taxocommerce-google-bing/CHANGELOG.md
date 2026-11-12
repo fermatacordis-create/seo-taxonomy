@@ -1,3 +1,27 @@
+## [1.1.52] — 2026-11-12 — Competencia sin scrapers, mercado y Merchant (#2576)
+
+- Sustituye el informe competitivo profundo que utilizaba SerpApi/ScraperAPI y rastreo HTML de otros dominios por un informe manual sobre Merchant Center, Google Trends, aceleraciones de Search Console, Bing y GA4 propios.
+- Utiliza snapshots existentes de productos populares y consulta como máximo tres categorías de visibilidad competitiva mediante Merchant Reports API oficial, únicamente al generar el informe, sin scraping ni dependencia de TaxoCommerce Scrappers.
+- Si faltan permisos, fuentes o datos competitivos, presenta N/D; elimina clasificaciones 5/5 sin evidencia contrastable.
+- Reutiliza el motor de Tendencias sin alterarlo; distingue productos ausentes del feed Merchant de productos ausentes de WooCommerce.
+- Mantiene configuración, histórico, botón de generación manual y exportación segura JSON; informa cuando un informe guardado procede del rastreo histórico.
+- Los tests confirman que no se realizan peticiones de scraping ni se requieren otros plugins.
+
+## [1.1.51] — 2026-11-12 — Descarga completa JSON por bloques con control adaptativo
+- «Preparar JSON completo por bloques» sustituye la petición PHP monolítica que podía agotar tiempo o memoria.
+- AJAX autenticado por administrador: 21 pasos independientes, archivo temporal privado, progreso, detención y descarga final solo al completar y validar JSON.
+- Cinco velocidades seleccionables para regular el intervalo entre pasos, con reducción adaptativa del ritmo según tiempo, presión de memoria y CPU del proceso PHP (no porcentaje de CPU global); sin cron ni cambios en los diez informes individuales.
+- Mantiene las claves y el esquema v9 del JSON unificado y suprime consultas de fuentes ajenas a cada fragmento.
+- No modifica productos, categorías, Auditor, credenciales, configuración OAuth ni producción.
+
+## [1.1.50] — 2026-11-12 — Analista: inteligencia comercial y tráfico referido desde IA (#2573)
+
+- El Plan de acción ejecutivo prioriza oportunidades de demanda de Search Console, GA4, Google Trends y posiciones competitivas disponibles. La falta de coincidencia textual entre consulta y categoría ya no se presenta como incidencia editorial de mercado.
+- Añade comparación de sesiones que GA4 atribuye a asistentes IA con el periodo anterior equivalente, desglosada por fuente cuando se mide. No confunde referencias con menciones en IA ni atribuye visitas de AI Overviews sin evidencia.
+- Distingue expresamente las limitaciones de Clarity: el seguimiento configurado no equivale a disponibilidad de sus métricas en Analysis.
+- Mantiene los informes especializados y el motor heredado de auditoría para compatibilidad, sin cargarlo en el Plan de acción comercial.
+- Conserva el JSON independiente, su último snapshot y la descarga segura. No cambia datos de productos, categorías, Auditor ni configuraciones OAuth.
+
 ## [1.1.49] — 2026-11-11 — Corrección visual de botones de Analysis (#2546)
 
 - Restablece el contraste de «Crear informe» y «Ejecutar informe completo» (fondo azul, texto blanco), antes ocultos por los estilos heredados de las tarjetas.

@@ -100,4 +100,19 @@ tci_analysis_check(
     'GA4 default range/cache regression'
 );
 
+$market_competition = tci_analysis_source( $root, 'includes/analysis/analista-competitivo.php' );
+$merchant_source = tci_analysis_source( $root, 'includes/class-taxocommerce-google-bing-merchant.php' );
+tci_analysis_check(
+    false !== strpos( $lazy, 'taxocommerce_insights_competitive_render_panel($days);' ) &&
+    false === strpos( $market_competition, 'seo_analista_competitive_public_audit' ) &&
+    false === strpos( $market_competition, 'seo_analista_competitive_serp_rows' ) &&
+    false === strpos( $market_competition, 'wp_safe_remote_get(' ) &&
+    false !== strpos( $market_competition, 'TaxoCommerce_Google_Bing_Merchant::snapshots()' ) &&
+    false !== strpos( $merchant_source, 'competitive_visibility( array $category_ids' ),
+    'Competition must use official Merchant sources without paid SERP/crawler dependency'
+);
+
+// Execute the new market report regression under the existing CI preflight.
+require_once __DIR__ . '/competition-market-smoke.php';
+
 echo "Standalone Insights Analysis: 11 report definitions, own CSS, JS, AJAX, no SEO monolith references: OK\n";

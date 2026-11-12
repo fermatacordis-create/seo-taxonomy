@@ -1,3 +1,18 @@
+= 1.1.52 (2026-11-12) =
+
+* Rebuild Competition report around cached Merchant Best Sellers, bounded official Merchant competitive visibility, Trends and own Search Console/Bing data.
+* Never run SerpApi/ScraperAPI or crawl competitor domains; unavailable external rankings render as N/D.
+* Preserve historic reports and manual secured JSON export. Issue #2576.
+
+= 1.1.51 (2026-11-12) =
+* Exportar el JSON completo en 21 bloques AJAX con control adaptativo de tiempo de CPU del proceso PHP y memoria, progreso, descarga autenticada y validación final; sin cron ni cambios de catálogo.
+
+= 1.1.50 (2026-11-12) =
+
+* Executive action plan now reports externally evidenced market opportunities, without editorial entity validation as an action blocker.
+* Compare GA4 AI-assistant referral sessions with the preceding period; preserve the distinction from AI mentions.
+* Retain legacy specialist reports, the secured plan JSON download, and all existing provider connections. Issue #2573.
+
 = 1.1.46 =
 
 * Restore GSC day-by-day SQL synchronization for Analysis using current Connections authentication.

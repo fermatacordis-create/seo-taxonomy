@@ -61,53 +61,73 @@ if (!function_exists('seo_analista_json_page_row')) {
 
 if (!function_exists('seo_analista_build_json_export')) {
     // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound -- Legacy callable name is used by existing modules; changing it requires a coordinated migration.
-    function seo_analista_build_json_export($days = 28) {
+    function seo_analista_build_json_export($days = 28, $requested_section = '', $requested_part = '') {
         $days = seo_analista_days($days);
-        $data = seo_analista_get_data($days);
-        $google = seo_analista_google_snapshot($days, false);
-        $evolution = seo_analista_evolution_snapshot($days);
-        $competition = seo_analista_competition_snapshot(100);
-        $plan = seo_analista_decision_plan($days, 40);
-        $plan_summary = seo_analista_plan_summary($plan);
-        $search = seo_analista_internal_search_snapshot($days, 50);
-        $suppliers = seo_analista_supplier_snapshot(50);
-        $market = seo_analista_market_signals(80);
-        $literature = function_exists('seo_analista_literature_work') ? seo_analista_literature_work($days, 100) : array();
-        $structure_work = function_exists('seo_analista_structure_work') ? seo_analista_structure_work($days, 120) : array();
-        $trend_work = function_exists('seo_analista_trend_work') ? seo_analista_trend_work($days, 100) : array();
-        $search_acceleration = function_exists('seo_analista_search_acceleration') ? seo_analista_search_acceleration($days, 80) : array();
-        $catalog_guidance = seo_analista_catalog_guidance($days, 30);
-        $source_health = function_exists('seo_analista_source_health_all') ? seo_analista_source_health_all($days) : seo_analista_google_source_health($days);
-        $bing = function_exists('seo_analista_bing_snapshot') ? seo_analista_bing_snapshot($days, 50) : array();
-        $bing_google = function_exists('seo_analista_bing_google_query_compare')
+        // A requested fragment only evaluates its own sources. Calling without a
+        // fragment retains the full historic JSON contract for existing clients.
+        $wants = static function ($section, $parts = array()) use ($requested_section, $requested_part) {
+            if ('' === $requested_section) return true;
+            if ($section !== $requested_section) return false;
+            if ('' === $requested_part) return true;
+            return in_array($requested_part, (array) $parts, true);
+        };
+
+        $data = ($wants('meta') || $wants('donde_estamos') || $wants('comparacion', array('tracked_keywords', 'bing_google_queries')))
+            ? seo_analista_get_data($days) : array();
+        $google = $wants('donde_estamos') ? seo_analista_google_snapshot($days, false) : array();
+        $evolution = $wants('donde_estamos') ? seo_analista_evolution_snapshot($days) : array();
+        $competition = $wants('comparacion', array('competition')) ? seo_analista_competition_snapshot(100) : array();
+        $needs_plan = $wants('estrategia', array('plan')) || $wants('hacia_donde_vamos');
+        $plan = $needs_plan ? seo_analista_decision_plan($days, 40) : array();
+        $plan_summary = $needs_plan ? seo_analista_plan_summary($plan) : array();
+        $search = $wants('donde_estamos') ? seo_analista_internal_search_snapshot($days, 50) : array();
+        $suppliers = $wants('comparacion', array('suppliers')) ? seo_analista_supplier_snapshot(50) : array();
+        $market = $wants('comparacion', array('google_trends')) ? seo_analista_market_signals(80) : array();
+        $literature = ($wants('directrices', array('literatura')) && function_exists('seo_analista_literature_work'))
+            ? seo_analista_literature_work($days, 100) : array();
+        $structure_work = ($wants('directrices', array('estructura')) && function_exists('seo_analista_structure_work'))
+            ? seo_analista_structure_work($days, 120) : array();
+        $trend_work = ($wants('directrices', array('tendencias')) && function_exists('seo_analista_trend_work'))
+            ? seo_analista_trend_work($days, 100) : array();
+        $search_acceleration = ($wants('directrices', array('search_console_acceleration')) && function_exists('seo_analista_search_acceleration'))
+            ? seo_analista_search_acceleration($days, 80) : array();
+        $catalog_guidance = $wants('comparacion', array('catalog_guidance')) ? seo_analista_catalog_guidance($days, 30) : array();
+        $source_health = $wants('sources')
+            ? (function_exists('seo_analista_source_health_all') ? seo_analista_source_health_all($days) : seo_analista_google_source_health($days))
+            : array();
+        $bing = ($wants('comparacion', array('bing', 'bing_google_queries')) && function_exists('seo_analista_bing_snapshot'))
+            ? seo_analista_bing_snapshot($days, 50) : array();
+        $bing_google = ($wants('comparacion', array('bing_google_queries')) && function_exists('seo_analista_bing_google_query_compare'))
             ? seo_analista_bing_google_query_compare((array) ($data['queries'] ?? array()), (array) ($bing['top_queries'] ?? array()), 40)
             : array();
-        $catalog_structure = seo_analista_catalog_structure_snapshot((array) ($data['pages'] ?? array()));
-        $architecture_advice = function_exists('seo_analista_architecture_advice') ? seo_analista_architecture_advice($days, 100) : array();
-        $tracked_keywords = seo_analista_tracked_keyword_snapshot(
-            (array) ($data['queries'] ?? array()),
-            (array) ($data['previous_queries'] ?? array())
-        );
-        $campaigns = function_exists('seo_analista_campaign_proposals')
+        $catalog_structure = $wants('donde_estamos')
+            ? seo_analista_catalog_structure_snapshot((array) ($data['pages'] ?? array()))
+            : array();
+        $architecture_advice = ($wants('arquitectura') && function_exists('seo_analista_architecture_advice'))
+            ? seo_analista_architecture_advice($days, 100) : array();
+        $tracked_keywords = $wants('comparacion', array('tracked_keywords'))
+            ? seo_analista_tracked_keyword_snapshot((array) ($data['queries'] ?? array()), (array) ($data['previous_queries'] ?? array()))
+            : array();
+        $campaigns = ($wants('campanas') && function_exists('seo_analista_campaign_proposals'))
             ? seo_analista_campaign_proposals($days, 12, false)
             : array('available'=>false,'proposals'=>array(),'blocked_by_price'=>array());
-        $task_contract = function_exists('seo_analista_task_contract')
-            ? array_map('seo_analista_task_contract', $plan)
-            : $plan;
-        $scheduler_health = function_exists('seo_analista_action_scheduler_health')
+        $task_contract = $wants('estrategia', array('plan'))
+            ? (function_exists('seo_analista_task_contract') ? array_map('seo_analista_task_contract', $plan) : $plan)
+            : array();
+        $scheduler_health = $wants('operational_health') && function_exists('seo_analista_action_scheduler_health')
             ? seo_analista_action_scheduler_health()
             : array('available'=>false,'state'=>'unknown','overdue'=>0);
-        $validation_tests = function_exists('seo_analista_383_self_tests')
-            ? seo_analista_383_self_tests()
-            : (function_exists('seo_analista_382_self_tests')
-                ? seo_analista_382_self_tests()
-                : (function_exists('seo_analista_381_self_tests') ? seo_analista_381_self_tests() : array()));
-        $gate_summary = function_exists('seo_analista_action_gate_summary')
-            ? seo_analista_action_gate_summary($plan)
+        $validation_tests = $wants('estrategia', array('validation'))
+            ? (function_exists('seo_analista_383_self_tests')
+                ? seo_analista_383_self_tests()
+                : (function_exists('seo_analista_382_self_tests')
+                    ? seo_analista_382_self_tests()
+                    : (function_exists('seo_analista_381_self_tests') ? seo_analista_381_self_tests() : array())))
             : array();
-        $plan_consistency = function_exists('seo_analista_plan_consistency_report')
-            ? seo_analista_plan_consistency_report($plan)
-            : array();
+        $gate_summary = ($wants('estrategia', array('plan')) && function_exists('seo_analista_action_gate_summary'))
+            ? seo_analista_action_gate_summary($plan) : array();
+        $plan_consistency = ($wants('estrategia', array('plan')) && function_exists('seo_analista_plan_consistency_report'))
+            ? seo_analista_plan_consistency_report($plan) : array();
 
         $queries = array();
         foreach (array_slice((array) ($data['queries'] ?? array()), 0, 120) as $row) {
@@ -227,6 +247,20 @@ if (!function_exists('seo_analista_build_json_export')) {
             ),
         );
 
+        if ('meta' === $requested_section) {
+            return seo_analista_json_clean_value(array_intersect_key($payload, array_flip(array('schema', 'generated_at', 'site', 'period'))));
+        }
+        if ('' !== $requested_section && array_key_exists($requested_section, $payload)) {
+            $section = $payload[$requested_section];
+            if ('estrategia' === $requested_section && 'plan' === $requested_part) {
+                unset($section['validation']);
+                return seo_analista_json_clean_value($section);
+            }
+            if ('' !== $requested_part && is_array($section) && array_key_exists($requested_part, $section)) {
+                return seo_analista_json_clean_value($section[$requested_part]);
+            }
+            return seo_analista_json_clean_value($section);
+        }
         return seo_analista_json_clean_value($payload);
     }
 }

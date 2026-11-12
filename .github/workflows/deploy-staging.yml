@@ -166,6 +166,8 @@ jobs:
           php taxocommerce-google-bing/tests/analysis-unified-smoke.php
           php -l taxocommerce-google-bing/tests/analysis-mobile-smoke.php
           php taxocommerce-google-bing/tests/analysis-mobile-smoke.php
+          php -l taxocommerce-google-bing/tests/analysis-chunked-json-smoke.php
+          php taxocommerce-google-bing/tests/analysis-chunked-json-smoke.php
           node --check taxocommerce-google-bing/includes/analysis/assets/analista-lazy.js
           php taxocommerce-google-bing/tests/geo-bridge-smoke.php
           node taxocommerce-google-bing/tests/head-tags-browser-smoke.js
