@@ -334,7 +334,7 @@ body.tcc-family-admin .tcc-guide-article h3{font-size:17px;line-height:1.35;marg
 .tcc-hero .tc-family-hero__excerpt{margin:0 0 6px;font-size:13px;line-height:1.6;color:#47576f}
 .tcc-hero .tc-family-hero__link{font-size:13px;font-weight:600;text-decoration:none}
 .tcc-hero .tc-family-hero__link:hover{text-decoration:underline}
-.tcc-dashboard .tc-family-history-panel{margin:0 0 17px;padding:18px 22px;border:1px solid #dfe6ef;border-radius:13px;background:#fff;box-shadow:0 3px 14px rgba(20,45,85,.04);color:#26354c}
+.tcc-dashboard .tc-family-history-panel{margin:18px 0 17px;padding:18px 22px;border:1px solid #dfe6ef;border-radius:13px;background:#fff;box-shadow:0 3px 14px rgba(20,45,85,.04);color:#26354c}
 .tcc-dashboard .tc-family-history-panel__title{margin:0 0 10px;padding:0;font-size:15px;font-weight:700;color:#122038}
 .tcc-dashboard .tc-family-history-panel__body{max-height:320px;overflow:auto;padding-right:8px;font-size:13px;line-height:1.6}
 .tcc-dashboard .tc-family-history-panel__body h3{margin:16px 0 6px;font-size:13px;font-weight:700;color:#122038}
