@@ -1579,7 +1579,3 @@ msgstr "Fehlgeschlagen"
 #: includes/feeds/admin.php
 msgid "Stopped"
 msgstr "Angehalten"
-
-#. Description of the plugin
-msgid "Publishes commercial feeds and professional XML sitemaps through independent bounded processes."
-msgstr "Veröffentlicht kommerzielle Feeds und professionelle XML-Sitemaps über eigenständige, ressourcenbegrenzte Prozesse."

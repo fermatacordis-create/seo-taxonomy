@@ -918,7 +918,3 @@ msgstr "Open technical audit of existing associations"
 #. TaxoCommerce Templates visible administration UI
 msgid "Gestionar las páginas asignadas a cada rol"
 msgstr "Manage pages assigned to each role"
-
-#. Description of the plugin
-msgid "Standalone WordPress/WooCommerce request-template routing, SEO role assignments and migration audit."
-msgstr "Standalone WordPress/WooCommerce request-template routing, SEO role assignments and migration audit."

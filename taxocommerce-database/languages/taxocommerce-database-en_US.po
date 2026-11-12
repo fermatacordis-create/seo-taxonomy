@@ -1087,7 +1087,3 @@ msgstr "Unlock bulk acceptance"
 msgid "Elimina el bloqueo únicamente si has comprobado que no hay otra aceptación masiva ejecutándose. ¿Continuar?"
 msgstr "Remove the lock only if you have verified that no other bulk acceptance process is running. Continue?"
 
-
-#. Description of the plugin
-msgid "Original Clean Database and SEO Data Table migrated into one independent plugin, without Data Layer."
-msgstr "Original Clean Database and SEO Data Table migrated into one independent plugin, without Data Layer."

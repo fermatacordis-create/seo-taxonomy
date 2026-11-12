@@ -1844,9 +1844,7 @@ msgstr "Qué revisa"
 msgid ""
 "Read-only WordPress and WooCommerce content quality audits with detailed "
 "KPIs and full JSON exports."
-msgstr ""
-"Read-only WordPress and WooCommerce content quality audits with detailed "
-"KPIs and full JSON exports."
+msgstr "Auditorías de calidad de contenido de WordPress y WooCommerce en solo lectura, con KPI detallados y exportaciones JSON completas."
 
 #: includes/class-admin.php:174
 msgid "Reanudar"
@@ -2683,7 +2681,3 @@ msgstr "Los cinco niveles establecen techos de 40 a 500 objetos por lote; cada a
 #: includes/class-admin.php includes/class-manual.php
 msgid "La pantalla utiliza wp_ajax_taxocommerce_auditor_watch con manage_options y nonce, procesando un lote por petición AJAX. Workload::effective_batch_size() respeta el máximo elegido y Workload::adjusted_batch_size() ajusta el próximo lote según tiempo completo, memoria y CPU propia medida mediante getrusage() cuando existe. El navegador regula la pausa según duración, latencia, memoria y CPU PHP; no conoce la CPU total del servidor. La consulta usa el mismo tamaño que la condición de finalización y conserva cursor e informes JSONL. El bloqueo taxocommerce_auditor_worker_{scope} impide solapamientos. Los fallos HTTP se reintentan; Cron queda solo como respaldo opcional."
 msgstr "La pantalla utiliza wp_ajax_taxocommerce_auditor_watch con manage_options y nonce, procesando un lote por petición AJAX. Workload::effective_batch_size() respeta el máximo elegido y Workload::adjusted_batch_size() ajusta el próximo lote según tiempo completo, memoria y CPU propia medida mediante getrusage() cuando existe. El navegador regula la pausa según duración, latencia, memoria y CPU PHP; no conoce la CPU total del servidor. La consulta usa el mismo tamaño que la condición de finalización y conserva cursor e informes JSONL. El bloqueo taxocommerce_auditor_worker_{scope} impide solapamientos. Los fallos HTTP se reintentan; Cron queda solo como respaldo opcional."
-
-#. Description of the plugin
-msgid "Read-only WordPress and WooCommerce content quality audits with detailed KPIs and full JSON exports."
-msgstr "Auditorías de calidad de contenido de WordPress y WooCommerce en solo lectura, con KPI detallados y exportaciones JSON completas."

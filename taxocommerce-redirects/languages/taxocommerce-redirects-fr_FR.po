@@ -799,7 +799,3 @@ msgid ""
 "versión exacta, registros de WordPress y los resultados de CI. No consideres"
 " un problema resuelto hasta comprobarlo en el entorno afectado."
 msgstr "Pour analyser un échec, conservez les rapports JSON AVANT et APRÈS, la version exacte, les journaux WordPress et les résultats CI. Ne considérez pas le problème comme résolu avant de l’avoir vérifié dans l’environnement concerné."
-
-#. Description of the plugin
-msgid "301/302 redirect management and assisted deletion for WordPress and WooCommerce content, with optional TaxoCommerce Core integration."
-msgstr "Gestion des redirections 301/302 et suppression assistée de contenus WordPress et WooCommerce, avec intégration facultative à TaxoCommerce Core."

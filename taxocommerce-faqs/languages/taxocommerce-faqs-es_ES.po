@@ -650,7 +650,3 @@ msgid ""
 "CSV UTF-8; hasta 500 filas y 2 MB por importación. Solo se actualiza un ID "
 "existente; las nuevas filas reciben ID nuevo."
 msgstr "CSV UTF-8; hasta 500 filas y 2 MB por importación. Solo se actualiza un ID existente; las nuevas filas reciben ID nuevo."
-
-#. Description of the plugin
-msgid "Manage WordPress and WooCommerce FAQs with CSV exchange, KPIs and semantic labels. Uninstalling deletes stored FAQ data."
-msgstr "Gestiona las preguntas frecuentes de WordPress y WooCommerce con intercambio CSV, indicadores KPI y etiquetas semánticas. La desinstalación elimina los datos de preguntas frecuentes almacenados."

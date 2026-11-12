@@ -19,7 +19,7 @@ msgstr ""
 msgid ""
 "External connections, provider data downloads, and the restored legacy "
 "Analysis dashboard."
-msgstr ""
+msgstr "Connexions externes, téléchargements des données des fournisseurs et le tableau de bord Analyse historique restauré."
 
 #. Author of the plugin
 #: taxocommerce-google-bing.php
@@ -3978,7 +3978,3 @@ msgstr "Télécharger le JSON du plan d’action"
 #: taxocommerce-google-bing.php
 msgid "Abrir JSON del plan (móvil)"
 msgstr "Ouvrir le JSON du plan (mobile)"
-
-#. Description of the plugin
-msgid "External connections, provider data downloads, and the restored legacy Analysis dashboard."
-msgstr "Connexions externes, téléchargements des données des fournisseurs et le tableau de bord Analyse historique restauré."

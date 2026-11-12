@@ -23,7 +23,7 @@ msgstr "https://www.distribuidordeherramientas.es/"
 msgid ""
 "301/302 redirect management and assisted deletion for WordPress and "
 "WooCommerce content, with optional TaxoCommerce Core integration."
-msgstr "301/302 redirect management and assisted deletion for WordPress and WooCommerce content, with optional TaxoCommerce Core integration."
+msgstr "Gestión de redirecciones 301/302 y borrado asistido de contenidos de WordPress y WooCommerce, con integración opcional con TaxoCommerce Core."
 
 #. Author of the plugin
 #: taxocommerce-redirects.php
@@ -799,7 +799,3 @@ msgid ""
 "versión exacta, registros de WordPress y los resultados de CI. No consideres"
 " un problema resuelto hasta comprobarlo en el entorno afectado."
 msgstr "Para investigar un fallo, conserva los informes JSON ANTES y DESPUÉS, la versión exacta, los registros de WordPress y los resultados de CI. No consideres un problema resuelto hasta comprobarlo en el entorno afectado."
-
-#. Description of the plugin
-msgid "301/302 redirect management and assisted deletion for WordPress and WooCommerce content, with optional TaxoCommerce Core integration."
-msgstr "Gestión de redirecciones 301/302 y borrado asistido de contenidos de WordPress y WooCommerce, con integración opcional con TaxoCommerce Core."

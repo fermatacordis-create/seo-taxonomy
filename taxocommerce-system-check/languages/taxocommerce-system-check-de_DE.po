@@ -1700,7 +1700,3 @@ msgstr "Möglicherweise doppelte PHP-Deklarationen müssen überprüft werden."
 #: includes/class-taxocommerce-system-check-code-check.php
 msgid "Native local checks: PHP, literal include paths, duplicate declarations, WordPress conventions and security patterns. Full data flow, runtime and official Plugin Check remain unverified."
 msgstr "Eigene lokale Prüfungen: PHP, wörtliche Include-Pfade, doppelte Deklarationen, WordPress-Konventionen und Sicherheitsmuster. Vollständiger Datenfluss, Laufzeitverhalten und offizieller Plugin Check bleiben ungeprüft."
-
-#. Description of the plugin
-msgid "Independent WordPress, server and plugin diagnostics with local checks, reports and optional administrator notifications."
-msgstr "Unabhängige Diagnose für WordPress, Server und Plugins mit lokalen Prüfungen, Berichten und optionalen Administratorbenachrichtigungen."

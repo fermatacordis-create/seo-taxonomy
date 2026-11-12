@@ -1114,7 +1114,3 @@ msgstr "Autotest"
 #: taxocommerce-scrappers.php:143
 msgid "Manual"
 msgstr "Manual"
-
-#. Description of the plugin
-msgid "External market and product research using the legacy Ojeador and Ingeniero engines with shared SerpApi and ScraperAPI connections."
-msgstr "Investigación externa de mercado y productos mediante los motores históricos Ojeador e Ingeniero, con conexiones compartidas a SerpApi y ScraperAPI."

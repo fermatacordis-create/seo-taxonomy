@@ -498,7 +498,3 @@ msgstr "2.6 Auto Test : portée et conservation"
 msgid "2.7 Límites y pruebas"
 msgstr "2.7 Limites et tests"
 
-
-#. Description of the plugin
-msgid "Vocabulario semántico, atributos técnicos, clasificación asistida e importación/exportación para TaxoCommerce."
-msgstr "Vocabulaire sémantique, attributs techniques, classification assistée et importation/exportation pour TaxoCommerce."

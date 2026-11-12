@@ -1700,7 +1700,3 @@ msgstr "Les déclarations PHP potentiellement dupliquées nécessitent une véri
 #: includes/class-taxocommerce-system-check-code-check.php
 msgid "Native local checks: PHP, literal include paths, duplicate declarations, WordPress conventions and security patterns. Full data flow, runtime and official Plugin Check remain unverified."
 msgstr "Contrôles locaux natifs : PHP, chemins d’inclusion littéraux, déclarations dupliquées, conventions WordPress et motifs de sécurité. Les flux de données complets, l’exécution et le Plugin Check officiel ne sont pas vérifiés."
-
-#. Description of the plugin
-msgid "Independent WordPress, server and plugin diagnostics with local checks, reports and optional administrator notifications."
-msgstr "Diagnostics indépendants de WordPress, du serveur et des extensions, avec contrôles locaux, rapports et notifications facultatives aux administrateurs."
