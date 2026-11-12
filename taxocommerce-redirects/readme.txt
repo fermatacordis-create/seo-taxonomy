@@ -4,19 +4,23 @@ Tags: redirects, redirection, seo, woocommerce, delete
 Requires at least: 6.5
 Requires PHP: 7.4
 Tested up to: 7.1
-Stable tag: 0.1.18
+Stable tag: 0.1.20
 License: GPLv2 or later
 
 Manage SEO redirects and assisted content deletion for WordPress and WooCommerce.
 
 == Description ==
 
+* Admin header: plugin title, a single local `Description` with the static `Plugin URI` link below it (left); a wider collapsed `CHANGELOG.md` history (center); local version and release date (right). No duplicated information panel or external requests.
+
 * The admin header reads this plugin's local `Description` and links to `Plugin URI`, without external requests or caching. The version history is bundled in `CHANGELOG.md`.
 
-* Collapsible local plugin information beside the independent version history.
+* One collapsible version-history control, without a duplicate plugin-information box.
 
 
 Independent WordPress/WooCommerce 301/302 manager with assisted deletion.
+
+* Administrators can enable or disable the TaxoCommerce redirect engine from a checkbox in Redirects. Existing sites default to enabled. Disabling stops TaxoCommerce-owned redirects and ownership claims, preserves saved rules and management features, and does not automatically enable another plugin.
 
 == Installation ==
 
@@ -156,4 +160,4 @@ retired and all native relationships have been verified.
 == External Services ==
 
 
-The local information panel shows `Description` and the `Plugin URI` link from the main PHP plugin header, without an HTTP request.
+The header shows `Description` once and the static `Plugin URI` link directly below it, without an HTTP request.

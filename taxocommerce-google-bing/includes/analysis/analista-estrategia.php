@@ -73,7 +73,7 @@ if (!function_exists('seo_analista_source_health_all')) {
         $gsc_period = $property_id && function_exists('seo_analista_period')
             ? seo_analista_period($property_id, $days) : array();
         $ga4 = function_exists('seo_analista_ga4_snapshot')
-            ? (array) seo_analista_ga4_snapshot($days, $gsc_period['date_to'] ?? '') : array();
+            ? (array) seo_analista_ga4_snapshot($days) : array();
         $sessions = (int) ($ga4['sessions'] ?? 0);
         $purchases = (int) ($ga4['purchases'] ?? 0);
         $revenue = (float) ($ga4['revenue'] ?? 0);
@@ -644,12 +644,19 @@ if (!function_exists('seo_analista_prioritize_portfolio')) {
     // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound -- Legacy callable name is used by existing modules; changing it requires a coordinated migration.
     function seo_analista_prioritize_portfolio(array $rows, $days = 28, $limit = 40, $now_limit = 10) {
         $health = seo_analista_source_health_all($days);
+        // Read the existing GSC data cutoff once; do not re-fetch pages or reports.
+        $gsc_data_to = '';
+        if (function_exists('seo_analista_resolve_property_id') && function_exists('seo_analista_period')) {
+            $property_id = seo_analista_resolve_property_id();
+            $period = $property_id ? (array) seo_analista_period($property_id, $days) : array();
+            $gsc_data_to = (string) ($period['date_to'] ?? '');
+        }
         $out = array();
         foreach ($rows as $row) {
             if (!is_array($row)) continue;
             $enriched = seo_analista_enrich_business_row($row, $health);
             if (function_exists('seo_analista_validate_and_finalize_task')) {
-                $enriched = seo_analista_validate_and_finalize_task($enriched, $days);
+                $enriched = seo_analista_validate_and_finalize_task($enriched, $days, $gsc_data_to);
             }
             $out[] = $enriched;
         }

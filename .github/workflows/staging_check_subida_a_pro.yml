@@ -25,6 +25,11 @@ on:
         type: boolean
         required: true
         default: false
+      target_plugin:
+        description: 'Optional plugin slug for scoped deployment and check, e.g. taxocommerce-core'
+        type: string
+        required: false
+        default: ''
 
 permissions:
   contents: read
@@ -73,6 +78,7 @@ jobs:
     uses: ./.github/workflows/deploy-staging.yml
     with:
       full_sync: ${{ inputs.full_sync || false }}
+      target_plugin: ${{ inputs.target_plugin || '' }}
     secrets: inherit
     permissions:
       contents: read
@@ -84,7 +90,7 @@ jobs:
     if: needs.staging.result == 'success'
     uses: ./.github/workflows/taxocommerce-plugin-check.yml
     with:
-      plugin: all
+      plugin: ${{ inputs.target_plugin || 'changed' }}
     permissions:
       contents: read
 
@@ -95,9 +101,11 @@ jobs:
     uses: ./.github/workflows/despliege_de_main_a_pro.yml
     with:
       source_sha: ${{ github.sha }}
+      target_plugin: ${{ inputs.target_plugin || '' }}
     secrets: inherit
     permissions:
       contents: read
+      actions: read
 
   report-failure:
     name: 'Stop and open an issue on failure'
@@ -118,7 +126,7 @@ jobs:
           PRO_RESULT: ${{ needs.production.result }}
           SOURCE_SHA: ${{ github.sha }}
           PIPELINE_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          SELECTED_PLUGIN: all
+          SELECTED_PLUGIN: ${{ inputs.target_plugin || 'changed' }}
           FULL_SYNC: ${{ inputs.full_sync || false }}
           COPILOT_AGENT_TOKEN: ${{ secrets.COPILOT_AGENT_TOKEN }}
         shell: bash

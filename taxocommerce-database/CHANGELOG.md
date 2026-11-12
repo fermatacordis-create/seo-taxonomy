@@ -1,3 +1,10 @@
+## [0.4.20] — 2026-11-10 — Cabecera en tres zonas sin contenido duplicado (#2521)
+
+- Izquierda: nombre, descripción local del plugin y un único enlace estático `Plugin URI` bajo el texto.
+- Centro: desplegable más ancho con el historial local `CHANGELOG.md`, cerrado inicialmente.
+- Derecha: versión y fecha reales del propio plugin.
+- Se retira la segunda caja «Información del plugin», sin cambios en servicios, menús ni consultas externas.
+
 ## [0.4.19] — 2026-11-10 — Descripción visible desde el plugin (#2494)
 
 - La descripción inmediatamente debajo del título administrativo procede de `Description:` del archivo principal, sin textos duplicados ni consultas externas.

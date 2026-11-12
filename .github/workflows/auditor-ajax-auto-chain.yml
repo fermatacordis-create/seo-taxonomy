@@ -37,6 +37,8 @@ jobs:
       - name: Check PHP syntax
         run: |
           find taxocommerce-auditor -name '*.php' -type f -print0 | xargs -0 -n1 php -l
+      - name: Category relationships and native auditor smoke
+        run: php taxocommerce-auditor/tests/smoke.php
       - name: Functional and i18n smoke
         run: php taxocommerce-auditor/tests/auto-test-manual-smoke.php
       - name: Automatic AJAX chaining smoke

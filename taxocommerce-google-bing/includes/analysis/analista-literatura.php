@@ -190,7 +190,7 @@ if (!function_exists('seo_analista_category_content_map')) {
         // phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare,WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber -- Trusted internal table identifiers; generated value placeholders are bound using wpdb::prepare (WordPress 5.8 compatibility).
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Native live read/write of plugin-owned tables, retaining immediate reporting consistency; query values are prepared.
         $rows = (array) $wpdb->get_results(
-            "SELECT object_id, seo_role, keywords
+            "SELECT object_id, seo_role, keywords, updated_at
              FROM {$table}
              WHERE object_type='category' AND status=1
                AND seo_role IN ('description','excerpt','category','ambito')
@@ -203,8 +203,12 @@ if (!function_exists('seo_analista_category_content_map')) {
             $id = absint($row['object_id'] ?? 0);
             $role = sanitize_key((string) ($row['seo_role'] ?? ''));
             if (!$id || $role === '') continue;
-            if (!isset($out[$id])) $out[$id] = array('description' => '', 'excerpt' => '', 'category' => '', 'ambito' => '');
+            if (!isset($out[$id])) $out[$id] = array('description' => '', 'excerpt' => '', 'category' => '', 'ambito' => '', 'modified_at' => '');
             if (isset($out[$id][$role]) && $out[$id][$role] === '') $out[$id][$role] = (string) ($row['keywords'] ?? '');
+            if (in_array($role, array('description', 'excerpt'), true)) {
+                $updated_at = (string) ($row['updated_at'] ?? '');
+                if ($updated_at > (string) $out[$id]['modified_at']) $out[$id]['modified_at'] = $updated_at;
+            }
         }
         return $out;
     }
@@ -650,6 +654,7 @@ if (!function_exists('seo_analista_build_entity_work_row')) {
             'action_label' => (string) ($meta['label'] ?? $action),
             'channel' => (string) ($meta['channel'] ?? 'contenido'),
             'topic' => (string) $title,
+            'content_modified_at' => (string) ($source['modified_at'] ?? ''),
             'reason' => implode(' ', $reason_parts),
             'sources' => array_values(array_filter(array('WordPress', $impressions > 0 ? 'Search Console' : '', $vocabulary_count > 0 ? 'Vocabulary' : ''))),
             'source' => '',
@@ -754,6 +759,7 @@ if (!function_exists('seo_analista_content_work')) {
             $source = array(
                 'title' => (string) ($post['post_title'] ?? ''),
                 'content' => (string) ($post['post_content'] ?? ''),
+                'modified_at' => (string) ($post['post_modified'] ?? ''),
                 'excerpt' => (string) ($post['post_excerpt'] ?? ''),
                 'seo_meta' => seo_analista_seo_meta_snapshot($id),
                 'tag_count' => is_wp_error($tags) ? 0 : count((array) $tags),
@@ -803,6 +809,7 @@ if (!function_exists('seo_analista_content_work')) {
                     $source = array(
                         'title' => (string) ($post['post_title'] ?? ''),
                         'content' => (string) ($post['post_content'] ?? ''),
+                'modified_at' => (string) ($post['post_modified'] ?? ''),
                         'excerpt' => (string) ($post['post_excerpt'] ?? ''),
                         'seo_meta' => seo_analista_seo_meta_snapshot($id),
                     );
@@ -837,6 +844,7 @@ if (!function_exists('seo_analista_content_work')) {
                     $source = array(
                         'title' => (string) ($term->name ?? ''),
                         'content' => (string) (($stored['description'] ?? '') !== '' ? $stored['description'] : ($term->description ?? '')),
+                        'modified_at' => (string) ($stored['modified_at'] ?? ''),
                         'excerpt' => (string) ($stored['excerpt'] ?? ''),
                         'seo_meta' => array('title' => '', 'description' => ''),
                         'tag_count' => count($category_tags),

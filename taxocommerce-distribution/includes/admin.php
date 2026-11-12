@@ -8,6 +8,7 @@ defined( 'ABSPATH' ) || exit;
 add_action( 'admin_menu', 'taxocommerce_distribution_register_menu', 42 );
 add_action( 'admin_post_tcdist_sitemap_regenerate', 'taxocommerce_distribution_handle_sitemap_regenerate' );
 add_action( 'admin_post_tcdist_sitemap_speed', 'taxocommerce_distribution_save_sitemap_speed' );
+add_action( 'admin_post_tcdist_sitemap_ownership', 'taxocommerce_distribution_save_sitemap_ownership' );
 add_action( 'admin_post_tcdist_sitemap_stop', 'taxocommerce_distribution_stop_sitemap' );
 add_action( 'wp_ajax_tcdist_sitemap_pulse', 'taxocommerce_distribution_sitemap_ajax_pulse' );
 add_action( 'admin_enqueue_scripts', 'taxocommerce_distribution_sitemap_enqueue' );
@@ -80,6 +81,54 @@ function taxocommerce_distribution_handle_sitemap_regenerate() {
     exit;
 }
 
+
+/**
+ * Store explicit permission to publish the site's XML sitemap.
+ *
+ * The setting defaults to enabled for backwards compatibility. External
+ * plugins may still claim ownership via the existing WordPress filter.
+ */
+function taxocommerce_distribution_save_sitemap_ownership() {
+    taxocommerce_distribution_guard();
+    check_admin_referer( 'tcdist_sitemap_ownership' );
+
+    $enabled = isset( $_POST['tcdist_sitemap_enabled'] )
+        && is_string( $_POST['tcdist_sitemap_enabled'] )
+        && '1' === sanitize_text_field( wp_unslash( $_POST['tcdist_sitemap_enabled'] ) );
+    $previous = tcdist_sitemap_enabled();
+
+    // A running publisher must be stopped explicitly before switching owners.
+    if ( ! $enabled && $previous ) {
+        $state = tcdist_sitemap_job_state();
+        if ( 'running' === ( $state['status'] ?? '' ) ) {
+            wp_safe_redirect( taxocommerce_distribution_url( 'sitemaps', array(
+                'tcdist_sitemap_result'  => 'error',
+                'tcdist_sitemap_message' => rawurlencode( __( 'Detén primero la generación en curso antes de ceder el control del sitemap.', 'taxocommerce-distribution' ) ),
+            ) ) );
+            exit;
+        }
+    }
+
+    update_option( 'tcdist_sitemap_enabled', $enabled ? 'yes' : 'no', false );
+
+    if ( ! $enabled ) {
+        wp_clear_scheduled_hook( TCDIST_SITEMAP_DAILY_HOOK );
+        wp_clear_scheduled_hook( TCDIST_SITEMAP_WORKER_HOOK );
+        wp_clear_scheduled_hook( 'tcdist_sitemap_regenerate_sitemaps_event' );
+    }
+
+    // Rebuild the public endpoint rules so native WordPress (or another
+    // provider) can serve its own sitemap when Distribution is disabled.
+    flush_rewrite_rules( false );
+
+    wp_safe_redirect( taxocommerce_distribution_url( 'sitemaps', array(
+        'tcdist_sitemap_result'  => 'ok',
+        'tcdist_sitemap_message' => rawurlencode( $enabled
+            ? __( 'Gestión de sitemaps habilitada en Distribution.', 'taxocommerce-distribution' )
+            : __( 'Distribution ha cedido la gestión del sitemap. Los XML existentes se conservan.', 'taxocommerce-distribution' ) ),
+    ) ) );
+    exit;
+}
 
 /**
  * Schedule-safe priority controls; no changes to other TaxoCommerce plugins.
@@ -329,6 +378,9 @@ function taxocommerce_distribution_render_sitemaps() {
     $speed = tcdist_sitemap_speed();
     $speeds = tcdist_sitemap_speed_labels();
     $published_at = tcdist_sitemap_publication_time();
+    $owner_enabled = tcdist_sitemap_enabled();
+    $external_owner = tcdist_sitemap_external_owner();
+    $legacy_sitemap = defined( 'TCDIST_LEGACY_SITEMAP_ACTIVE' ) && TCDIST_LEGACY_SITEMAP_ACTIVE;
     $published_at_label = $published_at ? wp_date( 'd/m/Y H:i:s', $published_at ) : __( 'Todavía no publicado', 'taxocommerce-distribution' );
     $started_at_label = ! empty( $job['started_at'] ) ? wp_date( 'd/m/Y H:i:s', absint( $job['started_at'] ) ) : '—';
     $updated_at_label = ! empty( $job['updated_at'] ) ? wp_date( 'd/m/Y H:i:s', absint( $job['updated_at'] ) ) : '—';
@@ -347,6 +399,24 @@ function taxocommerce_distribution_render_sitemaps() {
         <h2 style="margin-top:0;"><?php esc_html_e( 'XML Sitemaps', 'taxocommerce-distribution' ); ?></h2>
         <p><?php esc_html_e( 'The same proven engine is preserved: atomic publishing, pre-publication XML validation, product batching, and stable root-domain URLs.', 'taxocommerce-distribution' ); ?></p>
         <p><?php esc_html_e( 'Professional index:', 'taxocommerce-distribution' ); ?> <a href="<?php echo esc_url( $main_url ); ?>" target="_blank" rel="noopener noreferrer"><code><?php echo esc_html( $main_url ); ?></code></a></p>
+
+        <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="padding:12px 14px;border:1px solid #c3c4c7;margin:12px 0;">
+            <input type="hidden" name="action" value="tcdist_sitemap_ownership">
+            <?php wp_nonce_field( 'tcdist_sitemap_ownership' ); ?>
+            <label for="tcdist-sitemap-enabled">
+                <input type="checkbox" id="tcdist-sitemap-enabled" name="tcdist_sitemap_enabled" value="1" <?php checked( $owner_enabled ); ?>>
+                <strong><?php esc_html_e( 'TaxoCommerce Distribution gestiona el sitemap XML', 'taxocommerce-distribution' ); ?></strong>
+            </label>
+            <p class="description"><?php esc_html_e( 'Desmarcar permite usar el sitemap nativo de WordPress o el de otro plugin. Los archivos XML existentes no se borran; los feeds comerciales siguen funcionando. Si otro plugin reclama la gestión mediante el filtro de WordPress, tiene prioridad.', 'taxocommerce-distribution' ); ?></p>
+            <?php if ( $legacy_sitemap ) : ?>
+                <p class="description"><?php esc_html_e( 'Existe otro generador heredado activo: conserva su prioridad hasta que se desactive.', 'taxocommerce-distribution' ); ?></p>
+            <?php elseif ( $owner_enabled && '' !== $external_owner ) : ?>
+                <p class="description"><?php esc_html_e( 'Otro plugin gestiona actualmente el sitemap.', 'taxocommerce-distribution' ); ?></p>
+            <?php elseif ( ! $owner_enabled ) : ?>
+                <p class="description"><?php esc_html_e( 'Distribution no publica sitemaps. WordPress u otro proveedor puede gestionarlos.', 'taxocommerce-distribution' ); ?></p>
+            <?php endif; ?>
+            <?php submit_button( __( 'Guardar elección', 'taxocommerce-distribution' ), 'secondary', 'submit', false ); ?>
+        </form>
 
         <?php if ( $message ) : ?>
             <div class="notice <?php echo esc_attr( 'ok' === $result ? 'notice-success' : 'notice-error' ); ?> inline"><p><?php echo esc_html( $message ); ?></p></div>
@@ -411,7 +481,7 @@ function taxocommerce_distribution_render_sitemaps() {
             </div>
         </div>
 
-        <?php if ( ! $running ) : ?>
+        <?php if ( ! $running && $owner_enabled && '' === $external_owner ) : ?>
             <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="margin:18px 0;">
                 <input type="hidden" name="action" value="tcdist_sitemap_regenerate">
                 <?php wp_nonce_field( 'tcdist_sitemap_regenerate' ); ?>

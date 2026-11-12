@@ -665,7 +665,7 @@ if (!function_exists('seo_analista_build_competitive_report')) {
         }
 
         $data = function_exists('seo_analista_get_data') ? (array) seo_analista_get_data($days) : array();
-        $ga4 = function_exists('seo_analista_ga4_snapshot') ? (array) seo_analista_ga4_snapshot($days, (string) (($data['period']['date_to'] ?? ''))) : array();
+        $ga4 = function_exists('seo_analista_ga4_snapshot') ? (array) seo_analista_ga4_snapshot($days) : array();
         $bing = function_exists('seo_analista_bing_snapshot') ? (array) seo_analista_bing_snapshot($days, 30) : array();
         $market = function_exists('seo_analista_market_signals') ? (array) seo_analista_market_signals(30) : array();
 

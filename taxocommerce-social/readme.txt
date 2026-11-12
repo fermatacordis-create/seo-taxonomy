@@ -4,7 +4,7 @@ Tags: social-media, scheduling, pinterest, publishing, calendar
 Requires at least: 6.7
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.1.14
+Stable tag: 0.1.16
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,9 +12,11 @@ Manage authorized social connections, publication templates and a content calend
 
 == Description ==
 
+* Admin header: plugin title, a single local `Description` with the static `Plugin URI` link below it (left); a wider collapsed `CHANGELOG.md` history (center); local version and release date (right). No duplicated information panel or external requests.
+
 * The admin header shows the plugin's bundled `Description` and links to its `Plugin URI`, without network requests or caching. Version history uses the bundled `CHANGELOG.md`.
 
-* Collapsible local plugin information beside the independent version history.
+* One collapsible version-history control, without a duplicate plugin-information box.
 
 
 TaxoCommerce Social supports optional Facebook, Instagram, LinkedIn, Pinterest and X connections, manual publication planning, CSV-based scheduling and queue/history views.
@@ -22,7 +24,7 @@ TaxoCommerce Social supports optional Facebook, Instagram, LinkedIn, Pinterest a
 * Administration areas: Connections, Templates, Calendar, Auto Test and Manual.
 * Auto Test: 16 local checks of providers, routes, tables, scheduler and security, without remote requests, publishing or file operations. Two recent results per administrator are stored for 30 days.
 * Two distinct, indexed in-plugin manuals: step-by-step user guide and detailed technical reference for future developers, including architecture, hooks, data models, security and CI.
-* Documents which CSV handlers are retained in the backend but are not exposed by the standalone plugin menu; avoids advertising controls not present in the current interface.
+* Restores CSV import/export controls in Calendar: template, content, agenda and history exports; upload validation and explicit import confirmation. Existing manual publishing controls remain unchanged.
 * Existing social settings and publication/schedule tables are reused on migrating sites.
 * Dedicated local calendar; offer/campaign planning belongs to TaxoCommerce Campaigns.
 * No social account is connected or published to by default. Administrators must authorize a provider and perform the action.
@@ -41,6 +43,10 @@ The plugin interacts with selected social network services when an administrator
 Social publishing sends authorized content and associated account data to the selected external social network. Store tokens securely, review provider policies and avoid including personal information in generated posts without permission. Disconnect accounts when the integration is not required.
 
 == Changelog ==
+
+= 0.1.16 =
+* Restore CSV import/export in the standalone Calendar tab, register secure administration actions, and retain the CSV validation/confirmation steps. Manual schedules and existing records are not modified by this update.
+
 
 = 0.1.13 =
 * Local Description and Plugin URI replace REST excerpt requests and caches in the header. Issue #2494.

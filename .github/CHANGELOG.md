@@ -1,3 +1,10 @@
+## 2026-11-12 — PRO: corregido HTTP 401 al seleccionar cambios (#2570)
+
+- Los releases #194 y #195 llegaban correctamente al inventario REST de PRO, pero fallaban antes de transferir archivos porque el selector descargaba logs protegidos de GitHub Actions con un token rechazado (401).
+- El selector obtiene el SHA de la ultima ejecución **completada y correcta** del workflow PRO desde los metadatos estructurados de GitHub, con rama `staging`; deja de consultar logs de jobs.
+- Si el token de lectura recibe un 401, reintenta una sola vez el endpoint público sin credenciales; un error 403 o la ausencia de un SHA válido sigue bloqueando el despliegue.
+- Se conservan selección diferencial por archivos, permisos, inventario de plugins instalados, comprobación de ancestro Git y verificación SHA-256. Sin cambios en WordPress, FTP ni plugins. La subida a PRO no se inicia para probar este ajuste.
+
 # Registro de cambios de la infraestructura QA
 
 ## 2026-11-04 — Despliegue automático restringido a diferencias reales (#2184)

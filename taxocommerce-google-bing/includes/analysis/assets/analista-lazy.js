@@ -11,6 +11,27 @@ jQuery(function ($) {
     var running = false;
     var cancelled = false;
     var pending = null;
+    function showSavedReport(item, data) {
+        var card = $('.seo-analista-report-card').filter(function () {
+            return $(this).attr('data-report') === item.report;
+        });
+        if (!card.length || !data) {
+            return;
+        }
+        var isPlan = item.report === 'directrices';
+        var date = isPlan ? data.plan_saved_at_display : data.report_saved_at_display;
+        var url = isPlan ? config.planDownloadUrl : data.report_download_url;
+        if (!date || !url) {
+            return;
+        }
+        card.find('.tgb-report-date').text(date);
+        card.find('.tgb-report-json-button').removeClass('disabled')
+            .attr('href', url).attr('aria-disabled', 'false');
+    }
+
+    function showSavedPlanDate(data) {
+        showSavedReport({ report: 'directrices' }, data);
+    }
 
     function setBusy(busy) {
         running = busy;
@@ -32,7 +53,7 @@ jQuery(function ($) {
             var button = $(this);
             return {
                 report: String(button.attr('data-report') || ''),
-                label: button.find('strong').first().text()
+                label: button.closest('.seo-analista-report-card').find('h3').first().text()
             };
         }).get().filter(function (item) { return item.report !== ''; });
     }
@@ -91,9 +112,14 @@ jQuery(function ($) {
                     finish('Error en ' + item.label + ': ' + explanation + ' (' + finished + '/' + total + ' completados).', true);
                     return;
                 }
-                result.append(
-                    $('<div>').addClass('tgb-analysis-report').attr('data-report', item.report).html(response.data.html)
-                );
+                var reportContainer = $('<div>').addClass('tgb-analysis-report')
+                    .attr('data-report', item.report).html(response.data.html);
+                result.append(reportContainer);
+                if (item.report === 'directrices') {
+                    showSavedPlanDate(response.data);
+                } else {
+                    showSavedReport(item, response.data);
+                }
                 finished++;
                 next();
             }).fail(function (xhr, reason) {
@@ -114,7 +140,7 @@ jQuery(function ($) {
         var button = $(this);
         run([{
             report: String(button.attr('data-report') || ''),
-            label: button.find('strong').first().text()
+            label: button.closest('.seo-analista-report-card').find('h3').first().text()
         }], false);
     });
 

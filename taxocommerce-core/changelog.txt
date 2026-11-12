@@ -1,3 +1,21 @@
+= 0.4.78 (2026-11-11) =
+* Fix local Plugin Check on existing stores: Core in taxocommerce-core/ uses its matching native gettext domain and five bundled catalogs. Build the public WordPress.org distribution from the same sources with its assigned long folder, entrypoint, gettext domain and catalogs, strictly checking both packages. Issue #2565.
+
+= 0.4.77 (2026-11-11) =
+* Align gettext calls, plugin header, five bundled locale catalogs and WordPress.org ZIP folder with the assigned plugin slug; preserve existing admin URLs and data. Issue #2560.
+
+= 0.4.76 (2026-11-11) =
+* Concise WordPress.org readme with coherent version metadata and changelogs. Runtime features and catalog data are unchanged. Issue #2557.
+
+= 0.4.75 (2026-11-11) =
+* Added complete read-only JSON download for Core > Content > Anomalies, preserving the separate editorial report.
+
+= 0.4.74 (2026-11-10) =
+* Three-zone admin header: unique local Description and static link on left, wider collapsed CHANGELOG.md in center, version/date on right; no duplicate panel. Issue #2521.
+
+= 0.4.73 (2026-11-10) =
+* Hide only Action Scheduler's past-due admin notice through its public filter, without changing scheduled tasks or other notices. Issue #2510.
+
 = 0.4.72 (2026-11-10) =
 * Admin subtitle uses bundled Description metadata; static Plugin URI and local version history retained. Issue #2494.
 

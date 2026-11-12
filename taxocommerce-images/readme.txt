@@ -4,7 +4,7 @@ Tags: images, media, thumbnails, optimization, webp
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.2.27
+Stable tag: 0.2.28
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,9 +12,11 @@ Image management for WordPress and WooCommerce with Media as the canonical sourc
 
 == Description ==
 
+* Admin header: plugin title, a single local `Description` with the static `Plugin URI` link below it (left); a wider collapsed `CHANGELOG.md` history (center); local version and release date (right). No duplicated information panel or external requests.
+
 * The admin header shows the plugin's bundled `Description` and links to its `Plugin URI`, without network requests or caching. Version history uses the bundled `CHANGELOG.md`.
 
-* Collapsible local plugin information beside the independent version history.
+* One collapsible version-history control, without a duplicate plugin-information box.
 
 
 TaxoCommerce Images is an independent member of the TaxoCommerce family.

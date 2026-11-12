@@ -2292,6 +2292,10 @@ function tcsocial_network_handle_scheduler_import_confirm()
     exit;
 }
 
+add_action('admin_post_tcsocial_network_scheduler_export', 'tcsocial_network_handle_scheduler_export');
+add_action('admin_post_tcsocial_network_scheduler_import_preview', 'tcsocial_network_handle_scheduler_import_preview');
+add_action('admin_post_tcsocial_network_scheduler_import_confirm', 'tcsocial_network_handle_scheduler_import_confirm');
+
 
 /**
  * Acciones del Programador: programar, publicar ahora o cancelar.
@@ -2914,16 +2918,11 @@ function tcsocial_network_render_automation()
 }
 
 /**
- * Programador: agenda simple, sin repetir los editores de plantillas.
+ * Renders the retained CSV import/export controls and prevalidation on the standalone calendar.
+ * Reused by the legacy scheduler renderer; rendering never schedules publications.
  */
-function tcsocial_network_render_scheduler()
+function tcsocial_network_render_scheduler_csv_panel()
 {
-    $settings = tcsocial_network_get_settings();
-    $providers = tcsocial_network_get_providers();
-
-    echo '<section class="seo-social-card">';
-    echo '<div class="seo-social-intro">' . '<div>' . '<h2>' . esc_html__( 'Programador', 'taxocommerce-social' ) . '</h2>' . '<p>' . esc_html__( 'Las ofertas de campaña salen a las', 'taxocommerce-social' ) . ' ' . '<strong>' . '18:00' . '</strong>' . esc_html__( '. Las entradas de', 'taxocommerce-social' ) . ' ' . '<strong>' . esc_html__( 'Noticias', 'taxocommerce-social' ) . '</strong>' . ' ' . esc_html__( 'salen a las', 'taxocommerce-social' ) . ' ' . '<strong>' . '20:00' . '</strong>' . ' ' . esc_html__( 'y pueden marcarse como prioritarias para adelantar a las noticias normales. Páginas y landings mantienen fecha y hora manual.', 'taxocommerce-social' ) . '</p>' . '</div>' . '<span class="seo-social-state is-scheduled">' . esc_html__( 'Agenda', 'taxocommerce-social' ) . '</span>' . '</div>';
-
     echo '<div class="seo-social-scheduler-io">';
     echo '<div class="seo-social-scheduler-io__block"><h3>Programacion masiva con Excel / CSV</h3><p class="seo-social-help">Descarga la lista de contenidos, prepara la hoja en Excel y guardala como <strong>CSV UTF-8</strong>. Columnas obligatorias: <code>contenido_id</code>, <code>redes</code> y <code>fecha_hora</code>. Para Noticias puedes añadir <code>prioridad</code> con valor <code>si</code> o <code>1</code>; la hora se normaliza automáticamente a las 20:00. En <code>redes</code> puedes usar una o varias, por ejemplo <code>facebook,instagram,x</code>. Las fechas aceptan <code>2026-09-25 10:30</code> o <code>25/09/2026 10:30</code>.</p>';
     echo '<form method="post" action="' . esc_url(admin_url('admin-post.php')) . '" enctype="multipart/form-data" class="seo-social-import-form">';
@@ -2996,6 +2995,21 @@ function tcsocial_network_render_scheduler()
         }
         echo '</div></div>';
     }
+
+}
+
+/**
+ * Programador: agenda simple, sin repetir los editores de plantillas.
+ */
+function tcsocial_network_render_scheduler()
+{
+    $settings = tcsocial_network_get_settings();
+    $providers = tcsocial_network_get_providers();
+
+    echo '<section class="seo-social-card">';
+    echo '<div class="seo-social-intro">' . '<div>' . '<h2>' . esc_html__( 'Programador', 'taxocommerce-social' ) . '</h2>' . '<p>' . esc_html__( 'Las ofertas de campaña salen a las', 'taxocommerce-social' ) . ' ' . '<strong>' . '18:00' . '</strong>' . esc_html__( '. Las entradas de', 'taxocommerce-social' ) . ' ' . '<strong>' . esc_html__( 'Noticias', 'taxocommerce-social' ) . '</strong>' . ' ' . esc_html__( 'salen a las', 'taxocommerce-social' ) . ' ' . '<strong>' . '20:00' . '</strong>' . ' ' . esc_html__( 'y pueden marcarse como prioritarias para adelantar a las noticias normales. Páginas y landings mantienen fecha y hora manual.', 'taxocommerce-social' ) . '</p>' . '</div>' . '<span class="seo-social-state is-scheduled">' . esc_html__( 'Agenda', 'taxocommerce-social' ) . '</span>' . '</div>';
+
+    tcsocial_network_render_scheduler_csv_panel();
 
     if (function_exists('seo_social_campaign_render_scheduler_panel')) {
         seo_social_campaign_render_scheduler_panel();

@@ -3,7 +3,7 @@
  * Plugin Name: TaxoCommerce Database
  * Plugin URI: https://asociacionfocazul.com/taxocommerce-database/
  * Description: Original Clean Database and SEO Data Table migrated into one independent plugin, without Data Layer.
- * Version: 0.4.19
+ * Version: 0.4.20
  * Release Date: 2026-11-10
  * Requires at least: 6.5
  * Requires PHP: 7.4
@@ -20,7 +20,7 @@ require_once __DIR__ . '/includes/class-taxocommerce-autotest-code.php';
 \TaxoCommerce_Database_Autotest_Code::boot();
 
 
-define( 'TAXOCOMMERCE_DATABASE_VERSION', '0.4.19' );
+define( 'TAXOCOMMERCE_DATABASE_VERSION', '0.4.20' );
 define( 'TAXOCOMMERCE_DATABASE_FILE', __FILE__ );
 define( 'TAXOCOMMERCE_DATABASE_PATH', plugin_dir_path( __FILE__ ) );
 define( 'TAXOCOMMERCE_DATABASE_URL', plugin_dir_url( __FILE__ ) );

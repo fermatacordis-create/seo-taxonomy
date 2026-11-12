@@ -4,13 +4,15 @@ Tags: analytics, search-console, bing, ecommerce, reporting
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.1.40
+Stable tag: 1.1.49
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 External connections, manual provider data downloads, and the restored legacy Analysis dashboard.
 
 == Description ==
+
+* Admin header: plugin title, a single local `Description` with the static `Plugin URI` link below it (left); a wider collapsed `CHANGELOG.md` history (center); local version and release date (right). No duplicated information panel or external requests.
 
 * Analysis: individual reports or a complete sequential run (mobile-friendly) using authenticated AJAX, and unified JSON download or browser-view fallback.
 
@@ -21,12 +23,12 @@ External connections, manual provider data downloads, and the restored legacy An
 TaxoCommerce Insights keeps external service connections and manual data downloads in one place.
 
 * Connections: Google Search Console, Google Analytics, Google Merchant Center, Bing Webmaster, Amazon and Pinterest.
-* Google Search downloads.
-* Google Analytics downloads.
+* Google Search downloads and explicit day-by-day synchronization of the historical Search Console tables used by Analysis, authorized via current Connections OAuth or service-account credentials.
+* Google Analytics downloads; optional GA4 product add-to-cart item chart and ecommerce event comparison in saved reports.
 * Bing downloads.
 * Optional IndexNow notifications for public URL changes, independent of Cloudflare; disabled by default to avoid duplicate providers. Configure in Connections > Bing. Uses WP-Cron, so regular scheduled execution is required.
 * Google Trends automatically compares all Spanish clusters (up to 5 per chart), then separately compares each cluster's primary hubs on page load. The underlying SEO hierarchy is dynamic, category and secondary-hub consultations remain manual; five-speed browser load controller, pause/resume/stop, and links to Google Explore. Charts are visual and do not provide machine-readable growth scores or verification of search term meaning. Historical RSS snapshots remain supported.
-* Analysis restores the previous working Analista engine inside Insights, including summary, content, structure, trends, comparison and work-plan views.
+* Analysis restores the previous working Analista engine inside Insights, including summary, content, structure, trends, comparison and work-plan views. Its historical GSC tables are refreshed by the separate Google Search synchronization button without WP-Cron. The GA4 Analysis adapter queries the live Data API through current Connections credentials.
 * User Guide contains read-only User Manual and Technical Manual explaining active features, integrations, data and maintenance.
 * The main technical folder remains taxocommerce-google-bing for compatibility; the displayed product name is TaxoCommerce Insights.
 
@@ -59,6 +61,34 @@ Only previously saved local information may be available. Live Google/Bing metri
 It is the continued plugin under the historical slug taxocommerce-google-bing, renamed to Insights and focused on unified connections and provider data downloads.
 
 == Changelog ==
+
+= 1.1.49 =
+* Corrected Analysis button contrast: Create report and Run full report are visible with blue backgrounds; individual JSON downloads remain legible when unavailable. Kept the five-column desktop layout and fixed individual AJAX progress labels without changing report calculations or exports.
+
+= 1.1.48 =
+* Analysis shows ten report cards in a five-column desktop grid, each with Create report, Download JSON and the date of the last generated report. Specialist JSON snapshots are stored only after running their reports, and downloads never request new provider data. The action plan retains its dedicated JSON.
+
+= 1.1.47 =
+* GA4 Analysis uses a self-contained window through yesterday; no longer inherits stale Search Console SQL dates. Existing GSC synchronization bridge and stored Google credentials are unchanged.
+
+
+= 1.1.45 =
+* Show two adjacent controls at the top of Analysis: run Plan de acción and download its latest saved JSON with its local generation date. Save only the last completed plan per site as a non-autoloaded WordPress option; authenticated nonce-protected download never recomputes reports. Remove lower-page JSON actions. Issue #2537.
+
+
+= 1.1.44 =
+* Shorten the merged Analysis report button to «Plan de acción». After loading it, provide a standalone downloadable JSON containing only the prioritised action plan, reusing the same computation; keep the full Insights JSON unchanged. Issue #2528.
+
+
+= 1.1.43 =
+* GA4 ecommerce event chart and product-level quantities added to carts and purchases, saved in the existing Analytics snapshot. Uses optional manual Google Data API retrieval; snapshots without item data remain supported. Issue #2514.
+
+= 1.1.42 =
+* Restore a three-zone admin header, with plugin title/description/link, collapsed version history and version/date, without duplicate content. Issue #2521.
+
+= 1.1.41 =
+* The Analysis action plan watches editorial recommendations when local content was updated after the latest Search Console data. No extra content crawl, no automatic verified-fix claim. Issue #2518.
+
 
 = 1.1.38 =
 * Local Description and Plugin URI replace the REST excerpt in the header, preserving executive reports and data integrations. Issue #2494.

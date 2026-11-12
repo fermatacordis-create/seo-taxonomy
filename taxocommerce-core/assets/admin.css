@@ -230,31 +230,22 @@ body.tcc-family-admin .tcc-guide-article h3{font-size:17px;line-height:1.35;marg
 .tcc-guide-code code{color:inherit;white-space:pre}
 @media(max-width:600px){.tcc-guide-manual-tabs{gap:7px}.tcc-guide-manual-tab{flex:1;text-align:center;padding:11px 8px}.tcc-guide-table th,.tcc-guide-table td{padding:9px 10px}}
 
-/* Release metadata belongs to Core's existing single dashboard hero. */
-.tcc-hero__metadata{position:relative;z-index:2;display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
-.tcc-hero__metadata span{display:inline-block;padding:5px 11px;border:1px solid #bdd4f5;border-radius:20px;background:#f1f6ff;color:#145fc5;font-size:12px;font-weight:700}
-
-/* Independent official-page excerpt (left) and local version history (right). */
-.tcc-hero__panels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px;max-width:900px}
-.tcc-hero__panels .tcc-hero__history{margin-top:0}
-.tcc-hero__panels .tc-family-info{border:1px solid #dfe6ef;border-radius:7px;background:#fff;color:#26354c}
-.tcc-hero__panels .tc-family-info summary{padding:9px 12px;cursor:pointer;font-size:13px;font-weight:600}
-.tcc-hero__panels .tc-family-info summary:focus-visible{outline:2px solid #1769de;outline-offset:2px}
-.tcc-hero__panels .tc-family-info__content{padding:12px;border-top:1px solid #e4e9f0;font-size:13px;line-height:1.6}
-@media(max-width:720px){.tcc-hero__panels{grid-template-columns:1fr}}
-
-/* #2476: three independent header zones; two centered controls. */
-.tcc-hero{display:grid;grid-template-columns:minmax(300px,1.1fr) minmax(340px,1.4fr) max-content;align-items:center;gap:22px}
+/* Three header zones: plugin identity + static link, wide history, release metadata. */
+.tcc-hero{display:grid;grid-template-columns:minmax(270px,1.05fr) minmax(370px,1.7fr) max-content;align-items:center;gap:20px}
 .tcc-hero__identity{min-width:0;max-width:none;width:100%}
 .tcc-hero__copy{min-width:0}
-.tcc-hero__panels{position:relative;z-index:1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:center;justify-self:center;width:100%;max-width:640px;margin:0;min-width:0}
-.tcc-hero__panels .tc-family-info,.tcc-hero__panels .tcc-hero__history{width:100%;min-width:0;max-width:none;margin:0}
-.tcc-hero__panels .tc-family-info summary,.tcc-hero__panels .tcc-hero__history summary{display:flex;align-items:center;min-height:43px;padding:10px 12px}
-.tcc-hero__panels .tc-family-info__content,.tcc-hero__panels .tcc-hero__history-content{max-height:300px;overflow:auto}
-.tcc-hero__metadata{margin:0;flex-direction:column;align-items:flex-end;flex-wrap:nowrap;justify-self:end;white-space:nowrap}
-@media(max-width:1200px){.tcc-hero{grid-template-columns:minmax(0,1fr) max-content}.tcc-hero__identity{grid-column:1;grid-row:1}.tcc-hero__metadata{grid-column:2;grid-row:1}.tcc-hero__panels{grid-column:1/-1;grid-row:2}}
-@media(max-width:700px){.tcc-hero{grid-template-columns:minmax(0,1fr);gap:12px}.tcc-hero__identity{grid-column:1;grid-row:1}.tcc-hero__metadata{grid-column:1;grid-row:2;justify-self:start;align-items:flex-start;white-space:normal}.tcc-hero__panels{grid-column:1;grid-row:3;grid-template-columns:1fr}}
-
+.tcc-hero__copy .tc-family-hero__link{display:inline-block;margin-top:8px;font-size:13px;color:#145fc5;text-decoration:underline;text-underline-offset:2px}
+.tcc-hero__copy .tc-family-hero__link:focus-visible{outline:2px solid #1769de;outline-offset:3px}
+.tcc-hero__history-zone{position:relative;z-index:1;width:100%;min-width:0}
+.tcc-hero__history-zone .tcc-hero__history{width:100%;max-width:none;margin:0;border:1px solid #dfe6ef;border-radius:7px;background:#fff;color:#26354c}
+.tcc-hero__history-zone .tcc-hero__history summary{display:flex;align-items:center;min-height:44px;padding:11px 14px;cursor:pointer;font-size:13px;font-weight:600}
+.tcc-hero__history-zone .tcc-hero__history summary:focus-visible{outline:2px solid #1769de;outline-offset:2px}
+.tcc-hero__history-zone .tcc-hero__history-content{max-height:320px;overflow:auto;padding:14px;white-space:pre-wrap;overflow-wrap:anywhere}
+.tcc-hero__metadata{position:relative;z-index:2;display:flex;flex-direction:column;align-items:flex-end;gap:8px;margin:0;flex-wrap:nowrap;justify-self:end;white-space:nowrap}
+.tcc-hero__metadata span{display:inline-block;padding:5px 11px;border:1px solid #bdd4f5;border-radius:20px;background:#f1f6ff;color:#145fc5;font-size:12px;font-weight:700}
+.tcc-hero__metadata span:last-child{border-color:#dfe6ef;background:#fff;color:#435369;font-weight:600}
+@media(max-width:1180px){.tcc-hero{grid-template-columns:minmax(0,1fr) max-content}.tcc-hero__identity{grid-column:1;grid-row:1}.tcc-hero__metadata{grid-column:2;grid-row:1}.tcc-hero__history-zone{grid-column:1/-1;grid-row:2}}
+@media(max-width:700px){.tcc-hero{grid-template-columns:minmax(0,1fr);gap:12px}.tcc-hero__identity{grid-column:1;grid-row:1}.tcc-hero__metadata{grid-column:1;grid-row:2;justify-self:start;align-items:flex-start;white-space:normal}.tcc-hero__history-zone{grid-column:1;grid-row:3}}
 
 /* WordPress.org review #2481: previously inlined Core-only admin presentation. */
 #tc-core-autotest .tc-at-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:20px 0}

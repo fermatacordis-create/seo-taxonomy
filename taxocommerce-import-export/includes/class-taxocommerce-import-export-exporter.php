@@ -51,10 +51,10 @@ final class TaxoCommerce_Import_Export_Exporter {
 		add_action( 'wp_ajax_taxocommerce_ie_export_resume', array( $this, 'ajax_resume' ) );
 		add_action( 'admin_post_taxocommerce_ie_export_download', array( $this, 'download' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
-		add_action( self::WORKER_HOOK, array( $this, 'background_worker' ), 10, 2 );
 		add_action( 'wp_ajax_' . self::CONTINUE_ACTION, array( $this, 'internal_continue' ) );
 		add_action( 'wp_ajax_nopriv_' . self::CONTINUE_ACTION, array( $this, 'internal_continue' ) );
 		add_action( 'init', array( $this, 'watchdog' ), 99 );
+		add_action( 'init', array( $this, 'retire_legacy_schedule' ), 20 );
 	}
 
 	/**
@@ -373,36 +373,9 @@ final class TaxoCommerce_Import_Export_Exporter {
 
 
 	/**
-	 * Schedule one short server-side step. Action Scheduler is provided by
-	 * WooCommerce; WP-Cron is used when it is unavailable.
-	 *
-	 * @param int    $user_id Job owner.
-	 * @param string $job Job identifier.
-	 * @param int    $delay Seconds before next step.
-	 * @return void
-	 */
-	private function schedule_worker( $user_id, $job, $delay ) {
-		$user_id = absint( $user_id );
-		$delay = max( 0, absint( $delay ) );
-		$args = array( $user_id, (string) $job );
-		if ( function_exists( 'as_schedule_single_action' ) ) {
-			// The running action may still be marked in-progress while it
-			// schedules its successor. A non-unique action is intentional;
-			// the per-job lock prevents concurrent writes.
-			if ( ! function_exists( 'as_has_scheduled_action' ) || ! as_has_scheduled_action( self::WORKER_HOOK, $args, self::WORKER_GROUP ) ) {
-				as_schedule_single_action( time() + $delay, self::WORKER_HOOK, $args, self::WORKER_GROUP, false, 10 );
-			}
-		} elseif ( ! wp_next_scheduled( self::WORKER_HOOK, $args ) ) {
-			wp_schedule_single_event( time() + $delay, self::WORKER_HOOK, $args );
-		}
-	}
-
-
-	/**
 	 * Trigger the next step entirely on the server, without a browser.
 	 * The short internal HTTP request observes the configured speed by
-	 * sleeping before running; an Action Scheduler/WP-Cron recovery job
-	 * is always armed first. Only one file writer owns the per-user lock.
+	 * sleeping before running. Only one file writer owns the per-user lock.
 	 *
 	 * @param int    $user_id Job owner.
 	 * @param string $job Job ID.
@@ -417,8 +390,6 @@ final class TaxoCommerce_Import_Export_Exporter {
 			empty( $state['dispatch_token'] ) ) {
 			return;
 		}
-		// Backup only: background loopbacks are the primary worker dispatcher.
-		$this->schedule_worker( $user_id, $job, 60 );
 		$response = wp_remote_post(
 			admin_url( 'admin-ajax.php' ),
 			array(
@@ -435,7 +406,7 @@ final class TaxoCommerce_Import_Export_Exporter {
 				),
 			)
 		);
-		// The scheduled backup remains valid if the loopback fails.
+		// The request-driven watchdog can retry a failed dispatch on later traffic.
 		if ( is_wp_error( $response ) ) {
 			return;
 		}
@@ -468,6 +439,23 @@ final class TaxoCommerce_Import_Export_Exporter {
 		}
 		$this->background_worker( $user_id, $job );
 		wp_die( '', '', array( 'response' => 200 ) );
+	}
+
+	/**
+	 * Retire legacy scheduled fallbacks without altering running CSV jobs.
+	 * The active worker continues through signed internal HTTP requests.
+	 *
+	 * @return void
+	 */
+	public function retire_legacy_schedule() {
+		if ( 'yes' === get_option( 'taxocommerce_ie_export_schedule_retired_0429', '' ) ) {
+			return;
+		}
+		if ( function_exists( 'as_unschedule_all_actions' ) ) {
+			as_unschedule_all_actions( self::WORKER_HOOK );
+		}
+		wp_unschedule_hook( self::WORKER_HOOK );
+		update_option( 'taxocommerce_ie_export_schedule_retired_0429', 'yes', false );
 	}
 
 	/**

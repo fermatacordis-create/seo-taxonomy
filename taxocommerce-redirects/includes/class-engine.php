@@ -57,18 +57,36 @@ final class Engine {
     }
 
     /**
-     * Another plugin serving redirects by the admin's choice, asked through
-     * `taxocommerce_redirects_owner` (OPNV answers 'opnv' when chosen there).
+     * Whether this site has enabled the redirect engine.
      *
-     * @return string '' when this plugin serves redirects, otherwise the owner id.
+     * An absent setting preserves the existing enabled behavior.
+     *
+     * @return bool
+     */
+    public static function enabled() {
+        return 'no' !== get_option( 'tc_redirects_enabled', 'yes' );
+    }
+
+    /**
+     * Resolve the redirect owner without depending on an external plugin.
+     *
+     * @return string Empty when Redirects owns the requests, otherwise owner ID.
      */
     public static function external_owner() {
+        if ( ! self::enabled() ) {
+            return 'disabled';
+        }
+
         $owner = sanitize_key( (string) apply_filters( 'taxocommerce_redirects_owner', 'taxocommerce' ) );
 
         return ( '' === $owner || 'taxocommerce' === $owner ) ? '' : $owner;
     }
 
     public static function disable_legacy_runtime() {
+        if ( ! self::enabled() ) {
+            return; // Do not suppress another redirect engine after opt-out.
+        }
+
         // Runtime-only coordination. NEVER edit the monolith's source files.
         // If new storage is unavailable, leave the working legacy redirect
         // handler active instead of silently disabling live redirects.

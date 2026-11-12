@@ -11,6 +11,8 @@
 
 defined('ABSPATH') || exit;
 
+require_once __DIR__ . '/analista-segunda-revision.php';
+
 if (!defined('SEO_ANALISTA_TASK_HISTORY_OPTION')) {
     define('SEO_ANALISTA_TASK_HISTORY_OPTION', 'seo_analista_task_history_381');
 }
@@ -1684,7 +1686,7 @@ if (!function_exists('seo_analista_hydrate_entity_from_target')) {
 
 if (!function_exists('seo_analista_validate_and_finalize_task')) {
     // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound -- Legacy callable name is used by existing modules; changing it requires a coordinated migration.
-    function seo_analista_validate_and_finalize_task(array $row, $days = 28) {
+    function seo_analista_validate_and_finalize_task(array $row, $days = 28, $gsc_data_to = '') {
         $row = seo_analista_hydrate_entity_from_target($row);
         $query = seo_analista_primary_query($row);
         $row['query'] = $query;
@@ -1892,6 +1894,12 @@ if (!function_exists('seo_analista_validate_and_finalize_task')) {
             $row = seo_analista_apply_history_state($row, $existing_tracking);
         }
 
+        // Second check: a local editorial update newer than GSC evidence is
+        // monitored, not proposed again. No second content scan is performed.
+        if (function_exists('seo_analista_editorial_date_review')) {
+            $row = seo_analista_editorial_date_review($row, $gsc_data_to);
+        }
+
         // La decisión final es la única fuente de verdad para contador, tarjeta y JSON.
         if (!empty($row['task_decision']) && is_array($row['task_decision'])) {
             $row['task_decision']['work_bucket'] = (string) ($row['work_bucket'] ?? 'VIGILAR');
@@ -1941,6 +1949,7 @@ if (!function_exists('seo_analista_task_contract')) {
             'investigation_steps'=>(array) ($row['investigation_steps'] ?? array()),
             'auto_resolution'=>(array) ($row['auto_resolution'] ?? array()),
             'coverage_decision'=>(array) ($row['coverage_decision'] ?? array()),
+            'date_review'=>(array) ($row['date_review'] ?? array()),
             'confidence_level'=>(string) ($row['confidence_level'] ?? 'low'),
             'confidence'=>absint($row['confidence'] ?? 0),
             'objective'=>(array) ($row['objective'] ?? array()),

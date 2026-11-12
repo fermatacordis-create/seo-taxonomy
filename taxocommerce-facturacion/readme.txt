@@ -4,12 +4,14 @@ Tags: woocommerce, invoices, proforma, quotes, pdf
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.1.13
+Stable tag: 0.1.14
 License: MIT
 
 WooCommerce invoices, proformas and quotations migrated from TaxoCommerce SEO.
 
 == Description ==
+
+* Admin header: plugin title, a single local `Description` with the static `Plugin URI` link below it (left); a wider collapsed `CHANGELOG.md` history (center); local version and release date (right). No duplicated information panel or external requests.
 
 * The admin header shows the plugin's bundled `Description` and links to its `Plugin URI`, without network requests or caching. Version history uses the bundled `CHANGELOG.md`.
 

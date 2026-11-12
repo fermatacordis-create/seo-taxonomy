@@ -1,3 +1,28 @@
+## 2026-11-10 - Import-Export 0.4.29: eliminar programación de colas propias (#2530)
+
+- Quitadas las llamadas que creaban tareas programadas de importación/exportación en Action Scheduler y WP-Cron. Se mantiene la secuencia HTTP interna con regulador de carga, los controles y el watchdog activado con el tráfico.
+- Se cancelan únicamente acciones programadas antiguas de los dos hooks del plugin. No se borran CSV, estados, ni otras tareas del sitio.
+- El rastreador de proveedores heredado sigue usando seo_supplier_crawl_tick para avanzar: no se modifica al no existir sustituto funcional validado.
+- Actualizados contrato de regresión, versiones y documentación. Ningún despliegue a PRO antes del YAML.
+
+## 2026-11-10 - Redirects 0.1.20: control de propiedad y conflicto de PR (#2485)
+
+- Nueva casilla para activar o ceder la gestión de redirecciones. Activada por defecto; al desmarcar, el motor deja de responder rutas y reclamar la propiedad a OPNV, sin borrar reglas ni informes.
+- Conserva la cabecera unificada de tres bloques incorporada previamente, junto al contrato de interoperabilidad de David (#2516), y añade las pruebas de propiedad activada/desactivada/reactivada.
+- Resuelto el conflicto con los cambios de encabezado de la versión 0.1.19, manteniendo todas las entradas previas de historial. Sin desplegar en producción.
+
+## 2026-11-10 - Ojeador heredado: exportación SQL con lista cerrada (#2487)
+
+- Integrada la contribución de @fermatacordis-create para `includes/ojeador/class-ojeador-admin.php`: `stream_table_json()` limita los órdenes y filtros a valores autorizados y parametriza LIMIT/OFFSET.
+- La tabla se valida como identificador alfanumérico compatible con WordPress 5.8-6.1, evitando exigir el marcador `%i` introducido en WordPress 6.2.
+- Cambio exclusivo del plugin monolítico anterior; TaxoCommerce Scrappers ya dispone de protección equivalente y no se modifica. Sin seguimiento funcional adicional del monolito ni despliegue a producción.
+
+## 2026-11-10 - Distribution: gestión opcional del sitemap XML (#2484)
+
+- Añadida casilla propia en TaxoCommerce Distribution para activar o ceder la publicación XML; sin dependencia obligatoria de OPNV ni de Core.
+- Mantiene los feeds comerciales, la publicación previa y el mecanismo de propiedad por filtros. Limpia las tareas de sitemap al desactivar, actualiza las reglas públicas y evita cambios con generaciones activas.
+- Incorporadas pruebas de regresión sobre propiedad y cesión a WordPress para validar compatibilidad. Producción excluida de esta entrega.
+
 ## 2026-11-10 — Extractos oficiales resistentes a errores HTTP en los 20 plugins (#2489)
 
 - La captura de una tienda cliente evidencia «Excerpt temporarily unavailable» pese a que la API REST pública de asociacionfocazul.com sirve la ficha oficial. Ningún cliente define URLs de documentación.

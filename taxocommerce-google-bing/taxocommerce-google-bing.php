@@ -3,8 +3,8 @@
  * Plugin Name: TaxoCommerce Insights
  * Plugin URI: https://asociacionfocazul.com/taxocommerce-google-bing/
  * Description: External connections, provider data downloads, and the restored legacy Analysis dashboard.
- * Version: 1.1.40
- * Release Date: 2026-11-10
+ * Version: 1.1.49
+ * Release Date: 2026-11-11
  * Requires at least: 5.8
  * Requires PHP: 7.4
  * Author: David Perez
@@ -19,7 +19,7 @@ require_once __DIR__ . '/includes/admin-branding.php';
 require_once __DIR__ . '/includes/class-taxocommerce-autotest-code.php';
 \TaxoCommerce_Insights_Autotest_Code::boot();
 
-define( 'TAXOCOMMERCE_GOOGLE_BING_VERSION', '1.1.40' );
+define( 'TAXOCOMMERCE_GOOGLE_BING_VERSION', '1.1.49' );
 define( 'TAXOCOMMERCE_GOOGLE_BING_FILE', __FILE__ );
 define( 'TAXOCOMMERCE_GOOGLE_BING_PATH', plugin_dir_path( __FILE__ ) );
 define( 'TAXOCOMMERCE_GOOGLE_BING_URL', plugin_dir_url( __FILE__ ) );
@@ -48,6 +48,7 @@ require_once TAXOCOMMERCE_GOOGLE_BING_PATH . 'includes/class-taxocommerce-connec
 require_once TAXOCOMMERCE_GOOGLE_BING_PATH . 'includes/class-taxocommerce-google-bing-connections.php';
 require_once TAXOCOMMERCE_GOOGLE_BING_PATH . 'includes/class-taxocommerce-google-bing-oauth.php';
 require_once TAXOCOMMERCE_GOOGLE_BING_PATH . 'includes/class-taxocommerce-google-bing-gsc.php';
+require_once TAXOCOMMERCE_GOOGLE_BING_PATH . 'includes/class-taxocommerce-google-bing-google-service.php';
 require_once TAXOCOMMERCE_GOOGLE_BING_PATH . 'includes/class-taxocommerce-google-bing-reports.php';
 require_once TAXOCOMMERCE_GOOGLE_BING_PATH . 'includes/class-taxocommerce-google-bing-trends.php';
 require_once TAXOCOMMERCE_GOOGLE_BING_PATH . 'includes/class-taxocommerce-google-bing-trends-hierarchy.php';
@@ -68,6 +69,19 @@ require_once TAXOCOMMERCE_GOOGLE_BING_PATH . 'includes/analysis/analista-geo-bri
 function taxocommerce_google_bing_boot() {
     TaxoCommerce_Google_Bing_Connections::register();
     TaxoCommerce_Google_Bing_OAuth::register();
+
+    // The historical Google Intelligence tables feed Analysis. Restore their
+    // manual importer only when no other plugin already owns these functions.
+    // Credentials are read from modern Connections without rewriting them.
+    if ( ! function_exists( 'seo_google_get_settings' ) ) {
+        require_once TAXOCOMMERCE_GOOGLE_BING_PATH . 'includes/class-taxocommerce-google-bing-gsc-sync-bridge.php';
+        add_filter( 'taxocommerce_google_bing_gsc_sync_settings', array( 'TaxoCommerce_Google_Bing_GSC_Sync_Bridge', 'settings' ) );
+        add_filter( 'taxocommerce_google_bing_gsc_sync_status', array( 'TaxoCommerce_Google_Bing_GSC_Sync_Bridge', 'status' ) );
+        add_filter( 'taxocommerce_google_bing_gsc_sync_access_token', array( 'TaxoCommerce_Google_Bing_GSC_Sync_Bridge', 'access_token' ) );
+        add_filter( 'taxocommerce_google_bing_gsc_sync_verify_start', array( 'TaxoCommerce_Google_Bing_GSC_Sync_Bridge', 'verify_and_select' ) );
+        add_action( 'taxocommerce_google_bing_gsc_sync_completed', array( 'TaxoCommerce_Google_Bing_GSC_Sync_Bridge', 'record_completed' ) );
+        require_once TAXOCOMMERCE_GOOGLE_BING_PATH . 'includes/google/seo-google-info.php';
+    }
 
     // Connections now belongs to Insights. These boot methods preserve the
     // historical public helpers and admin-post contracts for Amazon/Pinterest.
@@ -207,6 +221,11 @@ function taxocommerce_google_bing_screen() {
     } else {
         $source = 'google_search' === $tab ? 'search' : ( 'google_analytics' === $tab ? 'analytics' : 'bing' );
         TaxoCommerce_Google_Bing_Reports::render( $source );
+        if ( 'google_search' === $tab && function_exists( 'seo_google_render_sync_status' ) ) {
+            echo '<hr><h2>' . esc_html__( 'Sincronización de Search Console para Analysis', 'taxocommerce-google-bing' ) . '</h2>';
+            echo '<p>' . esc_html__( 'Actualiza las tablas históricas que utiliza Analysis. Es independiente de los informes guardados y utiliza las credenciales actuales de Connections.', 'taxocommerce-google-bing' ) . '</p>';
+            seo_google_render_sync_status();
+        }
     }
 
     echo '</div>';
@@ -258,6 +277,9 @@ function taxocommerce_google_bing_analysis_screen() {
                 'ajaxUrl' => admin_url( 'admin-ajax.php' ),
                 'nonce'   => wp_create_nonce( 'taxocommerce_insights_analysis' ),
                 'days'    => $days,
+                'planDownloadLabel' => __( 'Descargar JSON del plan de acción', 'taxocommerce-google-bing' ),
+                'planDownloadUrl' => taxocommerce_insights_plan_json_download_url(),
+                'planOpenLabel' => __( 'Abrir JSON del plan (móvil)', 'taxocommerce-google-bing' ),
             ), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT ) . ';',
             'before'
         );
@@ -265,7 +287,7 @@ function taxocommerce_google_bing_analysis_screen() {
     echo '<div class="seo-analista-wrap">';
     echo '<div class="seo-analista-toolbar">';
     echo '<div>' . '<h2 style="margin:0 0 4px">' . esc_html__( 'Analysis', 'taxocommerce-google-bing' ) . '</h2>';
-    echo '<p style="margin:0;color:#646970">' . esc_html__( 'Qué hacer y Plan de acción se presentan juntos; el resto de informes sigue bajo demanda.', 'taxocommerce-google-bing' ) . '</p>' . '</div>';
+    echo '<p style="margin:0;color:#646970">' . esc_html__( 'El Plan de acción reúne recomendaciones y tareas priorizadas; el resto de informes sigue bajo demanda.', 'taxocommerce-google-bing' ) . '</p>' . '</div>';
     echo '<form method="get" action="' . esc_url( admin_url( 'admin.php' ) ) . '">';
     echo '<input type="hidden" name="page" value="taxocommerce-google-bing">';
     echo '<input type="hidden" name="tgb_tab" value="analysis">';
@@ -286,19 +308,40 @@ function taxocommerce_google_bing_analysis_screen() {
     // Do not call seo_analista_lazy_render_shell: it would enqueue the same
     // click handler again and issue two AJAX requests per button click.
     $reports = taxocommerce_google_bing_analysis_reports();
-    echo '<div class="seo-analista-lazy-controls">';
+    $last_plan = taxocommerce_insights_last_plan_export();
+    echo '<div class="seo-analista-lazy-controls seo-analista-toolbar-actions">';
     echo '<button type="button" id="tgb-analysis-run-all" class="button button-primary">' . esc_html__( 'Ejecutar informe completo', 'taxocommerce-google-bing' ) . '</button>';
     echo '<button type="button" id="tgb-analysis-cancel" class="button" disabled>' . esc_html__( 'Detener', 'taxocommerce-google-bing' ) . '</button>';
     echo '</div>';
     echo '<div class="seo-analista-lazy-intro"><strong>Analista '
         . esc_html( defined( 'SEO_ANALISTA_VERSION' ) ? SEO_ANALISTA_VERSION : '' )
         . '</strong> · carga bajo demanda<p>Ejecuta únicamente el informe elegido.</p></div>';
-    echo '<div class="seo-analista-lazy-controls">';
+    echo '<div class="seo-analista-lazy-controls seo-analista-report-grid">';
     foreach ( $reports as $key => $report ) {
-        echo '<button type="button" class="button seo-analista-lazy-button" data-report="' . esc_attr( (string) $key ) . '">';
-        echo '<strong>' . esc_html( (string) ( $report['label'] ?? '' ) ) . '</strong>';
-        echo '<span>' . esc_html( (string) ( $report['description'] ?? '' ) ) . '</span>';
-        echo '</button>';
+        $is_plan = 'directrices' === $key;
+        $stored = $is_plan ? $last_plan : taxocommerce_insights_last_report_export( $key, $days );
+        $saved_date = $stored
+            ? wp_date( 'd/m/Y H:i', strtotime( (string) $stored['generated_at'] ) )
+            : '';
+        $download_url = $is_plan
+            ? taxocommerce_insights_plan_json_download_url()
+            : taxocommerce_insights_report_json_download_url( $key, $days );
+
+        echo '<article class="seo-analista-report-card" data-report="' . esc_attr( (string) $key ) . '">';
+        echo '<h3>' . esc_html( (string) ( $report['label'] ?? '' ) ) . '</h3>';
+        echo '<p>' . esc_html( (string) ( $report['description'] ?? '' ) ) . '</p>';
+        echo '<div class="seo-analista-report-meta"><strong>' . esc_html__( 'Último informe:', 'taxocommerce-google-bing' )
+            . '</strong> <time class="tgb-report-date">' . esc_html( $saved_date ) . '</time></div>';
+        echo '<div class="seo-analista-report-actions">';
+        echo '<button type="button" class="button button-primary seo-analista-lazy-button" data-report="'
+            . esc_attr( (string) $key ) . '">' . esc_html__( 'Crear informe', 'taxocommerce-google-bing' ) . '</button>';
+        $download_class = $stored ? 'button tgb-report-json-button' : 'button tgb-report-json-button disabled';
+        echo '<a ' . ( $is_plan ? 'id="tgb-plan-json-download" ' : '' ) . 'class="' . esc_attr( $download_class )
+            . '" data-report="' . esc_attr( (string) $key ) . '"'
+            . ( $stored ? ' href="' . esc_url( $download_url ) . '"' : '' )
+            . ' aria-disabled="' . ( $stored ? 'false' : 'true' ) . '">'
+            . esc_html__( 'Descargar JSON', 'taxocommerce-google-bing' ) . '</a>';
+        echo '</div></article>';
     }
     echo '</div>';
     echo '<div id="seo-analista-lazy-status" class="seo-analista-lazy-status" aria-live="polite"></div>';

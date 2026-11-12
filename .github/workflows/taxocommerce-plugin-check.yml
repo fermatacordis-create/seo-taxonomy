@@ -60,6 +60,16 @@ jobs:
               )
               if not selected:
                   raise SystemExit("No TaxoCommerce plugins found for strict gate")
+          elif os.environ.get("REQUESTED_PLUGIN") == "changed":
+              diff = subprocess.check_output(
+                  ["git", "diff", "--name-only", "-z", "HEAD^", "HEAD"]
+              ).decode("utf-8").split("\0")
+              selected = sorted({
+                  name.split("/", 1)[0]
+                  for name in diff
+                  if name.startswith("taxocommerce-") and "/" in name
+                  and (Path(name.split("/", 1)[0]) / (name.split("/", 1)[0] + ".php")).is_file()
+              })
           elif os.environ["EVENT_NAME"] == "workflow_dispatch":
               selected = [os.environ["REQUESTED_PLUGIN"]]
           else:
@@ -102,25 +112,48 @@ jobs:
           php-version: '8.3'
           coverage: none
       - name: Package only the installable plugin files (no tests or FTP state)
+        id: package
         env:
           PLUGIN: ${{ matrix.plugin }}
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p "build/$PLUGIN"
+          # Core's existing GitHub/staging directory stays stable, but its
+          # WordPress.org distribution MUST use the slug already assigned.
+          TARGET_SLUG="$PLUGIN"
+          if [ "$PLUGIN" = "taxocommerce-core" ]; then
+            TARGET_SLUG="taxocommerce-core-catalog-content-management-for-woocommerce"
+          fi
+          echo "target_slug=$TARGET_SLUG" >> "$GITHUB_OUTPUT"
+          mkdir -p "build/$TARGET_SLUG"
           rsync -a --exclude='tests/' --exclude='.*' --exclude='node_modules/' \
             --exclude='uploads/' --exclude='*.bak' --exclude='*.log' \
             --exclude='*.pyc' --exclude='*.pot' --include='/CHANGELOG.md' --exclude='*.md' \
-            "$PLUGIN/" "build/$PLUGIN/"
-          test -f "build/$PLUGIN/$PLUGIN.php"
-          test -f "build/$PLUGIN/readme.txt"
+            "$PLUGIN/" "build/$TARGET_SLUG/"
+          if [ "$PLUGIN" = "taxocommerce-core" ]; then
+            # Check the already-installed short-slug directory *and* the
+            # assigned WordPress.org long-slug distribution independently.
+            mkdir -p "build/$PLUGIN"
+            rsync -a --exclude='tests/' --exclude='.*' --exclude='node_modules/' \
+              --exclude='uploads/' --exclude='*.bak' --exclude='*.log' \
+              --exclude='*.pyc' --exclude='*.pot' --include='/CHANGELOG.md' --exclude='*.md' \
+              "$PLUGIN/" "build/$PLUGIN/"
+            php "$PLUGIN/tests/slug-compatibility-smoke.php"
+            python3 -m unittest discover -s .github/tests -p test_package_core_wordpress_org.py -v
+            python3 .github/scripts/package_core_wordpress_org.py "build/$TARGET_SLUG"
+            # Do not ship official-slug catalogs in the short-slug smoke package.
+            find "build/$PLUGIN/languages" -maxdepth 1 -type f -name "$TARGET_SLUG-*" -delete
+            test -f "build/$PLUGIN/$PLUGIN.php"
+          fi
+          test -f "build/$TARGET_SLUG/$TARGET_SLUG.php"
+          test -f "build/$TARGET_SLUG/readme.txt"
           # All twenty independent plugins use their own bundled changelog.
-          test -s "build/$PLUGIN/CHANGELOG.md"
-          if find "build/$PLUGIN" -name '.*' -o -name '.ftp-deploy-sync-state.json' | grep -q .; then
+          test -s "build/$TARGET_SLUG/CHANGELOG.md"
+          if find "build/$TARGET_SLUG" -name '.*' -o -name '.ftp-deploy-sync-state.json' | grep -q .; then
             echo "::error::Hidden or FTP synchronization files found"
             exit 1
           fi
-          find "build/$PLUGIN" -type f -name '*.php' -print0 |
+          find "build/$TARGET_SLUG" -type f -name '*.php' -print0 |
             xargs -0 -r -n1 php -l
           # Optional, read-only plugin-specific boot regression (not packed in ZIP).
           if [ -f "$PLUGIN/tests/standalone-bootstrap-smoke.php" ]; then
@@ -133,19 +166,29 @@ jobs:
             php "$PLUGIN/tests/consent-wpoptions-seed-smoke.php"
             php "$PLUGIN/tests/consent-smoke.php"
           fi
-          python3 .github/scripts/taxocommerce_family_readme_check.py "$PLUGIN" "build/$PLUGIN"
-          ( cd build && zip -qr "../$PLUGIN-plugin-check.zip" "$PLUGIN" )
+          python3 .github/scripts/taxocommerce_family_readme_check.py "$PLUGIN" "build/$TARGET_SLUG"
+          ( cd build && zip -qr "../$PLUGIN-plugin-check.zip" "$TARGET_SLUG" )
           unzip -t "$PLUGIN-plugin-check.zip"
           sha256sum "$PLUGIN-plugin-check.zip" > "$PLUGIN-plugin-check.sha256"
           printf 'Plugin: %s\nCommit: %s\nWorkflow: %s\n' \
             "$PLUGIN" "$GITHUB_SHA" "$GITHUB_RUN_ID" > "$PLUGIN-plugin-check-source.txt"
           echo "## Plugin Check: $PLUGIN" >> "$GITHUB_STEP_SUMMARY"
           echo "Candidate SHA: \`$GITHUB_SHA\`" >> "$GITHUB_STEP_SUMMARY"
+      - name: Official WordPress Plugin Check - installed Core / 0 errors, 0 warnings
+        if: matrix.plugin == 'taxocommerce-core'
+        uses: wordpress/plugin-check-action@v1
+        with:
+          build-dir: ./build/taxocommerce-core
+          slug: taxocommerce-core
+          wp-version: latest
+          ignore-warnings: false
+          ignore-errors: false
+          strict: true
       - name: Official WordPress Plugin Check - errors and warnings must pass
         uses: wordpress/plugin-check-action@v1
         with:
-          build-dir: ./build/${{ matrix.plugin }}
-          slug: ${{ matrix.plugin }}
+          build-dir: ./build/${{ steps.package.outputs.target_slug }}
+          slug: ${{ steps.package.outputs.target_slug }}
           wp-version: latest
           ignore-warnings: false
           ignore-errors: false

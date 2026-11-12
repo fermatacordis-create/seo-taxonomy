@@ -108,6 +108,9 @@ function tcsocial_admin_render() {
     } else {
         echo '<section class="seo-social-card">' . '<div class="seo-social-intro">' . '<div>' . '<h2>' . esc_html__( 'Agenda social', 'taxocommerce-social' ) . '</h2>' . '<p>' . esc_html__( 'Programa publicaciones manualmente o por CSV y revisa el resultado en el calendario mensual. No se incorporan campañas de Marketing ni se reserva ninguna franja para Noticias.', 'taxocommerce-social' ) . '</p>' . '</div>' . '<span class="seo-social-state is-scheduled">' . esc_html__( 'Solo redes sociales', 'taxocommerce-social' ) . '</span>' . '</div>' . '</section>';
         tcsocial_programador_render_admin();
+        // CSV operations reuse the legacy calendar's canonical schedule records.
+        // This restores bulk import/export without changing the manual scheduler.
+        tcsocial_network_render_scheduler_csv_panel();
         tcsocial_calendar_render_admin();
     }
 

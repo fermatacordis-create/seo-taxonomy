@@ -4,13 +4,15 @@ Tags: woocommerce, audit, seo, content, quality
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.3.20
+Stable tag: 0.3.22
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Audit WordPress and WooCommerce content quality, structure, duplicate risks and FAQs with per-type metrics and full JSON exports.
 
 == Description ==
+
+* Admin header: plugin title, a single local `Description` with the static `Plugin URI` link below it (left); a wider collapsed `CHANGELOG.md` history (center); local version and release date (right). No duplicated information panel or external requests.
 
 * The admin panel reads the local PHP Description and Plugin URI metadata with no external request or cache; bundled CHANGELOG.md provides the version history.
 

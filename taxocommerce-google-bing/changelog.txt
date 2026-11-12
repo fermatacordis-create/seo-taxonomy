@@ -1,3 +1,12 @@
+= 1.1.46 =
+
+* Restore GSC day-by-day SQL synchronization for Analysis using current Connections authentication.
+* Restore GA4 runReport for Analysis and correct the requested Google token scope.
+* Preserve stored reports, historic data, saved OAuth credentials and all existing exports.
+
+= 1.1.42 (2026-11-10) =
+* Three-zone admin header: unique local Description and static link on left, wider collapsed CHANGELOG.md in center, version/date on right; no duplicate panel. Issue #2521.
+
 = 1.1.40 (2026-11-10) =
 * Analysis uses its authenticated Insights AJAX screen; sequential complete report, mobile-friendly JSON browser fallback and removal of redundant executive tab. Issue #2507.
 

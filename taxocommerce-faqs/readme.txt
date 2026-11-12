@@ -4,7 +4,7 @@ Tags: faq, woocommerce, questions, csv, vocabulary
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.1.17
+Stable tag: 0.1.18
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,9 +12,11 @@ Manage product and page FAQs in WordPress and WooCommerce with CSV exchange, sta
 
 == Description ==
 
+* Admin header: plugin title, a single local `Description` with the static `Plugin URI` link below it (left); a wider collapsed `CHANGELOG.md` history (center); local version and release date (right). No duplicated information panel or external requests.
+
 * The admin header reads this plugin's local `Description` and links to `Plugin URI`, without external requests or caching. The version history is bundled in `CHANGELOG.md`.
 
-* Collapsible local plugin information beside the independent version history.
+* One collapsible version-history control, without a duplicate plugin-information box.
 
 
 TaxoCommerce FAQs works with an existing canonical FAQ table on migration and optionally integrates its admin screens into TaxoCommerce Core.
@@ -105,4 +107,4 @@ On multisite, the cleanup is limited to sites marked as initialized by this modu
 
 == Local plugin information ==
 
-The local information panel shows `Description` and the `Plugin URI` link from the main PHP plugin header, without an HTTP request.
+The header shows `Description` once and the static `Plugin URI` link directly below it, without an HTTP request.

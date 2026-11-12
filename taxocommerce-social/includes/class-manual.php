@@ -100,7 +100,7 @@ function tcsocial_manual_render() {
 
             <h2 id="tcsocial-user-csv">5. CSV: disponibilidad y precauciones</h2>
             <h3>5.1 Estado de la interfaz</h3>
-            <p>El código conserva importación, previsualización y exportación CSV de una pantalla anterior, pero <strong>la navegación principal del plugin independiente no muestra actualmente el formulario CSV</strong>. En Conexiones, Plantillas y Calendario solo está disponible el programador manual. No busques un botón de importar o descargar que no aparezca en tu instalación; recuperar esa pantalla es una tarea funcional distinta de estos manuales.</p>
+            <p>En <strong>Calendario</strong> se ha recuperado el bloque <strong>Programación masiva con Excel / CSV</strong> y sus controles de descarga, validación y confirmación. Sigue disponible el programador manual independiente. La validación no crea tareas: revisa el resultado antes de pulsar <strong>Importar programaciones</strong>.</p>
             <p>Los encabezados del formato heredado son <code>contenido_id</code>, <code>titulo</code>, <code>redes</code>, <code>fecha_hora</code> y <code>prioridad</code>. El importador admite alias y separadores habituales de Excel/LibreOffice; estos detalles se documentan para una futura integración o para instalaciones que todavía expongan la pantalla heredada.</p>
             <h3>5.2 Procedimiento únicamente si existe una interfaz CSV disponible</h3>
             <ol>
@@ -192,9 +192,9 @@ function tcsocial_manual_render() {
             <p><code>tcsocial_calendar_events()</code> adapta la agenda exportable, <code>tcsocial_calendar_group_by_day()</code> agrupa fechas y <code>tcsocial_calendar_has_same_network_collision()</code> identifica coincidencias de red. La interfaz compacta es una vista del mismo calendario, no un programador alternativo. El selector del Programador muestra hasta 150 contenidos recientes y su tabla consulta hasta 100 tareas.</p>
 
             <h2 id="tcsocial-dev-csv">6. Contratos CSV y validación</h2>
-            <h3>6.1 Esquema y exportaciones (backend heredado, no mostrado en la navegación actual)</h3>
+            <h3>6.1 Esquema y exportaciones (disponibles en Calendario)</h3>
             <p><code>tcsocial_network_scheduler_import_columns()</code> mantiene alias para <code>content_id</code>, <code>providers</code>, <code>scheduled_at</code>, <code>priority</code> y <code>title</code>. <code>tcsocial_network_handle_scheduler_export()</code> expone cuatro modos: <code>template</code>, <code>content</code>, <code>agenda</code> e <code>history</code>. Los CSV se transmiten como descargas; no cambies los encabezados públicos sin una migración documentada.</p>
-            <h3>6.2 Fases de importación en el backend heredado</h3>
+            <h3>6.2 Fases de importación desde Calendario</h3>
             <p><code>tcsocial_network_handle_scheduler_import_preview()</code> valida la carga de archivo, tipo <code>csv/txt/tsv</code>, tamaño máximo de 2 MB y estructura. Guarda los datos interpretados en un transitorio de usuario durante 20 minutos. <code>tcsocial_network_handle_scheduler_import_confirm()</code> exige nonce y token de previsualización, ignora filas erróneas y programa o reprograma las válidas. Preserva ambas fases al corregir importadores: <strong>previsualizar no puede programar tareas</strong>.</p>
 
             <h2 id="tcsocial-dev-autotest">7. Auto Test y diagnóstico seguro</h2>

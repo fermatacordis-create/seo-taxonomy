@@ -118,4 +118,33 @@ if ( false === strpos( $gsc_source, 'Una conexión GA4 correcta no concede permi
     print( "GSC permissions guidance regression failed\n" );
     exit( 1 );
 }
-echo "Report rendering smoke test: OK (no network requests, GA4 batches capped at five)\n";
+// The new charts must render solely from snapshots and escape item names.
+function __( $message, $domain = '' ) { return $message; }
+function esc_html__( $message, $domain = '' ) { return esc_html( $message ); }
+$chart = new ReflectionMethod( 'TaxoCommerce_Google_Bing_Reports', 'render_ga4_ecommerce' );
+$chart->setAccessible( true );
+ob_start();
+$chart->invoke( null, array(
+    'funnel' => array(
+        'current' => array( 'view_item' => 15, 'add_to_cart' => 4, 'view_cart' => 3, 'begin_checkout' => 2, 'purchase' => 0 ),
+        'previous' => array( 'view_item' => 8, 'add_to_cart' => 1, 'view_cart' => 1, 'begin_checkout' => 1, 'purchase' => 0 ),
+    ),
+    'cart_products' => array( 'available' => true, 'rows' => array(
+        array( 'name' => '<unsafe>', 'id' => 'SKU-1', 'viewed' => 10, 'added' => 3, 'purchased' => 0 ),
+    ) ),
+) );
+$cart_html = ob_get_clean();
+if ( false === strpos( $cart_html, 'Productos añadidos al carrito' )
+    || false === strpos( $cart_html, 'Interacciones de compra' )
+    || false === strpos( $cart_html, '&lt;unsafe&gt;' )
+    || false !== strpos( $cart_html, '<unsafe>' )
+    || false === strpos( $cart_html, 'SKU-1' ) ) {
+    throw new RuntimeException( 'GA4 ecommerce charts failed rendering or HTML escaping.' );
+}
+ob_start();
+$chart->invoke( null, array( 'funnel' => array(), 'cart_products' => array( 'available' => false ) ) );
+$empty_html = ob_get_clean();
+if ( false === strpos( $empty_html, 'Actualizar datos de Google Analytics 4' ) ) {
+    throw new RuntimeException( 'Legacy snapshot empty state failed.' );
+}
+echo "Report rendering smoke test: OK (no network requests, GA4 batches capped at five; product charts).\\n";

@@ -1,3 +1,45 @@
+## [0.4.78] — 2026-11-11 — Corrige chequeo local y paquete WordPress.org (#2565)
+
+- Corrige los 1.022 errores y la advertencia de discrepancia de dominio de traducción identificados al comprobar Core instalado en `taxocommerce-core/`. El plugin instalado recupera el dominio nativo `taxocommerce-core`, sin modificar menús, tablas ni funciones.
+- El empaquetado de WordPress.org transforma **una copia** del mismo código: carpeta, archivo principal, dominio gettext y catálogos adoptan el slug `taxocommerce-core-catalog-content-management-for-woocommerce`, reservado durante la revisión.
+- La CI exige Plugin Check estricto independiente de **ambas distribuciones** (0 errores, 0 advertencias) y deja de examinar 20 plugins cuando solo cambia uno.
+- Se conservan las traducciones ES, EN, FR, DE y NL, los datos y los identificadores internos de cada tienda; no se toca otro plugin.
+
+## [0.4.77] — 2026-11-11 — Dominio gettext y slug de WordPress.org (#2560)
+
+- Se alinean las llamadas de traducción y la cabecera con el slug asignado `taxocommerce-core-catalog-content-management-for-woocommerce`, eliminando las causas de los 1.053 errores `TextDomainMismatch` comunicados.
+- Se incluyen catálogos de los cinco idiomas ES/EN/FR/DE/NL con el dominio oficial sin alterar los textos traducidos; los catálogos anteriores quedan disponibles para las instalaciones GitHub heredadas.
+- Se mantiene la ruta técnica de las instalaciones actuales, así como los slugs de administración, las tablas y las opciones, evitando desactivaciones.
+- Se valida y empaqueta Core para WordPress.org bajo su carpeta oficial, sin modificar los demás plugins ni el comportamiento de contenidos, menús o pedidos.
+
+## [0.4.76] — 2026-11-11 — Preparar documentación WordPress.org (#2557)
+
+- Se simplifica `readme.txt`, conservando descripción, funcionalidades, instalación, preguntas frecuentes e historial reciente; el histórico completo sigue en `CHANGELOG.md` y `changelog.txt`.
+- Se documenta la versión 0.4.75 omitida en `changelog.txt` y se alinea la versión 0.4.76 con el `Stable tag` de WordPress.org.
+- No se modifica el slug ni el text domain: su aceptación debe confirmarse con WordPress.org mediante el correo de revisión.
+- Sin cambios de comportamiento, formularios, datos, permisos ni interfaces del plugin.
+
+## [0.4.75] — 2026-11-11 — Descarga completa JSON de Core → Contenidos → Anomalías
+
+- Nuevo botón «Descargar JSON de todas las anomalías» junto a «Mostrar todas las comprobaciones», siempre visible cuando la arquitectura está configurada.
+- La exportación recupera en tiempo real las mismas secciones con incidencias que genera el informe de Anomalías. Incluye relaciones SEO, hubs, categorías, entradas/landings, contadores de categorías y FAQs cuando existan.
+- Solo lectura, sin duplicar reglas SQL ni incluir código HTML, formularios ni nonces en el JSON. No limita la cantidad de líneas de evidencia ni depende de «Mostrar todas».
+- Conserva la exportación JSON editorial ya existente, separada del informe completo.
+- Nueva regresión para el contenido exportado y la ausencia de tokens de seguridad; incluida en las validaciones de despliegue.
+- No modifica categorías, sus relaciones, productos ni otros módulos.
+
+## [0.4.74] — 2026-11-10 — Cabecera en tres zonas sin contenido duplicado (#2521)
+
+- Izquierda: nombre, descripción local del plugin y un único enlace estático `Plugin URI` bajo el texto.
+- Centro: desplegable más ancho con el historial local `CHANGELOG.md`, cerrado inicialmente.
+- Derecha: versión y fecha reales del propio plugin.
+- Se retira la segunda caja «Información del plugin», sin cambios en servicios, menús ni consultas externas.
+
+## [0.4.73] — 2026-11-10 — Suprimir solo el aviso Action Scheduler (#2510)
+
+- Se desactiva exclusivamente la comprobación visual de acciones vencidas que genera el aviso superior «Action Scheduler: past-due actions».
+- No se modifica ni detiene Action Scheduler, WordPress Cron, WooCommerce, sus colas, otros avisos ni funcionalidades comerciales.
+
 ## [0.4.72] — 2026-11-10 — Descripción visible desde el plugin (#2494)
 
 - La descripción inmediatamente debajo del título administrativo procede de `Description:` del archivo principal, sin textos duplicados ni consultas externas.

@@ -1,3 +1,17 @@
+## [0.1.19] — 2026-11-10 — Cabecera en tres zonas sin contenido duplicado (#2521)
+
+- Izquierda: nombre, descripción local del plugin y un único enlace estático `Plugin URI` bajo el texto.
+- Centro: desplegable más ancho con el historial local `CHANGELOG.md`, cerrado inicialmente.
+- Derecha: versión y fecha reales del propio plugin.
+- Se retira la segunda caja «Información del plugin», sin cambios en servicios, menús ni consultas externas.
+
+## [0.1.18] - 2026-11-10 - Selección de gestión de sitemaps (#2484)
+
+- Nueva casilla en Distribution > Sitemaps para habilitar o ceder la publicación XML sin instalar otros plugins; mantiene por defecto el comportamiento anterior.
+- Si se desmarca, Distribution deja de publicar XML y anunciarlo en robots.txt, permite el sitemap nativo de WordPress y cancela exclusivamente sus trabajos pendientes. No elimina los XML publicados ni afecta a feeds comerciales.
+- Se impide cambiar de propietario con una generación activa: antes debe detenerse con el control existente. Se conserva el filtro de interoperabilidad aportado por OPNV Systems.
+- Nonce, permisos, validación de entradas, reglas de reescritura y pruebas de regresión de propiedad, activación y desactivación.
+
 ## [0.1.17] — 2026-11-10 — Descripción visible desde el plugin (#2494)
 
 - La descripción inmediatamente debajo del título administrativo procede de `Description:` del archivo principal, sin textos duplicados ni consultas externas.

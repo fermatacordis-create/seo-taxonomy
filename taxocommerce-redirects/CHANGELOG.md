@@ -1,3 +1,16 @@
+## [0.1.20] - 2026-11-10 - Activación del motor y compatibilidad con otros gestores (#2485)
+
+- Casilla administrativa «TaxoCommerce gestiona las redirecciones», activada por defecto. Guardado protegido mediante nonce y permisos de WordPress.
+- Al desactivar, Redirects deja de atender rutas, reclamar el control a OPNV y guardar cambios de slug remitidos por otro gestor. Se conservan reglas, herramientas de importación/exportación e informes.
+- Conservadas las mejoras de coordinación de PR #2516 y la cabecera en tres zonas de v0.1.19. Añadida la prueba automática de activación, desactivación y reactivación.
+
+## [0.1.19] — 2026-11-10 — Cabecera en tres zonas sin contenido duplicado (#2521)
+
+- Izquierda: nombre, descripción local del plugin y un único enlace estático `Plugin URI` bajo el texto.
+- Centro: desplegable más ancho con el historial local `CHANGELOG.md`, cerrado inicialmente.
+- Derecha: versión y fecha reales del propio plugin.
+- Se retira la segunda caja «Información del plugin», sin cambios en servicios, menús ni consultas externas.
+
 ## [0.1.18] — 2026-11-10 — Descripción visible desde el plugin (#2494)
 
 - La descripción inmediatamente debajo del título administrativo procede de `Description:` del archivo principal, sin textos duplicados ni consultas externas.

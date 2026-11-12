@@ -349,7 +349,22 @@ if (did_action('admin_print_styles')) {
         $first = true;
         echo '[';
         do {
-            $rows = $wpdb->get_results("SELECT * FROM {$table} WHERE {$where} ORDER BY {$order_by} LIMIT {$chunk} OFFSET {$offset}", ARRAY_A);
+            // Only the exporter's fixed query shapes are accepted; do not allow caller-provided SQL.
+            $sort_map = array('id ASC' => 'id ASC', 'term_id ASC' => 'term_id ASC', 'object_id ASC' => 'object_id ASC');
+            $where_map = array('1=1' => '1=1', "object_type='product_cat'" => "object_type='product_cat'");
+            // Table names are $wpdb->prefix + a fixed name: only identifier characters are accepted.
+            // (No %i placeholder here: it needs WordPress 6.2 and this plugin declares 5.8.)
+            if (!isset($sort_map[$order_by], $where_map[$where]) || !preg_match('/^[A-Za-z0-9_]+$/', (string) $table)) {
+                break;
+            }
+            $safe_order = $sort_map[$order_by];
+            $safe_where = $where_map[$where];
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Interactive administrative export or status query must reflect current state; no cache invalidation contract exists.
+            $rows = $wpdb->get_results(
+                // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table checked above; WHERE and ORDER BY come from the two fixed allowlists; pagination is parameterized.
+                $wpdb->prepare("SELECT * FROM `{$table}` WHERE {$safe_where} ORDER BY {$safe_order} LIMIT %d OFFSET %d", $chunk, $offset),
+                ARRAY_A
+            );
             foreach ((array) $rows as $row) {
                 if (!$first) {
                     echo ',';

@@ -808,6 +808,9 @@ function taxocommerce_core_anomalies_finish_section( $has_findings, $show_all, &
     $html = ob_get_clean();
     if ( $has_findings ) {
         ++$visible_findings;
+        if ( function_exists( 'taxocommerce_core_anomalies_full_json_capture_section' ) ) {
+            taxocommerce_core_anomalies_full_json_capture_section( $html );
+        }
     }
     if ( $has_findings || $show_all ) {
         echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by the original report renderers.
@@ -839,10 +842,16 @@ function taxocommerce_core_anomalies_render_report() {
     echo '<h2>' . esc_html__( '🚨 Reporte de Auditoría y Control de Estructura', 'taxocommerce-core' ) . '</h2>';
     echo '<p>' . esc_html__( 'Monitoreo global de la integridad estructural de Nodos y relaciones semánticas en la base de datos.', 'taxocommerce-core' ) . '</p>';
     $report_url = admin_url( 'admin.php?page=taxocommerce-core-content&tc_type=anomalies' );
-    echo '<p><a class="button button-secondary" href="' .
+    $complete_export_url = wp_nonce_url(
+        admin_url( 'admin-post.php?action=taxocommerce_core_anomalies_full_json_export' ),
+        'taxocommerce_core_anomalies_full_json_export'
+    );
+    echo '<p style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;"><a class="button button-secondary" href="' .
         esc_url( $show_all ? $report_url : add_query_arg( 'tc_anomalies_all', '1', $report_url ) ) .
         '">' . esc_html( $show_all ? __( 'Mostrar solo incidencias', 'taxocommerce-core' ) :
-        __( 'Mostrar todas las comprobaciones', 'taxocommerce-core' ) ) . '</a></p>';
+        __( 'Mostrar todas las comprobaciones', 'taxocommerce-core' ) ) . '</a>';
+    echo '<a class="button button-secondary" href="' . esc_url( $complete_export_url ) . '">' .
+        esc_html__( 'Descargar JSON de todas las anomalías', 'taxocommerce-core' ) . '</a></p>';
 
     if ($show_all && function_exists('taxocommerce_core_anomalies_content_json_render_panel') && taxocommerce_core_anomalies_table_exists('seo_object_vocabulary') && taxocommerce_core_anomalies_table_exists('seo_vocabulary')) {
         taxocommerce_core_anomalies_content_json_render_panel();
@@ -1883,6 +1892,9 @@ function taxocommerce_core_anomalies_render_report() {
     $faq_html = ob_get_clean();
     if ( '' !== trim( $faq_html ) ) {
         ++$visible_findings;
+        if ( function_exists( 'taxocommerce_core_anomalies_full_json_capture_section' ) ) {
+            taxocommerce_core_anomalies_full_json_capture_section( $faq_html );
+        }
         echo $faq_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped in FAQ renderer.
     }
 

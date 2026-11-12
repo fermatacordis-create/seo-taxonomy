@@ -1,3 +1,17 @@
+## [0.4.29] — 2026-11-10 — Sin tareas programadas propias de importación/exportación (#2530)
+
+- Eliminada la creación de acciones de Action Scheduler y WP-Cron para exportación CSV y cola de importación; conservados el procesamiento por bloques, autollamadas internas autenticadas, control adaptativo, pausas y cancelación.
+- El watchdog reanuda un trabajo interrumpido al recibir nuevas peticiones a WordPress; ya no existe recuperación automática mediante tareas programadas si fallan las autollamadas internas.
+- Limpieza puntual de los hooks de calendario anteriores del plugin, sin borrar datos, colas, CSV ni acciones de WooCommerce u otros plugins.
+- seo_supplier_crawl_tick del monolito no se altera: necesita sustitución de su mecanismo de ejecución antes de retirarlo.
+
+## [0.4.28] — 2026-11-10 — Cabecera en tres zonas sin contenido duplicado (#2521)
+
+- Izquierda: nombre, descripción local del plugin y un único enlace estático `Plugin URI` bajo el texto.
+- Centro: desplegable más ancho con el historial local `CHANGELOG.md`, cerrado inicialmente.
+- Derecha: versión y fecha reales del propio plugin.
+- Se retira la segunda caja «Información del plugin», sin cambios en servicios, menús ni consultas externas.
+
 ## [0.4.27] — 2026-11-10 — Descripción visible desde el plugin (#2494)
 
 - La descripción inmediatamente debajo del título administrativo procede de `Description:` del archivo principal, sin textos duplicados ni consultas externas.

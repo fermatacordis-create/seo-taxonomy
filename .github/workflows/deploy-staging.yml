@@ -89,6 +89,7 @@ jobs:
           python3 -m py_compile .github/scripts/deploy_staging_delta.py
           python3 -m unittest discover -s .github/tests -p test_deploy_staging_delta.py -v
           python3 -m unittest discover -s .github/tests -p test_pro_historic_modular_workflow.py -v
+          python3 -m unittest discover -s .github/tests -p test_select_pro_release_delta.py -v
           python3 -m unittest discover -s .github/tests -p test_staging_check_subida_a_pro.py -v
           python3 -m unittest discover -s .github/tests -p test_insights_head_tags_bootstrap.py -v
           python3 -m py_compile .github/scripts/audit_core_dual_sites.py
@@ -100,6 +101,9 @@ jobs:
           php .github/tests/legacy-scrappers-coexistence-smoke.php
           php -l .github/tests/legacy-loaders-smoke.php
           php .github/tests/legacy-loaders-smoke.php
+          php -l includes/ojeador/class-ojeador-admin.php
+          php -l .github/tests/legacy-ojeador-allowlist-smoke.php
+          php .github/tests/legacy-ojeador-allowlist-smoke.php
           php -l taxocommerce-dependiente/tests/i18n-catalog-smoke.php
           php taxocommerce-dependiente/tests/i18n-catalog-smoke.php
           for entry in bootstrap.php seo-marketing.php includes/header.php includes/dependiente/clonador/clonador-bootstrap.php; do php -l "$entry"; done
@@ -156,6 +160,9 @@ jobs:
           php -l taxocommerce-google-bing/includes/class-taxocommerce-insights-consent.php
           php taxocommerce-google-bing/tests/consent-smoke.php
           php taxocommerce-google-bing/tests/analysis-standalone-smoke.php
+          php -l taxocommerce-google-bing/includes/class-taxocommerce-google-bing-gsc-sync-bridge.php
+          php -l taxocommerce-google-bing/includes/class-taxocommerce-google-bing-google-service.php
+          php taxocommerce-google-bing/tests/gsc-sync-bridge-smoke.php
           php taxocommerce-google-bing/tests/analysis-unified-smoke.php
           php -l taxocommerce-google-bing/tests/analysis-mobile-smoke.php
           php taxocommerce-google-bing/tests/analysis-mobile-smoke.php
@@ -171,6 +178,8 @@ jobs:
           php taxocommerce-import-export/tests/auto-test-smoke.php
           php taxocommerce-logistica/tests/auto-test-smoke.php
           php taxocommerce-redirects/tests/auto-test-smoke.php
+          php -l taxocommerce-redirects/tests/opnv-redirects-owner-smoke.php
+          php taxocommerce-redirects/tests/opnv-redirects-owner-smoke.php
           php taxocommerce-scrappers/tests/manual-autotest-smoke.php
           php -l taxocommerce-scrappers/tests/lifecycle-smoke.php
           php taxocommerce-scrappers/tests/lifecycle-smoke.php
@@ -221,6 +230,8 @@ jobs:
       - name: Core PHP syntax and regression tests
         run: |
           php -l taxocommerce-core/taxocommerce-core.php
+          php -l taxocommerce-core/tests/action-scheduler-notice-smoke.php
+          php taxocommerce-core/tests/action-scheduler-notice-smoke.php
           php -l taxocommerce-core/includes/class-taxocommerce-core-anomalies.php
           php -l taxocommerce-core/includes/class-taxocommerce-core-country.php
           php -l taxocommerce-core/includes/class-taxocommerce-core-hierarchy.php
@@ -237,6 +248,9 @@ jobs:
           php -l taxocommerce-distribution/tests/sitemap-daily-smoke.php
           php taxocommerce-distribution/tests/sitemap-daily-smoke.php
           php taxocommerce-distribution/tests/sitemap-daily-smoke.php legacy
+          php -l taxocommerce-distribution/tests/opnv-sitemap-owner-smoke.php
+          php taxocommerce-distribution/tests/opnv-sitemap-owner-smoke.php
+          php taxocommerce-distribution/tests/opnv-sitemap-owner-smoke.php legacy
           php .github/tests/taxocommerce-core/auto-test-smoke.php
           php -l .github/tests/taxocommerce-core/autocheck-functional-smoke.php
           php .github/tests/taxocommerce-core/autocheck-functional-smoke.php
@@ -256,6 +270,7 @@ jobs:
           php .github/tests/taxocommerce-core/category-hierarchy-native-smoke.php
           php -l taxocommerce-core/includes/class-taxocommerce-core-block-navigation.php
           php .github/tests/taxocommerce-core/anomalies-configured-smoke.php
+          php taxocommerce-core/tests/anomalies-complete-json-smoke.php
           php .github/tests/taxocommerce-core/block-navigation-smoke.php
           php .github/tests/taxocommerce-core/sidebar-plugins-smoke.php
           php .github/tests/taxocommerce-core/official-info-static-smoke.php

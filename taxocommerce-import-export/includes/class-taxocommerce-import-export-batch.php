@@ -39,12 +39,12 @@ final class TaxoCommerce_Import_Export_Batch {
 		add_action( 'admin_post_taxocommerce_ie_batch_control', array( $this, 'handle_control' ) );
 		add_action( 'admin_post_taxocommerce_ie_batch_delete_pending', array( $this, 'handle_delete_pending' ) );
 		add_action( 'admin_post_taxocommerce_ie_batch_download_failed_log', array( $this, 'handle_download_failed_log' ) );
-		add_action( self::WORKER_HOOK, array( $this, 'worker' ) );
 		add_action( 'wp_ajax_taxocommerce_ie_batch_step', array( $this, 'ajax_step' ) );
 		add_action( 'wp_ajax_taxocommerce_ie_batch_continue', array( $this, 'internal_continue' ) );
 		add_action( 'wp_ajax_nopriv_taxocommerce_ie_batch_continue', array( $this, 'internal_continue' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_runner' ) );
 		add_action( 'init', array( $this, 'watchdog' ), 99 );
+		add_action( 'init', array( $this, 'retire_legacy_schedule' ), 20 );
 	}
 
 	const INDIVIDUAL_STATE = 'taxocommerce_ie_individual_last';
@@ -201,7 +201,7 @@ final class TaxoCommerce_Import_Export_Batch {
 								&& in_array( (string) ( $state['status'] ?? '' ), array( 'processing', 'waiting_next' ), true )
 								&& $last > 0 && time() - $last > 90;
 							echo esc_html( $stalled
-								? __( 'Sin progreso reciente. El sistema intentará recuperarla cuando WordPress reciba peticiones; comprueba WP-Cron y el bucle HTTP.', 'taxocommerce-import-export' )
+								? __( 'Sin progreso reciente. El sistema intentará recuperarla cuando WordPress reciba peticiones; comprueba las conexiones HTTP internas.', 'taxocommerce-import-export' )
 								: __( 'La cola iniciada se comprueba automáticamente; el CSV debe estar dentro de la cola privada.', 'taxocommerce-import-export' ) );
 						?></td></tr>
 					</tbody>
@@ -227,7 +227,7 @@ final class TaxoCommerce_Import_Export_Batch {
 					<button class="button" name="queue_action" value="stop"><?php esc_html_e( 'Detener importación actual', 'taxocommerce-import-export' ); ?></button>
 					<button class="button" name="queue_action" value="tick"><?php esc_html_e( 'Procesar siguiente bloque', 'taxocommerce-import-export' ); ?></button>
 				</form>
-				<p class="description"><?php esc_html_e( 'Cada bloque lanza inmediatamente el siguiente; Action Scheduler y WP-Cron son solo respaldo. La velocidad regula el tamaño de lote en función de tiempo y memoria, sin esperas entre bloques. Detener conserva el offset.', 'taxocommerce-import-export' ); ?></p>
+				<p class="description"><?php esc_html_e( 'Cada bloque lanza inmediatamente el siguiente por HTTP interno. La velocidad regula el tamaño de lote según tiempo y memoria, sin tareas programadas. entre bloques. Detener conserva el offset.', 'taxocommerce-import-export' ); ?></p>
 				<p id="tc-ie-batch-live" role="status" aria-live="polite" class="notice notice-info inline" style="padding:9px;margin-top:10px;">Consultando ejecución continua…</p>
 			</div>
 		</div>
@@ -1442,19 +1442,19 @@ Deny from all
 	}
 
 	/**
-	 * Watchdog only: normal CSV blocks never wait for Action Scheduler.
-	 * This path can recover a failed loopback when cron eventually runs.
+	 * Retire previous scheduled fallbacks once; keep active CSV state and files.
+	 *
+	 * @return void
 	 */
-	private function schedule( $delay = 60 ) {
-		$delay = max( 60, absint( $delay ) );
-		if ( function_exists( 'as_schedule_single_action' )
-			&& ( ! function_exists( 'as_has_scheduled_action' )
-				|| ! as_has_scheduled_action( self::WORKER_HOOK, array(), self::AS_GROUP ) ) ) {
-			as_schedule_single_action( time() + $delay, self::WORKER_HOOK, array(), self::AS_GROUP, true, 10 );
+	public function retire_legacy_schedule() {
+		if ( 'yes' === get_option( 'taxocommerce_ie_batch_schedule_retired_0429', '' ) ) {
+			return;
 		}
-		if ( false === wp_next_scheduled( self::WORKER_HOOK ) ) {
-			wp_schedule_single_event( time() + $delay, self::WORKER_HOOK );
+		if ( function_exists( 'as_unschedule_all_actions' ) ) {
+			as_unschedule_all_actions( self::WORKER_HOOK );
 		}
+		wp_unschedule_hook( self::WORKER_HOOK );
+		update_option( 'taxocommerce_ie_batch_schedule_retired_0429', 'yes', false );
 	}
 
 	/** Dispatch the next bounded request immediately via local loopback. */
@@ -1465,7 +1465,6 @@ Deny from all
 			return;
 		}
 		$token = (string) ( $state['dispatch_token'] ?? '' );
-		$this->schedule( 60 ); // Backup only.
 		if ( '' === $token ) {
 			return;
 		}
@@ -1480,7 +1479,7 @@ Deny from all
 			),
 		) );
 		if ( is_wp_error( $response ) ) {
-			$state['message'] = __( 'Falló la autollamada; la recuperación por cron y desde el administrador sigue disponible.', 'taxocommerce-import-export' );
+			$state['message'] = __( 'Falló la autollamada; se reintentará con nuevas peticiones a WordPress o desde el administrador.', 'taxocommerce-import-export' );
 			$this->store_state( $state );
 		}
 	}

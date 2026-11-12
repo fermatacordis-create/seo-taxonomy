@@ -42,14 +42,12 @@ def main():
     for slug, (icon, description) in PLUGINS.items():
         # Every independent plugin exposes its own bundled changelog.
         # Keep the source generated from the canonical template, never from Core.
-        history_css = history_php = history_html = ""
-        history_css = ".tc-family-history{margin-top:11px;max-width:680px;border:1px solid #dfe6ef;border-radius:7px;background:#fff;color:#26354c}.tc-family-history summary{padding:9px 12px;cursor:pointer;font-size:13px;font-weight:600}.tc-family-history summary:focus-visible{outline:2px solid #1769de;outline-offset:2px}.tc-family-history__content{max-height:290px;overflow:auto;padding:12px;border-top:1px solid #e4e9f0;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.6 monospace}"
+        history_php = history_html = ""
         history_php = "    $tc_history_file = dirname( __DIR__ ) . '/CHANGELOG.md';\n    $tc_history = is_readable( $tc_history_file ) ? file_get_contents( $tc_history_file ) : '';\n    $tc_history_labels = array(\n        'es' => 'Historial de versiones y mejoras',\n        'en' => 'Version history and improvements',\n        'fr' => 'Historique des versions et améliorations',\n        'de' => 'Versionsverlauf und Verbesserungen',\n        'nl' => 'Versiegeschiedenis en verbeteringen',\n    );\n    $tc_history_label = __( 'Version history and improvements', '__TC_DOMAIN__' );\n    if ( 'Version history and improvements' === $tc_history_label && isset( $tc_history_labels[ $tc_language ] ) ) {\n        $tc_history_label = $tc_history_labels[ $tc_language ];\n    }\n"
         history_html = "            <?php if ( is_string( $tc_history ) && '' !== trim( $tc_history ) ) : ?>\n                <details class=\"tc-family-history\">\n                    <summary><?php echo esc_html( $tc_history_label ); ?></summary>\n                    <div class=\"tc-family-history__content\"><?php echo esc_html( $tc_history ); ?></div>\n                </details>\n            <?php endif; ?>\n"
         result = (template
                   .replace("__TC_DOMAIN__", "taxocommerce-" + slug)
                   .replace("__TC_ICON__", icon)
-                  .replace("__TC_HISTORY_CSS__", history_css)
                   .replace("__TC_HISTORY_PHP__", history_php)
                   .replace("__TC_HISTORY_HTML__", history_html)
                   .replace("__TC_DOMAIN__", "taxocommerce-" + slug))
@@ -69,7 +67,11 @@ def main():
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(result, encoding="utf-8")
     core_info_path = ROOT / "taxocommerce-core/includes/official-excerpt.php"
-    core_info = official_template.replace("__TC_DOMAIN__", "taxocommerce-core")
+    # Core's WP.org archive uses the official long slug as directory name,
+    # but its existing main file remains taxocommerce-core.php in every installation.
+    core_info = (official_template
+                 .replace("__TC_DOMAIN__", "taxocommerce-core")
+                 .replace("$plugin_file = $plugin_dir . '/' . basename( $plugin_dir ) . '.php';", "$plugin_file = $plugin_dir . '/taxocommerce-core.php';"))
     if args.check:
         if not core_info_path.is_file() or core_info_path.read_text(encoding="utf-8") != core_info:
             errors.append("core:official")

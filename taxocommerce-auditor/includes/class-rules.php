@@ -359,6 +359,51 @@ final class Rules {
         );
     }
 
+    /**
+     * Read canonical SEO category assignments from seo_relations once per PHP
+     * request. The cache lives only for this request: subsequent AJAX batches
+     * read the current database, not a persisted snapshot or term_meta.
+     *
+     * Null means that the canonical table cannot be queried; do not infer
+     * missing relationships from unavailable evidence.
+     *
+     * @return array<int, bool>|null
+     */
+    private static function category_secondary_hub_map() {
+        static $assignments = null;
+        static $queried = false;
+
+        if ( $queried ) {
+            return $assignments;
+        }
+        $queried = true;
+        global $wpdb;
+
+        if ( ! isset( $wpdb ) || ! is_object( $wpdb ) || ! method_exists( $wpdb, 'prepare' ) || ! method_exists( $wpdb, 'get_col' ) ) {
+            return null;
+        }
+
+        $table = $wpdb->prefix . 'seo_relations';
+        // Canonical relation direction: hub_secondary -> product_cat.
+        // One bounded query for the entire category scope, never one query per term.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Read-only canonical SEO relationship table; request-scoped cache avoids per-term queries.
+        $targets = $wpdb->get_col(
+            $wpdb->prepare(
+                'SELECT DISTINCT target_id FROM %i WHERE source_type = %s AND target_type = %s AND relation_type = %s',
+                $table,
+                'hub_secondary',
+                'product_cat',
+                'hub_secondary_to_category'
+            )
+        );
+        if ( ! is_array( $targets ) || ! empty( $wpdb->last_error ) ) {
+            return null;
+        }
+
+        $assignments = array_fill_keys( array_filter( array_map( 'absint', $targets ) ), true );
+        return $assignments;
+    }
+
     private static function inspect_category( \WP_Term $term ) {
         $id = $term->term_id;
         $title = trim( (string) $term->name );
@@ -366,7 +411,7 @@ final class Rules {
         $slug = trim( (string) $term->slug );
         $count = absint( $term->count );
         $findings = array();
-        $parents = array_filter( array_map( 'absint', (array) get_term_meta( $id, '_taxocommerce_core_parent_hub_secondary', false ) ) );
+        $secondary_hubs = self::category_secondary_hub_map();
         $vocab = self::vocabulary_count( 'product_cat', $id );
 
         if ( $count > 0 && $body === '' ) {
@@ -428,8 +473,8 @@ final class Rules {
             );
         }
 
-        if ( $count > 0 && ! $parents && defined( 'TAXOCOMMERCE_CORE_VERSION' ) ) {
-            $findings[] = self::finding( 'category_no_native_secondary_hub', 'low', 'product_cat', $id, $title, __( 'No consta un Hub secundario en term_meta de Core.', 'taxocommerce-auditor' ), __( 'Comprobar si el vínculo existe en el modelo nativo o la categoría es deliberadamente independiente.', 'taxocommerce-auditor' ) );
+        if ( is_array( $secondary_hubs ) && ! isset( $secondary_hubs[ $id ] ) ) {
+            $findings[] = self::finding( 'category_no_native_secondary_hub', 'low', 'product_cat', $id, $title, __( 'No existe relación hub_secondary_to_category en seo_relations.', 'taxocommerce-auditor' ), __( 'Vincular la categoría con un Hub secundario mediante la arquitectura SEO canónica.', 'taxocommerce-auditor' ) );
         }
 
         return array(

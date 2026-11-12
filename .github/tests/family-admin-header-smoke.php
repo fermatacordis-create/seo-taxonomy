@@ -119,16 +119,20 @@ foreach ( $slugs as $slug ) {
     tc_test_assert( 1 === substr_count( $html, '<details class="tc-family-history">' ), 'Exactly one collapsed version history: ' . $slug );
     tc_test_assert( false !== strpos( $html, '<summary>Historial de versiones y mejoras</summary>' ), 'Translated history title: ' . $slug );
     tc_test_assert( false === strpos( $html, '<details class="tc-family-history" open' ), 'History must be closed by default: ' . $slug );
-    tc_test_assert( 1 === substr_count( $html, '<details class="tc-family-info">' ), 'One official excerpt panel: ' . $slug );
-    tc_test_assert( 1 === substr_count( $html, '<div class="tc-family-panels">' ), 'One centered header controls zone: ' . $slug );
+    tc_test_assert( 0 === substr_count( $html, 'tc-family-info' ), 'No duplicated information panel: ' . $slug );
+    tc_test_assert( 1 === substr_count( $html, '<div class="tc-family-hero__history-zone">' ), 'One wide centered history zone: ' . $slug );
+    tc_test_assert( 1 === substr_count( $html, 'class="tc-family-hero__link"' ), 'One direct developer link under description: ' . $slug );
+    tc_test_assert( 1 === substr_count( $html, '<details' ), 'Only history is collapsible: ' . $slug );
     tc_test_assert( false === strpos( $html, 'name="tc_official_url"' ), 'The developer-owned link cannot be changed by a shop administrator: ' . $slug );
     $headers = get_file_data( $root . '/taxocommerce-' . $slug . '/taxocommerce-' . $slug . '.php', array( 'uri' => 'Plugin URI', 'description' => 'Description' ) );
-    tc_test_assert( false !== strpos( $html, esc_html( wp_strip_all_tags( $headers['description'] ) ) ), 'Local plugin Description shown: ' . $slug );
+    tc_test_assert( 1 === substr_count( $html, esc_html( wp_strip_all_tags( $headers['description'] ) ) ), 'Local plugin Description appears exactly once: ' . $slug );
     tc_test_assert( false !== strpos( $html, '<p class="tc-family-hero__desc">' . esc_html( wp_strip_all_tags( $headers['description'] ) ) . '</p>' ), 'Visible subtitle follows local plugin Description: ' . $slug );
     tc_test_assert( false !== strpos( $html, esc_html( $headers['uri'] ) ), 'Local Plugin URI linked: ' . $slug );
-    tc_test_assert( strpos( $html, '<details class="tc-family-info">' ) < strpos( $html, '<details class="tc-family-history">' ), 'Official excerpt at left of local history: ' . $slug );
-    tc_test_assert( false !== strpos( $html, '<summary>Información del plugin</summary>' ), 'Official excerpt translated in Spanish: ' . $slug );
-    tc_test_assert( false === strpos( $html, 'tc-family-info" open' ), 'Official excerpt closed by default: ' . $slug );
+    $description_end = strpos( $html, '</p>', strpos( $html, 'tc-family-hero__desc' ) );
+    $link_at = strpos( $html, 'class="tc-family-hero__link"' );
+    $history_at = strpos( $html, '<details class="tc-family-history">' );
+    tc_test_assert( false !== $link_at && false !== $description_end && $description_end < $link_at && $link_at < $history_at, 'Developer link directly below Description and before the centered history: ' . $slug );
+    tc_test_assert( false !== strpos( $html, '>Ver ficha oficial</a>' ), 'Official link localized in Spanish: ' . $slug );
     tc_test_assert( is_readable( $root . '/taxocommerce-' . $slug . '/includes/official-excerpt.php' ), 'Independent local plugin metadata renderer: ' . $slug );
     $changelog = $root . '/taxocommerce-' . $slug . '/CHANGELOG.md';
     tc_test_assert( is_readable( $changelog ), 'Bundled history is required: ' . $slug );
@@ -150,7 +154,7 @@ foreach ( $slugs as $slug ) {
     }
     tc_test_assert( 1 === count( $tc_test_styles ), 'No cross-plugin styles enqueued on ' . $slug );
     $styles = reset( $tc_test_styles );
-    tc_test_assert( false !== strpos( $styles['css'], '@media(max-width:600px)' ), 'Responsive header on ' . $slug );
+    tc_test_assert( false !== strpos( $styles['css'], '@media(max-width:700px)' ), 'Responsive header on ' . $slug );
     tc_test_assert( false !== strpos( $styles['css'], '.nav-tab-wrapper' ), 'Existing tabs retained on ' . $slug );
     tc_test_assert( false !== strpos( $styles['css'], 'grid-template-columns:74px minmax(' ), 'Three-zone centered header: ' . $slug );
 }
@@ -238,7 +242,9 @@ foreach ( array( 'core' ) as $other ) {
 $core_ui = file_get_contents( $root . '/taxocommerce-core/includes/class-taxocommerce-core-dashboard.php' );
 $tasks_ui = file_get_contents( $root . '/taxocommerce-tasks/taxocommerce-tasks.php' );
 tc_test_assert( false !== strpos( $core_ui, 'tcc-hero__metadata' ) && false !== strpos( $core_ui, 'TAXOCOMMERCE_CORE_RELEASE_DATE' ), 'Core hero version and date' );
-tc_test_assert( false !== strpos( $core_ui, 'tcc-hero__panels' ), 'Core presents the developer information and local changelog in a separate centered zone.' );
+tc_test_assert( false !== strpos( $core_ui, 'tcc-hero__history-zone' ), 'Core presents one wide centered history zone.' );
+tc_test_assert( false === strpos( $core_ui, 'tcc-hero__panels' ), 'Core has no duplicated information panel.' );
+tc_test_assert( 1 === substr_count( $core_ui, "\$tc_official_info->render( 'taxocommerce-core', \$tc_locale )" ), 'Core renders one developer link under its Description.' );
 tc_test_assert( false !== strpos( $core_ui, '<details class="tcc-hero__history">' ), 'Core has a collapsed history on its own dashboard.' );
 tc_test_assert( false !== strpos( $core_ui, "dirname( __DIR__ ) . '/CHANGELOG.md'" ), 'Core reads its own local changelog.' );
 tc_test_assert( false !== strpos( $core_ui, "'description' => 'Description'" ), 'Core title subtitle reads bundled plugin Description.' );
@@ -251,4 +257,4 @@ tc_test_assert( false !== strpos( $tasks_ui, '<div class="wrap"><nav class="nav-
 $tasks_data = get_file_data( $root . '/taxocommerce-tasks/taxocommerce-tasks.php', array( 'version' => 'Version', 'released' => 'Release Date' ) );
 tc_test_assert( false !== strpos( file_get_contents( $root . '/taxocommerce-tasks/readme.txt' ), 'Stable tag: ' . $tasks_data['version'] ), 'Tasks release version matches readme' );
 tc_test_assert( false !== strpos( $core_ui, "'/official-excerpt.php'" ), 'Core must load standalone developer metadata.' );
-echo "PASS: 20 local version histories + static Description / Plugin URI panels + Core." . PHP_EOL;
+echo "PASS: 20 three-zone headers, Description once, single developer link, wide collapsed history, version and date." . PHP_EOL;

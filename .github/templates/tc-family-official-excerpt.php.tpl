@@ -1,9 +1,9 @@
 <?php
 /**
- * Local developer information for a standalone TaxoCommerce plugin.
+ * WordPress-localized, static developer Plugin URI link for a standalone plugin.
  *
- * Uses only its bundled WordPress plugin headers. No remote request, cache,
- * WordPress.org API dependency or other TaxoCommerce plugin is required.
+ * Uses only its own bundled PHP plugin metadata. No remote requests, caches,
+ * options or TaxoCommerce Core dependency are required.
  *
  * @package TaxoCommerce
  */
@@ -11,66 +11,48 @@ defined( 'ABSPATH' ) || exit;
 
 return new class() {
     /**
-     * Localize the panel chrome. The plugin Description remains the author's
-     * own metadata, not a remotely fetched or machine-translated excerpt.
+     * Translate the link text using WordPress, with a local fallback.
      *
      * @param string $locale WordPress administration locale.
-     * @return array Two UI labels.
+     * @return string
      */
-    private function labels( $locale ) {
-        $labels = array(
-            'en' => array( 'Plugin information', 'Official plugin page' ),
-            'es' => array( 'Información del plugin', 'Ver ficha oficial' ),
-            'fr' => array( 'Informations sur le plugin', 'Voir la fiche officielle' ),
-            'de' => array( 'Plugininformationen', 'Offizielle Pluginseite' ),
-            'nl' => array( 'Plugininformatie', 'Officiële pluginpagina' ),
+    private function label( $locale ) {
+        $label = __( 'Official plugin page', '__TC_DOMAIN__' );
+        if ( 'Official plugin page' !== $label ) {
+            return $label;
+        }
+        $translations = array(
+            'es' => 'Ver ficha oficial',
+            'en' => 'Official plugin page',
+            'fr' => 'Voir la fiche officielle',
+            'de' => 'Offizielle Pluginseite',
+            'nl' => 'Officiële pluginpagina',
         );
         $language = strtolower( substr( (string) $locale, 0, 2 ) );
-        $chosen   = isset( $labels[ $language ] ) ? $labels[ $language ] : $labels['en'];
-        $english  = $labels['en'];
-        $native   = array(
-            __( 'Plugin information', '__TC_DOMAIN__' ),
-            __( 'Official plugin page', '__TC_DOMAIN__' ),
-        );
-        foreach ( $native as $index => $translated ) {
-            if ( $translated !== $english[ $index ] ) {
-                $chosen[ $index ] = $translated;
-            }
-        }
-        return $chosen;
+        return $translations[ $language ] ?? $translations['en'];
     }
 
     /**
-     * Show bundled Description and developer Plugin URI without a request.
+     * Render a single link underneath the visible plugin Description.
      *
-     * @param string $slug   Reserved for compatibility with existing headers.
+     * @param string $slug   Reserved for legacy renderer compatibility.
      * @param string $locale WordPress administration locale.
      * @return void
      */
     public function render( $slug, $locale ) {
-        $labels      = $this->labels( $locale );
         $plugin_dir  = dirname( __DIR__ );
         $plugin_file = $plugin_dir . '/' . basename( $plugin_dir ) . '.php';
         $headers     = is_readable( $plugin_file )
-            ? get_file_data( $plugin_file, array( 'uri' => 'Plugin URI', 'description' => 'Description' ), 'plugin' )
+            ? get_file_data( $plugin_file, array( 'uri' => 'Plugin URI' ), 'plugin' )
             : array();
-
-        $description = isset( $headers['description'] ) && is_string( $headers['description'] )
-            ? trim( wp_strip_all_tags( $headers['description'] ) )
-            : '';
         $page = isset( $headers['uri'] ) && is_string( $headers['uri'] )
             ? esc_url_raw( $headers['uri'], array( 'https' ) )
             : '';
 
-        echo '<details class="tc-family-info">';
-        echo '<summary>' . esc_html( $labels[0] ) . '</summary>';
-        echo '<div class="tc-family-info__content">';
-        if ( '' !== $description ) {
-            echo '<p>' . esc_html( $description ) . '</p>';
+        if ( '' === $page ) {
+            return;
         }
-        if ( $page ) {
-            echo '<p><a href="' . esc_url( $page ) . '" target="_blank" rel="noopener noreferrer">' . esc_html( $labels[1] ) . '</a></p>';
-        }
-        echo '</div></details>';
+
+        echo '<a class="tc-family-hero__link" href="' . esc_url( $page ) . '" target="_blank" rel="noopener noreferrer">' . esc_html( $this->label( $locale ) ) . '</a>';
     }
 };

@@ -22,7 +22,7 @@ def header_values(text: str) -> dict[str, str]:
 def check(slug: str, folder: Path) -> int:
     errors = []
     warnings = []
-    entry = folder / (slug + '.php')
+    entry = folder / (folder.name + '.php')
     readme = folder / 'readme.txt'
     if not entry.is_file():
         errors.append(f'Missing plugin entry file: {entry}')
@@ -50,8 +50,8 @@ def check(slug: str, folder: Path) -> int:
         errors.append('Missing License in readme.txt')
     if not php_headers.get('text domain'):
         errors.append('Missing Text Domain in PHP header')
-    elif php_headers['text domain'] != slug:
-        errors.append(f'Text Domain {php_headers["text domain"]!r} does not match folder {slug!r}')
+    elif php_headers['text domain'] != folder.name:
+        errors.append(f'Text Domain {php_headers["text domain"]!r} does not match folder {folder.name!r}')
     tags = [s.strip() for s in readme_headers.get('tags', '').split(',') if s.strip()]
     if len(tags) > 5:
         errors.append(f'WordPress.org allows at most 5 readme tags; found {len(tags)}')

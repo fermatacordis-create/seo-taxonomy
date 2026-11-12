@@ -3970,3 +3970,11 @@ msgstr "Zur IndexNow-Warteschlange hinzufügen"
 #: includes/class-taxocommerce-connections-admin.php includes/class-taxocommerce-google-bing-indexnow.php
 msgid "IndexNow puede activarse desde Conexiones de Insights si otro sistema no lo está gestionando. Bing Webmaster se usa aquí para informes de lectura."
 msgstr "IndexNow kann in Insights-Verbindungen aktiviert werden, sofern kein anderer Dienst die Meldungen verwaltet. Bing Webmaster wird hier nur für lesende Berichte verwendet."
+
+#: taxocommerce-google-bing.php
+msgid "Descargar JSON del plan de acción"
+msgstr "JSON des Aktionsplans herunterladen"
+
+#: taxocommerce-google-bing.php
+msgid "Abrir JSON del plan (móvil)"
+msgstr "JSON des Aktionsplans öffnen (Mobilgerät)"

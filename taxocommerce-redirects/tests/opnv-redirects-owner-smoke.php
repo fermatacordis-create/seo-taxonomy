@@ -49,6 +49,21 @@ namespace {
     $slug();
     check_redirect_owner( array( array( '/viejo/', '/nuevo/', 301 ) ) === $GLOBALS['saved'], 'Slug changes from OPNV are stored here once claimed' );
 
+    // The new checkbox disables the runtime, even when storage is ready.
+    $GLOBALS['options']['tc_redirects_enabled'] = 'no';
+    check_redirect_owner( false === \TaxoCommerce\Redirects\Engine::enabled(), 'Administrator disabled Redirects' );
+    check_redirect_owner( 'disabled' === \TaxoCommerce\Redirects\Engine::external_owner(), 'Disabled engine yields the request' );
+    check_redirect_owner( 'opnv' === owner_now(), 'Disabled Redirects does not claim OPNV' );
+    \TaxoCommerce\Redirects\Engine::maybe_redirect(); // Must return before is_admin().
+    $GLOBALS['saved'] = array();
+    $slug();
+    check_redirect_owner( array() === $GLOBALS['saved'], 'Disabled engine does not store OPNV slug changes' );
+
+    // Re-enabling restores the existing owner-negotiation behavior.
+    $GLOBALS['options']['tc_redirects_enabled'] = 'yes';
+    check_redirect_owner( true === \TaxoCommerce\Redirects\Engine::enabled(), 'Re-enabled Redirects' );
+    check_redirect_owner( 'taxocommerce' === owner_now(), 'Enabled Redirects claims OPNV again' );
+
     // The admin chose OPNV for redirects: this engine stands down and claims nothing.
     $GLOBALS['tc_owner'] = 'opnv';
     check_redirect_owner( 'opnv' === \TaxoCommerce\Redirects\Engine::external_owner(), 'Admin choice of another owner is seen' );

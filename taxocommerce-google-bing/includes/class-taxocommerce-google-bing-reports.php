@@ -478,9 +478,100 @@ final class TaxoCommerce_Google_Bing_Reports {
             )
         );
         echo '</div>';
+        self::render_ga4_ecommerce( $data );
         self::render_ga4_pages( $data['pages'] );
         echo '<p class="description">' . esc_html__( 'Purchases and key events are shown only when GA4 receives the corresponding events.', 'taxocommerce-google-bing' ) . '</p>';
         echo '</section>';
+    }
+
+    /**
+     * GA4 ecommerce event counts are independent: these are not unique users
+     * or a linked checkout journey. Item counts are quantities, not carts.
+     *
+     * @param array $data Cached GA4 snapshot.
+     */
+    private static function render_ga4_ecommerce( $data ) {
+        $current  = (array) ( $data['funnel']['current'] ?? array() );
+        $previous = (array) ( $data['funnel']['previous'] ?? array() );
+        $events   = array(
+            'view_item'      => __( 'Producto visto', 'taxocommerce-google-bing' ),
+            'add_to_cart'    => __( 'Añadir al carrito', 'taxocommerce-google-bing' ),
+            'view_cart'      => __( 'Ver carrito', 'taxocommerce-google-bing' ),
+            'begin_checkout' => __( 'Iniciar compra', 'taxocommerce-google-bing' ),
+            'purchase'       => __( 'Compra registrada', 'taxocommerce-google-bing' ),
+        );
+        $labels = array_values( $events );
+        $now    = array();
+        $before = array();
+        foreach ( array_keys( $events ) as $event ) {
+            $now[]    = max( 0, (int) ( $current[ $event ] ?? 0 ) );
+            $before[] = max( 0, (int) ( $previous[ $event ] ?? 0 ) );
+        }
+
+        echo '<div class="tgb-rank-card"><h3>' . esc_html__( 'Interacciones de compra (GA4)', 'taxocommerce-google-bing' ) . '</h3>';
+        echo '<p class="description">' . esc_html__( 'Eventos agregados: no representan compradores únicos ni pasos consecutivos del mismo usuario.', 'taxocommerce-google-bing' ) . '</p>';
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- These private chart/legend builders escape SVG attributes, chart labels and HTML labels before returning trusted markup.
+        echo self::svg_bar_chart( $labels, array(
+            array( 'label' => __( 'Periodo actual', 'taxocommerce-google-bing' ), 'values' => $now ),
+            array( 'label' => __( 'Periodo anterior', 'taxocommerce-google-bing' ), 'values' => $before, 'previous' => true ),
+        ), __( 'Eventos', 'taxocommerce-google-bing' ) );
+        echo self::legend( array(
+            array( 'label' => __( 'Periodo actual', 'taxocommerce-google-bing' ) ),
+            array( 'label' => __( 'Periodo anterior', 'taxocommerce-google-bing' ), 'previous' => true ),
+        ) );
+        // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
+        echo '</div>';
+
+        echo '<div class="tgb-rank-card"><h3>' . esc_html__( 'Productos añadidos al carrito (GA4)', 'taxocommerce-google-bing' ) . '</h3>';
+        $items = (array) ( $data['cart_products'] ?? array() );
+        if ( empty( $items['available'] ) ) {
+            echo '<p>' . esc_html__( 'El informe guardado no incluye todavía el desglose por producto. Pulsa «Actualizar datos de Google Analytics 4» para solicitarlo.', 'taxocommerce-google-bing' ) . '</p>';
+            if ( ! empty( $items['error'] ) ) {
+                echo '<p class="description">' . esc_html( (string) $items['error'] ) . '</p>';
+            }
+            echo '</div>';
+            return;
+        }
+
+        $rows = (array) ( $items['rows'] ?? array() );
+        if ( empty( $rows ) ) {
+            echo '<p>' . esc_html__( 'GA4 no devuelve artículos identificados para el periodo seleccionado.', 'taxocommerce-google-bing' ) . '</p></div>';
+            return;
+        }
+
+        $top = array_slice( $rows, 0, 10 );
+        $short_labels = array();
+        foreach ( $top as $item ) {
+            $short_labels[] = function_exists( 'mb_strimwidth' )
+                ? mb_strimwidth( (string) $item['name'], 0, 28, '…' )
+                : substr( (string) $item['name'], 0, 26 );
+        }
+        // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- These private chart/legend builders escape SVG attributes, chart labels and HTML labels before returning trusted markup.
+        echo self::svg_bar_chart( $short_labels, array(
+            array( 'label' => __( 'Unidades añadidas', 'taxocommerce-google-bing' ), 'values' => array_column( $top, 'added' ) ),
+            array( 'label' => __( 'Unidades compradas', 'taxocommerce-google-bing' ), 'values' => array_column( $top, 'purchased' ) ),
+        ), __( 'Unidades', 'taxocommerce-google-bing' ) );
+        echo self::legend( array(
+            array( 'label' => __( 'Unidades añadidas', 'taxocommerce-google-bing' ) ),
+            array( 'label' => __( 'Unidades compradas', 'taxocommerce-google-bing' ) ),
+        ) );
+        // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
+        echo '<div class="tgb-table-scroll"><table class="widefat striped"><thead><tr>';
+        echo '<th>' . esc_html__( 'Producto', 'taxocommerce-google-bing' ) . '</th>';
+        echo '<th>' . esc_html__( 'ID de GA4', 'taxocommerce-google-bing' ) . '</th>';
+        echo '<th>' . esc_html__( 'Unidades vistas', 'taxocommerce-google-bing' ) . '</th>';
+        echo '<th>' . esc_html__( 'Unidades añadidas', 'taxocommerce-google-bing' ) . '</th>';
+        echo '<th>' . esc_html__( 'Unidades compradas', 'taxocommerce-google-bing' ) . '</th>';
+        echo '</tr></thead><tbody>';
+        foreach ( $rows as $item ) {
+            echo '<tr><td>' . esc_html( (string) $item['name'] ) . '</td>';
+            echo '<td>' . esc_html( (string) $item['id'] ) . '</td>';
+            echo '<td>' . esc_html( number_format_i18n( (int) $item['viewed'] ) ) . '</td>';
+            echo '<td>' . esc_html( number_format_i18n( (int) $item['added'] ) ) . '</td>';
+            echo '<td>' . esc_html( number_format_i18n( (int) $item['purchased'] ) ) . '</td></tr>';
+        }
+        echo '</tbody></table></div>';
+        echo '<p class="description">' . esc_html__( 'Las unidades añadidas no equivalen a carritos abandonados. GA4 no identifica por sí solo al comprador ni confirma qué artículos siguen en un carrito.', 'taxocommerce-google-bing' ) . '</p></div>';
     }
 
     private static function render_ga4_pages( $pages ) {
@@ -637,6 +728,7 @@ final class TaxoCommerce_Google_Bing_Reports {
                 'current'  => self::ga4_event_map( $current_reports[7] ),
                 'previous' => self::ga4_event_map( $previous_reports[7] ),
             ),
+            'cart_products' => self::ga4_cart_products( $property, $ranges['current'] ),
             'daily' => array(
                 'labels'              => $axis_current['labels'],
                 'current_sessions'    => $daily_current['sessions'],
@@ -649,6 +741,83 @@ final class TaxoCommerce_Google_Bing_Reports {
         );
 
         return $out;
+    }
+
+    /**
+     * Independent, optional GA4 item report. Any API incompatibility leaves the
+     * nine existing GA4 reports untouched, including their saved snapshots.
+     */
+    private static function ga4_cart_products( $property, $range ) {
+        $fallback = array( 'available' => false, 'rows' => array() );
+        $token = TaxoCommerce_Google_Bing_Connections::access_token(
+            'https://www.googleapis.com/auth/analytics.readonly'
+        );
+        if ( is_wp_error( $token ) ) {
+            return $fallback;
+        }
+
+        $request = array(
+            'dateRanges' => array( array(
+                'startDate' => (string) $range['start'],
+                'endDate'   => (string) $range['end'],
+            ) ),
+            'dimensions' => array(
+                array( 'name' => 'itemName' ),
+                array( 'name' => 'itemId' ),
+            ),
+            'metrics' => array(
+                array( 'name' => 'itemsViewed' ),
+                array( 'name' => 'itemsAddedToCart' ),
+                array( 'name' => 'itemsPurchased' ),
+            ),
+            'orderBys' => array( array(
+                'metric' => array( 'metricName' => 'itemsAddedToCart' ),
+                'desc'   => true,
+            ) ),
+            'limit' => 50,
+        );
+
+        $response = wp_remote_post(
+            'https://analyticsdata.googleapis.com/v1beta/properties/' . rawurlencode( $property ) . ':runReport',
+            array(
+                'timeout' => 30,
+                'headers' => array(
+                    'Authorization' => 'Bearer ' . $token,
+                    'Content-Type'  => 'application/json',
+                    'Accept'        => 'application/json',
+                ),
+                'body' => wp_json_encode( $request ),
+            )
+        );
+        if ( is_wp_error( $response ) ) {
+            return $fallback;
+        }
+        $code = (int) wp_remote_retrieve_response_code( $response );
+        $body = json_decode( (string) wp_remote_retrieve_body( $response ), true );
+        if ( $code < 200 || $code >= 300 || ! is_array( $body ) ) {
+            return $fallback;
+        }
+
+        $rows = array();
+        foreach ( (array) ( $body['rows'] ?? array() ) as $row ) {
+            $name = sanitize_text_field( (string) self::row_dimension( $row, 0 ) );
+            $id   = sanitize_text_field( (string) self::row_dimension( $row, 1 ) );
+            $added = max( 0, (int) self::row_metric( $row, 1 ) );
+            $viewed = max( 0, (int) self::row_metric( $row, 0 ) );
+            $purchased = max( 0, (int) self::row_metric( $row, 2 ) );
+            if ( 0 === $added && 0 === $purchased ) {
+                continue;
+            }
+            $rows[] = array(
+                'name' => '' !== $name ? $name : __( 'Producto sin nombre', 'taxocommerce-google-bing' ),
+                'id' => $id,
+                'viewed' => $viewed,
+                'added' => $added,
+                'purchased' => $purchased,
+            );
+        }
+
+        return array( 'available' => true, 'rows' => $rows );
     }
 
     private static function ga4_batch( $property, $range ) {

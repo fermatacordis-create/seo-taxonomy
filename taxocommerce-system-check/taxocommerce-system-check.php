@@ -3,7 +3,7 @@
  * Plugin Name: TaxoCommerce System Check
  * Plugin URI: https://asociacionfocazul.com/taxocommerce-system-check/
  * Description: Independent WordPress, server and plugin diagnostics with local checks, reports and optional administrator notifications.
- * Version: 0.2.31
+ * Version: 0.2.32
  * Release Date: 2026-11-10
  * Requires at least: 6.2
  * Requires PHP: 7.4
@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) || exit;
 
 require_once __DIR__ . '/includes/admin-branding.php';
 
-define( 'TAXOCOMMERCE_SYSTEM_CHECK_VERSION', '0.2.31' );
+define( 'TAXOCOMMERCE_SYSTEM_CHECK_VERSION', '0.2.32' );
 define( 'TAXOCOMMERCE_SYSTEM_CHECK_FILE', __FILE__ );
 define( 'TAXOCOMMERCE_SYSTEM_CHECK_PATH', plugin_dir_path( __FILE__ ) );
 define( 'TAXOCOMMERCE_SYSTEM_CHECK_URL', plugin_dir_url( __FILE__ ) );

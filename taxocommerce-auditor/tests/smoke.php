@@ -184,9 +184,31 @@ $GLOBALS['tc_wc']->attrs = array( new WC_Product_Attribute( 'Tension', array( '1
 $conflict = Rules::inspect( 'products', get_post( 4 ) );
 verify( in_array( 'product_attribute_title_conflict', array_column( $conflict['findings'], 'code' ), true ), 'Legacy voltage conflict rule' );
 
+// Canonical relationship fixtures: only seo_relations can determine parent hubs.
+// WordPress term_meta remains empty in this smoke suite.
+class TC_Auditor_Fake_DB {
+    public $prefix = 'wp_';
+    public $last_error = '';
+    public $queries = 0;
+    public function prepare( $sql, ...$args ) {
+        return str_replace( array( '%i', '%s' ), array( '%s', '%s' ), $sql );
+    }
+    public function get_col( $query ) {
+        ++$this->queries;
+        return array( 11, 15 );
+    }
+}
+$GLOBALS['wpdb'] = new TC_Auditor_Fake_DB();
+
 $category = Rules::inspect( 'categories', get_term( 11 ) );
 verify( in_array( 'category_missing_description', array_column( $category['findings'], 'code' ), true ), 'Missing native category description' );
 verify( ! in_array( 'category_missing_excerpt', array_column( $category['findings'], 'code' ), true ), 'No excerpt false positive when field has not been migrated' );
+verify( ! in_array( 'category_no_native_secondary_hub', array_column( $category['findings'], 'code' ), true ), 'Canonical hub relation prevents false orphan despite empty term_meta' );
+$unlinked_category = Rules::inspect( 'categories', get_term( 16 ) );
+verify( in_array( 'category_no_native_secondary_hub', array_column( $unlinked_category['findings'], 'code' ), true ), 'Missing canonical hub relation is reported' );
+$empty_unlinked_category = Rules::inspect( 'categories', new WP_Term( 31, 'Categoria vacia sin hub', 0 ) );
+verify( in_array( 'category_no_native_secondary_hub', array_column( $empty_unlinked_category['findings'], 'code' ), true ), 'Empty categories also require a secondary hub' );
+verify( 1 === $GLOBALS['wpdb']->queries, 'SEO relations loaded once per PHP request, not once per category' );
 $small = Category_Review::inspect( get_term( 16 ) );
 verify( ! empty( $small['inventory']['review_merge'] ), 'Small category review' );
 verify( ! empty( $small['inventory']['merge_proposal'] ), 'Semantically backed sibling suggestion' );

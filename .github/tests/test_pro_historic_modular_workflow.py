@@ -59,9 +59,9 @@ class HistoricModularDeployTests(unittest.TestCase):
     def test_only_existing_modules_and_sha256_verified_by_wordpress(self):
         text = self.workflow
         self.assertIn("find . -maxdepth 1 -mindepth 1 -type d -name 'taxocommerce-*'", text)
-        self.assertIn('if [ ! -f "$module/$module.php" ]; then', text)
-        self.assertIn('for module in "${installed_modules[@]}"; do', text)
-        self.assertIn('zip -qr "$package" .', text)
+        self.assertIn('test -f "$module/$module.php"', text)
+        self.assertIn('for module in "${selected_modules[@]}"; do', text)
+        self.assertIn('zip -q "$package" "${changed_files[@]}"', text)
         self.assertIn("unzip -t \"$package\"", text)
         self.assertIn("unzip -Z1 \"$package\"", text)
         self.assertIn("manifest_sha256", text)
@@ -71,16 +71,35 @@ class HistoricModularDeployTests(unittest.TestCase):
         self.assertIn("zipfile.ZipFile(package)", text)
         self.assertIn("trap cleanup_handoff EXIT", text)
 
-    def test_release_archive_ignores_hidden_developer_files(self):
+    def test_only_deployable_changed_files_are_transferred(self):
         text = self.workflow
-        self.assertIn("-x 'tests/*'", text)
-        self.assertIn("-x 'uploads/*'", text)
-        self.assertIn("-x 'node_modules/*'", text)
-        self.assertIn("-x '.*'", text)
-        self.assertIn("-x '*/.*'", text)
-        self.assertIn("ftp-deploy-sync-state", text)
-        self.assertIn(".taxocommerce-deploy", text)
+        selector = (ROOT / '.github/scripts/select_pro_release_delta.py').read_text(encoding='utf-8')
+        self.assertIn('select_pro_release_delta.py', text)
+        self.assertIn('fetch-depth: 0', text)
+        self.assertIn("selected_count != '0'", text)
+        self.assertIn('for module in "${selected_modules[@]}"; do', text)
+        self.assertIn('zip -q "$package" "${changed_files[@]}"', text)
+        self.assertIn('modules=$SELECTED_MODULES_JSON', text)
+        self.assertIn('if set(updated_by_slug) != set(selected):', text)
+        self.assertIn('manifest_sha256', text)
+        self.assertIn('verified_files', text)
+        self.assertIn('last_successful_source', selector)
+        self.assertNotIn('actions/jobs/', selector)
+        self.assertIn('branch=staging&status=success', selector)
+        self.assertIn('merge-base', selector)
+        for excluded in ('tests', 'uploads', 'node_modules', '.bak', '.log', '.pot'):
+            self.assertIn(excluded, selector)
 
+    def test_readme_and_changelog_remain_on_disk_but_only_changed_files_are_packed(self):
+        text = self.workflow
+        self.assertIn('test -f "$module/readme.txt"', text)
+        self.assertNotIn('zip -qr "$package" .', text)
+        self.assertNotIn('for module in "${installed_modules[@]}"; do', text)
+        self.assertIn("DELTA_FILE: ${{ runner.temp }}/taxocommerce-pro-changed.json", text)
+        modules = sorted(d for d in ROOT.glob('taxocommerce-*')
+                         if d.is_dir() and MODULE.fullmatch(d.name))
+        for module in modules:
+            self.assertTrue((module / 'CHANGELOG.md').is_file(), module.name)
     def test_every_source_module_has_version_and_stable_tag(self):
         modules = sorted(
             d for d in ROOT.glob("taxocommerce-*")
@@ -100,11 +119,12 @@ class HistoricModularDeployTests(unittest.TestCase):
                 errors.append(module.name + ": missing Version or Stable tag")
         self.assertEqual(errors, [])
 
-    def test_runtime_metadata_mismatch_is_only_a_release_warning(self):
+    def test_does_not_scan_every_plugin_or_deploy_when_nothing_changed(self):
         workflow = self.workflow
-        self.assertIn('print(f"::warning::{module.name}: plugin Version', workflow)
-        self.assertIn("missing plugin Version or readme Stable tag", workflow)
-
+        self.assertNotIn('Validate all TaxoCommerce version headers and readmes', workflow)
+        self.assertIn('if: steps.delta.outputs.selected_count != \'0\'', workflow)
+        self.assertIn('Sincronizar SOLO archivos modificados', workflow)
+        self.assertIn('actions: read', workflow)
     def test_source_inventory_is_a_valid_modular_family(self):
         modules = sorted(
             d for d in ROOT.glob("taxocommerce-*")

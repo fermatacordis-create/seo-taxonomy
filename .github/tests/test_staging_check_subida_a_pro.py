@@ -72,10 +72,11 @@ class GatedPipelineContract(unittest.TestCase):
         self.assertIn("uses: ./.github/workflows/deploy-staging.yml", self.pipeline)
         self.assertIn("uses: ./.github/workflows/taxocommerce-plugin-check.yml", self.pipeline)
         self.assertIn("uses: ./.github/workflows/despliege_de_main_a_pro.yml", self.pipeline)
-        self.assertIn("plugin: all", self.pipeline)
+        self.assertIn("plugin: ${{ inputs.target_plugin || 'changed' }}", self.pipeline)
         self.assertIn("needs: staging", self.pipeline)
         self.assertIn("needs: [staging, plugin-check]", self.pipeline)
         self.assertIn("needs.plugin-check.result == 'success'", self.pipeline)
+        self.assertIn("target_plugin: ${{ inputs.target_plugin || '' }}", self.pipeline)
         self.assertIn("source_sha:", self.pipeline)
         self.assertIn("ignore-warnings: false", self.check)
         self.assertIn("ignore-errors: false", self.check)
@@ -92,6 +93,9 @@ class GatedPipelineContract(unittest.TestCase):
         self.assertIn('test "$GITHUB_REF_NAME" = "staging"', self.pro)
         self.assertIn('ACTUAL_SHA="$(git rev-parse HEAD)"', self.pro)
         self.assertIn('if [ "$ACTUAL_SHA" != "$EXPECTED_SHA" ]; then', self.pro)
+        # PRO's reusable workflow requires actions:read to find the last safe SHA.
+        production = self.pipeline.split("  production:", 1)[1].split("  report-failure:", 1)[0]
+        self.assertIn("      actions: read", production)
         self.assertIn("manifest_sha256", self.pro)
         self.assertIn("verified_files", self.pro)
 

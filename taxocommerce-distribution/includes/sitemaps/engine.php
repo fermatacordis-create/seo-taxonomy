@@ -46,6 +46,15 @@ function tcdist_sitemap_sitemap_filename_is_allowed($filename)
  *
  * @return string '' when Distribution owns the public sitemap, otherwise the owner id.
  */
+/**
+ * Administrator preference. Existing stores keep publishing until disabled.
+ *
+ * @return bool
+ */
+function tcdist_sitemap_enabled() {
+    return 'no' !== get_option( 'tcdist_sitemap_enabled', 'yes' );
+}
+
 function tcdist_sitemap_external_owner()
 {
     if (defined('TCDIST_LEGACY_SITEMAP_ACTIVE') && TCDIST_LEGACY_SITEMAP_ACTIVE) {
@@ -53,6 +62,10 @@ function tcdist_sitemap_external_owner()
     }
 
     $owner = sanitize_key((string) apply_filters('taxocommerce_sitemap_owner', 'taxocommerce'));
+
+    if ( ! tcdist_sitemap_enabled() && ( '' === $owner || 'taxocommerce' === $owner ) ) {
+        return 'wordpress';
+    }
 
     return ($owner === '' || $owner === 'taxocommerce') ? '' : $owner;
 }
@@ -91,6 +104,15 @@ function tcdist_sitemap_register_sitemap_rewrite_rules()
     );
 }
 if ( ! defined( 'TCDIST_LEGACY_SITEMAP_ACTIVE' ) || ! TCDIST_LEGACY_SITEMAP_ACTIVE ) { add_action('init', 'tcdist_sitemap_register_sitemap_rewrite_rules', 1); }
+
+/** Remove stale Distribution rules during a settings-change rewrite flush. */
+function tcdist_sitemap_filter_rewrite_rules( $rules ) {
+    if ( '' !== tcdist_sitemap_external_owner() && is_array( $rules ) ) {
+        unset( $rules['^(wp-sitemap\\.xml|sitemap(?:[_-][a-z0-9-]+)?\\.xml)$'] );
+    }
+    return $rules;
+}
+add_filter( 'rewrite_rules_array', 'tcdist_sitemap_filter_rewrite_rules', 100 );
 
 /**
  * Disables the native WordPress sitemap. This module is the only public
@@ -1384,6 +1406,10 @@ function tcdist_sitemap_get_existing_sitemaps()
  */
 function tcdist_sitemap_schedule_sitemap_regeneration($post_id = 0)
 {
+    if ( '' !== tcdist_sitemap_external_owner() ) {
+        return;
+    }
+
     $post_id = absint($post_id);
 
     if (
@@ -1420,6 +1446,10 @@ if ( ! defined( 'TCDIST_LEGACY_SITEMAP_ACTIVE' ) || ! TCDIST_LEGACY_SITEMAP_ACTI
  */
 function tcdist_sitemap_regenerate_sitemaps_silent()
 {
+    if ( '' !== tcdist_sitemap_external_owner() ) {
+        return;
+    }
+
     $result = tcdist_sitemap_create_sitemaps();
 
     if (!is_array($result) || ($result['type'] ?? '') !== 'success') {
@@ -1439,6 +1469,10 @@ if ( ! defined( 'TCDIST_LEGACY_SITEMAP_ACTIVE' ) || ! TCDIST_LEGACY_SITEMAP_ACTI
  */
 function tcdist_sitemap_ensure_initial_sitemap_generation()
 {
+    if ( '' !== tcdist_sitemap_external_owner() ) {
+        return;
+    }
+
     $storage = tcdist_sitemap_sitemap_storage();
     if (is_wp_error($storage) || is_file($storage['dir'] . 'sitemap.xml')) {
         return;

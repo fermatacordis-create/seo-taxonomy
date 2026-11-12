@@ -46,8 +46,17 @@ final class TaxoCommerce_Google_Bing_Google_Service {
     }
 
     public static function analytics_run_report( $request = array() ) {
-        return TaxoCommerce_Google_Bing_Connections::google_analytics_report(
-            is_array( $request ) ? $request : array()
+        $settings = TaxoCommerce_Google_Bing_Connections::google_settings();
+        $property = preg_replace( '/\\D+/', '', (string) ( $settings['analytics_property_id'] ?? '' ) );
+        if ( '' === $property || empty( $settings['service_account_json'] ) ) {
+            return new WP_Error( 'tgb_ga4_not_configured', 'Falta la propiedad o cuenta de servicio de Google Analytics 4.' );
+        }
+
+        return self::request(
+            'POST',
+            'https://analyticsdata.googleapis.com/v1beta/properties/' . rawurlencode( $property ) . ':runReport',
+            is_array( $request ) ? $request : array(),
+            'https://www.googleapis.com/auth/analytics.readonly'
         );
     }
 
@@ -98,9 +107,8 @@ final class TaxoCommerce_Google_Bing_Google_Service {
         return $out;
     }
 
-    private static function request( $method, $url, $body = null ) {
-        $settings = TaxoCommerce_Google_Bing_Connections::google_settings();
-        $token = TaxoCommerce_Google_Bing_Connections::access_token( $settings );
+    private static function request( $method, $url, $body = null, $scope = 'https://www.googleapis.com/auth/webmasters.readonly' ) {
+        $token = TaxoCommerce_Google_Bing_Connections::access_token( $scope );
         if ( is_wp_error( $token ) ) {
             return $token;
         }

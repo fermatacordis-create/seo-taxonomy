@@ -1,3 +1,70 @@
+## [1.1.49] — 2026-11-11 — Corrección visual de botones de Analysis (#2546)
+
+- Restablece el contraste de «Crear informe» y «Ejecutar informe completo» (fondo azul, texto blanco), antes ocultos por los estilos heredados de las tarjetas.
+- Coloca los controles superiores en una fila compacta y mantiene accesible «Descargar JSON», incluido su estado deshabilitado sin informe previo.
+- Recupera el título visible de la tarjeta al ejecutar el análisis individual por AJAX.
+- Conserva las diez tarjetas en cinco columnas por dos filas, la descarga del último JSON, el motor de informes y las demás pestañas sin cambios.
+- Amplía las comprobaciones estáticas para cubrir contraste, controles y etiqueta de ejecución.
+
+## [1.1.48] — 2026-11-11 — Tarjetas de Analysis con dos acciones independientes (#2546)
+
+- Diez informes en una cuadrícula de cinco columnas por dos filas en escritorio, adaptable a móvil.
+- Cada tarjeta deja de ser un botón: muestra título, descripción, fecha del último informe y las acciones «Crear informe» y «Descargar JSON».
+- Se elimina la tarjeta duplicada del JSON del plan; su descarga autenticada conserva el contrato y el almacenamiento existentes.
+- Los informes especializados guardan individualmente la última representación generada, con periodo, fecha, HTML y texto, y la descargan como JSON sin nuevas consultas ni cálculos. La acción de creación conserva el AJAX original.
+- No se modifica el motor de análisis, ni las conexiones de proveedores, ni las descargas completas.
+
+## [1.1.47] — 2026-11-11 — Fecha independiente para GA4
+
+- Los informes GA4 de Analysis, Fuentes, Estrategia y Competencia consultan su propio periodo finalizado hasta ayer; la última fecha SQL de Search Console ya no recorta las métricas GA4.
+- Se invalida el antiguo espacio de caché GA4 para evitar mostrar informes con fechas antiguas. No se modifica la sincronización GSC restaurada en 1.1.46, las conexiones OAuth/cuentas de servicio ni los JSON guardados.
+
+## [1.1.46] — 2026-11-11 — Recuperar conexión y sincronización real de Google en Insights
+
+- Analysis vuelve a cargar el módulo de datos SQL de Search Console que se perdió al independizar el plugin, con su sincronización manual por días vía AJAX y sin cron.
+- Un puente utiliza las credenciales y la propiedad verificadas de Connections (OAuth o cuenta de servicio) sin copiar, borrar ni reescribir los secretos heredados o actuales.
+- El inicio de sincronización comprueba con una petición real a Google que la pareja credencial/propiedad tiene acceso antes de escribir datos; si falla OAuth prueba la cuenta de servicio.
+- Google Analytics en Analysis vuelve a consultar `properties/{property}:runReport`, con el ámbito OAuth `analytics.readonly`, en lugar de una llamada a un método inexistente.
+- Mantiene las estadísticas almacenadas, los informes guardados, los botones de descarga JSON, el Plan de acción y el resto de las integraciones sin alterarlos.
+- Añadida prueba de regresión offline para selección OAuth/cuenta de servicio y preservación de opciones, e incorporada al workflow de validación.
+
+## [1.1.45] — 2026-11-10 — Dos botones superiores y último JSON fechado (#2537)
+
+- El botón «Plan de acción» y «Descargar JSON del plan de acción» aparecen juntos arriba, antes de los resultados; la descarga inferior se elimina.
+- El segundo botón muestra la fecha y hora del último JSON generado, accesible tras recargar la pantalla. Si todavía no hay un JSON guardado, se muestra inhabilitado hasta completar un informe.
+- Se conserva solamente el último plan por instalación en `wp_options` sin autoload. La descarga autenticada por nonce y `manage_options` reutiliza ese JSON, sin ejecutar Analista ni consultar servicios externos.
+- No se cambia el JSON completo de Insights, las demás tarjetas ni el motor del Plan de acción. Se conserva la compatibilidad del JSON existente y las traducciones de los dos rótulos.
+
+## [1.1.44] — 2026-11-10 — Plan de acción: botón y JSON independiente (#2528)
+
+- Renombra únicamente el botón combinado de Insights > Analysis como «Plan de acción», conservando sus contenidos comerciales, SEO/GEO y el listado de trabajos.
+- Tras ejecutar el informe aparece «Descargar JSON del plan de acción», con alternativa para abrirlo en el navegador móvil.
+- El JSON independiente contiene exclusivamente el resumen y todas las recomendaciones del plan calculado (prioridad, objetivo, incidencia, destino, acción, estado, trazabilidad y fechas de revisión); excluye los demás informes de Insights.
+- Reutiliza el mismo cálculo AJAX, sin segunda consulta, cron ni almacenamiento adicional. Mantiene intactos «Descargar JSON completo», el resto de informes y las comprobaciones de seguridad.
+- Controles de descarga traducidos mediante los catálogos nativos PO/MO en ES/EN/FR/DE/NL.
+
+## [1.1.43] — 2026-11-10 — Gráficos GA4 del carrito y artículos (#2514)
+
+- Incorpora el gráfico comparativo de eventos del embudo de compra y el desglose por producto (vistas, unidades añadidas y compradas) con gráfica y tabla en Google Analytics.
+- El desglose por artículo se obtiene de GA4 Data API solo al pulsar «Actualizar datos» y se guarda en el snapshot existente; consultar informes no lanza peticiones externas.
+- La petición de artículos es opcional y no bloquea los nueve informes GA4 existentes; los snapshots anteriores no inventan artículos.
+- Distingue eventos agregados, unidades y compras sin inferir carritos abandonados; escapa datos externos en las gráficas y tablas.
+- Reconciliado con 1.1.41 (segundo chequeo editorial) y 1.1.42 (encabezado administrativo), sin perder sus cambios.
+
+## [1.1.42] — 2026-11-10 — Cabecera en tres zonas sin contenido duplicado (#2521)
+
+- Izquierda: nombre, descripción local del plugin y un único enlace estático `Plugin URI` bajo el texto.
+- Centro: desplegable más ancho con el historial local `CHANGELOG.md`, cerrado inicialmente.
+- Derecha: versión y fecha reales del propio plugin.
+- Se retira la segunda caja «Información del plugin», sin cambios en servicios, menús ni consultas externas.
+
+## [1.1.41] — 2026-11-10 — Segundo chequeo por fecha en el Plan de acción (#2518)
+
+- El Plan de acción evita repetir correcciones editoriales sustentadas en Search Console cuando el contenido local se modificó después de la última fecha de esos datos: pasa la tarea a Vigilar, no a corregida/verificada.
+- Usa fechas ya disponibles en WordPress y, cuando existen, las marcas de actualización de descripciones/excerpts en seo_nodes; no reanaliza contenido ni añade consultas externas o cron.
+- Se conservan tareas técnicas, comerciales y casos sin fechas fiables, así como las acciones ejecutadas que ya controla el seguimiento existente.
+- La fecha de modificación, la fecha GSC y el resultado de la revisión quedan en el contrato JSON. Se añaden pruebas de regresión independientes.
+
 ## [1.1.40] — 2026-11-10 — Analysis completo y JSON móvil (#2507)
 
 - La pestaña Analysis activa usa su controlador AJAX y nonce de Insights, evitando rechazos al ejecutar informes.

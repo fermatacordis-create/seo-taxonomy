@@ -66,9 +66,10 @@ $cases = array(
 $total_cases = 0;
 
 foreach ( $slugs as $slug ) {
-    $domain = 'taxocommerce-' . $slug;
-    $directory = $root . '/' . $domain;
-    $source = file_get_contents( $directory . '/' . $domain . '.php' );
+    $folder_slug = 'taxocommerce-' . $slug;
+    $domain = $folder_slug;
+    $directory = $root . '/' . $folder_slug;
+    $source = file_get_contents( $directory . '/' . $folder_slug . '.php' );
     verify( false !== $source, $domain . ' main PHP file missing' );
     verify( false !== strpos( $source, 'Text Domain: ' . $domain ), $domain . ' text domain missing' );
 

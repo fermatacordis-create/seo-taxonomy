@@ -40,12 +40,14 @@ if (!function_exists('seo_analista_ga4_snapshot')) {
         $days = seo_analista_days($days);
         $start_offset = max(0, $days - 1);
         $end_date = (string) $end_date;
-        if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $end_date)) $end_date = wp_date('Y-m-d');
+        if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $end_date)) {
+            $end_date = (new DateTimeImmutable('yesterday', wp_timezone()))->format('Y-m-d');
+        }
         try {
             $start_date = (new DateTimeImmutable($end_date))->modify('-' . $start_offset . ' days')->format('Y-m-d');
         } catch (Exception $exception) {
-            $end_date = wp_date('Y-m-d');
-            $start_date = wp_date('Y-m-d', current_time('timestamp') - ($start_offset * DAY_IN_SECONDS));
+            $end_date = (new DateTimeImmutable('yesterday', wp_timezone()))->format('Y-m-d');
+            $start_date = (new DateTimeImmutable($end_date, wp_timezone()))->modify('-' . $start_offset . ' days')->format('Y-m-d');
         }
 
         $empty = array(
@@ -108,7 +110,7 @@ if (!function_exists('seo_analista_ga4_snapshot')) {
 
         if (!function_exists('seo_google_analytics_run_report')) return $empty;
 
-        $cache_key = 'seo_analista_ga4_v3_' . get_current_blog_id() . '_' . $days . '_' . str_replace('-', '', $end_date);
+        $cache_key = 'seo_analista_ga4_v4_' . get_current_blog_id() . '_' . $days . '_' . str_replace('-', '', $end_date);
         $cached = get_transient($cache_key);
         if (is_array($cached)) return $cached;
 

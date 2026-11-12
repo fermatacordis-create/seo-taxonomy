@@ -12,6 +12,7 @@ define( 'ABSPATH', __DIR__ );
 define( 'TCDIST_LEGACY_SITEMAP_ACTIVE', in_array( 'legacy', $argv ?? array(), true ) );
 $GLOBALS['hooks']  = array();
 $GLOBALS['owner']  = 'taxocommerce';
+$GLOBALS['setting'] = 'yes';
 $GLOBALS['events'] = array();
 $GLOBALS['builds'] = 0;
 function add_action( $name, $callback, $priority = 10, $args = 1 ) { $GLOBALS['hooks'][ $name ][] = $callback; }
@@ -22,6 +23,9 @@ function apply_filters( $name, $value ) {
     return $value;
 }
 function sanitize_key( $key ) { return preg_replace( '/[^a-z0-9_\-]/', '', strtolower( (string) $key ) ); }
+function get_option( $name, $default = false ) {
+    return 'tcdist_sitemap_enabled' === $name ? $GLOBALS['setting'] : $default;
+}
 function home_url( $path = '/' ) { return 'https://example.test' . $path; }
 function wp_parse_url( $url, $component = -1 ) { return parse_url( $url, $component ); }
 function get_query_var( $name ) { throw new RuntimeException( 'The external owner must return before reading the request.' ); }
@@ -70,7 +74,23 @@ check_owner( ! isset( $GLOBALS['events'][ $hook ] ), 'Daily build is unscheduled
 tcdist_sitemap_daily_refresh();
 check_owner( 0 === $GLOBALS['builds'], 'No sitemap files are built for an external owner' );
 
-// 3) Unknown or empty values fall back to Distribution.
+// 3) An administrator opt-out leaves the native WordPress sitemap available.
+$GLOBALS['owner'] = 'taxocommerce';
+$GLOBALS['setting'] = 'no';
+check_owner( 'wordpress' === tcdist_sitemap_external_owner(), 'Administrator opt-out yields to WordPress' );
+check_owner( true === tcdist_sitemap_disable_wordpress_core_sitemaps( true ), 'Native WordPress sitemap is enabled' );
+check_owner( $robots === tcdist_sitemap_add_sitemap_to_robots( $robots, true ), 'Opt-out leaves robots.txt untouched' );
+tcdist_sitemap_ensure_daily_refresh();
+check_owner( ! isset( $GLOBALS['events'][ $hook ] ), 'Opt-out clears recurring generation' );
+tcdist_sitemap_daily_refresh();
+check_owner( 0 === $GLOBALS['builds'], 'Opt-out cannot start builds' );
+
+// 4) Another sitemap owner is still recognised.
+$GLOBALS['owner'] = 'opnv';
+check_owner( 'opnv' === tcdist_sitemap_external_owner(), 'External sitemap owner preserved' );
+
+// 5) Unknown or empty values fall back to Distribution when enabled.
+$GLOBALS['setting'] = 'yes';
 $GLOBALS['owner'] = '';
 check_owner( '' === tcdist_sitemap_external_owner(), 'Empty owner falls back to Distribution' );
 

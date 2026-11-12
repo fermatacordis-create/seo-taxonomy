@@ -101,6 +101,10 @@ function tcdist_sitemap_job_build_directory( $state ) {
  * Starts a new background job. No catalog items are processed here.
  */
 function tcdist_sitemap_start_background_build() {
+    if ( function_exists( 'tcdist_sitemap_external_owner' ) && '' !== tcdist_sitemap_external_owner() ) {
+        return array( 'type' => 'error', 'message' => __( 'Distribution no gestiona el sitemap XML en esta instalación.', 'taxocommerce-distribution' ) );
+    }
+
     $previous = tcdist_sitemap_job_state();
     if ( 'running' === ( $previous['status'] ?? '' ) ) {
         $previous['rerun_required'] = 1;
@@ -370,6 +374,11 @@ function tcdist_sitemap_memory_percent() {
  */
 function tcdist_sitemap_background_worker_tick() {
     $state = tcdist_sitemap_job_state();
+    if ( 'running' === ( $state['status'] ?? '' ) && function_exists( 'tcdist_sitemap_external_owner' ) && '' !== tcdist_sitemap_external_owner() ) {
+        // Never publish a window after another sitemap owner takes control.
+        tcdist_sitemap_stop_background_build();
+        return tcdist_sitemap_job_state();
+    }
     if ( 'running' !== ( $state['status'] ?? '' ) ) {
         return $state;
     }
@@ -476,6 +485,10 @@ add_action( TCDIST_SITEMAP_WORKER_HOOK, 'tcdist_sitemap_background_worker_tick' 
 
 /** Recover the worker when a previous PHP process was interrupted or cron stalled. */
 function tcdist_sitemap_recover_background_worker() {
+    if ( function_exists( 'tcdist_sitemap_external_owner' ) && '' !== tcdist_sitemap_external_owner() ) {
+        return;
+    }
+
     $state = tcdist_sitemap_job_state();
     if ( 'running' === ( $state['status'] ?? '' ) && ! wp_next_scheduled( TCDIST_SITEMAP_WORKER_HOOK ) ) {
         $delay = max( 1, absint( $state['not_before'] ?? 0 ) - time() );

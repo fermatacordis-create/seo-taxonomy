@@ -74,6 +74,15 @@ $plugin_source = file_get_contents( dirname( __DIR__ ) . '/taxocommerce-social.p
 preg_match( '/^ \* Version: (\d+\.\d+\.\d+)$/m', $plugin_source, $header_version );
 social_assert( TAXOCOMMERCE_SOCIAL_VERSION === ( $header_version[1] ?? '' ), 'Social version matches plugin header' );
 social_assert( has_action( 'admin_post_tcsocial_run_auto_test' ), 'Auto Test action registered' );
+foreach ( array( 'tcsocial_network_scheduler_export', 'tcsocial_network_scheduler_import_preview', 'tcsocial_network_scheduler_import_confirm' ) as $route ) {
+    social_assert( has_action( 'admin_post_' . $route ), 'CSV handler registered: ' . $route );
+}
+social_assert( function_exists( 'tcsocial_network_render_scheduler_csv_panel' ), 'CSV panel renderer available' );
+ob_start(); tcsocial_network_render_scheduler_csv_panel(); $csv_panel = ob_get_clean();
+foreach ( array( 'Descargar plantilla CSV', 'Exportar contenidos', 'Exportar agenda', 'Exportar historial', 'Validar CSV antes de importar' ) as $control ) {
+    social_assert( strpos( $csv_panel, $control ) !== false, 'CSV action displayed: ' . $control );
+}
+
 social_assert( count( TCSocial_Auto_Test::cases() ) === 16, 'Exactly sixteen checks' );
 
 $report = TCSocial_Auto_Test::run_suite();
@@ -111,7 +120,7 @@ foreach ( array(
     'tcsocial-dev-hooks', 'tcsocial-dev-cron', 'tcsocial-dev-csv', 'tcsocial-dev-autotest',
     'tcsocial-dev-workflow', 'seo_social_network_settings_v1',
     'tcsocial_programador_run_job', 'check_admin_referer', 'CHANGELOG.md',
-    'no muestra actualmente el formulario CSV',
+    'Programación masiva con Excel / CSV',
 ) as $anchor ) {
     social_assert( strpos( $manual, $anchor ) !== false, 'developer and user manuals contain ' . $anchor );
 }

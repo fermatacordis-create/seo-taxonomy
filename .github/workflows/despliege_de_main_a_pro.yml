@@ -7,10 +7,22 @@ on:
         description: 'Exact STAGING commit approved by the prior two phases'
         required: true
         type: string
+      target_plugin:
+        description: 'Optional single installed plugin to update, e.g. taxocommerce-core'
+        required: false
+        type: string
+        default: ''
   workflow_dispatch:
+    inputs:
+      target_plugin:
+        description: 'Optional installed plugin slug (empty: all changed plugins)'
+        required: false
+        type: string
+        default: ''
 
 permissions:
   contents: read
+  actions: read
 
 concurrency:
   group: taxocommerce-production-deploy
@@ -21,7 +33,7 @@ env:
 
 jobs:
   deploy:
-    name: Publicar plugins TaxoCommerce instalados (sin monolitico)
+    name: Publicar SOLO archivos modificados en plugins instalados
     runs-on: ubuntu-latest
     timeout-minutes: 90
     steps:
@@ -30,6 +42,7 @@ jobs:
         uses: actions/checkout@v6
         with:
           ref: staging
+          fetch-depth: 0  # Ancestor SHAs required to verify only changed files.
 
       - name: Record deployed source revision
         run: |
@@ -57,47 +70,9 @@ jobs:
           set -euo pipefail
           python3 -m unittest discover -s .github/tests -p test_pro_historic_modular_workflow.py -v
           python3 -m py_compile .github/scripts/fetch_pro_installed_modules.py
+          python3 -m py_compile .github/scripts/select_pro_release_delta.py
+          python3 -m unittest discover -s .github/tests -p test_select_pro_release_delta.py -v
           python3 -m unittest discover -s .github/scripts/tests -p test_fetch_pro_installed_modules.py -v
-
-      - name: Validate all TaxoCommerce version headers and readmes
-        shell: bash
-        run: |
-          python3 - <<'PY'
-          import re
-          from pathlib import Path
-
-          modules = sorted(
-              folder for folder in Path('.').glob('taxocommerce-*')
-              if folder.is_dir() and (folder / (folder.name + '.php')).is_file()
-          )
-          if not modules:
-              raise SystemExit("No TaxoCommerce modules available in STAGING")
-          for module in modules:
-              main = (module / (module.name + '.php')).read_text(encoding="utf-8")
-              readme_file = module / 'readme.txt'
-              if not readme_file.is_file():
-                  raise SystemExit(f"{module.name}: missing readme.txt, abort before PRO")
-              readme = readme_file.read_text(encoding="utf-8")
-              version = re.search(r"(?mi)^\s*\*\s*Version:\s*(\S+)", main)
-              stable = re.search(r"(?mi)^Stable tag:\s*(\S+)", readme)
-              if not version or not stable:
-                  raise SystemExit(f"{module.name}: missing plugin Version or readme Stable tag")
-              if version.group(1) != stable.group(1):
-                  # WordPress.org release metadata is not the runtime plugin version.
-                  # Core currently has Version 0.4.56 and Stable tag 0.4.55;
-                  # do not block this manual PRO file sync over a README mismatch.
-                  print(f"::warning::{module.name}: plugin Version {version.group(1)} "
-                        f"differs from Stable tag {stable.group(1)} (fix before WordPress.org)")
-              else:
-                  print(f"{module.name}: Version/Stable tag {version.group(1)} OK")
-          print("Validated modules:", len(modules))
-          PY
-
-      - name: Instalar cliente FTPS y compresor ZIP
-        shell: bash
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y lftp zip
 
       - name: Descubrir plugins TaxoCommerce disponibles en MAIN
         id: family
@@ -138,62 +113,78 @@ jobs:
           set -euo pipefail
           python3 .github/scripts/fetch_pro_installed_modules.py >> "$GITHUB_OUTPUT"
 
-      - name: Sincronizar cambios de todos los plugins TaxoCommerce instalados
+
+      - name: Seleccionar solo archivos modificados desde el ultimo release PRO correcto
+        id: delta
         shell: bash
         env:
           ALL_MODULES_JSON: ${{ steps.family.outputs.modules }}
           INSTALLED_MODULES_JSON: ${{ steps.installed.outputs.modules }}
+          TARGET_PLUGIN: ${{ inputs.target_plugin || '' }}
+        run: |
+          set -euo pipefail
+          # Read the last successful PRO release from PUBLIC run metadata.
+          # Job-log downloads caused HTTP 401 in runs #194 and #195.
+          # No GitHub token is needed and the release fails closed on missing data.
+          runs_url="https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/despliege_de_main_a_pro.yml/runs?branch=staging&status=success&per_page=15"
+          base_sha="$(curl --fail --silent --show-error --location --retry 3 --retry-delay 2 \
+            -H 'Accept: application/vnd.github+json' \
+            -H 'User-Agent: TaxoCommerce-PRO-Deploy' \
+            "$runs_url" | jq -er '[.workflow_runs[]? | select(.status == "completed" and .conclusion == "success" and .head_branch == "staging") | .head_sha][0]')"
+          if ! [[ "$base_sha" =~ ^[0-9a-f]{40}$ ]]; then
+            echo '::error::No se ha podido verificar el ultimo release PRO correcto.'
+            exit 1
+          fi
+          git cat-file -e "$base_sha^{commit}"
+          if ! git merge-base --is-ancestor "$base_sha" HEAD; then
+            echo "::error::El ultimo release PRO no es ancestro de STAGING: $base_sha"
+            exit 1
+          fi
+          echo "Base PRO verificada: $base_sha"
+
+          python3 .github/scripts/select_pro_release_delta.py \
+            --base-sha "$base_sha" \
+            --installed-json "$INSTALLED_MODULES_JSON" \
+            --allowed-json "$ALL_MODULES_JSON" \
+            --target-plugin "$TARGET_PLUGIN" \
+            --output "$RUNNER_TEMP/taxocommerce-pro-changed.json"
+          count="$(jq 'length' "$RUNNER_TEMP/taxocommerce-pro-changed.json")"
+          echo "selected_count=$count" >> "$GITHUB_OUTPUT"
+          if [ "$count" -eq 0 ]; then
+            echo "Ningun archivo instalable ha cambiado. Sin transferencia a produccion."
+          fi
+
+      - name: Instalar cliente FTPS y compresor ZIP (solo si hay cambios)
+        if: steps.delta.outputs.selected_count != '0'
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lftp zip
+
+      - name: Sincronizar SOLO archivos modificados de los plugins seleccionados
+        if: steps.delta.outputs.selected_count != '0'
+        shell: bash
+        env:
+          ALL_MODULES_JSON: ${{ steps.family.outputs.modules }}
+          INSTALLED_MODULES_JSON: ${{ steps.installed.outputs.modules }}
+          DELTA_FILE: ${{ runner.temp }}/taxocommerce-pro-changed.json
           FTP_SERVER: ${{ secrets.FTP_SERVER }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: |
           set -euo pipefail
 
-          mapfile -t installed_modules < <(
-            python3 - <<'PY'
-          import json
-          import os
-
-          for module in json.loads(os.environ.get("INSTALLED_MODULES_JSON", "[]")):
-              print(module)
-          PY
-          )
-
-          if [ "${#installed_modules[@]}" -eq 0 ]; then
-            echo "No hay plugins TaxoCommerce instalados para actualizar en PRO. No se instalaran plugins ausentes."
+          mapfile -t selected_modules < <(jq -r 'keys[]' "$DELTA_FILE")
+          if [ "${#selected_modules[@]}" -eq 0 ]; then
+            echo "No hay cambios para publicar. No se transfiere ningun ZIP."
             exit 0
           fi
-
-          mapfile -t allowed_modules < <(
-            python3 - <<'PY'
-          import json
-          import os
-          for module in json.loads(os.environ["ALL_MODULES_JSON"]):
-              print(module)
-          PY
-          )
-
-          if [ "${#allowed_modules[@]}" -eq 0 ]; then
-            echo "::error::La lista de módulos de STAGING está vacía; comprueba ALL_MODULES_JSON antes de escribir en PRO."
-            exit 1
-          fi
-          echo "Validación previa: ${#installed_modules[@]} instalados en PRO; ${#allowed_modules[@]} disponibles en STAGING."
-
-          declare -A allowed_lookup=()
-          for module in "${allowed_modules[@]}"; do
-            allowed_lookup["$module"]=1
-          done
-
-          for module in "${installed_modules[@]}"; do
-            if [ -z "${allowed_lookup[$module]:-}" ]; then
-              echo "::error::PRO devolvió un módulo TaxoCommerce instalado que no existe correctamente en STAGING: $module"
-              exit 1
-            fi
-
-            if [ ! -f "$module/$module.php" ]; then
-              echo "::error::El módulo instalado $module no existe correctamente en STAGING."
-              exit 1
-            fi
+          SELECTED_MODULES_JSON="$(jq -c 'keys' "$DELTA_FILE")"
+          export SELECTED_MODULES_JSON
+          echo "Validacion previa: ${#selected_modules[@]} plugin(s) modificado(s) en PRO."
+          for module in "${selected_modules[@]}"; do
+            test -f "$module/$module.php"
+            test -f "$module/readme.txt"
           done
           deploy_token="$(openssl rand -hex 32)"
           token_hash="$(printf '%s' "$deploy_token" | sha256sum | awk '{print $1}')"
@@ -212,7 +203,7 @@ jobs:
           trap cleanup_handoff EXIT
 
           # Prepare the handoff directory only. Never expose the token until
-          # ALL plugin ZIPs have been uploaded (slow transfers can take minutes).
+          # selected changed-file ZIPs have been uploaded.
           lftp -u "$FTP_USERNAME","$FTP_PASSWORD" -p 21 "$FTP_SERVER" <<EOF
           set cmd:fail-exit no
           set ftp:ssl-force true
@@ -224,7 +215,7 @@ jobs:
           bye
           EOF
 
-          for module in "${installed_modules[@]}"; do
+          for module in "${selected_modules[@]}"; do
             package="/tmp/$module.zip"
             rm -f "$package"
 
@@ -235,30 +226,21 @@ jobs:
               cp -a includes/facturas/dompdf "$module/includes/dompdf"
             fi
 
-            echo "Empaquetando $module sin tests ni datos, conservando readme.txt..."
-            (
-              cd "$module"
-              zip -qr "$package" . \
-                -x 'tests/*' \
-                -x 'uploads/*' \
-                -x '*.md' \
-                -x '*.pot' \
-                -x 'node_modules/*' \
-                -x 'node_modules/' \
-                -x 'tests/' \
-                -x 'uploads/' \
-                -x '.*' \
-                -x '*/.*' \
-                -x '*.bak'
+            mapfile -d '' -t changed_files < <(
+              jq -j --arg module "$module" '.[$module][] + "\u0000"' "$DELTA_FILE"
             )
+            if [ "${#changed_files[@]}" -eq 0 ]; then
+              echo "::error::$module sin archivos modificados seleccionados."
+              exit 1
+            fi
+            echo "Empaquetando $module: ${#changed_files[@]} archivo(s) cambiado(s)..."
+            ( cd "$module" && zip -q "$package" "${changed_files[@]}" )
             unzip -t "$package" >/dev/null
             # Never ship FTP sync-state files, hidden handoff data or Git metadata.
             if unzip -Z1 "$package" | grep -E '(^|/)(\.ftp-deploy-sync-state\.json|\.taxocommerce-deploy)(/|$)'; then
               echo "::error::$module contains deployment artifacts"
               exit 1
             fi
-            unzip -Z1 "$package" | grep -Fx "$module.php" >/dev/null
-            unzip -Z1 "$package" | grep -Fx 'readme.txt' >/dev/null
 
             echo "Subiendo un único paquete temporal para $module..."
             lftp -u "$FTP_USERNAME","$FTP_PASSWORD" -p 21 "$FTP_SERVER" <<EOF
@@ -296,6 +278,7 @@ jobs:
             -X POST \
             --data-urlencode "run_id=$GITHUB_RUN_ID" \
             --data-urlencode "deploy_token=$deploy_token" \
+            --data-urlencode "modules=$SELECTED_MODULES_JSON" \
             "$PRO_SITE_URL/wp-json/taxocommerce/v1/deploy-active-modules")"
 
           if [[ "$http_code" != 2* ]]; then
@@ -314,7 +297,7 @@ jobs:
           import zipfile
           from pathlib import Path
 
-          installed = json.loads(os.environ.get("INSTALLED_MODULES_JSON", "[]"))
+          selected = json.loads(os.environ["SELECTED_MODULES_JSON"])
           payload = json.loads(os.environ["DEPLOY_RESPONSE"])
           updated = payload.get("updated", [])
 
@@ -324,13 +307,13 @@ jobs:
               if isinstance(item, dict)
           }
 
-          if set(updated_by_slug) != set(installed):
+          if set(updated_by_slug) != set(selected):
               raise SystemExit(
                   "PRO no confirmó exactamente los plugins instalados. "
-                  f"Instalados={installed}; actualizados={sorted(updated_by_slug)}"
+                  f"Seleccionados={selected}; actualizados={sorted(updated_by_slug)}"
               )
 
-          for slug in installed:
+          for slug in selected:
               main_file = Path(slug) / f"{slug}.php"
               text = main_file.read_text(encoding="utf-8", errors="replace")
               match = re.search(r"^\s*\*\s*Version:\s*([^\r\n]+)", text, re.MULTILINE)
@@ -347,7 +330,7 @@ jobs:
                       f"esperada={expected!r}; recibida={received!r}"
                   )
 
-              # Compare the full deployed ZIP with the hashes WordPress checked in WP_PLUGIN_DIR.
+              # Verify every changed file against WordPress SHA-256; no other files were uploaded.
               package = Path('/tmp') / (slug + '.zip')
               with zipfile.ZipFile(package) as archive:
                   file_names = [info.filename for info in archive.infolist() if not info.is_dir()]
@@ -377,5 +360,5 @@ jobs:
           # Keep EXIT cleanup for failures, not a second rm on success (550).
           trap - EXIT
 
-          echo "Despliegue modular terminado: solo se han sobrescrito archivos cuyo contenido cambió."
+          echo "Despliegue parcial terminado: solo se transfirieron y verificaron archivos modificados."
 

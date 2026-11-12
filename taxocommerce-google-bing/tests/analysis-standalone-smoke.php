@@ -83,4 +83,21 @@ tci_analysis_check( false !== strpos( $css_owner, "'taxocommerce-insights-analys
 tci_analysis_check( false === strpos( $css_owner, "if (!function_exists('seo_analista_enqueue_report_assets'))" ), 'Legacy callback collision remains' );
 tci_analysis_check( false !== strpos( $stylesheet, '.seo-analista-chart .line{fill:none;stroke:#2271b1' ), 'Blue SVG line style absent' );
 tci_analysis_check( false !== strpos( $stylesheet, '.seo-analista-card,.seo-analista-section,.seo-analista-chart{background:#fff' ), 'White cards style absent' );
+
+$ga4_analysis = tci_analysis_source( $root, 'includes/analysis/analista-google.php' );
+$ga4_strategy = tci_analysis_source( $root, 'includes/analysis/analista-estrategia.php' );
+$ga4_competitive = tci_analysis_source( $root, 'includes/analysis/analista-competitivo.php' );
+$ga4_source = tci_analysis_source( $root, 'includes/analysis/analista-fuentes.php' );
+tci_analysis_check(
+    false !== strpos( $ga4_analysis, 'seo_analista_ga4_snapshot($days);' ) &&
+    false !== strpos( $ga4_strategy, 'seo_analista_ga4_snapshot($days) : array();' ) &&
+    false !== strpos( $ga4_competitive, 'seo_analista_ga4_snapshot($days) : array();' ),
+    'GA4 Analysis callers must not be anchored to local GSC dates'
+);
+tci_analysis_check(
+    false !== strpos( $ga4_source, "new DateTimeImmutable('yesterday', wp_timezone())" ) &&
+    false !== strpos( $ga4_source, "'seo_analista_ga4_v4_'" ),
+    'GA4 default range/cache regression'
+);
+
 echo "Standalone Insights Analysis: 11 report definitions, own CSS, JS, AJAX, no SEO monolith references: OK\n";

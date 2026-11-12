@@ -19,9 +19,10 @@ function tc_ie_background_check( $condition, $message ) {
     }
 }
 foreach ( array(
-    "add_action( self::WORKER_HOOK, array( \$this, 'background_worker' ), 10, 2 )",
-    "as_schedule_single_action(",
-    "wp_schedule_single_event(",
+    "add_action( 'init', array( \$this, 'retire_legacy_schedule' ), 20 )",
+    "public function retire_legacy_schedule()",
+    "as_unschedule_all_actions( self::WORKER_HOOK )",
+    "wp_unschedule_hook( self::WORKER_HOOK )",
     "add_action( 'init', array( \$this, 'watchdog' ), 99 )",
     "public function background_worker( \$user_id, \$job )",
     "wp_set_current_user( \$user_id )",
@@ -39,6 +40,10 @@ foreach ( array(
 ) as $required ) {
     tc_ie_background_check( false !== strpos( $exporter, $required ), 'Missing export guard: ' . $required );
 }
+tc_ie_background_check( false === strpos( $exporter, 'as_schedule_single_action(' ), 'Export must not create Action Scheduler actions' );
+tc_ie_background_check( false === strpos( $exporter, 'wp_schedule_single_event(' ), 'Export must not create WP-Cron actions' );
+tc_ie_background_check( false === strpos( $exporter, 'add_action( self::WORKER_HOOK' ), 'Deprecated scheduler callback must not be active' );
+tc_ie_background_check( false !== strpos( $exporter, "'blocking' => false" ), 'Server-to-server loopback remains active' );
 tc_ie_background_check( false === strpos( $browser, "request('taxocommerce_ie_export_step'" ), 'Browser must never execute export steps' );
 tc_ie_background_check( false !== strpos( $browser, "request('taxocommerce_ie_export_status')" ), 'Browser must observe state' );
 tc_ie_background_check( false !== strpos( $browser, "request('taxocommerce_ie_export_resume')" ), 'Browser must be able to retry failed job' );

@@ -10,3 +10,26 @@
 .seo-analista-lazy-intro{background:#fff;border:1px solid #dcdcde;border-left:4px solid #2271b1;border-radius:8px;padding:15px 18px;margin:0 0 16px}.seo-analista-lazy-intro p{margin:5px 0 0;color:#646970}
         .seo-analista-lazy-controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:10px;margin:0 0 16px}.seo-analista-lazy-controls .button{height:auto;min-height:78px;text-align:left;padding:12px 14px;white-space:normal;display:block;background:#fff}.seo-analista-lazy-controls .button strong{display:block;font-size:14px;margin-bottom:5px}.seo-analista-lazy-controls .button span{display:block;color:#646970;font-weight:400;line-height:1.35}.seo-analista-lazy-controls .button.is-running{border-color:#2271b1;box-shadow:0 0 0 1px #2271b1}
         .seo-analista-lazy-status{min-height:30px;margin:8px 0 12px;color:#50575e}.seo-analista-lazy-status .spinner{float:none;margin:0 7px 0 0;vertical-align:middle}.seo-analista-lazy-result{min-height:120px}.seo-analista-lazy-empty{background:#f6f7f7;border:1px dashed #c3c4c7;border-radius:8px;padding:22px;text-align:center;color:#50575e}.seo-analista-lazy-empty p{margin:5px 0 0}.seo-analista-partial-head{background:#fff;border:1px solid #dcdcde;border-radius:8px;padding:15px 18px;margin-bottom:16px}.seo-analista-partial-head h2{margin:0 0 5px}.seo-analista-partial-head p{margin:0;color:#646970}
+
+/* Standalone, non-clickable report cards; actions are the only controls. */
+.seo-analista-wrap .seo-analista-report-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;align-items:stretch}
+.seo-analista-report-card{display:flex;flex-direction:column;min-width:0;min-height:168px;padding:12px;background:#fff;border:1px solid #4164d7;border-radius:4px;box-sizing:border-box}
+.seo-analista-report-card h3{margin:0 0 9px;color:#254bce;font-size:14px;line-height:1.3}
+.seo-analista-report-card p{margin:0 0 12px;color:#50575e;font-size:12px;line-height:1.4;flex:1}
+.seo-analista-report-meta{margin-bottom:10px;font-size:12px;line-height:1.4;min-height:17px}
+.seo-analista-report-meta strong{color:#254bce}
+.seo-analista-report-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;margin-top:auto}
+.seo-analista-wrap .seo-analista-report-actions .button{min-width:0;min-height:42px;height:auto;display:flex;align-items:center;justify-content:center;padding:6px 5px;white-space:normal;text-align:center;line-height:1.25;font-size:13px;font-weight:600;box-sizing:border-box}
+.seo-analista-wrap .seo-analista-report-actions .button.disabled{pointer-events:none;cursor:not-allowed;opacity:1;color:#646970;background:#f6f7f7;border-color:#c3c4c7}
+/* Override the old full-card .button background: #fff, which hides white primary labels. */
+.seo-analista-wrap .seo-analista-toolbar-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:16px}
+.seo-analista-wrap .seo-analista-toolbar-actions .button{width:auto;min-height:38px;height:auto;padding:8px 14px;text-align:center;white-space:normal;display:inline-flex;align-items:center;justify-content:center;color:#2271b1;background:#fff;border-color:#2271b1}
+.seo-analista-wrap .seo-analista-report-actions .button{border:1px solid #2271b1;color:#2271b1;background:#fff;min-height:46px;line-height:1.3;font-size:13px}
+.seo-analista-wrap .seo-analista-toolbar-actions .button.button-primary,.seo-analista-wrap .seo-analista-report-actions .button.button-primary{background:#2271b1;border-color:#2271b1;color:#fff}
+.seo-analista-wrap .seo-analista-toolbar-actions .button.button-primary:hover:not(:disabled),.seo-analista-wrap .seo-analista-report-actions .button.button-primary:hover:not(:disabled){background:#135e96;border-color:#135e96;color:#fff}
+.seo-analista-wrap .seo-analista-report-actions .button:not(.button-primary):not(.disabled):hover{color:#135e96;background:#f0f6fc;border-color:#135e96}
+.seo-analista-wrap .seo-analista-report-actions .button.disabled{color:#646970;background:#f6f7f7;border-color:#c3c4c7;opacity:1}
+.seo-analista-wrap .seo-analista-report-actions .button:focus-visible,.seo-analista-wrap .seo-analista-toolbar-actions .button:focus-visible{outline:2px solid #2271b1;outline-offset:2px}
+@media(max-width:1250px){.seo-analista-wrap .seo-analista-report-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:850px){.seo-analista-wrap .seo-analista-report-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.seo-analista-wrap .seo-analista-report-grid{grid-template-columns:minmax(0,1fr)}}

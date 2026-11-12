@@ -3410,3 +3410,11 @@ msgstr ""
 #: includes/class-taxocommerce-connections-admin.php includes/class-taxocommerce-google-bing-indexnow.php
 msgid "IndexNow puede activarse desde Conexiones de Insights si otro sistema no lo está gestionando. Bing Webmaster se usa aquí para informes de lectura."
 msgstr ""
+
+#: taxocommerce-google-bing.php
+msgid "Descargar JSON del plan de acción"
+msgstr ""
+
+#: taxocommerce-google-bing.php
+msgid "Abrir JSON del plan (móvil)"
+msgstr ""

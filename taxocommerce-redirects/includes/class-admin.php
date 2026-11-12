@@ -13,6 +13,7 @@ final class Admin {
         add_action( 'admin_enqueue_scripts', array( __CLASS__, 'assets' ) );
         add_action( 'admin_post_tc_redirects_manage', array( __CLASS__, 'handle_manage' ) );
         add_action( 'admin_post_tc_redirects_export', array( __CLASS__, 'handle_export' ) );
+        add_action( 'admin_post_tc_redirects_toggle', array( __CLASS__, 'handle_toggle' ) );
     }
 
     public static function menu() {
@@ -63,6 +64,27 @@ final class Admin {
         }
         echo '<div class="notice ' . ( ! empty( $notice['error'] ) ? 'notice-error' : 'notice-success' ) . ' is-dismissible"><p>'
             . esc_html( (string) $notice['text'] ) . '</p></div>';
+    }
+
+    /**
+     * Save the redirect-engine ownership preference without touching rules.
+     *
+     * @return void
+     */
+    public static function handle_toggle() {
+        self::can_manage();
+        check_admin_referer( 'tc_redirects_toggle' );
+
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified above.
+        $enabled = isset( $_POST['tc_redirects_enabled'] )
+            && is_string( $_POST['tc_redirects_enabled'] )
+            && '1' === sanitize_text_field( wp_unslash( $_POST['tc_redirects_enabled'] ) );
+
+        update_option( 'tc_redirects_enabled', $enabled ? 'yes' : 'no', false );
+        self::success( $enabled
+            ? __( 'TaxoCommerce Redirects vuelve a gestionar las redirecciones.', 'taxocommerce-redirects' )
+            : __( 'Gestión de redirecciones desactivada; las reglas guardadas se conservan.', 'taxocommerce-redirects' )
+        );
     }
 
     public static function render() {
@@ -121,6 +143,24 @@ final class Admin {
                 <strong>Reglas compartidas con TaxoCommerce SEO antiguo</strong>, sin migrar ni duplicar tablas.</p>
             <?php self::tabs( 'redirects' ); ?>
             <?php self::notice(); ?>
+            <section class="tc-rd-panel" style="margin:16px 0;padding:16px;">
+                <h2><?php esc_html_e( 'Control de redirecciones', 'taxocommerce-redirects' ); ?></h2>
+                <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+                    <input type="hidden" name="action" value="tc_redirects_toggle">
+                    <?php wp_nonce_field( 'tc_redirects_toggle' ); ?>
+                    <label for="tc-redirects-enabled">
+                        <input type="checkbox" name="tc_redirects_enabled" id="tc-redirects-enabled" value="1" <?php checked( Engine::enabled() ); ?>>
+                        <strong><?php esc_html_e( 'TaxoCommerce gestiona las redirecciones', 'taxocommerce-redirects' ); ?></strong>
+                    </label>
+                    <p class="description"><?php esc_html_e( 'Desmarcar detiene las redirecciones de TaxoCommerce y cede el control a otro gestor si está instalado. Las reglas guardadas, la importación y los informes se conservan. No activa ni configura automáticamente otro plugin.', 'taxocommerce-redirects' ); ?></p>
+                    <?php if ( Engine::enabled() && '' !== Engine::external_owner() ) : ?>
+                        <p class="description"><?php esc_html_e( 'Otro plugin reclama actualmente la gestión de redirecciones.', 'taxocommerce-redirects' ); ?></p>
+                    <?php elseif ( ! Engine::enabled() ) : ?>
+                        <p class="description"><?php esc_html_e( 'Motor de redirecciones desactivado; ningún otro gestor se habilita automáticamente.', 'taxocommerce-redirects' ); ?></p>
+                    <?php endif; ?>
+                    <?php submit_button( __( 'Guardar elección', 'taxocommerce-redirects' ), 'secondary', 'submit', false ); ?>
+                </form>
+            </section>
             <?php if ( ! Store::table_exists() ) : ?>
                 <div class="notice notice-error"><p>No existe la tabla de redirecciones. Desactiva y activa el plugin para crearla sin alterar las reglas antiguas.</p></div>
             <?php endif; ?>

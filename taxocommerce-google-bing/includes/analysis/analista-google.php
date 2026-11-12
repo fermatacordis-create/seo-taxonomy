@@ -18,9 +18,8 @@ if (!function_exists('seo_analista_google_snapshot')) {
             : array();
 
         $sources = (array) ($payload['sources'] ?? array());
-        $property_id = function_exists('seo_analista_resolve_property_id') ? seo_analista_resolve_property_id() : '';
-        $gsc_period = $property_id && function_exists('seo_analista_period') ? seo_analista_period($property_id, $days) : array();
-        $ga4 = seo_analista_ga4_snapshot($days, $gsc_period['date_to'] ?? '');
+        // GA4 has its own processing calendar and must not be limited by stale GSC SQL data.
+        $ga4 = seo_analista_ga4_snapshot($days);
 
         // La fuente Analytics de Google Intelligence puede figurar como no
         // comprobada aunque GA4 responda. Analista usa la comprobacion real.

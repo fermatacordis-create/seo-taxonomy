@@ -29,14 +29,16 @@ function wp_safe_remote_get( $url, $args = array() ) {
 $path = dirname( __DIR__, 3 ) . '/taxocommerce-core/';
 $info = require $path . 'includes/official-excerpt.php';
 $plugin = get_file_data( $path . 'taxocommerce-core.php', array( 'uri' => 'Plugin URI', 'description' => 'Description' ), 'plugin' );
-foreach ( array( 'es' => 'Información del plugin', 'en' => 'Plugin information', 'fr' => 'Informations sur le plugin', 'de' => 'Plugininformationen', 'nl' => 'Plugininformatie' ) as $locale => $label ) {
+foreach ( array( 'es' => 'Ver ficha oficial', 'en' => 'Official plugin page', 'fr' => 'Voir la fiche officielle', 'de' => 'Offizielle Pluginseite', 'nl' => 'Officiële pluginpagina' ) as $locale => $label ) {
     ob_start();
     $info->render( 'taxocommerce-core', $locale );
     $markup = ob_get_clean();
-    if ( false === strpos( $markup, esc_html( $plugin['description'] ) )
-        || false === strpos( $markup, esc_html( $plugin['uri'] ) )
-        || false === strpos( $markup, '<summary>' . $label . '</summary>' ) ) {
-        throw new RuntimeException( 'Core must show local Description and Plugin URI in locale ' . $locale );
+    if ( false === strpos( $markup, esc_html( $plugin['uri'] ) )
+        || false === strpos( $markup, 'class="tc-family-hero__link"' )
+        || false === strpos( $markup, '>' . $label . '</a>' )
+        || false !== strpos( $markup, esc_html( $plugin['description'] ) )
+        || false !== strpos( $markup, '<details' ) ) {
+        throw new RuntimeException( 'Core must show only the local Plugin URI link in locale ' . $locale );
     }
 }
 if ( 0 !== $GLOBALS['tc_official_calls'] ) {
@@ -48,4 +50,4 @@ if ( false === strpos( $dashboard, "\$tc_official_info->render( 'taxocommerce-co
     || false !== strpos( $dashboard, 'tc_core_load_official_excerpt' ) ) {
     throw new RuntimeException( 'Core dashboard must use independent local renderer directly.' );
 }
-echo "Core static developer information: PASS\n";
+echo "Core static developer link without duplicate Description: PASS\n";
