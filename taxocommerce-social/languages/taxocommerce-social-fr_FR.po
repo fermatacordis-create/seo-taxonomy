@@ -709,3 +709,7 @@ msgstr "Autre"
 msgid "Contenido #%d"
 msgstr "Contenu nº %d"
 
+
+#. Description of the plugin
+msgid "Social network connections, publishing templates and calendar for the TaxoCommerce family."
+msgstr "Connexions aux réseaux sociaux, modèles de publication et calendrier pour la famille TaxoCommerce."

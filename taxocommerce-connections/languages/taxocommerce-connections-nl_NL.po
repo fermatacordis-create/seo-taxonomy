@@ -334,3 +334,7 @@ msgstr "Bestand"
 #: includes/class-taxocommerce-autotest-code.php
 msgid "Security"
 msgstr "Beveiliging"
+
+#. Description of the plugin
+msgid "Temporary compatibility bridge. External connections now live inside TaxoCommerce Insights."
+msgstr "Tijdelijke compatibiliteitsbrug. Externe koppelingen worden nu beheerd in TaxoCommerce Insights."

@@ -1598,3 +1598,11 @@ msgstr ""
 
 msgid "Filtro de estados cargado; no se consultan ni modifican pedidos."
 msgstr ""
+
+#. Description of the plugin
+msgid "Supplier catalogue intake, purchasing, product decisions, supplier prices, WooCommerce linking, and external image references."
+msgstr ""
+
+#. Family card description
+msgid "Supplier catalogue, purchasing, prices, and external images."
+msgstr ""

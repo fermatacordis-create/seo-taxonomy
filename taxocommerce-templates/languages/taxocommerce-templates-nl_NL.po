@@ -918,3 +918,7 @@ msgstr "Technische controle van bestaande koppelingen openen"
 #. Templates UI
 msgid "Gestionar las páginas asignadas a cada rol"
 msgstr "De aan elke rol toegewezen pagina’s beheren"
+
+#. Description of the plugin
+msgid "Standalone WordPress/WooCommerce request-template routing, SEO role assignments and migration audit."
+msgstr "Zelfstandige routering van WordPress-/WooCommerce-verzoeksjablonen, toewijzing van SEO-rollen en migratiecontrole."

@@ -1166,3 +1166,7 @@ msgstr "Vous n'avez pas l'autorisation de gérer TaxoCommerce Images."
 #: includes/legacy-optimizer-ajax.php:61
 msgid "No tienes permisos para optimizar las imágenes."
 msgstr "Vous n’avez pas l’autorisation d’optimiser les images."
+
+#. Description of the plugin
+msgid "Gestiona, audita y optimiza imágenes de WordPress/WooCommerce manteniendo Media como fuente de verdad."
+msgstr "Gérez, auditez et optimisez les images WordPress/WooCommerce en conservant la médiathèque comme source de référence."

@@ -3861,3 +3861,7 @@ msgstr "Keine Berechtigung, den Selbsttest auszuführen."
 #: includes/class-taxocommerce-core.php
 msgid "Private task agenda, calendar, categories and indicators."
 msgstr "Private Aufgabenagenda, Kalender, Kategorien und Kennzahlen."
+
+#. Description of the plugin
+msgid "Modular core for catalog hierarchy, unified content editing, logs, and extensions in WooCommerce stores."
+msgstr "Modularer Kern für Kataloghierarchie, einheitliche Inhaltsbearbeitung, Protokolle und Erweiterungen in WooCommerce-Shops."

@@ -1061,3 +1061,11 @@ msgstr "Inhoudsopgave van de documentatie"
 
 msgid "Sistema"
 msgstr "Systeem"
+
+#. Description of the plugin
+msgid "Supplier catalogue intake, purchasing, product decisions, supplier prices, WooCommerce linking, and external image references."
+msgstr "Invoer van leverancierscatalogi, inkoop, productbeslissingen, leveranciersprijzen, koppeling met WooCommerce en verwijzingen naar externe afbeeldingen."
+
+#. Family card description
+msgid "Supplier catalogue, purchasing, prices, and external images."
+msgstr "Leverancierscatalogus, inkoop, prijzen en externe afbeeldingen."

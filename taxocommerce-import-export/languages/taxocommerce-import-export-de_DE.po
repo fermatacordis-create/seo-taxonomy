@@ -1587,3 +1587,7 @@ msgstr ""
 #: includes/class-taxocommerce-import-export.php:385
 msgid "No tienes permisos para gestionar TaxoCommerce Import-Export."
 msgstr "Du hast keine Berechtigung, TaxoCommerce Import-Export zu verwalten."
+
+#. Description of the plugin
+msgid "Importa y exporta productos, categorías de producto, categorías WordPress, entradas, páginas y Media, con integración opcional con TaxoCommerce Core."
+msgstr "Importiert und exportiert Produkte, Produktkategorien, WordPress-Kategorien, Beiträge, Seiten und Medien, mit optionaler Anbindung an TaxoCommerce Core."

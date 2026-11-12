@@ -64,6 +64,10 @@ add_action( 'admin_notices', static function () use ( $tc_brand_on_screen, $tc_b
         return;
     }
     $plugin = get_file_data( $tc_brand_main, array( 'name' => 'Plugin Name', 'version' => 'Version', 'released' => 'Release Date', 'description' => 'Description' ) );
+    if ( ! empty( $plugin['description'] ) ) {
+        // Description header in the admin language, from this plugin's own catalog (as on the Plugins screen).
+        $plugin['description'] = translate( $plugin['description'], $tc_brand_slug ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText,WordPress.WP.I18n.NonSingularStringLiteralDomain,WordPress.WP.I18n.LowLevelTranslationFunction
+    }
     $title = preg_replace( '/\\s+-\\s+.*$/', '', (string) ( $plugin['name'] ?? '' ) );
     $version = (string) ( $plugin['version'] ?? '' );
     $released = (string) ( $plugin['released'] ?? '' );

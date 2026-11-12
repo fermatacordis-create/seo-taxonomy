@@ -105,6 +105,10 @@ final class TaxoCommerce_Core_Dashboard {
         $tc_official_info = require __DIR__ . '/official-excerpt.php';
         $tc_plugin_headers = get_file_data( dirname( __DIR__ ) . '/taxocommerce-core.php', array( 'description' => 'Description' ), 'plugin' );
         $tc_plugin_description = trim( wp_strip_all_tags( (string) ( $tc_plugin_headers['description'] ?? '' ) ) );
+        if ( '' !== $tc_plugin_description ) {
+            // Description header in the admin language (as on the Plugins screen).
+            $tc_plugin_description = translate( $tc_plugin_description, 'taxocommerce-core' ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText,WordPress.WP.I18n.LowLevelTranslationFunction
+        }
         // The version history is bundled with this plugin, not fetched from GitHub.
         $tc_history_file = dirname( __DIR__ ) . '/CHANGELOG.md';
         $tc_history = is_readable( $tc_history_file ) ? file_get_contents( $tc_history_file ) : '';

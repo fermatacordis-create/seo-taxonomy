@@ -3862,3 +3862,7 @@ msgstr "Vous n'êtes pas autorisé à exécuter l'autocontrôle."
 #: includes/class-taxocommerce-core.php
 msgid "Private task agenda, calendar, categories and indicators."
 msgstr "Agenda privée des tâches, calendrier, catégories et indicateurs."
+
+#. Description of the plugin
+msgid "Modular core for catalog hierarchy, unified content editing, logs, and extensions in WooCommerce stores."
+msgstr "Noyau modulaire pour la hiérarchie du catalogue, l'édition unifiée des contenus, les journaux et les extensions des boutiques WooCommerce."

@@ -61,7 +61,7 @@ function taxocommerce_suppliers_register_core( $core ) {
 			'name'        => 'TaxoCommerce Suppliers',
 			'version'     => TAXOCOMMERCE_SUPPLIERS_VERSION,
 			'status'      => 'active',
-			'description' => 'Supplier catalogue, purchasing, prices, and external images.',
+			'description' => __( 'Supplier catalogue, purchasing, prices, and external images.', 'taxocommerce-suppliers' ),
 			'admin_url'   => admin_url( 'admin.php?page=taxocommerce-suppliers' ),
 		)
 	);
@@ -81,7 +81,7 @@ function taxocommerce_suppliers_family_catalog( $extensions ) {
 		'search_term'   => 'TaxoCommerce Suppliers',
 		'wordpress_org' => false,
 		'admin_url'     => admin_url( 'admin.php?page=taxocommerce-suppliers' ),
-		'description'   => 'Supplier catalogue, purchasing, prices, and external images.',
+		'description'   => __( 'Supplier catalogue, purchasing, prices, and external images.', 'taxocommerce-suppliers' ),
 	);
 	return $extensions;
 }

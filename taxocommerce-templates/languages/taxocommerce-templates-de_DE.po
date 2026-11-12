@@ -918,3 +918,7 @@ msgstr "Technische Prüfung vorhandener Zuordnungen öffnen"
 #. Templates UI
 msgid "Gestionar las páginas asignadas a cada rol"
 msgstr "Die jeder Rolle zugeordneten Seiten verwalten"
+
+#. Description of the plugin
+msgid "Standalone WordPress/WooCommerce request-template routing, SEO role assignments and migration audit."
+msgstr "Eigenständiges Routing von WordPress-/WooCommerce-Anfragevorlagen, Zuordnung von SEO-Rollen und Migrationsprüfung."

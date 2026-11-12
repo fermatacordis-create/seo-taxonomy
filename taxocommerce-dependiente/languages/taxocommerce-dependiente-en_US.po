@@ -1821,3 +1821,7 @@ msgstr "No material"
 #. Dependiente Academy empty lesson status
 msgid "Lección omitida; no evaluada"
 msgstr "Lesson skipped; not evaluated"
+
+#. Description of the plugin
+msgid "Intelligent WooCommerce assistant with auditable L1-L10 lessons, semantic interpretation, L9 memory, and continuous updates."
+msgstr "Intelligent WooCommerce assistant with auditable L1–L10 lessons, semantic interpretation, L9 memory and continuous updates."

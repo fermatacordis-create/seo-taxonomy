@@ -1580,3 +1580,7 @@ msgstr "Fallido"
 #: includes/feeds/admin.php
 msgid "Stopped"
 msgstr "Detenido"
+
+#. Description of the plugin
+msgid "Publishes commercial feeds and professional XML sitemaps through independent bounded processes."
+msgstr "Publica feeds comerciales y sitemaps XML profesionales mediante procesos independientes y acotados."

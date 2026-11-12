@@ -4148,3 +4148,7 @@ msgstr "No permission to run autocheck."
 #: includes/class-taxocommerce-core.php
 msgid "Private task agenda, calendar, categories and indicators."
 msgstr "Private task agenda, calendar, categories and indicators."
+
+#. Description of the plugin
+msgid "Modular core for catalog hierarchy, unified content editing, logs, and extensions in WooCommerce stores."
+msgstr "Modular core for catalog hierarchy, unified content editing, logs, and extensions in WooCommerce stores."

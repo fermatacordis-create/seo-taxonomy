@@ -359,3 +359,7 @@ msgstr "El módulo documental de Billing no está disponible."
 #: taxocommerce-facturacion.php:118
 msgid "Billing"
 msgstr "Facturación"
+
+#. Description of the plugin
+msgid "WooCommerce invoices, proformas, and PDF quotations migrated 1:1 from TaxoCommerce SEO."
+msgstr "Facturas, proformas y presupuestos PDF de WooCommerce migrados íntegramente desde TaxoCommerce SEO."

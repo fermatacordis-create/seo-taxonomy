@@ -1599,3 +1599,11 @@ msgstr "Status lookup"
 
 msgid "Filtro de estados cargado; no se consultan ni modifican pedidos."
 msgstr "Status filter loaded; orders are neither queried nor modified."
+
+#. Description of the plugin
+msgid "Supplier catalogue intake, purchasing, product decisions, supplier prices, WooCommerce linking, and external image references."
+msgstr "Supplier catalogue intake, purchasing, product decisions, supplier prices, WooCommerce linking, and external image references."
+
+#. Family card description
+msgid "Supplier catalogue, purchasing, prices, and external images."
+msgstr "Supplier catalogue, purchasing, prices, and external images."

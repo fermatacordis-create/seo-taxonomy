@@ -3978,3 +3978,7 @@ msgstr "Download action plan JSON"
 #: taxocommerce-google-bing.php
 msgid "Abrir JSON del plan (móvil)"
 msgstr "Open action plan JSON (mobile)"
+
+#. Description of the plugin
+msgid "External connections, provider data downloads, and the restored legacy Analysis dashboard."
+msgstr "External connections, provider data downloads, and the restored legacy Analysis dashboard."

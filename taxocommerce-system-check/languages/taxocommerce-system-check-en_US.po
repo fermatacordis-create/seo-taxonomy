@@ -1512,3 +1512,7 @@ msgstr ""
 #: taxocommerce-system-check.php:401
 msgid "El módulo de auditoría HTTP no se ha cargado."
 msgstr "The HTTP audit module has not been loaded."
+
+#. Description of the plugin
+msgid "Independent WordPress, server and plugin diagnostics with local checks, reports and optional administrator notifications."
+msgstr "Independent diagnostics for WordPress, the server and plugins, with local checks, reports and optional administrator notifications."
