@@ -42,6 +42,145 @@ final class TaxoCommerce_Core_Suite {
 		add_action( 'admin_post_taxocommerce_core_download_extension', array( __CLASS__, 'handle_download' ) );
 		// OPNV automatic translation: translate the family into the admin's language.
 		add_filter( 'opnv_plugin_i18n_auto_targets', array( __CLASS__, 'opnv_i18n_targets' ) );
+		// Updates from the suite channel, like any plugin (Plugins → Updates, auto-updates).
+		add_filter( 'pre_set_site_transient_update_plugins', array( __CLASS__, 'offer_updates' ) );
+		add_filter( 'upgrader_pre_download', array( __CLASS__, 'verified_download' ), 10, 4 );
+	}
+
+	/** Site transient with the last suite manifest read (6 h; 1 h after a failure). */
+	const MANIFEST_CACHE = 'taxocommerce_suite_manifest';
+
+	/**
+	 * Suite manifest, cached so update checks do not hit the channel every time.
+	 *
+	 * @return array|WP_Error
+	 */
+	public static function cached_manifest() {
+		$cached = get_site_transient( self::MANIFEST_CACHE );
+		if ( is_array( $cached ) ) {
+			return empty( $cached['modules'] ) ? new WP_Error( 'tc_suite_cached_failure', __( 'El canal de la suite no ha respondido correctamente.', 'taxocommerce-core' ) ) : $cached;
+		}
+		$manifest = self::fetch_manifest();
+		if ( is_wp_error( $manifest ) ) {
+			set_site_transient( self::MANIFEST_CACHE, array( 'modules' => array() ), HOUR_IN_SECONDS );
+			return $manifest;
+		}
+		set_site_transient( self::MANIFEST_CACHE, $manifest, 6 * HOUR_IN_SECONDS );
+		return $manifest;
+	}
+
+	/**
+	 * Valid channel entry for a plugin folder, or null.
+	 *
+	 * @param array  $manifest Suite manifest.
+	 * @param string $dir      Plugin folder.
+	 * @return array|null
+	 */
+	private static function channel_entry( $manifest, $dir ) {
+		$entry = isset( $manifest['modules'][ $dir ] ) && is_array( $manifest['modules'][ $dir ] ) ? $manifest['modules'][ $dir ] : null;
+		if ( null === $entry ) {
+			return null;
+		}
+		$version = (string) ( $entry['version'] ?? '' );
+		$url     = (string) ( $entry['url'] ?? '' );
+		$sha     = strtolower( (string) ( $entry['sha256'] ?? '' ) );
+		if ( '' === $version || ! self::url_allowed( $url ) || ! preg_match( '/^[a-f0-9]{64}$/', $sha ) ) {
+			return null;
+		}
+		return $entry;
+	}
+
+	/**
+	 * Offers the channel's newer versions of the Core and of every installed module to WordPress.
+	 *
+	 * @param mixed $transient update_plugins site transient.
+	 * @return mixed
+	 */
+	public static function offer_updates( $transient ) {
+		if ( ! is_object( $transient ) ) {
+			return $transient;
+		}
+		$manifest = self::cached_manifest();
+		if ( is_wp_error( $manifest ) ) {
+			return $transient;
+		}
+		if ( ! function_exists( 'get_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		foreach ( get_plugins() as $file => $data ) {
+			$dir = dirname( $file );
+			if ( $file !== $dir . '/' . $dir . '.php' || ! preg_match( '/^taxocommerce-[a-z0-9-]+$/', $dir ) ) {
+				continue;
+			}
+			$entry = self::channel_entry( $manifest, $dir );
+			if ( null === $entry ) {
+				continue;
+			}
+			$item = (object) array(
+				'id'          => $file,
+				'slug'        => $dir,
+				'plugin'      => $file,
+				'new_version' => (string) $entry['version'],
+				'url'         => 'https://github.com/fermatacordis-create/seo-taxonomy',
+				'package'     => (string) $entry['url'],
+				'icons'       => array(),
+				'banners'     => array(),
+			);
+			if ( version_compare( (string) $entry['version'], (string) ( $data['Version'] ?? '0' ), '>' ) ) {
+				if ( ! isset( $transient->response ) || ! is_array( $transient->response ) ) {
+					$transient->response = array();
+				}
+				$transient->response[ $file ] = $item;
+				if ( isset( $transient->no_update[ $file ] ) ) {
+					unset( $transient->no_update[ $file ] );
+				}
+			} elseif ( empty( $transient->response[ $file ] ) ) {
+				if ( ! isset( $transient->no_update ) || ! is_array( $transient->no_update ) ) {
+					$transient->no_update = array();
+				}
+				$transient->no_update[ $file ] = $item;
+			}
+		}
+		return $transient;
+	}
+
+	/**
+	 * Downloads a channel package for WordPress's upgrader and refuses it unless its sha256 and
+	 * folder match the manifest.
+	 *
+	 * @param mixed       $reply      False to let WordPress download, or a file path / WP_Error.
+	 * @param string      $package    Package URL.
+	 * @param object|null $upgrader   Upgrader.
+	 * @param array       $hook_extra Extra data.
+	 * @return mixed
+	 */
+	public static function verified_download( $reply, $package, $upgrader = null, $hook_extra = array() ) {
+		if ( false !== $reply || ! is_string( $package ) || ! self::url_allowed( $package ) ) {
+			return $reply;
+		}
+		$manifest = self::cached_manifest();
+		if ( is_wp_error( $manifest ) ) {
+			return $reply;
+		}
+		foreach ( array_keys( (array) $manifest['modules'] ) as $dir ) {
+			$entry = self::channel_entry( $manifest, (string) $dir );
+			if ( null === $entry || (string) $entry['url'] !== $package ) {
+				continue;
+			}
+			if ( ! function_exists( 'download_url' ) ) {
+				require_once ABSPATH . 'wp-admin/includes/file.php';
+			}
+			$tmp = download_url( $package, 300 );
+			if ( is_wp_error( $tmp ) ) {
+				return $tmp;
+			}
+			if ( ! hash_equals( strtolower( (string) $entry['sha256'] ), (string) hash_file( 'sha256', $tmp ) ) || ! self::zip_contains( $tmp, $dir . '/' . $dir . '.php' ) ) {
+				wp_delete_file( $tmp );
+				return new WP_Error( 'tc_suite_sha', __( 'El archivo descargado no coincide con su huella; no se ha instalado.', 'taxocommerce-core' ) );
+			}
+			return $tmp;
+		}
+		return $reply;
 	}
 
 	/**
