@@ -123,7 +123,7 @@ final class TaxoCommerce_Core {
 		add_action( 'admin_post_taxocommerce_core_activate_extension', array( $this, 'activate_extension' ) );
 		add_action( 'admin_post_taxocommerce_core_deactivate_extension', array( $this, 'deactivate_extension' ) );
 		TaxoCommerce_Core_Suite::register_hooks();
-add_action( 'admin_post_taxocommerce_core_download_extension', array( $this, 'download_extension' ) );
+		add_action( 'admin_post_taxocommerce_core_download_extension', array( $this, 'download_extension' ) );
 		add_filter( 'plugin_action_links_' . TAXOCOMMERCE_CORE_BASENAME, array( $this, 'plugin_action_links' ) );
 
 		TaxoCommerce_Core_Country::register_hooks();
