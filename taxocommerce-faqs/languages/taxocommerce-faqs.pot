@@ -2,7 +2,7 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: TaxoCommerce FAQs 0.1.6\n"
+"Project-Id-Version: TaxoCommerce FAQs 0.1.20\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/taxocommerce-faqs\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -481,4 +481,34 @@ msgstr ""
 
 #: includes/class-taxocommerce-faqs.php:665
 msgid "CSV UTF-8; hasta 500 filas y 2 MB por importación. Solo se actualiza un ID existente; las nuevas filas reciben ID nuevo."
+msgstr ""
+
+msgid "Ejecutar Autocheck"
+msgstr ""
+
+msgid "Descargar resultados (JSON)"
+msgstr ""
+
+msgid "Autocheck de FAQs"
+msgstr ""
+
+msgid "Diagnóstico manual y no destructivo: comprueba funciones y configuración sin crear, editar, eliminar ni importar preguntas."
+msgstr ""
+
+msgid "Todavía no se ha ejecutado el Autocheck en este sitio."
+msgstr ""
+
+msgid "Correctos"
+msgstr ""
+
+msgid "Errores"
+msgstr ""
+
+msgid "Omitidos / externos"
+msgstr ""
+
+msgid "No ejecutados"
+msgstr ""
+
+msgid "Los controles comprueban contratos y lecturas, no operaciones reales. Los casos omitidos requieren validación manual en STAGING; el Code Check no sustituye a WordPress Plugin Check."
 msgstr ""

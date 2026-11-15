@@ -876,23 +876,24 @@ final class TaxoCommerce_Core_Auto_Test {
     }
 
     public static function render() {
-        if ( \TaxoCommerce_Core_Autotest_Code::render_subtabs() ) { return; }
         if ( ! self::allowed() ) {
             wp_die( esc_html__( 'Acceso denegado a Autocheck.', 'taxocommerce-core' ) );
         }
         $report = get_transient( self::REPORT_PREFIX . get_current_user_id() );
         $totals = is_array( $report ) && isset( $report['totals'], $report['rows'] ) ? $report['totals'] : null;
         ?>
-        <div class="wrap tcc-family-screen" id="tc-core-autotest">
-            <header class="tcc-page-header"><div class="tcc-page-header__content">
-                <p>TaxoCommerce Core</p><h1><?php esc_html_e( 'Autocheck', 'taxocommerce-core' ); ?></h1>
-                <p><?php esc_html_e( 'Comprueba las funciones principales de esta instalación después de actualizar Core.', 'taxocommerce-core' ); ?></p>
-            </div></header>
-            <nav class="nav-tab-wrapper" aria-label="<?php esc_attr_e( 'Navegación de TaxoCommerce Core', 'taxocommerce-core' ); ?>">
-                <a class="nav-tab" href="<?php echo esc_url( admin_url( 'admin.php?page=taxocommerce-core' ) ); ?>"><?php esc_html_e( 'Overview', 'taxocommerce-core' ); ?></a>
-                <a class="nav-tab" href="<?php echo esc_url( admin_url( 'admin.php?page=' . TaxoCommerce_Core_User_Guide::PAGE_SLUG ) ); ?>"><?php esc_html_e( 'User Guide', 'taxocommerce-core' ); ?></a>
-                <a class="nav-tab nav-tab-active" aria-current="page" href="<?php echo esc_url( add_query_arg( array( 'page' => 'taxocommerce-core', 'tab' => 'autocheck' ), admin_url( 'admin.php' ) ) ); ?>"><?php esc_html_e( 'Autocheck', 'taxocommerce-core' ); ?></a>
-            </nav>            <form class="tc-at-actions" action="<?php echo esc_url( admin_url( 'admin.php?page=taxocommerce-core&tab=autocheck' ) ); ?>" method="post">
+        <div class="wrap tcc-dashboard tcc-family-screen" id="tc-core-autotest">
+            <?php
+            // Core's own hero, version/history and navigation remain identical
+            // on Overview, Functionality Check and Code Check.
+            TaxoCommerce_Core_Dashboard::render_header_nav( 'autocheck' );
+            ?>
+            <?php
+            // The functional and source-code checks share Core's screen and navigation.
+            // Switching to Code Check must not run the functional suite.
+            if ( ! \TaxoCommerce_Core_Autotest_Code::render_subtabs() ) :
+            ?>
+            <form class="tc-at-actions" action="<?php echo esc_url( admin_url( 'admin.php?page=taxocommerce-core&tab=autocheck' ) ); ?>" method="post">
                 <input type="hidden" name="tc_autotest_manual_run" value="1">
                 <?php wp_nonce_field( self::NONCE, 'tc_autotest_nonce' ); ?>
                 <?php submit_button( __( 'Ejecutar autocheck', 'taxocommerce-core' ), 'primary', 'submit', false ); ?>
@@ -930,6 +931,7 @@ final class TaxoCommerce_Core_Auto_Test {
                     </div>
                 <?php endforeach; ?>
                 <p class="description"><?php esc_html_e( 'Verde significa que pasó la comprobación indicada. Gris significa no aplicable o no ejecutado. Los resultados basados en muestras no sustituyen una auditoría completa ni las UAT de escritura en staging.', 'taxocommerce-core' ); ?></p>
+            <?php endif; ?>
             <?php endif; ?>
         </div>
         <?php

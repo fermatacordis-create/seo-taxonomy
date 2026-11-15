@@ -113,6 +113,38 @@ final class TaxoCommerce_Logistica_Auto_Test {
         return $reflection->invokeArgs( null, $args );
     }
 
+    /**
+     * Canonical, backwards-compatible functional report fields.
+     * Never writes to the database and never exposes private site URLs.
+     *
+     * @param array $report Stored or newly generated report.
+     * @return array Normalized report with historical keys preserved.
+     */
+    public static function standardize_report( $report ) {
+        if ( ! is_array( $report ) ) {
+            return array();
+        }
+        $names = self::groups();
+        foreach ( (array) ( $report['rows'] ?? array() ) as $index => $row ) {
+            if ( ! is_array( $row ) ) {
+                continue;
+            }
+            $group_id = (string) ( $row['group_id'] ?? $row['group'] ?? '' );
+            $row['group_id'] = $group_id;
+            $row['group_name'] = (string) ( $names[ $group_id ] ?? $row['group'] ?? $group_id );
+            $row['label'] = (string) ( $row['label'] ?? $row['name'] ?? '' );
+            $row['message'] = (string) ( $row['message'] ?? $row['detail'] ?? '' );
+            $row['ms'] = max( 0, (int) ( $row['ms'] ?? 0 ) );
+            $report['rows'][ $index ] = $row;
+        }
+        $report['wordpress'] = (string) ( $report['wordpress'] ?? $report['wordpress_version'] ?? $report['wp_version'] ?? '' );
+        $report['php'] = (string) ( $report['php'] ?? $report['php_version'] ?? '' );
+        $report['date'] = (string) ( $report['date'] ?? $report['date_utc'] ?? $report['executed_at'] ?? '' );
+        $report['executed_at'] = (string) ( $report['executed_at'] ?? $report['date_utc'] ?? $report['date'] );
+        $report['timestamp'] = max( 0, (int) ( $report['timestamp'] ?? strtotime( $report['executed_at'] ) ) );
+        return $report;
+    }
+
     public static function run_suite( $group = 'all', $override = null ) {
         $groups = self::groups();
         $group = 'all' === $group || isset( $groups[ $group ] ) ? $group : 'all';
@@ -148,7 +180,7 @@ final class TaxoCommerce_Logistica_Auto_Test {
             ++$totals[ $outcome['status'] ];
         }
         global $wp_version;
-        return array(
+        return self::standardize_report( array(
             'schema' => 1,
             'phase' => 'check',
             'group' => $group,
@@ -162,7 +194,7 @@ final class TaxoCommerce_Logistica_Auto_Test {
             'duration_ms' => (int) round( ( microtime( true ) - $started ) * 1000 ),
             'totals' => $totals,
             'rows' => $rows,
-        );
+        ) );
     }
 
     public static function compare( $before, $after ) {
@@ -513,7 +545,7 @@ final class TaxoCommerce_Logistica_Auto_Test {
     private static function stored( $kind ) {
         $report = get_user_meta( get_current_user_id(), self::key( $kind ), true );
         return is_array( $report ) && ! empty( $report['site_hash'] ) && ! empty( $report['rows'] )
-            && hash_equals( self::site_hash(), (string) $report['site_hash'] ) ? $report : array();
+            && hash_equals( self::site_hash(), (string) $report['site_hash'] ) ? self::standardize_report( $report ) : array();
     }
 
     private static function url() {
@@ -590,7 +622,6 @@ final class TaxoCommerce_Logistica_Auto_Test {
     public static function render() {
         if ( \TaxoCommerce_Logistica_Autotest_Code::render_subtabs() ) { return; }
         if ( ! self::allowed() ) { wp_die( esc_html__( 'Sin permisos para consultar Autocheck.', 'taxocommerce-logistica' ) ); }
-        $before = self::stored( 'before' );
         $latest = self::stored( 'latest' );
         $cases = self::cases();
         $groups = self::groups();
@@ -599,68 +630,33 @@ final class TaxoCommerce_Logistica_Auto_Test {
             if ( isset( $row['id'] ) ) { $rows[ $row['id'] ] = $row; }
         }
         $totals = $latest['totals'] ?? array( 'pass'=>0, 'fail'=>0, 'skip'=>0, 'not_run'=>count( $cases ) );
-        $diff = $before && $latest ? self::compare( $before, $latest ) : null;
         ?>
         <section class="tc-log-at" aria-labelledby="tc-log-at-heading">
-            <h2 id="tc-log-at-heading"><?php esc_html_e( 'Autocheck — Logistics', 'taxocommerce-logistica' ); ?></h2>
-            <p><?php esc_html_e( 'Chequeo no destructivo de tarifas, reglas, pesos, destinos y seguridad. No realiza envíos, cambia pedidos, recalcula carritos ni importa configuraciones. Solo guarda sus propios informes.', 'taxocommerce-logistica' ); ?></p>
+            <h2 id="tc-log-at-heading"><?php esc_html_e( 'Autocheck de TaxoCommerce Logistics', 'taxocommerce-logistica' ); ?></h2>
+            <p><?php esc_html_e( 'Diagnóstico no destructivo de tarifas, reglas, pesos, destinos y seguridad. No realiza envíos, modifica pedidos, recalcula carritos ni importa configuraciones.', 'taxocommerce-logistica' ); ?></p>
             <div class="tc-log-at-actions">
-                <?php self::run_button( 'all', 'before', __( '1. Guardar estado ANTES', 'taxocommerce-logistica' ), true ); ?>
-                <?php self::run_button( 'all', 'after', __( '2. Comprobar DESPUÉS', 'taxocommerce-logistica' ) ); ?>
-                <?php self::run_button( 'all', 'check', __( 'Chequeo completo', 'taxocommerce-logistica' ) ); ?>
+                <?php self::run_button( 'all', 'check', __( 'Ejecutar Autocheck', 'taxocommerce-logistica' ) ); ?>
+                <?php if ( $latest ) : ?>
+                    <?php self::download_button( 'latest', __( 'Descargar resultados (JSON)', 'taxocommerce-logistica' ) ); ?>
+                <?php else : ?>
+                    <button type="button" class="button button-secondary" disabled><?php esc_html_e( 'Descargar resultados (JSON)', 'taxocommerce-logistica' ); ?></button>
+                <?php endif; ?>
             </div>
-            <div class="tc-log-at-snapshots">
-                <div>
-                    <h3><?php esc_html_e( 'Referencia ANTES', 'taxocommerce-logistica' ); ?></h3>
-                    <?php if ( $before ) : ?>
-                        <p><strong><?php esc_html_e( 'Fecha de ejecución:', 'taxocommerce-logistica' ); ?></strong> <?php echo esc_html( ( function_exists( 'wp_date' ) ? wp_date( 'd/m/Y H:i:s T', strtotime( (string) $before['date_utc'] ) ) : gmdate( 'd/m/Y H:i:s', strtotime( (string) $before['date_utc'] ) ) . ' UTC' ) ); ?></p>
-                        <p><?php echo esc_html( (string) $before['date_utc'] . ' · v' . (string) $before['version'] ); ?></p>
-                        <?php
-                        /* translators: 1: Number of passing checks, 2: number of failing checks. */
-                        $tc_log_pass_fail_format = __( '%1$d correctas · %2$d errores', 'taxocommerce-logistica' );
-                        ?>
-                        <p><?php echo esc_html( sprintf( $tc_log_pass_fail_format, absint( $before['totals']['pass'] ), absint( $before['totals']['fail'] ) ) ); ?></p>
-                        <?php self::download_button( 'before', __( 'Descargar ANTES (JSON)', 'taxocommerce-logistica' ) ); ?>
-                    <?php else : ?>
-                        <p><?php esc_html_e( 'Todavía no hay referencia guardada.', 'taxocommerce-logistica' ); ?></p>
-                    <?php endif; ?>
-                </div>
-                <div>
-                    <h3><?php esc_html_e( 'Último chequeo', 'taxocommerce-logistica' ); ?></h3>
-                    <?php if ( $latest ) : ?>
-                        <p><strong><?php esc_html_e( 'Fecha de ejecución:', 'taxocommerce-logistica' ); ?></strong> <?php echo esc_html( ( function_exists( 'wp_date' ) ? wp_date( 'd/m/Y H:i:s T', strtotime( (string) $latest['date_utc'] ) ) : gmdate( 'd/m/Y H:i:s', strtotime( (string) $latest['date_utc'] ) ) . ' UTC' ) ); ?></p>
-                        <p><?php echo esc_html( (string) $latest['date_utc'] . ' · v' . (string) $latest['version'] ); ?></p>
-                        <p><?php echo esc_html( (string) $latest['phase'] . ' · ' . (string) $latest['group'] . ' · ' . absint( $latest['duration_ms'] ) . ' ms' ); ?></p>
-                        <?php self::download_button( 'latest', __( 'Descargar último (JSON)', 'taxocommerce-logistica' ) ); ?>
-                    <?php else : ?>
-                        <p><?php esc_html_e( 'No se ha ejecutado ninguna comprobación.', 'taxocommerce-logistica' ); ?></p>
-                    <?php endif; ?>
-                </div>
-            </div>
+            <?php if ( $latest ) : ?>
+                <p class="tc-log-at-last">
+                    <strong><?php esc_html_e( 'Fecha de ejecución:', 'taxocommerce-logistica' ); ?></strong>
+                    <?php echo esc_html( (string) ( $latest['executed_at'] ?? '' ) ); ?>
+                    · <?php echo esc_html( 'v' . (string) ( $latest['version'] ?? '' ) ); ?>
+                    · <?php echo esc_html( absint( $latest['duration_ms'] ?? 0 ) . ' ms' ); ?>
+                </p>
+            <?php else : ?>
+                <p class="description"><?php esc_html_e( 'Todavía no se ha ejecutado el Autocheck en este sitio.', 'taxocommerce-logistica' ); ?></p>
+            <?php endif; ?>
             <div class="tc-log-at-totals" aria-label="<?php esc_attr_e( 'Resultados del último chequeo', 'taxocommerce-logistica' ); ?>">
-                <?php foreach ( array( 'pass'=>__( 'Correctas', 'taxocommerce-logistica' ), 'fail'=>__( 'Errores', 'taxocommerce-logistica' ), 'skip'=>__( 'No verificadas', 'taxocommerce-logistica' ), 'not_run'=>__( 'Sin ejecutar', 'taxocommerce-logistica' ) ) as $status => $label ) : ?>
+                <?php foreach ( array( 'pass'=>__( 'Correctos', 'taxocommerce-logistica' ), 'fail'=>__( 'Errores', 'taxocommerce-logistica' ), 'skip'=>__( 'Omitidos / externos', 'taxocommerce-logistica' ), 'not_run'=>__( 'No ejecutados', 'taxocommerce-logistica' ) ) as $status => $label ) : ?>
                     <div><strong><?php echo esc_html( absint( $totals[ $status ] ?? 0 ) ); ?></strong><span><?php echo esc_html( $label ); ?></span></div>
                 <?php endforeach; ?>
             </div>
-            <?php if ( $diff ) : ?>
-                <div class="tc-log-at-comparison" role="status">
-                    <h3><?php esc_html_e( 'Comparación ANTES / DESPUÉS', 'taxocommerce-logistica' ); ?></h3>
-                    <?php
-                    /* translators: 1: New regressions, 2: resolved issues, 3: existing issues, 4: lost coverage, 5: new tests. */
-                    $tc_log_diff_format = __( 'Regresiones: %1$d · Corregidas: %2$d · Persistentes: %3$d · Cobertura perdida: %4$d · Pruebas nuevas: %5$d', 'taxocommerce-logistica' );
-                    ?>
-                    <p><?php echo esc_html( sprintf( $tc_log_diff_format, count( $diff['new_failures'] ), count( $diff['resolved'] ), count( $diff['existing_failures'] ), count( $diff['lost_coverage'] ), count( $diff['new_checks'] ) ) ); ?></p>
-                    <?php if ( $diff['new_failures'] || $diff['lost_coverage'] ) : ?>
-                        <?php
-                        /* translators: %s: Comma-separated list of regressions or lost test coverage. */
-                        $tc_log_review_format = __( 'Revisar: %s', 'taxocommerce-logistica' );
-                        ?>
-                        <p class="tc-log-at-danger"><?php echo esc_html( sprintf( $tc_log_review_format, implode( ', ', array_unique( array_merge( $diff['new_failures'], $diff['lost_coverage'] ) ) ) ) ); ?></p>
-                    <?php endif; ?>
-                </div>
-            <?php elseif ( $before && $latest ) : ?>
-                <p class="description"><?php esc_html_e( 'La comparación exige una ejecución completa DESPUÉS, en el mismo sitio y con el mismo administrador.', 'taxocommerce-logistica' ); ?></p>
-            <?php endif; ?>
             <?php foreach ( $groups as $group => $name ) : ?>
                 <?php
                 $subset = array_filter( $cases, static function ( $case ) use ( $group ) { return $case[0] === $group; } );
@@ -677,13 +673,12 @@ final class TaxoCommerce_Logistica_Auto_Test {
                     $tc_log_group_failure_format = __( ' · %d errores', 'taxocommerce-logistica' );
                     ?>
                     <summary><?php echo esc_html( sprintf( $tc_log_group_format, $name, count( $subset ), $failures ? sprintf( $tc_log_group_failure_format, $failures ) : '' ) ); ?></summary>
-                    <div class="tc-log-at-group-actions"><?php self::run_button( $group, 'check', __( 'Comprobar grupo', 'taxocommerce-logistica' ) ); ?></div>
                     <?php foreach ( $subset as $id => $case ) : ?>
-                        <?php $row = $rows[ $id ] ?? array( 'status'=>'not_run', 'message'=>__( 'No ejecutada.', 'taxocommerce-logistica' ) ); ?>
+                        <?php $row = $rows[ $id ] ?? array( 'status'=>'not_run', 'label' => $case[1], 'message'=>__( 'No ejecutada.', 'taxocommerce-logistica' ), 'ms' => 0 ); ?>
                         <div class="tc-log-at-row">
                             <span aria-hidden="true" class="tc-log-at-dot tc-log-at-dot--<?php echo esc_attr( $row['status'] ); ?>"></span>
-                            <div><strong><?php echo esc_html( $case[1] ); ?></strong> <small><?php echo esc_html( $id ); ?></small>
-                                <p><?php echo esc_html( $row['message'] ); ?></p></div>
+                            <div><strong><?php echo esc_html( (string) $row['label'] ); ?> <small><?php echo esc_html( $id ); ?></small></strong>
+                                <p><?php echo esc_html( (string) $row['message'] ); ?></p><small><?php echo esc_html( absint( $row['ms'] ) . ' ms' ); ?></small></div>
                         </div>
                     <?php endforeach; ?>
                 </details>

@@ -36,6 +36,8 @@ function wp_nonce_field() {}
 function wp_die( $message ) { throw new RuntimeException( (string) $message ); }
 function wp_unslash( $value ) { return $value; }
 function check_admin_referer() {}
+function wp_nonce_url( $url ) { return $url . '&_wpnonce=smoke'; }
+function add_query_arg( $args, $url ) { return $url . '?' . http_build_query( $args ); }
 function admin_url( $path = '' ) { return 'https://example.test/wp-admin/' . $path; }
 function get_option( $key, $default = false ) { return $GLOBALS['tcs_process_options'][ $key ] ?? $default; }
 function update_option( $key, $value ) { $GLOBALS['tcs_process_options'][ $key ] = $value; return true; }
@@ -85,6 +87,7 @@ class TCD_Academy {
 }
 class TaxoCommerce_Import_Export_Batch {}
 
+require dirname( __DIR__ ) . '/includes/class-taxocommerce-system-check-process-details.php';
 require dirname( __DIR__ ) . '/includes/class-taxocommerce-system-check-processes.php';
 
 $GLOBALS['tcs_process_actions'] = array(
@@ -130,6 +133,13 @@ ob_start();
 TaxoCommerce_System_Check_Processes::render();
 $html = ob_get_clean();
 tcs_assert( false !== strpos( $html, 'Action Scheduler' ) && false !== strpos( $html, 'WP-Cron' ), 'The process screen must render.' );
+tcs_assert( false !== strpos( $html, 'Ver log / diagnóstico' ) && false !== strpos( $html, 'Ver detalles' ), 'Each queue exposes read-only details.' );
+tcs_assert( false === strpos( $html, 'serialize(' ), 'Cron signature is JSON-compatible, not serialized.' );
+$cancel_cron = new ReflectionMethod( 'TaxoCommerce_System_Check_Processes', 'cancel_cron' );
+$cancel_cron->setAccessible( true );
+tcs_assert( $cancel_cron->invoke( null, $cron[0]['hook'], $cron[0]['due'], md5( wp_json_encode( $cron[0]['args'] ) ) ), 'Generated WP-Cron signature authorizes exactly the selected safe event.' );
+tcs_assert( in_array( 'tcd_learning_tick', $GLOBALS['tcs_process_deleted'], true ), 'The selected event was unscheduled.' );
+tcs_assert( ! $cancel_cron->invoke( null, $cron[1]['hook'], $cron[1]['due'], md5( wp_json_encode( $cron[1]['args'] ) ) ), 'Protected core cron cannot be cancelled.' );
 $GLOBALS['tcs_process_denied'] = true;
 ob_start();
 TaxoCommerce_System_Check_Processes::render();

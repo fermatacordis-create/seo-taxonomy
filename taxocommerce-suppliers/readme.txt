@@ -4,12 +4,20 @@ Tags: woocommerce, suppliers, csv, inventory, prices
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.2.19
+Stable tag: 0.2.27
 License: GPLv2 or later
 
-CSV-only supplier catalogue management for the TaxoCommerce family.
+CSV-only supplier catalogue management and private supplier contact directory for the TaxoCommerce family.
 
 == Description ==
+
+Version 0.2.24 adds a direct link to each supplier's product page in the Inventory table, without requiring a WooCommerce order. Uses the original supplier URL or a canonical fallback when available; does not change any supplier or WooCommerce data.
+
+
+Version 0.2.23 adds a searchable, paginated global price-history inventory and CPU-batched CSV import/export. CSV exports preserve supplier identity, date, cost, regular/sale/effective prices and source; imports append history only after identity and duplicate checks, and never overwrite WooCommerce or supplier catalogue prices.
+
+Version 0.2.22 synchronizes the five local translation catalogs (es_ES, en_US, fr_FR, de_DE, nl_NL), including supplier price-history controls and all gettext strings currently inventoried in the plugin. Menu labels, buttons, field labels, messages and both integrated manuals use the active WordPress locale. Further runtime validation is required for any interface text outside gettext.
+
 
 * Admin header: plugin title, a single local `Description` with the static `Plugin URI` link below it (left); a wider collapsed `CHANGELOG.md` history (center); local version and release date (right). No duplicated information panel or external requests.
 
@@ -20,13 +28,16 @@ CSV-only supplier catalogue management for the TaxoCommerce family.
 TaxoCommerce Suppliers owns the supplier intake and intermediate supplier catalogue workflow.
 
 Included:
+* Inventory-backed supplier management with editable private business/contact/address/lead-time records and free-form notes.
+* Bulk CSV import/export of private supplier contact profiles, including new blank templates for every supplier in the inventory, with CPU-batched processing, import errors and resumable progress within the active session. New suppliers automatically appear after their first CSV import; deleting a record never removes catalogue products.
 * CSV-only supplier imports.
 * Reusable CSV mapping templates.
 * Generic canonical CSV import format and price-only update format; no provider templates preinstalled.
 * Compatibility with existing regional CSV feed parsing without preloading third-party supplier presets.
-* Intermediate inventory with pending, review, accepted, and discarded decisions.
+* Intermediate inventory with pending, review, accepted, and discarded decisions, including a direct link to the supplier product when available.
 * WooCommerce product linking/creation on acceptance.
 * Supplier price correction and optional WooCommerce price updates.
+* Append-only supplier and selling-price snapshots, with a read-only history viewer for each inventory row.
 * External supplier image references stored without downloading to Media.
 * Purchasing view that matches active WooCommerce sales to accepted supplier sources.
 * Compatibility with the existing seo_proveedores_productos and seo_supplier_images tables.
@@ -41,7 +52,32 @@ Explicitly excluded:
 * Cloud Run jobs.
 * Automatic supplier website extraction.
 
+== Installation ==
+
+1. Install and activate WooCommerce.
+2. Upload and activate TaxoCommerce Suppliers using WordPress Plugins.
+3. Open TaxoCommerce Suppliers, then import a supplier CSV or inspect the Inventory tab.
+4. The plugin installs its own supplier price history table automatically; history starts at the first captured observation.
+
 == Changelog ==
+
+= 0.2.27 =
+* Private supplier directory CSV import/export for every supplier in Inventory, with progress, five batch speeds, cancellation and validation of exact catalogue identities. A CSV import does not affect prices, stock, products or orders.
+
+= 0.2.26 =
+* Supplier management tab discovers actual providers from intermediate inventory, supports private contact/company/address/delivery/notes records, and separates profile deletion from inventory products. Adds an isolated DB table and five-language gettext entries.
+
+= 0.2.24 =
+* Link to the supplier's product page directly from Inventory, with safe external navigation and canonical URL fallback. Issue #2610.
+
+= 0.2.23 =
+* Global historical price inventory with supplier/product/date filters, previous price and change; batch CSV export/import with duplicate protection. Issue #2600.
+
+= 0.2.21 =
+* Sort retrospective price history by observed date, then ID, when importing older archived records. Issue #2596.
+
+= 0.2.20 =
+* Add an append-only price history table and read-only inventory price history view. Issue #2589.
 
 = 0.2.17 =
 * Local Description and Plugin URI replace REST excerpt requests and caches in the header. Issue #2494.

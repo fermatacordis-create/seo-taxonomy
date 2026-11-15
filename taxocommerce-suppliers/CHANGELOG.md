@@ -1,3 +1,56 @@
+## [0.2.27] — 2026-11-13 — Importación/exportación masiva de fichas de proveedores
+
+- CSV de la pestaña Gestión de proveedores con los 18 campos canónicos, incluyendo observaciones privadas; exporta también los proveedores sin ficha para facilitar su cumplimentación masiva.
+- Importación por bloques de 25/50/100/200/350 fichas con límite temporal de 7 s por petición, progreso, cancelación, errores y rechazo de nombres ausentes en inventario. Máximo 50 MiB o límite inferior del alojamiento.
+- Los valores vacíos sustituyen los anteriores, por lo que se recomienda exportar una copia antes de importar. No se crean proveedores ajenos al inventario ni se modifican productos, costes, existencias o pedidos.
+- CSV UTF-8 con BOM para Excel; los textos exportados se protegen frente a fórmulas de hoja de cálculo. Compatible con los idiomas ES/EN/FR/DE/NL.
+
+## [0.2.26] — 2026-11-13 — Gestión dinámica de proveedores
+
+- Nueva pestaña de gestión con listado y búsqueda de proveedores derivados de `seo_proveedores_productos`, actualizado automáticamente tras importar nuevos CSV.
+- Fichas de empresa, identificación fiscal, teléfono, correo, web, comercial, dirección, plazo de entrega y observaciones internas libres; altas, edición y eliminación de la ficha con permisos y nonce.
+- Tabla independiente `seo_proveedores_fichas` (migración automática). La ficha no altera el nombre del proveedor, productos, inventario, precios ni pedidos. Las bajas no afectan a las fuentes del catálogo.
+- Actualiza documentación, pruebas de regresión y catálogos locales ES/EN/FR/DE/NL.
+
+## [0.2.25] — 2026-11-13 — Code Check equiparado a Core 0.4.82 (#2626)
+
+- Code Check equiparado a Core 0.4.82: reglas autónomas PHP/WordPress/seguridad, clasificación por gravedad, detalles de archivos y recomendaciones, resumen y JSON; sin modificar el Autotest funcional. Issue #2626.
+- Continúa siendo una revisión estática independiente del Plugin Check oficial, con ejecución por bloques y control de CPU.
+
+## [0.2.24] — 2026-11-13 — Enlace a tienda del proveedor desde Inventario (#2610)
+
+- La tabla Inventario muestra una columna «Supplier product» con acceso directo a la ficha del proveedor, sin que exista pedido WooCommerce.
+- Emplea la URL de origen y recurre a la canónica cuando falta o no es válida, como en Compras. Abre el enlace externo en otra pestaña de forma segura; si no hay URL válida, muestra un guion.
+- Reutiliza las cadenas ya traducidas en ES/EN/FR/DE/NL, sin nuevas dependencias ni cambios de base de datos, precios, productos, enlaces de pedidos o importaciones.
+
+## [0.2.23] — 2026-11-12 — Inventario global e importación/exportación CSV de precios históricos (#2600)
+
+- Nueva pestaña «Historial de precios»: vista global paginada de movimientos de catálogo, proveedor, SKU, precio anterior, precio actual y variación, con filtros por proveedor, búsqueda y fechas.
+- Exportación CSV de todos los registros filtrados por lotes AJAX, sin limitarla a los 50 registros visibles ni depender de cron.
+- Importación CSV en lotes con cinco velocidades; verifica la identidad del catálogo, omite filas sin coincidencia, rechaza fechas/precios inválidos y detecta duplicados. Nunca cambia los precios actuales ni los márgenes.
+- Añade validaciones de permisos y nonce, archivo temporal fuera del directorio público y límites de tamaño. Mantiene compatibilidad con los cinco idiomas ES/EN/FR/DE/NL mediante POT/PO/MO sincronizados.
+- No altera el esquema histórico ni las funcionalidades existentes de Suppliers.
+
+## [0.2.22] — 2026-11-12 — Catálogos i18n sincronizados en cinco idiomas (#2062)
+
+- Completa la traducción de las 335 entradas neerlandesas pendientes: recupera 179 claves que faltaban y traduce 156 mensajes que estaban vacíos. Se conservan todos los identificadores técnicos, tokens de formato y etiquetas HTML.
+- Añade 29 cadenas gettext de la interfaz que existían en PHP pero no figuraban en la plantilla POT: historial de precios, controles del autochequeo de código, fechas, origen, encabezado y enlace oficial. Traduce esas 29 cadenas en ES/EN/FR/DE/NL (145 entradas).
+- Los cinco PO y el POT coinciden en 560 claves; los cinco PO quedan sin msgstr vacíos. Se recompilan los cinco MO conservando la cabecera gettext.
+- No se modifica la lógica de catálogo, precios, compras, historial, WooCommerce, datos ni APIs. Se preserva la versión funcional 0.2.21 anterior.
+- Persisten las tareas generales del Issue #2062: revisar literales PHP/JS fuera de gettext y validar los cinco idiomas en WordPress real en STAGING/Focazul antes de dar por finalizada la internacionalización completa.
+
+## [0.2.21] — 2026-11-12 — Historial retrospectivo ordenado por fecha (#2596)
+
+- Consultas de precio vigente y vista histórica ordenadas por `fecha DESC, id DESC`, de modo que una importación retrospectiva no reemplace el último estado comercial al comparar.
+- Sin cambios en tarifas, margen, productos ni datos existentes.
+
+## [0.2.20] — 2026-11-12 — Historial de precios vinculado al catálogo (#2589)
+
+- Añade `seo_proveedores_productos_historico` con migración automática, fecha, costes del proveedor, PVP normal, precio de oferta y precio efectivo.
+- Registra cambios de CSV, ediciones manuales y guardados de WooCommerce; conserva la primera captura como referencia de inicio sin inventar fechas anteriores.
+- Incluye consulta de solo lectura «Price history» por producto en Inventario y chequeo de tabla en Autotest.
+- No altera el cálculo existente de márgenes ni aplica descuentos.
+
 ## [0.2.19] — 2026-11-10 — Cabecera en tres zonas sin contenido duplicado (#2521)
 
 - Izquierda: nombre, descripción local del plugin y un único enlace estático `Plugin URI` bajo el texto.

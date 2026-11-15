@@ -1,0 +1,398 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: fr_FR\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "1. Set the start date; 2. import paid WooCommerce orders page by page; 3. enter actual supplier invoices and expenses; 4. verify tax classification and the issued invoice before validating an entry; 5. review months and export the ledger for your accountant."
+msgstr "1. Set the start date; 2. import paid WooCommerce orders page by page; 3. enter actual supplier invoices and expenses; 4. verify tax classification and the issued invoice before validating an entry; 5. review months and export the ledger for your accountant."
+
+msgid "Accounting"
+msgstr "Comptabilité"
+
+msgid "Accounting sections"
+msgstr "Sections comptables"
+
+msgid "Action"
+msgstr "Action"
+
+msgid "Add received invoice / expense"
+msgstr "Ajouter une facture ou une dépense"
+
+msgid "All records live in a dedicated WordPress-prefix table, with unique source/source_id keys. Imports use WooCommerce WC_Order APIs and never change orders. No TaxoCommerce sibling is required. Validated entries are immutable; corrections need a new adjustment record in a later version."
+msgstr "All records live in a dedicated WordPress-prefix table, with unique source/source_id keys. Imports use WooCommerce WC_Order APIs and never change orders. No TaxoCommerce sibling is required. Validated entries are immutable; corrections need a new adjustment record in a later version."
+
+msgid "Assets"
+msgstr "Immobilisations"
+
+msgid "Autocheck"
+msgstr "Autocheck"
+
+msgid "Base"
+msgstr "Base"
+
+msgid "Base country:"
+msgstr "Base country:"
+
+msgid "CSV and JSON are internal fiscal registers, not official AEAT files. Each export has a 20,000-row upper bound."
+msgstr "CSV and JSON are internal fiscal registers, not official AEAT files. Each export has a 20,000-row upper bound."
+
+msgid "Cannot read orders."
+msgstr "Cannot read orders."
+
+msgid "Changing this date does not erase previously imported records."
+msgstr "Changing this date does not erase previously imported records."
+
+msgid "Concept"
+msgstr "Objet"
+
+msgid "Currency:"
+msgstr "Currency:"
+
+msgid "Date"
+msgstr "Date"
+
+msgid "Deductible VAT percentage (review first)"
+msgstr "Pourcentage de TVA déductible (à vérifier)"
+
+msgid "Deductible input VAT"
+msgstr "TVA déductible"
+
+msgid "Developer guide"
+msgstr "Guide technique"
+
+msgid "Difference"
+msgstr "Différence"
+
+msgid "Document"
+msgstr "Document"
+
+msgid "Domestic VAT (verify)"
+msgstr "TVA nationale (à vérifier)"
+
+msgid "Download Autocheck JSON"
+msgstr "Télécharger le JSON du contrôle"
+
+msgid "Exempt"
+msgstr "Exonéré"
+
+msgid "Expenses"
+msgstr "Dépenses"
+
+msgid "Exports"
+msgstr "Exports"
+
+msgid "Failure of draft/review checks means fiscal data needs validation, not that the plugin runtime has failed."
+msgstr "Failure of draft/review checks means fiscal data needs validation, not that the plugin runtime has failed."
+
+msgid "Fecha de ejecución:"
+msgstr "Fecha de ejecución:"
+
+msgid "Financial year:"
+msgstr "Exercice :"
+
+msgid "First real commercial date:"
+msgstr "Début des opérations réelles :"
+
+msgid "Fiscal ledger settings"
+msgstr "Paramètres du registre fiscal"
+
+msgid "Fiscal register, VAT review, supplier invoices and export. No tax return is filed automatically."
+msgstr "Fiscal register, VAT review, supplier invoices and export. No tax return is filed automatically."
+
+msgid "Import page %d (up to 25 orders)"
+msgstr "Importer la page %d (25 commandes maximum)"
+
+msgid "Imports only paid-status orders dated after the configured start. All imported records remain drafts until invoice and VAT verification; repeated imports do not duplicate them."
+msgstr "Imports only paid-status orders dated after the configured start. All imported records remain drafts until invoice and VAT verification; repeated imports do not duplicate them."
+
+msgid "Input VAT amount"
+msgstr "TVA déductible potentielle"
+
+msgid "Insufficient permissions."
+msgstr "Insufficient permissions."
+
+msgid "Internal exports"
+msgstr "Exports internes"
+
+msgid "Intra-EU"
+msgstr "Intracommunautaire"
+
+msgid "Invalid year."
+msgstr "Invalid year."
+
+msgid "Invoice number"
+msgstr "Numéro de facture"
+
+msgid "Issued invoice number"
+msgstr "Numéro de facture émise"
+
+msgid "Manual"
+msgstr "Manuel"
+
+msgid "Model 303 — preliminary working figures"
+msgstr "Model 303 — preliminary working figures"
+
+msgid "Month"
+msgstr "Mois"
+
+msgid "Monthly fiscal summary (validated domestic entries only)"
+msgstr "Synthèse mensuelle (écritures nationales validées)"
+
+msgid "Next import page"
+msgstr "Page d'import suivante"
+
+msgid "No entries in this section."
+msgstr "Aucune écriture dans cette section."
+
+msgid "Notes / document reference"
+msgstr "Notes / justificatif"
+
+msgid "Other tax forms (390, 347, 349, 200) require their own eligibility rules and are not generated in this first version."
+msgstr "Other tax forms (390, 347, 349, 200) require their own eligibility rules and are not generated in this first version."
+
+msgid "Output VAT"
+msgstr "TVA collectée"
+
+msgid "Party"
+msgstr "Tiers"
+
+msgid "Pending review"
+msgstr "En attente de vérification"
+
+msgid "Purchases / expenses"
+msgstr "Achats / dépenses"
+
+msgid "Read-only functional Autocheck"
+msgstr "Contrôle fonctionnel en lecture seule"
+
+msgid "Received invoices"
+msgstr "Factures reçues"
+
+msgid "Refund requires credit-note and VAT verification."
+msgstr "Refund requires credit-note and VAT verification."
+
+msgid "Requires review"
+msgstr "À vérifier"
+
+msgid "Reverse charge"
+msgstr "Autoliquidation"
+
+msgid "Sales"
+msgstr "Ventes"
+
+msgid "Save draft"
+msgstr "Enregistrer le brouillon"
+
+msgid "Save settings"
+msgstr "Enregistrer les paramètres"
+
+msgid "Settings"
+msgstr "Paramètres"
+
+msgid "Status"
+msgstr "Statut"
+
+msgid "Summary"
+msgstr "Résumé"
+
+msgid "Supplier"
+msgstr "Fournisseur"
+
+msgid "Tax identification"
+msgstr "Identification fiscale"
+
+msgid "Tax returns"
+msgstr "Déclarations fiscales"
+
+msgid "Taxable base"
+msgstr "Base imposable"
+
+msgid "TaxoCommerce Accounting"
+msgstr "Comptabilité TaxoCommerce"
+
+msgid "The simplified amounts above are NOT an official Model 303, and do not include reverse charge, imports, exemptions, regional VAT regimes, carryovers or corrections. Do not submit them to the tax authority without professional review."
+msgstr "The simplified amounts above are NOT an official Model 303, and do not include reverse charge, imports, exemptions, regional VAT regimes, carryovers or corrections. Do not submit them to the tax authority without professional review."
+
+msgid "Total"
+msgstr "Total"
+
+msgid "Unverified order: reconcile the issued invoice, taxes and possible refunds before approval."
+msgstr "Unverified order: reconcile the issued invoice, taxes and possible refunds before approval."
+
+msgid "User guide"
+msgstr "Guide utilisateur"
+
+msgid "VAT"
+msgstr "TVA"
+
+msgid "VAT treatment"
+msgstr "Traitement TVA"
+
+msgid "Validate"
+msgstr "Valider"
+
+msgid "WooCommerce is unavailable."
+msgstr "WooCommerce is unavailable."
+
+msgid "WooCommerce sales / refunds"
+msgstr "Ventes et remboursements WooCommerce"
+
+msgid "Year contains over 400 entries; use the exports for full reporting. This dashboard is limited."
+msgstr "Year contains over 400 entries; use the exports for full reporting. This dashboard is limited."
+
+msgid "Invoice storage is unavailable."
+msgstr "Le stockage des factures est indisponible."
+
+msgid "Secure invoice encryption is unavailable."
+msgstr "Le chiffrement sécurisé des factures est indisponible."
+
+msgid "Invoice cannot be decrypted or has been modified."
+msgstr "Impossible de déchiffrer la facture, ou le fichier a été modifié."
+
+msgid "Purchase entry not found."
+msgstr "Écriture d'achat introuvable."
+
+msgid "Select a PDF smaller than 10 MB."
+msgstr "Sélectionnez un PDF de moins de 10 Mo."
+
+msgid "Select a valid PDF invoice."
+msgstr "Sélectionnez une facture PDF valide."
+
+msgid "Supplier invoice PDF"
+msgstr "Facture PDF du fournisseur"
+
+msgid "Document pending"
+msgstr "Document manquant"
+
+msgid "Attach supplier PDF (up to 10 MB)"
+msgstr "Joindre le PDF du fournisseur (10 Mo max.)"
+
+msgid "Upload PDF"
+msgstr "Téléverser le PDF"
+
+msgid "Invoice document not found."
+msgstr "Document de facture introuvable."
+
+msgid "Supplier invoice PDF securely attached to the purchase."
+msgstr "Facture PDF du fournisseur jointe à l'achat de manière sécurisée."
+
+msgid "Select a valid PDF smaller than 10 MB."
+msgstr "Sélectionnez un PDF valide de moins de 10 Mo."
+
+msgid "Could not store the encrypted supplier invoice. No accounting data was changed."
+msgstr "Impossible d'enregistrer la facture fournisseur chiffrée. Aucune donnée comptable n'a été modifiée."
+
+msgid "The purchase record was not found."
+msgstr "L'écriture d'achat est introuvable."
+
+msgid "Supplier PDF originals can be attached to saved purchase and expense rows. Downloads require WordPress authentication. The files are encrypted at rest using the current site salts; preserve those salts in backups. CSV/JSON exports do not include PDFs."
+msgstr "Les PDF originaux des fournisseurs peuvent être joints aux achats et dépenses enregistrés. Les téléchargements nécessitent une authentification WordPress. Les fichiers sont chiffrés avec les sels du site actuel ; conservez-les dans les sauvegardes. Les exports CSV/JSON n'incluent pas les PDF."
+
+msgid "Hacienda"
+msgstr "Administration fiscale"
+
+msgid "Issued invoices book"
+msgstr "Registre des factures émises"
+
+msgid "Sales and refunds registered in the local ledger. Verify invoice series, dates, tax details and corrections."
+msgstr "Ventes et remboursements enregistrés. Vérifiez séries, dates, TVA et rectifications."
+
+msgid "Received invoices book"
+msgstr "Registre des factures reçues"
+
+msgid "Supplier invoices and expenses. Confirm deductible VAT and retain the original purchase documents."
+msgstr "Factures fournisseurs et dépenses. Vérifiez la TVA déductible et conservez les justificatifs originaux."
+
+msgid "Investment goods book"
+msgstr "Registre des biens d'investissement"
+
+msgid "Review capital goods separately; adjustments and asset-specific information are not calculated."
+msgstr "Contrôlez séparément les immobilisations ; les régularisations et données propres aux actifs ne sont pas calculées."
+
+msgid "Intra-EU operations book"
+msgstr "Registre des opérations intracommunautaires"
+
+msgid "Review transactions classified as intra-EU. Check VAT ID, transaction type and country before filing."
+msgstr "Vérifiez les opérations intracommunautaires, le numéro de TVA, le type et le pays avant dépôt."
+
+msgid "Model 303 — VAT"
+msgstr "Modèle 303 — TVA"
+
+msgid "Indicative quarterly domestic VAT balance only. Special regimes, non-domestic transactions, adjustments and the official return boxes are missing."
+msgstr "Solde trimestriel indicatif de TVA nationale uniquement. Régimes spéciaux, opérations étrangères, corrections et cases officielles manquent."
+
+msgid "Model 390 — annual VAT"
+msgstr "Modèle 390 — TVA annuelle"
+
+msgid "Indicative annual domestic VAT summary. Exemptions, carryovers, official totals and filing eligibility require separate verification."
+msgstr "Résumé annuel indicatif de TVA nationale. Exonérations, reports, totaux officiels et obligation de dépôt sont à vérifier."
+
+msgid "Model 347 — third-party transactions"
+msgstr "Modèle 347 — opérations avec des tiers"
+
+msgid "Raw sales and purchase movements for reconciliation. The statutory thresholds, exclusions, counterparties and declaration records are NOT calculated."
+msgstr "Mouvements bruts d'achats et ventes à rapprocher. Seuils légaux, exclusions, tiers et enregistrements officiels ne sont PAS calculés."
+
+msgid "Model 349 — intra-EU transactions"
+msgstr "Modèle 349 — opérations intracommunautaires"
+
+msgid "Only transactions tagged as intra-EU are listed. Fiscal operation keys, partner VAT IDs, required periodicity and official files are not produced."
+msgstr "Seules les opérations marquées intracommunautaires sont listées. Codes fiscaux, numéros TVA validés, périodicité et fichiers officiels ne sont pas générés."
+
+msgid "Model 200 — corporate income tax"
+msgstr "Modèle 200 — impôt sur les sociétés"
+
+msgid "Only raw transactions are available. A balance sheet, profit and loss account, tax adjustments and applicability checks are not implemented."
+msgstr "Seules les écritures brutes sont disponibles. Bilan, compte de résultat, ajustements fiscaux et vérification des obligations ne sont pas implémentés."
+
+msgid "Hacienda — tax reports and records"
+msgstr "Administration fiscale — rapports et registres"
+
+msgid "These are internal working reports, NOT official AEAT tax forms. They are not accepted for submission. The filing obligations depend on the business and tax regime."
+msgstr "Rapports internes, NON des formulaires officiels de l'AEAT. Non acceptés au dépôt. Les obligations dépendent de l'entreprise et du régime fiscal."
+
+msgid "Tax documents"
+msgstr "Documents fiscaux"
+
+msgid "VAT quarter"
+msgstr "Trimestre de TVA"
+
+msgid "Matching accounting entries"
+msgstr "Écritures comptables correspondantes"
+
+msgid "More than 20,000 entries match. Download is blocked rather than silently omitting data."
+msgstr "Plus de 20 000 écritures. Le téléchargement est bloqué pour éviter toute omission silencieuse."
+
+msgid "Download working data (not for filing)"
+msgstr "Télécharger les données préparatoires (non déposables)"
+
+msgid "Open official AEAT information and filing"
+msgstr "Ouvrir la procédure et les informations officielles de l'AEAT"
+
+msgid "To file a return, use the official AEAT procedure and verify all fields and fiscal obligations. No data is transmitted automatically."
+msgstr "Pour déposer, utilisez la procédure AEAT officielle et vérifiez toutes les cases et obligations. Aucune donnée n'est envoyée automatiquement."
+
+msgid "No accounting entries for this period."
+msgstr "Aucune écriture comptable pour cette période."
+
+msgid "Only validated domestic operations are included in the indicative VAT figures. Drafts and other regimes require review. This is not a complete tax return."
+msgstr "La TVA indicative ne comprend que les opérations nationales validées. Les brouillons et autres régimes sont à vérifier. Ce n'est pas une déclaration complète."
+
+msgid "Preview shows 20 entries. Download to inspect the complete matching register."
+msgstr "L'aperçu montre 20 écritures. Téléchargez pour consulter le registre complet."
+
+msgid "Invalid tax report selection."
+msgstr "Sélection de rapport fiscal invalide."
+
+msgid "PREPARATORY WORKING DATA — NOT AN OFFICIAL AEAT RETURN OR VALID FILING FILE."
+msgstr "DONNÉES PRÉPARATOIRES — NI DÉCLARATION OFFICIELLE NI FICHIER VALIDE POUR L'AEAT."
+
+msgid "Official AEAT blank workbook templates (not filled by TaxoCommerce):"
+msgstr "Modèles officiels de registres AEAT vierges (non remplis par TaxoCommerce) :"
+
+msgid "Download AEAT XLSX template — legal entities"
+msgstr "Télécharger le modèle AEAT XLSX — personnes morales"
+
+msgid "Download AEAT XLSX template — general"
+msgstr "Télécharger le modèle AEAT XLSX — général"

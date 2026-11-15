@@ -290,7 +290,7 @@ final class TaxoCommerce_System_Check_Processes {
 		$operation = isset( $_POST['operation'] ) ? sanitize_key( wp_unslash( $_POST['operation'] ) ) : '';
 		$success = 0;
 		if ( 'stop_worker' === $operation ) {
-			$id = isset( $_POST['worker'] ) ? sanitize_key( wp_unslash( $_POST['worker'] ) ) : '';
+			$id = isset( $_POST['worker'] ) && is_scalar( $_POST['worker'] ) ? sanitize_text_field( wp_unslash( $_POST['worker'] ) ) : '';
 			$success = self::stop_worker( $id ) ? 1 : 0;
 		} elseif ( 'cancel_action' === $operation ) {
 			$id = isset( $_POST['id'] ) ? absint( wp_unslash( $_POST['id'] ) ) : 0;
@@ -343,11 +343,38 @@ final class TaxoCommerce_System_Check_Processes {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return;
 		}
+		// FTPS deployments are not atomic: load the optional detail module lazily
+		// so an older bootstrap cannot leave the Processes tab in a fatal state.
+		$details_available = class_exists( 'TaxoCommerce_System_Check_Process_Details', false );
+		if ( ! $details_available ) {
+			$details_file = __DIR__ . '/class-taxocommerce-system-check-process-details.php';
+			if ( is_readable( $details_file ) ) {
+				require_once $details_file;
+				$details_available = class_exists( 'TaxoCommerce_System_Check_Process_Details', false );
+			}
+		}
 		$workers = self::workers();
 		$actions = self::actions();
 		$crons   = self::cron();
 		echo '<div class="wrap"><h2>' . esc_html__( 'Procesos de WordPress y WooCommerce', 'taxocommerce-system-check' ) . '</h2>';
 		echo '<p>' . esc_html__( 'Tareas de aplicación, no procesos Linux. Detener no interrumpe una petición PHP ya en marcha. Se preservan los trabajos críticos de WordPress y WooCommerce.', 'taxocommerce-system-check' ) . '</p>';
+		if ( class_exists( 'TaxoCommerce_System_Check_Queue_Health' ) ) {
+			echo '<h3>' . esc_html__( 'Queue health diagnostics (read-only)', 'taxocommerce-system-check' ) . '</h3>';
+			echo '<p>' . esc_html__( 'WP-Cron and Action Scheduler signals are measured when this page opens. These measurements do not start, cancel or resume jobs, and cannot prove a PHP runner is stopped.', 'taxocommerce-system-check' ) . '</p>';
+			echo '<table class="widefat striped"><thead><tr><th>' . esc_html__( 'Metric', 'taxocommerce-system-check' ) . '</th><th>' . esc_html__( 'Value', 'taxocommerce-system-check' ) . '</th><th>' . esc_html__( 'Status', 'taxocommerce-system-check' ) . '</th><th>' . esc_html__( 'Details', 'taxocommerce-system-check' ) . '</th></tr></thead><tbody>';
+			TaxoCommerce_System_Check_Queue_Health::render_cron_rows();
+			TaxoCommerce_System_Check_Queue_Health::render_scheduler_rows();
+			echo '</tbody></table>';
+		}
+		if ( $details_available ) {
+			$queue_state = class_exists( 'TaxoCommerce_System_Check_Queue_Health' ) ? TaxoCommerce_System_Check_Queue_Health::scheduler() : array();
+			if ( ! empty( $queue_state['last_failed_id'] ) ) {
+				echo '<p><a class="button button-secondary" href="' . esc_url( TaxoCommerce_System_Check_Process_Details::url( 'action', array( 'tcs_item' => (int) $queue_state['last_failed_id'] ) ) ) . '">' . esc_html__( 'Ver log del último fallo', 'taxocommerce-system-check' ) . '</a></p>';
+			}
+			TaxoCommerce_System_Check_Process_Details::render_selected();
+		} else {
+			echo '<div class="notice notice-warning inline"><p>' . esc_html__( 'Process diagnostics are unavailable until the plugin update completes.', 'taxocommerce-system-check' ) . '</p></div>';
+		}
 		self::button( 'stop_all', __( 'Detener los trabajos cancelables mostrados', 'taxocommerce-system-check' ), array(), true );
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only status feedback.
 		$stopped = isset( $_GET['stopped'] ) ? absint( wp_unslash( $_GET['stopped'] ) ) : null;
@@ -356,40 +383,52 @@ final class TaxoCommerce_System_Check_Processes {
 			echo '<p role="status">' . esc_html( sprintf( __( 'Operaciones de detención solicitadas o completadas: %d.', 'taxocommerce-system-check' ), $stopped ) ) . '</p>';
 		}
 		echo '<h3>' . esc_html__( 'Procesos de larga duración', 'taxocommerce-system-check' ) . '</h3>';
-		echo '<table class="widefat striped"><thead><tr><th>' . esc_html__( 'Trabajo', 'taxocommerce-system-check' ) . '</th><th>' . esc_html__( 'Estado', 'taxocommerce-system-check' ) . '</th><th>' . esc_html__( 'Detalle', 'taxocommerce-system-check' ) . '</th><th>' . esc_html__( 'Acción', 'taxocommerce-system-check' ) . '</th></tr></thead><tbody>';
+		echo '<table class="widefat striped"><thead><tr><th>' . esc_html__( 'Trabajo', 'taxocommerce-system-check' ) . '</th><th>' . esc_html__( 'Estado', 'taxocommerce-system-check' ) . '</th><th>' . esc_html__( 'Detalle', 'taxocommerce-system-check' ) . '</th><th>' . esc_html__( 'Acción', 'taxocommerce-system-check' ) . '</th><th>' . esc_html__( 'Diagnóstico', 'taxocommerce-system-check' ) . '</th></tr></thead><tbody>';
 		foreach ( $workers as $worker ) {
 			echo '<tr><td>' . esc_html( $worker['label'] ) . '</td><td>' . esc_html( $worker['status'] ) . '</td><td>' . esc_html( $worker['detail'] ?? '' ) . '</td><td>';
 			if ( ! empty( $worker['can_stop'] ) ) {
 				self::button( 'stop_worker', __( 'Detener', 'taxocommerce-system-check' ), array( 'worker' => $worker['id'] ) );
 			}
-			echo '</td></tr>';
+			if ( $details_available ) {
+				echo '</td><td><a class="button" href="' . esc_url( TaxoCommerce_System_Check_Process_Details::url( 'worker', array( 'tcs_worker' => $worker['id'] ) ) ) . '">' . esc_html__( 'Ver detalles', 'taxocommerce-system-check' ) . '</a></td></tr>';
+			} else {
+				echo '</td><td>' . esc_html__( 'Unavailable', 'taxocommerce-system-check' ) . '</td></tr>';
+			}
 		}
 		if ( ! $workers ) {
-			echo '<tr><td colspan="4">' . esc_html__( 'No hay procesos registrados.', 'taxocommerce-system-check' ) . '</td></tr>';
+			echo '<tr><td colspan="5">' . esc_html__( 'No hay procesos registrados.', 'taxocommerce-system-check' ) . '</td></tr>';
 		}
 		echo '</tbody></table><h3>Action Scheduler</h3>';
-		echo '<table class="widefat striped"><thead><tr><th>ID</th><th>Hook</th><th>Grupo</th><th>Estado</th><th>Acción</th></tr></thead><tbody>';
+		echo '<table class="widefat striped"><thead><tr><th>ID</th><th>Hook</th><th>Grupo</th><th>Estado</th><th>Acción</th><th>' . esc_html__( 'Diagnóstico', 'taxocommerce-system-check' ) . '</th></tr></thead><tbody>';
 		foreach ( $actions as $action ) {
 			echo '<tr><td>' . esc_html( (string) $action['id'] ) . '</td><td><code>' . esc_html( $action['hook'] ) . '</code></td><td>' . esc_html( $action['group'] ) . '</td><td>' . esc_html( $action['status'] ) . '</td><td>';
 			if ( $action['can_cancel'] ) {
 				self::button( 'cancel_action', __( 'Cancelar pendiente', 'taxocommerce-system-check' ), array( 'id' => $action['id'] ) );
 			}
-			echo '</td></tr>';
+			if ( $details_available ) {
+				echo '</td><td><a class="button" href="' . esc_url( TaxoCommerce_System_Check_Process_Details::url( 'action', array( 'tcs_item' => (int) $action['id'] ) ) ) . '">' . esc_html__( 'Ver log / diagnóstico', 'taxocommerce-system-check' ) . '</a></td></tr>';
+			} else {
+				echo '</td><td>' . esc_html__( 'Unavailable', 'taxocommerce-system-check' ) . '</td></tr>';
+			}
 		}
 		if ( ! $actions ) {
-			echo '<tr><td colspan="5">' . esc_html__( 'Sin acciones pendientes o en curso.', 'taxocommerce-system-check' ) . '</td></tr>';
+			echo '<tr><td colspan="6">' . esc_html__( 'Sin acciones pendientes o en curso.', 'taxocommerce-system-check' ) . '</td></tr>';
 		}
 		echo '</tbody></table><h3>WP-Cron</h3>';
-		echo '<table class="widefat striped"><thead><tr><th>Hook</th><th>Programado (UTC)</th><th>Estado</th><th>Acción</th></tr></thead><tbody>';
+		echo '<table class="widefat striped"><thead><tr><th>Hook</th><th>Programado (UTC)</th><th>Estado</th><th>Acción</th><th>' . esc_html__( 'Diagnóstico', 'taxocommerce-system-check' ) . '</th></tr></thead><tbody>';
 		foreach ( $crons as $event ) {
 			echo '<tr><td><code>' . esc_html( $event['hook'] ) . '</code></td><td>' . esc_html( gmdate( 'Y-m-d H:i:s', $event['due'] ) ) . '</td><td>' . esc_html( $event['status'] ) . '</td><td>';
 			if ( $event['can_cancel'] ) {
-				self::button( 'cancel_cron', __( 'Cancelar programación', 'taxocommerce-system-check' ), array( 'hook' => $event['hook'], 'when' => $event['due'], 'signature' => md5( serialize( $event['args'] ) ) ) );
+				self::button( 'cancel_cron', __( 'Cancelar programación', 'taxocommerce-system-check' ), array( 'hook' => $event['hook'], 'when' => $event['due'], 'signature' => md5( wp_json_encode( $event['args'] ) ) ) );
 			}
-			echo '</td></tr>';
+			if ( $details_available ) {
+				echo '</td><td><a class="button" href="' . esc_url( TaxoCommerce_System_Check_Process_Details::url( 'cron', array( 'tcs_hook' => $event['hook'], 'tcs_when' => $event['due'], 'tcs_sig' => md5( wp_json_encode( $event['args'] ) ) ) ) ) . '">' . esc_html__( 'Ver detalles', 'taxocommerce-system-check' ) . '</a></td></tr>';
+			} else {
+				echo '</td><td>' . esc_html__( 'Unavailable', 'taxocommerce-system-check' ) . '</td></tr>';
+			}
 		}
 		if ( ! $crons ) {
-			echo '<tr><td colspan="4">' . esc_html__( 'No hay eventos de WP-Cron.', 'taxocommerce-system-check' ) . '</td></tr>';
+			echo '<tr><td colspan="5">' . esc_html__( 'No hay eventos de WP-Cron.', 'taxocommerce-system-check' ) . '</td></tr>';
 		}
 		echo '</tbody></table></div>';
 	}

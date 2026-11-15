@@ -3,8 +3,8 @@
  * Plugin Name: TaxoCommerce Insights
  * Plugin URI: https://asociacionfocazul.com/taxocommerce-google-bing/
  * Description: External connections, provider data downloads, and the restored legacy Analysis dashboard.
- * Version: 1.1.52
- * Release Date: 2026-11-12
+ * Version: 1.1.64
+ * Release Date: 2026-11-15
  * Requires at least: 5.8
  * Requires PHP: 7.4
  * Author: David Perez
@@ -19,7 +19,7 @@ require_once __DIR__ . '/includes/admin-branding.php';
 require_once __DIR__ . '/includes/class-taxocommerce-autotest-code.php';
 \TaxoCommerce_Insights_Autotest_Code::boot();
 
-define( 'TAXOCOMMERCE_GOOGLE_BING_VERSION', '1.1.52' );
+define( 'TAXOCOMMERCE_GOOGLE_BING_VERSION', '1.1.64' );
 define( 'TAXOCOMMERCE_GOOGLE_BING_FILE', __FILE__ );
 define( 'TAXOCOMMERCE_GOOGLE_BING_PATH', plugin_dir_path( __FILE__ ) );
 define( 'TAXOCOMMERCE_GOOGLE_BING_URL', plugin_dir_url( __FILE__ ) );
@@ -299,19 +299,14 @@ function taxocommerce_google_bing_analysis_screen() {
             . esc_html( (string) $option ) . ' días</option>';
     }
     echo '</select>' . '<button type="submit" class="button">' . esc_html__( 'Cambiar periodo', 'taxocommerce-google-bing' ) . '</button>';
-    if ( function_exists( 'seo_analista_export_json_url' ) ) {
-        $json_url = seo_analista_export_json_url( $days );
-        // This button uses bounded authenticated AJAX chunks, never one long HTTP request.
-        echo ' <label for="tgb-chunked-json-speed">' . esc_html__( 'Velocidad JSON', 'taxocommerce-google-bing' ) . '</label>';
-        echo ' <select id="tgb-chunked-json-speed" aria-label="' . esc_attr__( 'Velocidad de exportación', 'taxocommerce-google-bing' ) . '">';
-        for ( $speed = 1; $speed <= 5; $speed++ ) {
-            echo '<option value="' . esc_attr( (string) $speed ) . '"' . selected( $speed, 3, false ) . '>' . esc_html( (string) $speed ) . '</option>';
-        }
-        echo '</select>';
-        echo ' <button type="button" id="tgb-chunked-json-start" class="button">' . esc_html__( 'Preparar JSON completo por bloques', 'taxocommerce-google-bing' ) . '</button>';
-        echo ' <button type="button" id="tgb-chunked-json-stop" class="button" disabled>' . esc_html__( 'Detener exportación', 'taxocommerce-google-bing' ) . '</button>';
+    // The full report has one execution path: authenticated, bounded JSON blocks.
+    // Individual specialist reports remain independent actions below.
+    echo ' <label for="tgb-chunked-json-speed">' . esc_html__( 'Control de CPU', 'taxocommerce-google-bing' ) . '</label>';
+    echo ' <select id="tgb-chunked-json-speed" aria-label="' . esc_attr__( 'Velocidad de ejecución', 'taxocommerce-google-bing' ) . '">';
+    for ( $speed = 1; $speed <= 5; $speed++ ) {
+        echo '<option value="' . esc_attr( (string) $speed ) . '"' . selected( $speed, 3, false ) . '>' . esc_html( (string) $speed ) . '</option>';
     }
-    echo '</form><div id="tgb-chunked-json-status" role="status" aria-live="polite"></div><a id="tgb-chunked-json-download" class="button button-primary" style="display:none" href="#">' . esc_html__( 'Descargar JSON completo', 'taxocommerce-google-bing' ) . '</a></div>';
+    echo '</select></form></div>';
 
     // Do not call seo_analista_lazy_render_shell: it would enqueue the same
     // click handler again and issue two AJAX requests per button click.
@@ -320,10 +315,12 @@ function taxocommerce_google_bing_analysis_screen() {
     echo '<div class="seo-analista-lazy-controls seo-analista-toolbar-actions">';
     echo '<button type="button" id="tgb-analysis-run-all" class="button button-primary">' . esc_html__( 'Ejecutar informe completo', 'taxocommerce-google-bing' ) . '</button>';
     echo '<button type="button" id="tgb-analysis-cancel" class="button" disabled>' . esc_html__( 'Detener', 'taxocommerce-google-bing' ) . '</button>';
+    echo '<a id="tgb-chunked-json-download" class="button disabled" aria-disabled="true">' . esc_html__( 'Descargar JSON completo', 'taxocommerce-google-bing' ) . '</a>';
     echo '</div>';
+    echo '<div id="seo-analista-lazy-status" class="seo-analista-lazy-status" aria-live="polite"></div>';
     echo '<div class="seo-analista-lazy-intro"><strong>Analista '
         . esc_html( defined( 'SEO_ANALISTA_VERSION' ) ? SEO_ANALISTA_VERSION : '' )
-        . '</strong> · carga bajo demanda<p>Ejecuta únicamente el informe elegido.</p></div>';
+        . '</strong> · carga bajo demanda<p>El informe completo se prepara en bloques con control de CPU. Los informes individuales pueden ejecutarse por separado.</p></div>';
     echo '<div class="seo-analista-lazy-controls seo-analista-report-grid">';
     foreach ( $reports as $key => $report ) {
         $is_plan = 'directrices' === $key;
@@ -352,9 +349,25 @@ function taxocommerce_google_bing_analysis_screen() {
         echo '</div></article>';
     }
     echo '</div>';
-    echo '<div id="seo-analista-lazy-status" class="seo-analista-lazy-status" aria-live="polite"></div>';
     echo '<div id="seo-analista-lazy-result" class="seo-analista-lazy-result">';
-    echo '<div class="seo-analista-lazy-empty">' . '<strong>' . esc_html__( 'Ningún informe cargado.', 'taxocommerce-google-bing' ) . '</strong>' . '<p>' . esc_html__( 'Pulsa uno de los botones anteriores para ejecutar solo ese análisis.', 'taxocommerce-google-bing' ) . '</p>' . '</div>';
+    // phpcs:disable WordPress.Security.NonceVerification.Recommended -- Read-only navigation state after a nonce-validated admin-post action.
+    $open_report = isset( $_GET['analysis_open'] ) ? sanitize_key( wp_unslash( $_GET['analysis_open'] ) ) : '';
+    $return_notice = isset( $_GET['analista_notice'] ) ? sanitize_key( wp_unslash( $_GET['analista_notice'] ) ) : '';
+    // phpcs:enable WordPress.Security.NonceVerification.Recommended
+    if ( 'competencia' === $open_report && function_exists( 'taxocommerce_insights_competitive_render_panel' ) ) {
+        // Render saved data only. Do not call the AJAX generator, Merchant, Trends,
+        // or any other data acquisition merely to restore the visible panel.
+        echo '<div class="tgb-analysis-report" data-report="competencia">';
+        if ( 'competitive_generated' === $return_notice ) {
+            echo '<div class="notice notice-success inline"><p>' . esc_html__( 'Informe competitivo generado y guardado.', 'taxocommerce-google-bing' ) . '</p></div>';
+        } elseif ( 'market_settings_saved' === $return_notice ) {
+            echo '<div class="notice notice-success inline"><p>' . esc_html__( 'Configuración del análisis guardada.', 'taxocommerce-google-bing' ) . '</p></div>';
+        }
+        taxocommerce_insights_competitive_render_panel( $days );
+        echo '</div>';
+    } else {
+        echo '<div class="seo-analista-lazy-empty">' . '<strong>' . esc_html__( 'Ningún informe cargado.', 'taxocommerce-google-bing' ) . '</strong>' . '<p>' . esc_html__( 'Pulsa uno de los botones anteriores para ejecutar solo ese análisis.', 'taxocommerce-google-bing' ) . '</p>' . '</div>';
+    }
     echo '</div></div>';
 }
 

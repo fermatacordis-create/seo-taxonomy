@@ -1,0 +1,8 @@
+= 0.1.2 (2026-11-14) =
+* Add Hacienda workspace with VAT books, models 303/390/347/349/200 preparatory authenticated CSV/JSON reports, official blank AEAT XLSX template links for books/303, current-quarter default, 303 quarterly and 390 yearly domestic VAT aggregation across all rows, AEAT links, and non-fileable status. No electronic filing; issue #2687.
+
+= 0.1.1 (2026-11-14) =
+* Secure, encrypted attachment of original supplier PDF invoices to manually entered purchases, expenses, assets and intra-EU records. Restricted uploads/downloads, preserved accounting ledger and no automatic tax document parsing. Issue #2681.
+
+= 0.1.0 =
+* First standalone WooCommerce accounting ledger; draft sales, manual supplier expenses, internal monthly VAT figures and CSV/JSON exports.

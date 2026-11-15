@@ -29,6 +29,9 @@ final class TCSUP_Admin {
 		add_action( 'admin_post_tcsup_price_update', array( 'TCSUP_Products', 'handle_price_update' ) );
 		add_action( 'admin_post_tcsup_images_update', array( 'TCSUP_Products', 'handle_images_update' ) );
 		add_action( 'admin_post_tcsup_settings', array( __CLASS__, 'handle_settings' ) );
+		TCSUP_History_Transfer::boot();
+		TCSUP_Profiles::boot();
+		TCSUP_Profiles_Transfer::boot();
 	}
 
 	public static function capability() {
@@ -63,6 +66,38 @@ final class TCSUP_Admin {
 		if ( false === strpos( (string) $hook, self::PAGE ) ) {
 			return;
 		}
+		if ( 'history' === self::active_tab() ) {
+			wp_enqueue_script( 'taxocommerce-suppliers-history', TAXOCOMMERCE_SUPPLIERS_URL . 'assets/price-history.js', array(), TAXOCOMMERCE_SUPPLIERS_VERSION, true );
+			wp_localize_script( 'taxocommerce-suppliers-history', 'tcsupHistoryStrings', array(
+				'exporting' => __( 'Exporting price history...', 'taxocommerce-suppliers' ),
+				'exportDone' => __( 'CSV exported. Rows: ', 'taxocommerce-suppliers' ),
+				'importing' => __( 'Importing historical prices...', 'taxocommerce-suppliers' ),
+				'importDone' => __( 'Import finished. ', 'taxocommerce-suppliers' ),
+				'inserted' => __( 'Added: ', 'taxocommerce-suppliers' ),
+				'duplicates' => __( 'Duplicates: ', 'taxocommerce-suppliers' ),
+				'unmatched' => __( 'Unmatched: ', 'taxocommerce-suppliers' ),
+				'invalid' => __( 'Invalid: ', 'taxocommerce-suppliers' ),
+				'serverError' => __( 'Server request failed.', 'taxocommerce-suppliers' ),
+			) );
+		}
+		if ( 'providers' === self::active_tab() ) {
+			wp_enqueue_script( 'tcsup-profiles-transfer', TAXOCOMMERCE_SUPPLIERS_URL . 'assets/profiles-transfer.js', array(), TAXOCOMMERCE_SUPPLIERS_VERSION, true );
+			wp_localize_script( 'tcsup-profiles-transfer', 'tcsupProfilesStrings', array(
+				'exporting' => __( 'Exporting supplier records...', 'taxocommerce-suppliers' ),
+				'exportDone' => __( 'Exported supplier records: ', 'taxocommerce-suppliers' ),
+				'importing' => __( 'Importing supplier records...', 'taxocommerce-suppliers' ),
+				'importDone' => __( 'Import completed. ', 'taxocommerce-suppliers' ),
+				'added' => __( 'Created: ', 'taxocommerce-suppliers' ),
+				'updated' => __( 'Updated: ', 'taxocommerce-suppliers' ),
+				'unchanged' => __( 'Unchanged: ', 'taxocommerce-suppliers' ),
+				'unmatched' => __( 'Unknown: ', 'taxocommerce-suppliers' ),
+				'invalid' => __( 'Invalid: ', 'taxocommerce-suppliers' ),
+				'stopping' => __( 'Stopping import after the current batch...', 'taxocommerce-suppliers' ),
+				'stopped' => __( 'Import stopped. Completed batches are retained.', 'taxocommerce-suppliers' ),
+				'sampleErrors' => __( 'First invalid or unmatched rows: ', 'taxocommerce-suppliers' ),
+				'serverError' => __( 'Server request failed.', 'taxocommerce-suppliers' ),
+			) );
+		}
 		wp_enqueue_style(
 			'taxocommerce-suppliers-admin',
 			TAXOCOMMERCE_SUPPLIERS_URL . 'assets/admin.css',
@@ -87,7 +122,7 @@ final class TCSUP_Admin {
 	private static function active_tab() {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only navigation.
 		$tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : 'import';
-		return in_array( $tab, array( 'import', 'templates', 'inventory', 'prices', 'images', 'purchasing', 'manual', 'autotest' ), true ) ? $tab : 'import';
+		return in_array( $tab, array( 'import', 'templates', 'inventory', 'prices', 'history', 'images', 'purchasing', 'providers', 'manual', 'autotest' ), true ) ? $tab : 'import';
 	}
 
 	public static function render() {
@@ -111,8 +146,10 @@ final class TCSUP_Admin {
 					'templates' => __( 'CSV Templates', 'taxocommerce-suppliers' ),
 					'inventory' => __( 'Inventory', 'taxocommerce-suppliers' ),
 					'prices'    => __( 'Prices', 'taxocommerce-suppliers' ),
+					'history'   => __( 'Price history', 'taxocommerce-suppliers' ),
 					'images'     => __( 'External Images', 'taxocommerce-suppliers' ),
 					'purchasing' => __( 'Purchasing', 'taxocommerce-suppliers' ),
+					'providers' => __( 'Supplier management', 'taxocommerce-suppliers' ),
 					'manual' => __( 'Manual', 'taxocommerce-suppliers' ),
 					'autotest' => __( 'Autocheck', 'taxocommerce-suppliers' ),
 				);
@@ -138,11 +175,17 @@ final class TCSUP_Admin {
 				case 'prices':
 					self::render_prices();
 					break;
+				case 'history':
+					TCSUP_History_Transfer::render();
+					break;
 				case 'images':
 					self::render_images();
 					break;
 				case 'purchasing':
 					TCSUP_Purchasing::render();
+					break;
+				case 'providers':
+					TCSUP_Profiles::render();
 					break;
 				case 'manual':
 					TCSUP_Manual::render();
@@ -632,6 +675,9 @@ final class TCSUP_Admin {
 	}
 
 	private static function render_inventory() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only history selector.
+		$history_id = isset( $_GET['history_id'] ) ? absint( $_GET['history_id'] ) : 0;
+		$history_row = $history_id ? TCSUP_Products::row( $history_id ) : false;
 		$result = self::catalogue_query( 50, false );
 		$rows = $result['rows'];
 		?>
@@ -652,15 +698,23 @@ final class TCSUP_Admin {
 					<button class="button button-primary"><?php esc_html_e( 'Apply', 'taxocommerce-suppliers' ); ?></button>
 				</div>
 				<div class="tcsup-scroll"><table class="widefat striped">
-					<thead><tr><th><input type="checkbox" id="tcsup-select-page" aria-label="<?php echo esc_attr__( 'Select all rows on this page', 'taxocommerce-suppliers' ); ?>"></th><th><?php esc_html_e( 'Supplier', 'taxocommerce-suppliers' ); ?></th><th><?php esc_html_e( 'External identity', 'taxocommerce-suppliers' ); ?></th><th><?php esc_html_e( 'Product', 'taxocommerce-suppliers' ); ?></th><th><?php esc_html_e( 'Market', 'taxocommerce-suppliers' ); ?></th><th><?php esc_html_e( 'Supplier price', 'taxocommerce-suppliers' ); ?></th><th><?php esc_html_e( 'Stock', 'taxocommerce-suppliers' ); ?></th><th><?php esc_html_e( 'Decision', 'taxocommerce-suppliers' ); ?></th><th><?php esc_html_e( 'Sync', 'taxocommerce-suppliers' ); ?></th><th><?php esc_html_e( 'Woo ID', 'taxocommerce-suppliers' ); ?></th><th><?php esc_html_e( 'Actions', 'taxocommerce-suppliers' ); ?></th></tr></thead>
+					<thead><tr><th><input type="checkbox" id="tcsup-select-page" aria-label="<?php echo esc_attr__( 'Select all rows on this page', 'taxocommerce-suppliers' ); ?>"></th><th><?php esc_html_e( 'Supplier', 'taxocommerce-suppliers' ); ?></th><th><?php esc_html_e( 'External identity', 'taxocommerce-suppliers' ); ?></th><th><?php esc_html_e( 'Product', 'taxocommerce-suppliers' ); ?></th><th><?php esc_html_e( 'Supplier product', 'taxocommerce-suppliers' ); ?></th><th><?php esc_html_e( 'Market', 'taxocommerce-suppliers' ); ?></th><th><?php esc_html_e( 'Supplier price', 'taxocommerce-suppliers' ); ?></th><th><?php esc_html_e( 'Stock', 'taxocommerce-suppliers' ); ?></th><th><?php esc_html_e( 'Decision', 'taxocommerce-suppliers' ); ?></th><th><?php esc_html_e( 'Sync', 'taxocommerce-suppliers' ); ?></th><th><?php esc_html_e( 'Woo ID', 'taxocommerce-suppliers' ); ?></th><th><?php esc_html_e( 'Actions', 'taxocommerce-suppliers' ); ?></th></tr></thead>
 					<tbody>
-					<?php if ( ! $rows ) : ?><tr><td colspan="11"><?php esc_html_e( 'No supplier rows match the current filters.', 'taxocommerce-suppliers' ); ?></td></tr><?php endif; ?>
+					<?php if ( ! $rows ) : ?><tr><td colspan="12"><?php esc_html_e( 'No supplier rows match the current filters.', 'taxocommerce-suppliers' ); ?></td></tr><?php endif; ?>
 					<?php foreach ( $rows as $row ) : ?>
 						<tr>
 							<td><input type="checkbox" name="row_ids[]" value="<?php echo esc_attr( $row['id'] ); ?>"></td>
 							<td><strong><?php echo esc_html( $row['proveedor'] ); ?></strong></td>
 							<td><code><?php echo esc_html( $row['proveedor_id_externo'] ); ?></code><br><small><?php echo esc_html( $row['sku'] ); ?></small></td>
 							<td><strong><?php echo esc_html( $row['nombre'] ); ?></strong><br><small><?php echo esc_html( $row['marca'] ); ?></small></td>
+							<?php
+							// Use the same supplier product URL priority as the existing Purchasing tab.
+							$supplier_url = esc_url( trim( (string) ( $row['url_origen'] ?? '' ) ) );
+							if ( '' === $supplier_url ) {
+								$supplier_url = esc_url( trim( (string) ( $row['url_canonica'] ?? '' ) ) );
+							}
+							?>
+							<td><?php if ( '' !== $supplier_url ) : ?><a class="button button-small" href="<?php echo esc_url( $supplier_url ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Purchase', 'taxocommerce-suppliers' ); ?></a><?php else : ?>—<?php endif; ?></td>
 							<td><?php echo esc_html( $row['pais_origen'] ?: '—' ); ?></td>
 							<td><?php echo esc_html( ( '' !== (string) $row['precio_con_iva'] ? $row['precio_con_iva'] : $row['precio_sin_iva'] ) . ' ' . $row['moneda'] ); ?></td>
 							<td><?php echo esc_html( '' !== (string) $row['stock_cantidad'] ? $row['stock_cantidad'] : $row['stock_estado'] ); ?></td>
@@ -671,12 +725,43 @@ final class TCSUP_Admin {
 								<button class="button button-small button-primary" name="row_action" value="accept:<?php echo esc_attr( $row['id'] ); ?>"><?php esc_html_e( 'Accept', 'taxocommerce-suppliers' ); ?></button>
 								<button class="button button-small" name="row_action" value="review:<?php echo esc_attr( $row['id'] ); ?>"><?php esc_html_e( 'Review', 'taxocommerce-suppliers' ); ?></button>
 								<button class="button button-small" name="row_action" value="discard:<?php echo esc_attr( $row['id'] ); ?>"><?php esc_html_e( 'Discard', 'taxocommerce-suppliers' ); ?></button>
+								<a class="button button-small" href="<?php echo esc_url( self::tab_url( 'inventory', array( 'history_id' => absint( $row['id'] ) ) ) ); ?>"><?php esc_html_e( 'Price history', 'taxocommerce-suppliers' ); ?></a>
 							</td>
 						</tr>
 					<?php endforeach; ?>
 					</tbody>
 				</table></div>
 			</form>
+			<?php if ( $history_row ) : ?>
+				<section class="tcsup-card" id="tcsup-price-history">
+					<h3><?php echo esc_html__( 'Price history', 'taxocommerce-suppliers' ) . ': ' . esc_html( $history_row['nombre'] ); ?></h3>
+					<p><?php esc_html_e( 'Read-only price snapshots. The first entry reflects the first captured price, not a reconstructed earlier price.', 'taxocommerce-suppliers' ); ?></p>
+					<div class="tcsup-scroll"><table class="widefat striped">
+						<thead><tr>
+							<th><?php esc_html_e( 'Date', 'taxocommerce-suppliers' ); ?></th>
+							<th><?php esc_html_e( 'Supplier excl. tax', 'taxocommerce-suppliers' ); ?></th>
+							<th><?php esc_html_e( 'Supplier incl. tax', 'taxocommerce-suppliers' ); ?></th>
+							<th><?php esc_html_e( 'Woo regular', 'taxocommerce-suppliers' ); ?></th>
+							<th><?php esc_html_e( 'Woo sale', 'taxocommerce-suppliers' ); ?></th>
+							<th><?php esc_html_e( 'Effective price', 'taxocommerce-suppliers' ); ?></th>
+							<th><?php esc_html_e( 'Currency', 'taxocommerce-suppliers' ); ?></th>
+							<th><?php esc_html_e( 'Source', 'taxocommerce-suppliers' ); ?></th>
+						</tr></thead>
+						<tbody>
+							<?php $history = TCSUP_Price_History::recent( $history_id ); ?>
+							<?php if ( ! $history ) : ?><tr><td colspan="8"><?php esc_html_e( 'No price changes have been recorded yet.', 'taxocommerce-suppliers' ); ?></td></tr><?php endif; ?>
+							<?php foreach ( $history as $entry ) : ?>
+								<tr>
+									<td><?php echo esc_html( get_date_from_gmt( $entry['fecha'], 'Y-m-d H:i:s' ) ); ?></td>
+									<?php foreach ( array( 'precio_proveedor_sin_iva', 'precio_proveedor_con_iva', 'precio_normal', 'precio_oferta', 'precio_venta', 'moneda', 'origen' ) as $field ) : ?>
+										<td><?php echo esc_html( null === $entry[ $field ] || '' === (string) $entry[ $field ] ? '—' : $entry[ $field ] ); ?></td>
+									<?php endforeach; ?>
+								</tr>
+							<?php endforeach; ?>
+						</tbody>
+					</table></div>
+				</section>
+			<?php endif; ?>
 			<script>
 			(function(){
 				var toggle=document.getElementById('tcsup-select-page');
@@ -699,6 +784,7 @@ final class TCSUP_Admin {
 		?>
 		<section class="tcsup-card">
 			<h2><?php esc_html_e( 'Price control', 'taxocommerce-suppliers' ); ?></h2>
+			<p><a class="button" href="<?php echo esc_url( self::tab_url( 'history' ) ); ?>"><?php esc_html_e( 'Price history', 'taxocommerce-suppliers' ); ?></a></p>
 			<p><?php esc_html_e( 'Supplier cost remains separate from the WooCommerce selling price. You can correct imported supplier prices without re-importing a CSV.', 'taxocommerce-suppliers' ); ?></p>
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="tcsup-settings">
 				<input type="hidden" name="action" value="tcsup_settings">

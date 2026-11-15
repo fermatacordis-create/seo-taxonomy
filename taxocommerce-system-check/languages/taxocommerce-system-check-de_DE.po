@@ -249,7 +249,7 @@ msgid ""
 "los límites son tolerancias operativas. No corrigen datos ni convierten un "
 "fallo real en correcto; permiten reflejar migraciones, excepciones conocidas"
 " y el volumen pendiente aceptado."
-msgstr ""
+msgstr "Grenzwerte sind betriebliche Toleranzen. Sie korrigieren keine Daten und machen aus einem echten Fehler keinen Erfolg; sie berücksichtigen Migrationen, bekannte Ausnahmen und akzeptierte Rückstände."
 
 #: includes/system-check/seo-core-validation-settings.php:441
 msgid "Producto y búsqueda representativos"
@@ -263,7 +263,7 @@ msgstr "Suchmodus"
 msgid ""
 "El modo adaptativo evita falsos fallos con títulos largos, signos y motores "
 "de búsqueda que exigen demasiados términos."
-msgstr ""
+msgstr "Der adaptive Modus vermeidet Fehlalarme durch lange Titel, Satzzeichen und Suchmaschinen, die zu viele Begriffe verlangen."
 
 #: includes/system-check/seo-core-validation-settings.php:456
 msgid "HTTP, plantillas y SEO técnico"
@@ -308,19 +308,19 @@ msgstr "Tatsächliches Rendering:"
 msgid ""
 "este bloque usa Chromium/Playwright en GitHub Actions. WordPress no ejecuta "
 "un navegador dentro del hosting."
-msgstr ""
+msgstr "dieser Bereich verwendet Chromium/Playwright in GitHub Actions. WordPress führt auf dem Hostingserver keinen Browser aus."
 
 #: includes/system-check/seo-core-validation-visual.php:593
 msgid ""
 "Configura primero la conexion GitHub Actions que ya utiliza TaxoCommerce "
 "SEO. El workflow visual debe existir en el mismo repositorio."
-msgstr ""
+msgstr "Konfigurieren Sie zunächst die GitHub-Actions-Verbindung dieser Installation. Der visuelle Workflow muss im selben Repository vorhanden sein."
 
 #: includes/system-check/seo-core-validation-visual.php:595
 msgid ""
 "Se prueban hasta 7 URLs representativas en movil, tablet y escritorio. Las "
 "capturas completas quedan como artefacto del workflow."
-msgstr ""
+msgstr "Bis zu 7 repräsentative URLs werden auf Mobilgeräten, Tablets und Desktop geprüft. Screenshots werden als Workflow-Artefakte gespeichert."
 
 #: includes/system-check/seo-core-validation.php:171
 msgid "Descarga de afectados"
@@ -352,7 +352,7 @@ msgstr "Plugin-Validierung"
 msgid ""
 "Chequeo interno de SEO System orientado a confirmar si el negocio sigue "
 "funcionando tras una subida."
-msgstr ""
+msgstr "Interne System-Check-Prüfung, ob der Shop nach einer Aktualisierung weiterhin funktioniert."
 
 #: includes/system-check/seo-core-validation.php:398
 msgid "Inventario de funciones y archivos del plugin"
@@ -367,7 +367,7 @@ msgid ""
 "Actualiza todos los chequeos pasivos. La auditoría 404 y la prueba "
 "transaccional del Data Layer conservan sus controles propios en sus áreas "
 "correspondientes."
-msgstr ""
+msgstr "Aktualisiert passive Prüfungen. Die 404-Prüfung und der transaktionsbezogene Data-Layer-Test behalten eigene Bedienelemente."
 
 #: includes/system-check/seo-core-validation.php:510
 msgid ""
@@ -379,7 +379,7 @@ msgstr "Tests werden in einem einzigen Durchlauf ausgeführt; jede Ansicht ordne
 msgid ""
 "La auditoría se divide en tres peticiones independientes. Los resultados se "
 "acumulan y cada bloque puede repetirse sin volver a ejecutar los demás."
-msgstr ""
+msgstr "Die Prüfung ist in drei unabhängige Anfragen unterteilt. Ergebnisse werden gesammelt; jeder Block kann einzeln erneut ausgeführt werden."
 
 #: includes/system-check/seo-core-validation.php:648
 msgid "Validación pendiente"
@@ -402,7 +402,7 @@ msgid ""
 "guarda el último diagnóstico, muestra primero lo crítico y expone un resumen"
 " seguro para el módulo de informes. La auditoría de Enlaces y 404 continúa "
 "dividida en tres bloques acumulativos."
-msgstr ""
+msgstr "speichert die letzte Diagnose, zeigt kritische Probleme zuerst und liefert den Berichten eine sichere Zusammenfassung. Die Link- und 404-Prüfung bleibt in drei kumulativen Blöcken."
 
 #: includes/system-check/seo-core-validation.php:6880
 msgid "No hay una ejecución guardada todavía."
@@ -440,7 +440,7 @@ msgstr "Dienste und Verbindungen"
 msgid ""
 "Cada fila representa el estado agregado de un servicio o conexión. Su "
 "puntuación forma parte del cálculo global de Plugin Validation."
-msgstr ""
+msgstr "Jede Zeile zeigt den Gesamtstatus eines Dienstes oder einer Verbindung. Die Bewertung fließt in die gesamte Plugin-Validierung ein."
 
 #: includes/system-check/seo-core-validation.php:7556
 msgid "Aceptación post-release"
@@ -476,7 +476,7 @@ msgstr "Geschäftsfunktionen"
 msgid ""
 "Simulación de navegación pública, calidad HTML/SEO, recursos, redirecciones "
 "y salud comercial sobre elementos representativos."
-msgstr ""
+msgstr "Simulation öffentlicher Navigation sowie Prüfung von HTML-/SEO-Qualität, Ressourcen, Weiterleitungen und Shop-Funktion anhand repräsentativer Elemente."
 
 #: includes/system-check/seo-core-validation.php:7745
 #: includes/system-check/seo-core-validation.php:7773
@@ -491,7 +491,7 @@ msgid ""
 "sección Enlaces y 404 de Chequeos avanzados. Las páginas de verificación del"
 " firewall o antibot se clasifican como aviso no concluyente; un error HTTP "
 "real sin firma de protección continúa siendo KO."
-msgstr ""
+msgstr "Anfragen verwenden GET; der Test legt keine Produkte in den Warenkorb, erstellt keine Bestellungen, verarbeitet keine Zahlungen und ändert keine Datensätze. Die allgemeine Validierung startet nicht die vollständige 404-Prüfung; nutzen Sie Links und 404 in den erweiterten Prüfungen. Firewall- oder Antibot-Prüfseiten gelten als nicht eindeutige Warnung; echte HTTP-Fehler ohne Schutzsignatur bleiben Fehler."
 
 #: includes/system-check/seo-core-validation.php:7765
 msgid "Enlaces y errores 404"
@@ -502,7 +502,7 @@ msgid ""
 "Auditoría de enlaces internos, URLs publicadas en sitemap, reglas de "
 "redirección, imágenes y recursos locales. Cada incidencia conserva uno o "
 "varios orígenes para facilitar su reparación."
-msgstr ""
+msgstr "Prüfung interner Links, Sitemap-URLs, Weiterleitungsregeln, Bilder und lokaler Ressourcen. Jedes Problem behält eine oder mehrere Quellen zur Behebung."
 
 #: includes/system-check/seo-core-validation.php:7773
 msgid ""
@@ -511,7 +511,7 @@ msgid ""
 "una sesión. Cada bloque tiene un límite estricto, se guarda por separado y "
 "puede repetirse. Una comprobación pendiente se muestra como Info, no como "
 "Aviso ni como falso OK."
-msgstr ""
+msgstr "erstellt oder korrigiert Weiterleitungen nicht automatisch. Abmelde-Links, Warenkorbaktionen, Nonces und andere GET-URLs mit möglichen Sitzungsänderungen werden ausgelassen. Jeder Block ist begrenzt, getrennt gespeichert und wiederholbar. Eine ausstehende Prüfung erscheint als Info, nicht als Warnung oder falsches OK."
 
 #: includes/system-check/seo-core-validation.php:7801
 msgid "Integridad del código"
@@ -522,7 +522,7 @@ msgid ""
 "Inventario estático de los archivos PHP propios del plugin. No ejecuta los "
 "archivos analizados: lee sus tokens para localizar declaraciones, hooks, "
 "posibles colisiones y patrones de compatibilidad con WordPress.org."
-msgstr ""
+msgstr "Statisches Inventar der PHP-Dateien des Plugins. Die Dateien werden nicht ausgeführt; Tokens zeigen Deklarationen, Hooks, mögliche Konflikte und WordPress.org-Konventionen."
 
 #: includes/system-check/seo-core-validation.php:8009
 msgid "Callback"
@@ -559,7 +559,7 @@ msgid ""
 "Estos KPIs reutilizan los resultados ya guardados: entrar en Resumen no "
 "vuelve a ejecutar ningún chequeo. Desde cada tarjeta puedes abrir el detalle"
 " correspondiente."
-msgstr ""
+msgstr "Diese Kennzahlen nutzen gespeicherte Ergebnisse: Das Öffnen der Übersicht startet keine neuen Prüfungen. Jede Karte öffnet die Details."
 
 #: includes/system-check/seo-core-validation.php:8119
 msgid "Informe técnico en texto para desarrolladores"
@@ -586,13 +586,13 @@ msgstr "Abschlussbericht"
 msgid ""
 "Este bloque está pensado para el futuro envío por email al sysadmin. "
 "Prioriza KO y avisos; los OK quedan resumidos."
-msgstr ""
+msgstr "Dieser Bereich ist für künftige E-Mails an die Systemadministration vorgesehen. Fehler und Warnungen haben Vorrang; erfolgreiche Prüfungen werden zusammengefasst."
 
 #: includes/system-check/seo-core-validation.php:8414
 msgid ""
 "si hay KO, el estado general será REVISAR. Si no hay KO pero sí avisos, será"
 " AVISOS. Si no hay incidencias, será CORRECTO."
-msgstr ""
+msgstr "wenn eine Prüfung fehlschlägt, lautet der Gesamtstatus PRÜFEN. Bei Warnungen ohne Fehler lautet er WARNUNGEN; ohne Probleme KORREKT."
 
 #: includes/system-check/seo-core-validation.php:8612
 msgid "Envío opcional de diagnósticos al desarrollador"
@@ -604,7 +604,7 @@ msgid ""
 " sitio la autoriza. Sirve únicamente para recibir información técnica que "
 "ayude a detectar errores, regresiones y problemas de compatibilidad de SEO "
 "System. Puedes desactivarla de nuevo en cualquier momento."
-msgstr ""
+msgstr "Diese optionale Funktion bleibt deaktiviert, bis ein Website-Administrator sie erlaubt. Sie sendet nur technische Daten zur Erkennung von Fehlern, Regressionen und Kompatibilitätsproblemen in System Check und lässt sich jederzeit ausschalten."
 
 #: includes/system-check/seo-core-validation.php:8622
 msgid ""
@@ -614,13 +614,13 @@ msgid ""
 "incidencias detectadas. No se envían contraseñas, tokens, cookies, pedidos, "
 "clientes, direcciones, filas completas de tablas ni contenido completo de "
 "logs."
-msgstr ""
+msgstr "Nach Zustimmung kann die Zusammenfassung Domain, zufällige Installations-ID, Datum und Anlass, technische Versionen (System Check, WordPress, WooCommerce, PHP), Gesamtbewertungen und Probleme enthalten. Passwörter, Tokens, Cookies, Bestellungen, Kundendaten, Adressen, vollständige Tabellenzeilen und Logs werden nicht gesendet."
 
 #: includes/system-check/seo-core-validation.php:8623
 msgid ""
 "El correo de administración del propio sitio puede recibir una copia del "
 "mismo resumen para que el titular conserve visibilidad del envío."
-msgstr ""
+msgstr "Die Administrator-E-Mail-Adresse der Website kann eine Kopie derselben Zusammenfassung erhalten, damit der Betreiber die Übermittlung nachvollziehen kann."
 
 #: includes/system-check/seo-core-validation.php:8625
 msgid "Guardar autorización"
@@ -638,7 +638,7 @@ msgstr "Verzeichnis globaler Plugin-Funktionen"
 msgid ""
 "No se han encontrado funciones PHP en el plugin o no se ha podido leer la "
 "ruta."
-msgstr ""
+msgstr "Im Plugin wurden keine PHP-Funktionen gefunden oder der Pfad konnte nicht gelesen werden."
 
 #: includes/system-check/seo-core-validation.php:8735
 msgid "Funciones globales duplicadas"
@@ -680,19 +680,19 @@ msgid ""
 "No vuelve a recorrer las 14.000+ URLs del sitemap para cada pasada, por lo "
 "que reduce mucho la carga y evita que el proceso se rompa por una cadena "
 "larga de páginas."
-msgstr ""
+msgstr "Dieser Scan prüft bekannte, aktive Bild-URLs direkt. Er durchsucht nicht bei jedem Durchlauf die gesamte Sitemap erneut und reduziert dadurch Last und lange Anfrageketten."
 
 #: includes/system-check/seo-health-scan.php:1262
 msgid "El inventario se construye solo con"
-msgstr ""
+msgstr "Das Inventar wird nur erstellt aus"
 
 #: includes/system-check/seo-health-scan.php:1262
 msgid "productos WooCommerce publicados"
-msgstr ""
+msgstr "veröffentlichten WooCommerce-Produkten"
 
 #: includes/system-check/seo-health-scan.php:1262
 msgid ". Se procesa por lotes seguros y los pendientes se cubren primero."
-msgstr ""
+msgstr ". Es wird in sicheren Blöcken verarbeitet, wobei ausstehende Elemente Vorrang haben."
 
 #: includes/system-check/seo-health-scan.php:1273
 #: includes/system-check/seo-health-scan.php:1275
@@ -712,7 +712,7 @@ msgid ""
 "al iniciarlo, WordPress actualiza automáticamente el inventario y reserva "
 "todas las páginas publicadas para una única ejecución del worker. No "
 "requiere pulsar \"Actualizar inventario\" ni lanzar lotes sucesivos."
-msgstr ""
+msgstr "beim Start aktualisiert WordPress automatisch das Inventar und plant alle veröffentlichten Seiten für einen Worker-Durchlauf ein. Inventar aktualisieren und weitere Blöcke sind nicht nötig."
 
 #: includes/system-check/seo-health-scan.php:1322
 msgid "Última ejecución"
@@ -732,81 +732,81 @@ msgstr "Keine Ergebnisse für diesen Filter."
 
 #: includes/system-check/seo-system-diagnostics-reporting.php:1771
 msgid "Análisis actualizado y resumen enviado automáticamente."
-msgstr ""
+msgstr "Analyse aktualisiert und Zusammenfassung automatisch gesendet."
 
 #: includes/system-check/seo-system-diagnostics-reporting.php:1773
 msgid "Análisis actualizado correctamente."
-msgstr ""
+msgstr "Analyse erfolgreich aktualisiert."
 
 #: includes/system-check/seo-system-diagnostics-reporting.php:1775
 #: includes/system-check/seo-system-diagnostics-reporting.php:1994
 msgid "No se pudo completar la actualización. Revisa el registro de errores."
-msgstr ""
+msgstr "Die Aktualisierung konnte nicht abgeschlossen werden. Prüfen Sie das Fehlerprotokoll."
 
 #: includes/system-check/seo-system-diagnostics-reporting.php:1779
 msgid "Global · todos los ámbitos"
-msgstr ""
+msgstr "Gesamt · alle Bereiche"
 
 #: includes/system-check/seo-system-diagnostics-reporting.php:1780
 msgid "Resumen global de todos los chequeos"
-msgstr ""
+msgstr "Gesamtübersicht aller Prüfungen"
 
 #: includes/system-check/seo-system-diagnostics-reporting.php:1781
 msgid ""
 "Esta es la única puntuación consolidada. Reúne el diagnóstico general del "
 "servidor y todas las áreas de SEO Core. El detalle se concentra en "
 "Integridad del código y Chequeos avanzados."
-msgstr ""
+msgstr "Dies ist die einzige Gesamtbewertung. Sie kombiniert Serverdiagnose und alle SEO-Core-Bereiche. Details stehen unter Codeintegrität und Erweiterte Prüfungen."
 
 #: includes/system-check/seo-system-diagnostics-reporting.php:1828
 msgid "Cómo se compone este resumen y qué no se suma dos veces"
-msgstr ""
+msgstr "Wie diese Zusammenfassung berechnet wird und was nicht doppelt zählt"
 
 #: includes/system-check/seo-system-diagnostics-reporting.php:1830
 msgid "Estado global"
-msgstr ""
+msgstr "Gesamtstatus"
 
 #: includes/system-check/seo-system-diagnostics-reporting.php:1830
 msgid ": consolidación ponderada de Servidor y SEO Core."
-msgstr ""
+msgstr ": gewichtete Zusammenfassung von Server und SEO Core."
 
 #: includes/system-check/seo-system-diagnostics-reporting.php:1831
 #: includes/system-check/seo-system-server-status.php:2849
 msgid "Servidor"
-msgstr ""
+msgstr "Server"
 
 #: includes/system-check/seo-system-diagnostics-reporting.php:1831
 msgid ""
 ": diagnóstico general de alojamiento, PHP, MySQL, WordPress y recursos."
-msgstr ""
+msgstr ": allgemeine Diagnose von Hosting, PHP, MySQL, WordPress und Ressourcen."
 
 #: includes/system-check/seo-system-diagnostics-reporting.php:1832
 msgid "SEO Core"
-msgstr ""
+msgstr "SEO Core"
 
 #: includes/system-check/seo-system-diagnostics-reporting.php:1832
 msgid ""
 ": suma de todos los tests del plugin, aunque la interfaz los muestre "
 "concentrados en dos vistas."
-msgstr ""
+msgstr ": Summe aller Plugin-Tests, auch wenn die Oberfläche sie in zwei Ansichten zusammenfasst."
 
 #: includes/system-check/seo-system-diagnostics-reporting.php:1833
 msgid "Contenido y FAQs"
-msgstr ""
+msgstr "Inhalte und FAQs"
 
 #: includes/system-check/seo-system-diagnostics-reporting.php:1833
 msgid ""
 ": detalle informativo del bloque Datos, SEO y contenido; ya está incluido en"
 " SEO Core y no vuelve a sumarse."
-msgstr ""
+msgstr ": informative Einzelheiten des Bereichs Daten, SEO und Inhalte; bereits in SEO Core enthalten und nicht erneut gezählt."
 
 #: includes/system-check/seo-system-diagnostics-reporting.php:1852
 msgid "Contenido, categorías y FAQs"
-msgstr ""
+msgstr "Inhalte, Kategorien und FAQs"
 
 #: includes/system-check/seo-system-diagnostics-reporting.php:1855
 msgid "No existe todavía una auditoría semántica. Pulsa"
-msgstr ""
+msgstr "Noch keine semantische Prüfung verfügbar. Klicken Sie auf"
 
 #: includes/system-check/seo-system-diagnostics-reporting.php:1855
 msgid "Actualizar auditoría"
@@ -826,11 +826,11 @@ msgstr "Was geändert werden muss"
 
 #: includes/system-check/seo-system-diagnostics-reporting.php:1913
 msgid "No se han generado acciones editoriales prioritarias."
-msgstr ""
+msgstr "Es wurden keine vorrangigen redaktionellen Maßnahmen erstellt."
 
 #: includes/system-check/seo-system-diagnostics-reporting.php:1915
 msgid "Entidad / campo"
-msgstr ""
+msgstr "Entität / Feld"
 
 #: includes/system-check/seo-system-diagnostics-reporting.php:1915
 msgid "Registros"
@@ -844,55 +844,55 @@ msgstr "Empfohlene Maßnahme"
 msgid ""
 "El módulo es de solo lectura. Las alertas semánticas indican qué revisar; no"
 " cambian categorías, productos, atributos, etiquetas ni FAQs."
-msgstr ""
+msgstr "Dieses Modul arbeitet nur lesend. Semantische Hinweise zeigen Prüfbedarf, ändern aber keine Kategorien, Produkte, Attribute, Schlagwörter oder FAQs."
 
 #: includes/system-check/seo-system-diagnostics-reporting.php:1986
 msgid "Informe completo TaxoCommerce System Check"
-msgstr ""
+msgstr "Vollständiger TaxoCommerce-System-Check-Bericht"
 
 #: includes/system-check/seo-system-diagnostics-reporting.php:1987
 msgid ""
 "Auditoría técnica, funcional, comercial, SEO y semántica preparada para "
 "revisión interna, un analista externo o una IA."
-msgstr ""
+msgstr "Technische, funktionale, geschäftliche, SEO- und semantische Prüfung für interne Kontrolle, externe Analyse oder KI-gestützte Auswertung."
 
 #: includes/system-check/seo-system-diagnostics-reporting.php:1990
 msgid "Auditoría actualizada y resumen enviado automáticamente."
-msgstr ""
+msgstr "Prüfung aktualisiert und Zusammenfassung automatisch gesendet."
 
 #: includes/system-check/seo-system-diagnostics-reporting.php:1992
 msgid "Auditoría actualizada correctamente."
-msgstr ""
+msgstr "Prüfung erfolgreich aktualisiert."
 
 #: includes/system-check/seo-system-diagnostics-reporting.php:2029
 msgid "Incidencias principales"
-msgstr ""
+msgstr "Wichtigste Probleme"
 
 #: includes/system-check/seo-system-diagnostics-reporting.php:2031
 msgid "No hay incidencias en los chequeos disponibles."
-msgstr ""
+msgstr "Bei den verfügbaren Prüfungen wurden keine Probleme gefunden."
 
 #: includes/system-check/seo-system-diagnostics-reporting.php:2045
 msgid "Interpretación"
-msgstr ""
+msgstr "Interpretation"
 
 #: includes/system-check/seo-system-diagnostics-reporting.php:2046
 msgid ""
 "Las puntuaciones resumen señales técnicas, funcionales y semánticas. Sirven "
 "para localizar incidencias y ordenar el trabajo, pero requieren "
 "interpretación antes de aplicar cambios."
-msgstr ""
+msgstr "Bewertungen fassen technische, funktionale und semantische Signale zusammen. Sie helfen, Probleme zu finden und Aufgaben zu priorisieren, erfordern aber vor Änderungen eine Prüfung."
 
 #: includes/system-check/seo-system-diagnostics-reporting.php:2047
 msgid ""
 "El PDF es adecuado para lectura y comunicación. El JSON conserva la "
 "estructura completa y es el formato recomendado para facilitar una segunda "
 "revisión por una IA."
-msgstr ""
+msgstr "PDF eignet sich zum Lesen und Weitergeben. JSON erhält die vollständige Struktur und wird für eine zweite KI-gestützte Prüfung empfohlen."
 
 #: includes/system-check/seo-system-diagnostics-reporting.php:2054
 msgid "No tienes permisos para actualizar este informe."
-msgstr ""
+msgstr "Sie haben keine Berechtigung, diesen Bericht zu aktualisieren."
 
 #: includes/system-check/seo-system-diagnostics-reporting.php:2104
 #: includes/system-check/seo-system-diagnostics-reporting.php:2116
@@ -903,47 +903,47 @@ msgstr "Du hast keine Berechtigung, diesen Bericht herunterzuladen."
 
 #: includes/system-check/seo-system-mysql-audit.php:294
 msgid "Necesita al menos 2 chequeos completos."
-msgstr ""
+msgstr "Mindestens zwei vollständige Prüfungen sind erforderlich."
 
 #: includes/system-check/seo-system-mysql-audit.php:320
 msgid "Evolución MySQL · fotografías del chequeo"
-msgstr ""
+msgstr "MySQL-Verlauf · Prüfschnappschüsse"
 
 #: includes/system-check/seo-system-mysql-audit.php:321
 msgid ""
 "Gráficos ligeros generados con las fotografías guardadas al ejecutar el "
 "chequeo completo. No consultan MySQL de nuevo."
-msgstr ""
+msgstr "Leichte Diagramme aus den bei der vollständigen Prüfung gespeicherten Momentaufnahmen. Sie fragen MySQL nicht erneut ab."
 
 #: includes/system-check/seo-system-mysql-audit.php:346
 msgid "Distribución de las tablas SEO más grandes"
-msgstr ""
+msgstr "Verteilung der größten SEO-Tabellen"
 
 #: includes/system-check/seo-system-mysql-audit.php:347
 msgid ""
 "Gráfico estático calculado con el inventario ya obtenido; no realiza "
 "consultas adicionales."
-msgstr ""
+msgstr "Statisches Diagramm aus dem bestehenden Inventar berechnet; keine weiteren Abfragen."
 
 #: includes/system-check/seo-system-mysql-audit.php:662
 msgid "Auditoría SQL de TaxoCommerce SEO"
-msgstr ""
+msgstr "SQL-Prüfung von TaxoCommerce SEO"
 
 #: includes/system-check/seo-system-mysql-audit.php:699
 msgid "Señales globales del servidor MySQL"
-msgstr ""
+msgstr "Gesamtindikatoren des MySQL-Servers"
 
 #: includes/system-check/seo-system-mysql-audit.php:699
 msgid "Señal"
-msgstr ""
+msgstr "Indikator"
 
 #: includes/system-check/seo-system-mysql-audit.php:699
 msgid "Lectura"
-msgstr ""
+msgstr "Messwert"
 
 #: includes/system-check/seo-system-mysql-audit.php:705
 msgid "Tablas propias e índices"
-msgstr ""
+msgstr "Eigene Tabellen und Indizes"
 
 #: includes/system-check/seo-system-mysql-audit.php:705
 #: includes/system-check/seo-system-mysql-audit.php:714
@@ -969,21 +969,21 @@ msgstr "Größe"
 #: includes/system-check/seo-system-mysql-audit.php:705
 #: includes/system-check/seo-system-server-status.php:2756
 msgid "Índices"
-msgstr ""
+msgstr "Indizes"
 
 #: includes/system-check/seo-system-mysql-audit.php:705
 msgid "PRIMARY"
-msgstr ""
+msgstr "PRIMARY"
 
 #: includes/system-check/seo-system-mysql-audit.php:713
 msgid "Candidatos de índice"
-msgstr ""
+msgstr "Indexkandidaten"
 
 #: includes/system-check/seo-system-mysql-audit.php:713
 msgid ""
 "Heurística sobre tablas con al menos 5.000 filas. No implica crear el índice"
 " sin revisar la consulta real."
-msgstr ""
+msgstr "Heuristik für Tabellen mit mindestens 5.000 Zeilen. Ein Index darf erst nach Prüfung der tatsächlichen Abfrage angelegt werden."
 
 #: includes/system-check/seo-system-mysql-audit.php:714
 msgid "Columna"
@@ -991,32 +991,32 @@ msgstr "Spalte"
 
 #: includes/system-check/seo-system-mysql-audit.php:722
 msgid "Índices duplicados exactos"
-msgstr ""
+msgstr "Identische doppelte Indizes"
 
 #: includes/system-check/seo-system-mysql-audit.php:722
 msgid "Índice A"
-msgstr ""
+msgstr "Index A"
 
 #: includes/system-check/seo-system-mysql-audit.php:722
 msgid "Índice B"
-msgstr ""
+msgstr "Index B"
 
 #: includes/system-check/seo-system-mysql-audit.php:722
 msgid "Columnas"
-msgstr ""
+msgstr "Spalten"
 
 #: includes/system-check/seo-system-mysql-audit.php:729
 msgid "EXPLAIN de consultas representativas"
-msgstr ""
+msgstr "EXPLAIN für repräsentative Abfragen"
 
 #: includes/system-check/seo-system-mysql-audit.php:729
 msgid ""
 "EXPLAIN analiza el plan del optimizador sin ejecutar el SELECT de negocio."
-msgstr ""
+msgstr "EXPLAIN analysiert den Optimiererplan, ohne das geschäftliche SELECT auszuführen."
 
 #: includes/system-check/seo-system-mysql-audit.php:730
 msgid "Consulta"
-msgstr ""
+msgstr "Abfrage"
 
 #: includes/system-check/seo-system-mysql-audit.php:730
 msgid "Filas"
@@ -1024,69 +1024,69 @@ msgstr "Zeilen"
 
 #: includes/system-check/seo-system-mysql-audit.php:730
 msgid "Extra"
-msgstr ""
+msgstr "Zusätzlich"
 
 #: includes/system-check/seo-system-mysql-audit.php:734
 msgid "No se pudieron construir planes para las tablas disponibles."
-msgstr ""
+msgstr "Für die verfügbaren Tabellen konnten keine Abfragepläne erstellt werden."
 
 #: includes/system-check/seo-system-mysql-audit.php:737
 msgid ""
 "primero diagnosticamos en STAGING. Si aparece un índice claramente útil, se "
 "incorporará después mediante una migración versionada; nunca desde este "
 "informe."
-msgstr ""
+msgstr "zuerst in STAGING diagnostizieren. Wenn ein Index eindeutig hilft, ihn später über eine versionierte Migration hinzufügen, niemals aus diesem Bericht heraus."
 
 #: includes/system-check/seo-system-server-status.php:63
 msgid "Server Status"
-msgstr ""
+msgstr "Serverstatus"
 
 #: includes/system-check/seo-system-server-status.php:64
 msgid ""
 "Panel de diagnóstico de solo lectura del servidor, WordPress, seguridad, "
 "base de datos, WooCommerce, rendimiento y logs."
-msgstr ""
+msgstr "Schreibgeschütztes Diagnose-Dashboard für Server, WordPress, Sicherheit, Datenbank, WooCommerce, Leistung und Protokolle."
 
 #: includes/system-check/seo-system-server-status.php:131
 msgid ""
 "Vista rápida sin guardar. Ejecuta el chequeo completo para crear una "
 "referencia y calcular tendencia."
-msgstr ""
+msgstr "Schnellansicht ohne Speicherung. Führen Sie die vollständige Prüfung aus, um einen Ausgangswert zu erstellen und Trends zu berechnen."
 
 #: includes/system-check/seo-system-server-status.php:291
 #: includes/system-check/seo-system-server-status.php:1981
 msgid "Chequeo"
-msgstr ""
+msgstr "Prüfung"
 
 #: includes/system-check/seo-system-server-status.php:291
 msgid "Observación"
-msgstr ""
+msgstr "Beobachtung"
 
 #: includes/system-check/seo-system-server-status.php:957
 msgid "Configuración del monitor externo de GitHub"
-msgstr ""
+msgstr "Konfiguration des externen GitHub-Monitors"
 
 #: includes/system-check/seo-system-server-status.php:958
 msgid ""
 "Guarda estos tres valores como Secrets del repositorio. El secreto solo se "
 "muestra a administradores de WordPress."
-msgstr ""
+msgstr "Speichern Sie diese drei Werte als Repository-Secrets. Nur WordPress-Administratoren können das Secret sehen."
 
 #: includes/system-check/seo-system-server-status.php:1014
 msgid "GitHub externo"
-msgstr ""
+msgstr "Externes GitHub"
 
 #: includes/system-check/seo-system-server-status.php:1036
 msgid "Correcto"
-msgstr ""
+msgstr "Korrekt"
 
 #: includes/system-check/seo-system-server-status.php:1037
 msgid "Lento"
-msgstr ""
+msgstr "Langsam"
 
 #: includes/system-check/seo-system-server-status.php:1038
 msgid "Importante"
-msgstr ""
+msgstr "Wichtig"
 
 #: includes/system-check/seo-system-server-status.php:1039
 msgid "Error"
@@ -1100,61 +1100,61 @@ msgstr "Sicherheit"
 msgid ""
 "Chequeos de endurecimiento local, actualizaciones, integridad de archivos y "
 "superficie publica. Todo es de solo lectura."
-msgstr ""
+msgstr "Prüfungen zu lokaler Absicherung, Updates, Dateiintegrität und öffentlicher Angriffsfläche. Alle Prüfungen lesen nur."
 
 #: includes/system-check/seo-system-server-status.php:1948
 msgid "Sin datos de seguridad:"
-msgstr ""
+msgstr "Keine Sicherheitsdaten:"
 
 #: includes/system-check/seo-system-server-status.php:1948
 msgid "ejecuta el chequeo completo para generar la nueva seccion."
-msgstr ""
+msgstr "Führen Sie die vollständige Prüfung aus, um den neuen Abschnitt zu erstellen."
 
 #: includes/system-check/seo-system-server-status.php:1961
 msgid "Vista rapida:"
-msgstr ""
+msgstr "Schnellansicht:"
 
 #: includes/system-check/seo-system-server-status.php:1961
 msgid ""
 "los sondeos HTTP publicos, checksums del core y recorrido de uploads solo se"
 " ejecutan con"
-msgstr ""
+msgstr "öffentliche HTTP-Prüfungen, Core-Prüfsummen und Durchsuchen der Uploads werden nur ausgeführt mit"
 
 #: includes/system-check/seo-system-server-status.php:1961
 msgid "Ejecutar chequeo completo"
-msgstr ""
+msgstr "Vollständige Prüfung ausführen"
 
 #: includes/system-check/seo-system-server-status.php:1981
 msgid "Observacion"
-msgstr ""
+msgstr "Beobachtung"
 
 #: includes/system-check/seo-system-server-status.php:2216
 msgid "el chequeo actual no contiene errores críticos, importantes ni avisos."
-msgstr ""
+msgstr "Die aktuelle Prüfung enthält keine kritischen Fehler, wesentlichen Probleme oder Warnungen."
 
 #: includes/system-check/seo-system-server-status.php:2232
 msgid "Salud por área"
-msgstr ""
+msgstr "Status nach Bereich"
 
 #: includes/system-check/seo-system-server-status.php:2268
 msgid "Resumen general"
-msgstr ""
+msgstr "Gesamtübersicht"
 
 #: includes/system-check/seo-system-server-status.php:2269
 msgid ""
 "Vista rápida de los puntos más importantes del entorno. Los errores y avisos"
 " aparecen antes del detalle técnico."
-msgstr ""
+msgstr "Schnellübersicht der wichtigsten Aspekte der Umgebung. Fehler und Warnungen stehen vor technischen Details."
 
 #: includes/system-check/seo-system-server-status.php:2308
 msgid "Sugerencia:"
-msgstr ""
+msgstr "Hinweis:"
 
 #: includes/system-check/seo-system-server-status.php:2308
 msgid ""
 "esta pantalla es solo lectura. Las limpiezas reales deberían seguir en Clean"
 " Database para evitar mezclar diagnóstico con acciones destructivas."
-msgstr ""
+msgstr "diese Ansicht ist schreibgeschützt. Tatsächliche Bereinigungen gehören zu Clean Database, damit Diagnose und löschende Aktionen getrennt bleiben."
 
 #: includes/system-check/seo-system-server-status.php:2322
 msgid "PHP"
@@ -1164,86 +1164,86 @@ msgstr "PHP"
 msgid ""
 "Parámetros PHP relevantes para WordPress, WooCommerce, importaciones y "
 "llamadas API."
-msgstr ""
+msgstr "Relevante PHP-Einstellungen für WordPress, WooCommerce, Importe und API-Aufrufe."
 
 #: includes/system-check/seo-system-server-status.php:2562
 msgid "Recursos observables desde WordPress"
-msgstr ""
+msgstr "Über WordPress beobachtbare Ressourcen"
 
 #: includes/system-check/seo-system-server-status.php:2563
 msgid ""
 "Gráficos instantáneos del proceso PHP y del sistema accesible. En hosting "
 "compartido la CPU se estima con"
-msgstr ""
+msgstr "Sofortdiagramme des PHP-Prozesses und verfügbarer Systemwerte. Auf Shared Hosting wird die CPU-Auslastung geschätzt anhand von"
 
 #: includes/system-check/seo-system-server-status.php:2563
 msgid "load average / núcleos visibles"
-msgstr ""
+msgstr "Durchschnittslast / sichtbare Kerne"
 
 #: includes/system-check/seo-system-server-status.php:2563
 msgid "; no sustituye las métricas físicas de WePanel."
-msgstr ""
+msgstr "; dies ersetzt nicht die physischen Messwerte von WePanel."
 
 #: includes/system-check/seo-system-server-status.php:2605
 msgid "Rendimiento de consultas MySQL"
-msgstr ""
+msgstr "Leistung der MySQL-Abfragen"
 
 #: includes/system-check/seo-system-server-status.php:2630
 msgid "Lectura parcial:"
-msgstr ""
+msgstr "Unvollständige Auswertung:"
 
 #: includes/system-check/seo-system-server-status.php:2630
 msgid ""
 "alguna consulta diagnóstica no pudo completarse con los permisos "
 "disponibles. El resto de métricas sigue siendo válido."
-msgstr ""
+msgstr "einige Diagnoseabfragen konnten mit den verfügbaren Berechtigungen nicht abgeschlossen werden. Die übrigen Messwerte bleiben gültig."
 
 #: includes/system-check/seo-system-server-status.php:2641
 msgid "MySQL / MariaDB"
-msgstr ""
+msgstr "MySQL / MariaDB"
 
 #: includes/system-check/seo-system-server-status.php:2642
 msgid ""
 "Configuracion, estadisticas, recursos observables y rendimiento de consultas"
 " de la base de datos actual."
-msgstr ""
+msgstr "Konfiguration, Statistiken, verfügbare Ressourcen und Abfrageleistung der aktuellen Datenbank."
 
 #: includes/system-check/seo-system-server-status.php:2653
 msgid "Configuracion MySQL / MariaDB"
-msgstr ""
+msgstr "MySQL-/MariaDB-Konfiguration"
 
 #: includes/system-check/seo-system-server-status.php:2718
 msgid "Estadisticas de MySQL / MariaDB"
-msgstr ""
+msgstr "MySQL-/MariaDB-Statistiken"
 
 #: includes/system-check/seo-system-server-status.php:2719
 msgid ""
 "Datos agregados de la base de datos usada por WordPress. No se muestra el "
 "contenido de las filas."
-msgstr ""
+msgstr "Zusammengefasste Daten der WordPress-Datenbank. Inhalte einzelner Zeilen werden nicht angezeigt."
 
 #: includes/system-check/seo-system-server-status.php:2747
 msgid "Tablas más grandes"
-msgstr ""
+msgstr "Größte Tabellen"
 
 #: includes/system-check/seo-system-server-status.php:2748
 msgid ""
 "Ayuda a detectar crecimiento anormal en options, postmeta, actionscheduler o"
 " tablas de plugins."
-msgstr ""
+msgstr "Hilft, ungewöhnliches Wachstum in Options, Postmeta, Action Scheduler oder Plugin-Tabellen zu erkennen."
 
 #: includes/system-check/seo-system-server-status.php:2751
 msgid "No se pudieron leer las tablas grandes."
-msgstr ""
+msgstr "Die größten Tabellen konnten nicht gelesen werden."
 
 #: includes/system-check/seo-system-server-status.php:2756
 msgid "Datos"
-msgstr ""
+msgstr "Daten"
 
 #: includes/system-check/seo-system-server-status.php:2756
 #: includes/system-check/seo-system-server-status.php:3200
 msgid "Total"
-msgstr ""
+msgstr "Gesamt"
 
 #: includes/system-check/seo-system-server-status.php:2756
 msgid "Motor"
@@ -1257,113 +1257,113 @@ msgstr "WordPress"
 msgid ""
 "Información general de WordPress, constantes relevantes, cron y residuos "
 "core."
-msgstr ""
+msgstr "Allgemeine WordPress-Informationen, wichtige Konstanten, Cron und Core-Restbestände."
 
 #: includes/system-check/seo-system-server-status.php:2822
 msgid "wp_options y autoload"
-msgstr ""
+msgstr "wp_options und Autoload"
 
 #: includes/system-check/seo-system-server-status.php:2823
 msgid ""
 "El autoload excesivo suele afectar a todas las cargas de WordPress porque "
 "esas opciones se cargan al inicio."
-msgstr ""
+msgstr "Zu viele Autoload-Optionen können jeden WordPress-Seitenaufruf verlangsamen, da sie beim Start geladen werden."
 
 #: includes/system-check/seo-system-server-status.php:2833
 msgid "Top opciones autoload más pesadas"
-msgstr ""
+msgstr "Größte Autoload-Optionen"
 
 #: includes/system-check/seo-system-server-status.php:2834
 msgid "Opción"
-msgstr ""
+msgstr "Option"
 
 #: includes/system-check/seo-system-server-status.php:2849
 msgid ""
 "Información básica del entorno de alojamiento, carga y uso de directorios "
 "clave."
-msgstr ""
+msgstr "Grundinformationen über Hostingumgebung, Auslastung und Nutzung wichtiger Verzeichnisse."
 
 #: includes/system-check/seo-system-server-status.php:2928
 msgid "Uso de espacio por directorios"
-msgstr ""
+msgstr "Speicherplatznutzung je Verzeichnis"
 
 #: includes/system-check/seo-system-server-status.php:2929
 msgid ""
 "Lectura aproximada con límite de archivos para no bloquear hostings "
 "compartidos."
-msgstr ""
+msgstr "Näherungsweise Auswertung mit Dateianzahl-Limit, um Shared Hosting nicht zu blockieren."
 
 #: includes/system-check/seo-system-server-status.php:2930
 msgid "Directorio"
-msgstr ""
+msgstr "Verzeichnis"
 
 #: includes/system-check/seo-system-server-status.php:2930
 msgid "Archivos revisados"
-msgstr ""
+msgstr "Geprüfte Dateien"
 
 #: includes/system-check/seo-system-server-status.php:2960
 msgid "Archivos grandes detectados"
-msgstr ""
+msgstr "Große Dateien gefunden"
 
 #: includes/system-check/seo-system-server-status.php:2961
 msgid ""
 "Busca logs, backups y paquetes grandes dentro de rutas de WordPress. No "
 "elimina nada."
-msgstr ""
+msgstr "Sucht in WordPress-Verzeichnissen nach großen Logs, Backups und Archiven. Es wird nichts gelöscht."
 
 #: includes/system-check/seo-system-server-status.php:2964
 msgid ""
 "No se han detectado logs, SQL, ZIP, GZ o backups mayores de 10 MB en las "
 "rutas revisadas."
-msgstr ""
+msgstr "In den geprüften Verzeichnissen wurden keine Logs, SQL-, ZIP-, GZ-Dateien oder Backups über 10 MB gefunden."
 
 #: includes/system-check/seo-system-server-status.php:2969
 msgid "Modificado"
-msgstr ""
+msgstr "Geändert"
 
 #: includes/system-check/seo-system-server-status.php:2984
 msgid "WooCommerce"
-msgstr ""
+msgstr "WooCommerce"
 
 #: includes/system-check/seo-system-server-status.php:2984
 msgid "Chequeos básicos del catálogo, calidad de producto y colas internas."
-msgstr ""
+msgstr "Grundprüfungen von Katalog, Produktqualität und internen Warteschlangen."
 
 #: includes/system-check/seo-system-server-status.php:3191
 msgid "Detalle Action Scheduler"
-msgstr ""
+msgstr "Action-Scheduler-Details"
 
 #: includes/system-check/seo-system-server-status.php:3192
 msgid ""
 "Muestra los hooks con más acciones pendientes o fallidas para identificar "
 "colas atascadas."
-msgstr ""
+msgstr "Zeigt Hooks mit den meisten ausstehenden oder fehlgeschlagenen Aktionen, um blockierte Warteschlangen zu erkennen."
 
 #: includes/system-check/seo-system-server-status.php:3195
 msgid "No hay acciones pendientes o fallidas relevantes."
-msgstr ""
+msgstr "Keine relevanten ausstehenden oder fehlgeschlagenen Aktionen."
 
 #: includes/system-check/seo-system-server-status.php:3200
 msgid "Más antigua"
-msgstr ""
+msgstr "Älteste"
 
 #: includes/system-check/seo-system-server-status.php:3213
 msgid "Rendimiento"
-msgstr ""
+msgstr "Leistung"
 
 #: includes/system-check/seo-system-server-status.php:3214
 msgid ""
 "Lectura agrupada de los indicadores que suelen explicar lentitud en "
 "WordPress y WooCommerce."
-msgstr ""
+msgstr "Zusammengefasste Indikatoren, die häufig eine langsame WordPress- oder WooCommerce-Leistung erklären."
 
 #: includes/system-check/seo-system-server-status.php:3226
 msgid "Logs"
-msgstr ""
+msgstr "Protokolle"
 
 #: includes/system-check/seo-system-server-status.php:3234
 msgid "Log PHP / sistema"
-msgstr ""
+msgstr "PHP-/Systemprotokoll"
 
 #: includes/system-check/seo-system-server-status.php:3235
 msgid ""
@@ -1372,124 +1372,124 @@ msgid ""
 "hosting puede usar una ruta, permisos o incluso syslog distintos. Si el "
 "archivo es legible por el mismo proceso PHP que ejecuta WordPress, puede "
 "mostrarse aqui aunque este fuera del directorio publico."
-msgstr ""
+msgstr "Dies ist das in PHP eingestellte Ziel für Fehlerprotokolle. System Check setzt oder ändert es nicht: Hostinganbieter können unterschiedliche Pfade, Berechtigungen oder Syslog verwenden. Kann der WordPress-PHP-Prozess die Datei lesen, darf sie auch außerhalb des öffentlichen Verzeichnisses angezeigt werden."
 
 #: includes/system-check/seo-system-server-status.php:3286
 msgid "Como activar o cambiar el log PHP / sistema"
-msgstr ""
+msgstr "PHP-/Systemprotokoll aktivieren oder ändern"
 
 #: includes/system-check/seo-system-server-status.php:3294
 msgid ""
 "El log PHP es opcional, pero recomendable para diagnosticar errores fatales."
-msgstr ""
+msgstr "Das PHP-Protokoll ist optional, wird aber zur Diagnose schwerwiegender Fehler empfohlen."
 
 #: includes/system-check/seo-system-server-status.php:3297
 msgid ""
 "La ruta exacta depende del hosting. TaxoCommerce SEO no la inventa ni la "
 "fuerza durante la instalacion."
-msgstr ""
+msgstr "Der genaue Pfad hängt vom Hostinganbieter ab. System Check erfindet oder erzwingt ihn bei der Installation nicht."
 
 #: includes/system-check/seo-system-server-status.php:3300
 msgid "Recomendacion:"
-msgstr ""
+msgstr "Empfehlung:"
 
 #: includes/system-check/seo-system-server-status.php:3300
 msgid ""
 "el error_log de PHP esta dentro del directorio publico. Muevelo a una ruta "
 "privada del hosting y vuelve a ejecutar Seguridad."
-msgstr ""
+msgstr "die PHP-Datei error_log liegt im öffentlichen Verzeichnis. Verschieben Sie sie in einen privaten Hostingpfad und führen Sie Sicherheit erneut aus."
 
 #: includes/system-check/seo-system-server-status.php:3302
 msgid "Privacidad de la ruta no concluyente:"
-msgstr ""
+msgstr "Datenschutz des Protokollpfads nicht eindeutig:"
 
 #: includes/system-check/seo-system-server-status.php:3302
 msgid ""
 "TaxoCommerce SEO no puede determinar si el destino queda dentro o fuera del "
 "document root. El cliente debe confirmarlo en el panel del hosting."
-msgstr ""
+msgstr "System Check kann nicht feststellen, ob das Ziel innerhalb oder außerhalb des Document Root liegt. Prüfen Sie dies im Hostingpanel."
 
 #: includes/system-check/seo-system-server-status.php:3304
 msgid "Log PHP configurado pero aun sin archivo:"
-msgstr ""
+msgstr "PHP-Protokoll konfiguriert, aber Datei noch nicht erstellt:"
 
 #: includes/system-check/seo-system-server-status.php:3304
 msgid ""
 "esto puede ser normal si no se ha producido ningun error desde que se cambio"
 " la ruta. PHP suele crear el archivo al escribir la primera entrada."
-msgstr ""
+msgstr "das kann normal sein, wenn seit der Pfadänderung keine Fehler aufgetreten sind. PHP erstellt die Datei meist erst beim ersten Eintrag."
 
 #: includes/system-check/seo-system-server-status.php:3306
 msgid "Log PHP activo pero no legible desde WordPress:"
-msgstr ""
+msgstr "PHP-Protokoll aktiv, aber in WordPress nicht lesbar:"
 
 #: includes/system-check/seo-system-server-status.php:3306
 msgid ""
 "TaxoCommerce SEO no intentara cambiar permisos. El cliente debe consultarlo "
 "desde el panel del hosting o pedir acceso al proveedor."
-msgstr ""
+msgstr "System Check ändert keine Berechtigungen. Nutzen Sie das Hostingpanel oder wenden Sie sich an Ihren Anbieter."
 
 #: includes/system-check/seo-system-server-status.php:3308
 msgid "Destino gestionado por el sistema:"
-msgstr ""
+msgstr "Systemverwaltetes Ziel:"
 
 #: includes/system-check/seo-system-server-status.php:3308
 msgid ""
 "PHP no esta escribiendo en un archivo local convencional accesible desde "
 "WordPress. TaxoCommerce SEO lo deja en modo informativo."
-msgstr ""
+msgstr "PHP schreibt nicht in eine herkömmliche lokale Datei, auf die WordPress zugreifen kann. System Check zeigt dies nur zur Information an."
 
 #: includes/system-check/seo-system-server-status.php:3317
 msgid ""
 "La lectura es voluntaria y solo para administradores. Antes de mostrarlo se "
 "enmascaran patrones comunes de contrasenas, tokens, claves API y cabeceras "
 "Authorization."
-msgstr ""
+msgstr "Das Lesen ist optional und auf Administratoren beschränkt. Häufige Muster für Passwörter, Tokens, API-Schlüssel und Authorization-Header werden vor der Anzeige maskiert."
 
 #: includes/system-check/seo-system-server-status.php:3321
 msgid "Ultimas 120 lineas del log PHP / sistema"
-msgstr ""
+msgstr "Letzte 120 Zeilen des PHP-/Systemprotokolls"
 
 #: taxocommerce-system-check.php:119 taxocommerce-system-check.php:121
 msgid "System Check"
-msgstr ""
+msgstr "System Check"
 
 #: taxocommerce-system-check.php:123
 msgid "PHP independiente"
-msgstr ""
+msgstr "Eigenständiges PHP"
 
 #: taxocommerce-system-check.php:125 taxocommerce-system-check.php:133
 #: taxocommerce-system-check.php:291
 msgid "Estado del sistema"
-msgstr ""
+msgstr "Systemstatus"
 
 #: taxocommerce-system-check.php:127 taxocommerce-system-check.php:401
 msgid "Chequeos HTTP"
-msgstr ""
+msgstr "HTTP-Prüfungen"
 
 #: taxocommerce-system-check.php:238
 msgid "Familia TaxoCommerce"
-msgstr ""
+msgstr "TaxoCommerce-Familie"
 
 #: taxocommerce-system-check.php:240
 msgid ""
 "Diagnósticos del servidor, comprobación de plugins y auditorías HTTP desde "
 "una única interfaz."
-msgstr ""
+msgstr "Serverdiagnose, Plugin-Prüfungen und HTTP-Audits in einer Oberfläche."
 
 #: taxocommerce-system-check.php:291
 msgid "Motor original no disponible."
-msgstr ""
+msgstr "Ursprüngliche Engine nicht verfügbar."
 
 #: taxocommerce-system-check.php:376
 msgid "Plugin Validation · módulos activos"
-msgstr ""
+msgstr "Plugin-Validierung · aktive Module"
 
 #: taxocommerce-system-check.php:377
 msgid ""
 "Sin Core solo se comprueba System Check. Con Core se usan sus módulos "
 "activos; no hay una lista duplicada."
-msgstr ""
+msgstr "Ohne Core wird nur System Check geprüft. Mit Core werden die aktiven Module verwendet; es gibt keine doppelte Liste."
 
 #: taxocommerce-system-check.php:378
 msgid "Plugin"
@@ -1501,13 +1501,13 @@ msgstr "Version"
 
 #: taxocommerce-system-check.php:378
 msgid "Comprobación básica"
-msgstr ""
+msgstr "Grundprüfung"
 
 #: taxocommerce-system-check.php:389
 msgid ""
 "Comprobación de carga y servicios básicos de System Check. No sustituye "
 "todavía los chequeos profundos, que se adaptarán por módulo."
-msgstr ""
+msgstr "Grundlegende Lade- und Serviceprüfungen von System Check. Dies ersetzt nicht die tieferen Prüfungen, die je Modul angepasst werden."
 
 #: taxocommerce-system-check.php:401
 msgid "El módulo de auditoría HTTP no se ha cargado."
@@ -1700,3 +1700,406 @@ msgstr "Möglicherweise doppelte PHP-Deklarationen müssen überprüft werden."
 #: includes/class-taxocommerce-system-check-code-check.php
 msgid "Native local checks: PHP, literal include paths, duplicate declarations, WordPress conventions and security patterns. Full data flow, runtime and official Plugin Check remain unverified."
 msgstr "Eigene lokale Prüfungen: PHP, wörtliche Include-Pfade, doppelte Deklarationen, WordPress-Konventionen und Sicherheitsmuster. Vollständiger Datenfluss, Laufzeitverhalten und offizieller Plugin Check bleiben ungeprüft."
+
+#: includes/admin-branding.php:70
+msgid "Version"
+msgstr "Version"
+
+#: includes/admin-branding.php:71
+msgid "Last updated"
+msgstr "Zuletzt aktualisiert"
+
+#: includes/admin-branding.php:104
+msgid "Version history and improvements"
+msgstr "Versionsverlauf und Verbesserungen"
+
+#: includes/class-taxocommerce-system-check-auto-test.php:33
+msgid "Último diagnóstico del servidor"
+msgstr "Letzte Serverdiagnose"
+
+#: includes/class-taxocommerce-system-check-auto-test.php:39
+msgid "Contrato JSON de Autocheck"
+msgstr "JSON-Vertrag des Selbsttests"
+
+#: includes/class-taxocommerce-system-check-auto-test.php:77
+msgid "El diagnóstico PHP independiente no está cargado."
+msgstr "Die eigenständige PHP-Diagnose ist nicht geladen."
+
+#: includes/class-taxocommerce-system-check-auto-test.php:81
+msgid "El diagnóstico PHP no devuelve su inventario completo."
+msgstr "Die PHP-Diagnose liefert kein vollständiges Inventar."
+
+#: includes/class-taxocommerce-system-check-auto-test.php:92
+msgid "El inventario PHP contiene datos incompletos, duplicados o estados desconocidos."
+msgstr "Das PHP-Inventar enthält unvollständige Daten, Duplikate oder unbekannte Zustände."
+
+#: includes/class-taxocommerce-system-check-auto-test.php:102
+msgid "%1$d comprobaciones PHP válidas; %2$d avisos del entorno (consultables en Sistema > PHP)."
+msgstr "%1$d gültige PHP-Prüfungen; %2$d Umgebungswarnungen (siehe System > PHP)."
+
+#: includes/class-taxocommerce-system-check-auto-test.php:107
+msgid "La pantalla de diagnóstico del servidor tiene un motor ejecutable."
+msgstr "Die Serverdiagnoseansicht verfügt über eine ausführbare Engine."
+
+#: includes/class-taxocommerce-system-check-auto-test.php:108
+msgid "No hay un motor de diagnóstico del servidor ejecutable. Comprueba la carga del módulo independiente."
+msgstr "Keine ausführbare Serverdiagnose-Engine verfügbar. Prüfen Sie, ob das eigenständige Modul geladen wurde."
+
+#: includes/class-taxocommerce-system-check-auto-test.php:113
+msgid "La lectura del histórico de servidor no está disponible; no se inicia ningún escaneo."
+msgstr "Der Serververlauf ist nicht verfügbar; es wurde kein Scan gestartet."
+
+#: includes/class-taxocommerce-system-check-auto-test.php:117
+msgid "Aún no hay un diagnóstico del servidor guardado. Ejecuta su comprobación desde Sistema."
+msgstr "Es wurde noch keine Serverdiagnose gespeichert. Starten Sie sie unter System."
+
+#: includes/class-taxocommerce-system-check-auto-test.php:123
+msgid "El último informe guardado del servidor tiene una estructura o fecha inválida."
+msgstr "Der letzte gespeicherte Serverbericht hat eine ungültige Struktur oder ein ungültiges Datum."
+
+#: includes/class-taxocommerce-system-check-auto-test.php:132
+msgid "El último diagnóstico contiene comprobaciones incompletas o duplicadas."
+msgstr "Die letzte Diagnose enthält unvollständige oder doppelte Prüfungen."
+
+#: includes/class-taxocommerce-system-check-auto-test.php:145
+msgid "El informe de servidor supera las 24 horas: se conserva como histórico, no como prueba actual."
+msgstr "Der Serverbericht ist älter als 24 Stunden: Er bleibt als Verlauf erhalten, nicht als aktueller Nachweis."
+
+#: includes/class-taxocommerce-system-check-auto-test.php:150
+msgid "Informe guardado válido: %d comprobaciones; su estado de salud se consulta en Sistema."
+msgstr "Gültiger gespeicherter Bericht: %d Prüfungen; der Status steht unter System."
+
+#: includes/class-taxocommerce-system-check-auto-test.php:155
+msgid "Falta la lectura de módulos activos."
+msgstr "Die Liste der aktiven Module ist nicht verfügbar."
+
+#: includes/class-taxocommerce-system-check-auto-test.php:159
+msgid "System Check no figura en sus módulos registrados."
+msgstr "System Check fehlt in der Liste der registrierten Module."
+
+#: includes/class-taxocommerce-system-check-auto-test.php:187
+msgid "Hay módulos registrados con contratos inválidos o comprobaciones fallidas."
+msgstr "Einige registrierte Module haben ungültige Verträge oder fehlgeschlagene Prüfungen."
+
+#: includes/class-taxocommerce-system-check-auto-test.php:194
+msgid "%d módulos comprobados: versiones, estados y verificaciones coherentes."
+msgstr "%d Module geprüft: Versionen, Zustände und Prüfungen sind konsistent."
+
+#: includes/class-taxocommerce-system-check-auto-test.php:199
+msgid "No está cargado el auditor HTTP."
+msgstr "Die HTTP-Prüfung ist nicht geladen."
+
+#: includes/class-taxocommerce-system-check-auto-test.php:205
+msgid "Falta el método HTTP ejecutable: %s."
+msgstr "Ausführbare HTTP-Methode fehlt: %s."
+
+#: includes/class-taxocommerce-system-check-auto-test.php:210
+msgid "Interfaz, inicio, proceso por lotes, controles y descarga HTTP disponibles; no se hace ninguna petición."
+msgstr "HTTP-Oberfläche, Start, Blockverarbeitung, Steuerung und Download verfügbar; es wird keine Anfrage gesendet."
+
+#: includes/class-taxocommerce-system-check-auto-test.php:215
+msgid "No se puede verificar el auditor HTTP: clase ausente."
+msgstr "HTTP-Auditor kann nicht geprüft werden: Klasse fehlt."
+
+#: includes/class-taxocommerce-system-check-auto-test.php:227
+msgid "Falta el callback HTTP del hook %s."
+msgstr "HTTP-Callback für Hook %s fehlt."
+
+#: includes/class-taxocommerce-system-check-auto-test.php:233
+msgid "El intervalo del vigilante HTTP es inválido."
+msgstr "Das Intervall der HTTP-Überwachung ist ungültig."
+
+#: includes/class-taxocommerce-system-check-auto-test.php:237
+msgid "Callbacks HTTP y vigilancia de cinco minutos registrados y consistentes; no se activan procesos."
+msgstr "HTTP-Callbacks und Fünf-Minuten-Überwachung sind registriert und konsistent; kein Prozess wurde gestartet."
+
+#: includes/class-taxocommerce-system-check-auto-test.php:243
+msgid "El exportador de módulos tiene función y acción de descarga registradas."
+msgstr "Der Modulexport verfügt über eine registrierte Funktion und Download-Aktion."
+
+#: includes/class-taxocommerce-system-check-auto-test.php:244
+msgid "La exportación JSON de módulos no está correctamente registrada."
+msgstr "Der JSON-Export der Module ist nicht korrekt registriert."
+
+#: includes/class-taxocommerce-system-check-auto-test.php:248
+msgid "Exportación histórica JSON disponible (no certifica la vigencia del informe)."
+msgstr "Der historische JSON-Export ist verfügbar (dies belegt nicht die Aktualität des Berichts)."
+
+#: includes/class-taxocommerce-system-check-auto-test.php:249
+msgid "Exportación del motor histórico no cargada; no es requisito del plugin independiente."
+msgstr "Der Export des historischen Motors ist nicht geladen; er ist für das eigenständige Plugin nicht erforderlich."
+
+#: includes/class-taxocommerce-system-check-auto-test.php:253
+msgid "El endpoint del JSON de Autocheck no está registrado."
+msgstr "Der JSON-Endpunkt des Selbsttests ist nicht registriert."
+
+#: includes/class-taxocommerce-system-check-auto-test.php:263
+msgid "La serialización JSON pierde estados o estructura."
+msgstr "Bei der JSON-Serialisierung gehen Zustände oder Struktur verloren."
+
+#: includes/class-taxocommerce-system-check-auto-test.php:265
+msgid "Endpoint disponible y serialización JSON validada, incluido el estado no ejecutado."
+msgstr "Endpunkt verfügbar und JSON-Serialisierung geprüft, einschließlich des Status Nicht ausgeführt."
+
+#: includes/class-taxocommerce-system-check-auto-test.php:327
+msgid "Descargar resultados (JSON)"
+msgstr "Ergebnisse herunterladen (JSON)"
+
+#: includes/class-taxocommerce-system-check-auto-test.php:328
+msgid "Fecha de ejecución:"
+msgstr "Ausführungsdatum:"
+
+#: includes/class-taxocommerce-system-check-auto-test.php:382
+msgid "Resultados:"
+msgstr "Ergebnisse:"
+
+#: includes/class-taxocommerce-system-check-auto-test.php:387
+msgid "Cobertura del Autocheck: %1$d de %2$d pruebas (%3$d%%). Los chequeos omitidos no se consideran superados."
+msgstr "Selbsttest-Abdeckung: %1$d von %2$d Prüfungen (%3$d%%). Übersprungene Prüfungen gelten nicht als bestanden."
+
+#: includes/class-taxocommerce-system-check-auto-test.php:413
+msgid "Sin permisos para descargar el Autocheck."
+msgstr "Sie haben keine Berechtigung, den Selbsttest herunterzuladen."
+
+#: includes/class-taxocommerce-system-check-auto-test.php:418
+msgid "Ejecuta el Autocheck antes de descargar el JSON."
+msgstr "Führen Sie den Selbsttest aus, bevor Sie die JSON-Datei herunterladen."
+
+#: includes/class-taxocommerce-system-check-auto-test.php:422
+msgid "No se pudo generar el informe JSON."
+msgstr "Der JSON-Bericht konnte nicht erstellt werden."
+
+#: includes/class-taxocommerce-system-check-processes.php:131
+msgid "Aprendizaje de Dependiente"
+msgstr "Dependiente-Lernprozess"
+
+#: includes/class-taxocommerce-system-check-processes.php:141
+msgid "Cola de importación"
+msgstr "Importwarteschlange"
+
+#: includes/class-taxocommerce-system-check-processes.php:179
+msgid "Exportación CSV"
+msgstr "CSV-Export"
+
+#: includes/class-taxocommerce-system-check-processes.php:199
+msgid "Detenido desde System Check. No se iniciarán nuevos lotes."
+msgstr "Aus System Check gestoppt. Es werden keine neuen Blöcke gestartet."
+
+#: includes/class-taxocommerce-system-check-processes.php:214
+msgid "Detención solicitada desde System Check; se conserva el cursor."
+msgstr "Stopp aus System Check angefordert; der Cursor bleibt erhalten."
+
+#: includes/class-taxocommerce-system-check-processes.php:326
+msgid "Mostrar confirmación de parada global"
+msgstr "Bestätigung zum Stoppen aller Jobs anzeigen"
+
+#: includes/class-taxocommerce-system-check-processes.php:349
+msgid "Procesos de WordPress y WooCommerce"
+msgstr "WordPress- und WooCommerce-Prozesse"
+
+#: includes/class-taxocommerce-system-check-processes.php:350
+msgid "Tareas de aplicación, no procesos Linux. Detener no interrumpe una petición PHP ya en marcha. Se preservan los trabajos críticos de WordPress y WooCommerce."
+msgstr "Anwendungsjobs, keine Linux-Prozesse. Stoppen unterbricht keine laufende PHP-Anfrage. Kritische WordPress- und WooCommerce-Jobs sind geschützt."
+
+#: includes/class-taxocommerce-system-check-processes.php:351
+msgid "Detener los trabajos cancelables mostrados"
+msgstr "Angezeigte abbrechbare Jobs stoppen"
+
+#: includes/class-taxocommerce-system-check-processes.php:356
+msgid "Operaciones de detención solicitadas o completadas: %d."
+msgstr "Angeforderte oder abgeschlossene Stoppvorgänge: %d."
+
+#: includes/class-taxocommerce-system-check-processes.php:358
+msgid "Procesos de larga duración"
+msgstr "Langlaufende Prozesse"
+
+#: includes/class-taxocommerce-system-check-processes.php:359
+msgid "Trabajo"
+msgstr "Job"
+
+#: includes/class-taxocommerce-system-check-processes.php:363
+msgid "Detener"
+msgstr "Stoppen"
+
+#: includes/class-taxocommerce-system-check-processes.php:368
+msgid "No hay procesos registrados."
+msgstr "Keine registrierten Prozesse."
+
+#: includes/class-taxocommerce-system-check-processes.php:375
+msgid "Cancelar pendiente"
+msgstr "Ausstehende Aufgabe abbrechen"
+
+#: includes/class-taxocommerce-system-check-processes.php:380
+msgid "Sin acciones pendientes o en curso."
+msgstr "Keine ausstehenden oder laufenden Aktionen."
+
+#: includes/class-taxocommerce-system-check-processes.php:387
+msgid "Cancelar programación"
+msgstr "Zeitplanung abbrechen"
+
+#: includes/class-taxocommerce-system-check-processes.php:392
+msgid "No hay eventos de WP-Cron."
+msgstr "Keine WP-Cron-Ereignisse."
+
+#: includes/class-taxocommerce-system-check-url-audit.php:675
+msgid "Auditoría HTTP: %s"
+msgstr "HTTP-Prüfung: %s"
+
+#: includes/class-taxocommerce-system-check-url-audit.php:677
+msgid "Trabajo local por lotes"
+msgstr "Lokaler Blockauftrag"
+
+#: includes/class-taxocommerce-system-check-url-audit.php:710
+msgid "Cancelado desde System Check."
+msgstr "Aus System Check abgebrochen."
+
+#: includes/official-excerpt.php:20
+msgid "Official plugin page"
+msgstr "Offizielle Plugin-Seite"
+
+#: taxocommerce-system-check.php:180
+msgid "Procesos"
+msgstr "Prozesse"
+
+#: taxocommerce-system-check.php:180
+msgid "Autocheck"
+msgstr "Selbsttest"
+
+msgid "Oldest overdue WP-Cron event"
+msgstr "Ältestes überfälliges WP-Cron-Ereignis"
+
+msgid "Unavailable"
+msgstr "Nicht verfügbar"
+
+msgid "The scheduled-event list is unavailable; no status is inferred."
+msgstr "Die Liste geplanter Ereignisse ist nicht verfügbar; es wird kein Status abgeleitet."
+
+msgid "None"
+msgstr "Keine"
+
+msgid "No event is more than 15 minutes overdue."
+msgstr "Kein Ereignis ist mehr als 15 Minuten überfällig."
+
+msgid "WP-Cron execution mechanism"
+msgstr "WP-Cron-Ausführungsmechanismus"
+
+msgid "External scheduler required"
+msgstr "Externer Zeitplaner erforderlich"
+
+msgid "WordPress visitor-triggered cron enabled"
+msgstr "WordPress-Besucher-Cron ist aktiviert"
+
+msgid "Overdue events alone do not prove that the runner is stopped. Check the hosting cron when WP-Cron is disabled."
+msgstr "Überfällige Ereignisse beweisen keinen Stillstand. Bei deaktiviertem WP-Cron den Hosting-Cron prüfen."
+
+msgid "Action Scheduler activity"
+msgstr "Action-Scheduler-Aktivität"
+
+msgid "Action Scheduler has no accessible action table."
+msgstr "Die Action-Scheduler-Tabelle ist nicht zugänglich."
+
+msgid "Oldest pending Action Scheduler job"
+msgstr "Älteste ausstehende Action-Scheduler-Aufgabe"
+
+msgid "No pending job found."
+msgstr "Keine ausstehenden Aufgaben gefunden."
+
+msgid "Most recent failed Action Scheduler attempt"
+msgstr "Letzter fehlgeschlagener Action-Scheduler-Versuch"
+
+msgid "No failed attempt is available."
+msgstr "Kein fehlgeschlagener Versuch verfügbar."
+
+msgid "Action Scheduler attempts in the last hour"
+msgstr "Action-Scheduler-Versuche in der letzten Stunde"
+
+msgid "Completed / failed, according to the last-attempt timestamp; not callback execution time."
+msgstr "Abgeschlossen / fehlgeschlagen nach Zeitstempel des letzten Versuchs; keine Laufzeit des Callbacks."
+
+msgid "No overdue backlog was detected in the sampled queue."
+msgstr "Kein überfälliger Rückstau in der Stichprobe erkannt."
+
+msgid "Recent failures exist; inspect the failing hooks. This does not prove the runner is stopped."
+msgstr "Es gibt aktuelle Fehler; betroffene Hooks prüfen. Das beweist keinen Stillstand."
+
+msgid "Recent completions exist, but an older task remains pending. Check the affected hook."
+msgstr "Kürzlich abgeschlossene Aufgaben, aber eine alte Aufgabe bleibt offen. Hook prüfen."
+
+msgid "Old pending tasks with no recent completions or failures: a runner issue is possible, but cannot be confirmed from one snapshot."
+msgstr "Alte Aufgaben ohne jüngste Aktivität: mögliches Runner-Problem, aber nicht durch eine Momentaufnahme bestätigt."
+
+msgid "Action Scheduler diagnostic"
+msgstr "Action-Scheduler-Diagnose"
+
+msgid "Read-only snapshot. Actual PHP process duration and runner heartbeat are not exposed by this check."
+msgstr "Schreibgeschützte Momentaufnahme. Tatsächliche PHP-Laufzeit und Runner-Heartbeat werden nicht gemessen."
+
+msgid "Queue health diagnostics (read-only)"
+msgstr "Warteschlangendiagnose (nur lesen)"
+
+msgid "WP-Cron and Action Scheduler signals are measured when this page opens. These measurements do not start, cancel or resume jobs, and cannot prove a PHP runner is stopped."
+msgstr "WP-Cron- und Action-Scheduler-Daten werden beim Öffnen gelesen. Keine Aufgaben starten, abbrechen oder fortsetzen; kein PHP-Stillstand nachweisbar."
+
+msgid "Metric"
+msgstr "Messwert"
+
+msgid "Value"
+msgstr "Wert"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Details"
+msgstr "Details"
+
+#. translators: 1: maximum URLs per batch; 2: completed; 3: total; 4: approximate next pending position.
+msgid "Batch limit: %1$d URLs · progress: %2$d/%3$d · resume: next pending URL (approx. position %4$d)."
+msgstr "Batchlimit: %1$d URLs · Fortschritt: %2$d/%3$d · Fortsetzung: nächste ausstehende URL (ungefähr Position %4$d)."
+
+msgid "Diagnóstico de tarea"
+msgstr "Aufgabendiagnose"
+
+msgid "La tarea ya no existe o no está disponible."
+msgstr "Die Aufgabe ist nicht mehr vorhanden oder nicht verfügbar."
+
+msgid "Grupo:"
+msgstr "Gruppe:"
+
+msgid "Posible tarea huérfana: no hay un callback registrado en esta petición. Confirma si el plugin está activo antes de cancelar."
+msgstr "Möglicherweise verwaiste Aufgabe: Für diese Anfrage ist kein Callback registriert. Prüfen Sie vor dem Abbrechen, ob das Plugin aktiv ist."
+
+msgid "Callback registrado. Esto no demuestra una ejecución correcta."
+msgstr "Callback registriert. Dies beweist keine erfolgreiche Ausführung."
+
+msgid "Ejecutor no verificable desde este estado."
+msgstr "Der Ausführer kann anhand dieses Status nicht überprüft werden."
+
+msgid "Programado (UTC):"
+msgstr "Geplant (UTC):"
+
+msgid "WP-Cron no conserva un historial individual de errores. Consulta los registros del plugin responsable si existen."
+msgstr "WP-Cron speichert keinen Fehlerverlauf für einzelne Ereignisse. Prüfen Sie gegebenenfalls die Protokolle des zuständigen Plugins."
+
+msgid "Este estado no prueba que una petición PHP siga ejecutándose."
+msgstr "Dieser Status beweist nicht, dass eine PHP-Anfrage noch läuft."
+
+msgid "Registro de Action Scheduler (últimas 20 entradas)"
+msgstr "Action-Scheduler-Protokoll (letzte 20 Einträge)"
+
+msgid "No hay entradas de registro disponibles para esta tarea."
+msgstr "Für diese Aufgabe sind keine Protokolleinträge verfügbar."
+
+msgid "El prefijo histórico seo_ no demuestra una dependencia del antiguo monolítico. No se muestran argumentos ni credenciales."
+msgstr "Das historische Präfix seo_ belegt keine Abhängigkeit vom alten monolithischen Plugin. Argumente und Zugangsdaten werden nicht angezeigt."
+
+msgid "Ver log del último fallo"
+msgstr "Protokoll des letzten Fehlers anzeigen"
+
+msgid "Ver detalles"
+msgstr "Details anzeigen"
+
+msgid "Ver log / diagnóstico"
+msgstr "Protokoll / Diagnose anzeigen"
+
+msgid "Process diagnostics are unavailable until the plugin update completes."
+msgstr "Die Prozessdiagnose ist erst nach Abschluss der Plugin-Aktualisierung verfügbar."

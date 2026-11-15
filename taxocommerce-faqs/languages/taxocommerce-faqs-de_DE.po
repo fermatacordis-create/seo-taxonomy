@@ -650,3 +650,33 @@ msgid ""
 "CSV UTF-8; hasta 500 filas y 2 MB por importación. Solo se actualiza un ID "
 "existente; las nuevas filas reciben ID nuevo."
 msgstr "UTF-8-CSV; höchstens 500 Zeilen und 2 MB je Import. Nur eine vorhandene ID wird aktualisiert; neue Zeilen erhalten eine neue ID."
+
+msgid "Ejecutar Autocheck"
+msgstr "Selbstprüfung ausführen"
+
+msgid "Descargar resultados (JSON)"
+msgstr "Ergebnisse herunterladen (JSON)"
+
+msgid "Autocheck de FAQs"
+msgstr "FAQ-Selbstprüfung"
+
+msgid "Diagnóstico manual y no destructivo: comprueba funciones y configuración sin crear, editar, eliminar ni importar preguntas."
+msgstr "Manuelle, nicht destruktive Diagnose: prüft Funktionen und Einstellungen, ohne FAQs zu erstellen, zu bearbeiten, zu löschen oder zu importieren."
+
+msgid "Todavía no se ha ejecutado el Autocheck en este sitio."
+msgstr "Die Selbstprüfung wurde auf dieser Website noch nicht ausgeführt."
+
+msgid "Correctos"
+msgstr "Erfolgreich"
+
+msgid "Errores"
+msgstr "Fehler"
+
+msgid "Omitidos / externos"
+msgstr "Übersprungen / extern"
+
+msgid "No ejecutados"
+msgstr "Nicht ausgeführt"
+
+msgid "Los controles comprueban contratos y lecturas, no operaciones reales. Los casos omitidos requieren validación manual en STAGING; el Code Check no sustituye a WordPress Plugin Check."
+msgstr "Die Prüfungen kontrollieren Schnittstellen und Lesevorgänge, keine echten Abläufe. Übersprungene Fälle müssen in STAGING manuell geprüft werden; die Codeprüfung ersetzt WordPress Plugin Check nicht."

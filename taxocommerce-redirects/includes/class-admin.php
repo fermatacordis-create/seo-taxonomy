@@ -266,6 +266,27 @@ final class Admin {
                             <td><div class="tc-rd-actions">
                                 <a href="<?php echo esc_url( self::url( array( 'edit' => absint( $row->id ) ) ) ); ?>">Editar</a>
                                 <a href="<?php echo esc_url( $origin ); ?>" target="_blank" rel="noopener">Probar</a>
+                                <?php if ( absint( $detail['chain_hops'] ?? 0 ) > 1 ) :
+                                    $terminal = Store::chain_destination( $row->id );
+                                    if ( ! is_wp_error( $terminal ) ) : ?>
+                                        <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+                                            <?php wp_nonce_field( 'tc_redirects_manage' ); ?>
+                                            <input type="hidden" name="action" value="tc_redirects_manage">
+                                            <input type="hidden" name="task" value="flatten_chain">
+                                            <input type="hidden" name="redirect_id" value="<?php echo esc_attr( (string) $row->id ); ?>">
+                                            <input type="hidden" name="confirmed_target" value="<?php echo esc_attr( $terminal ); ?>">
+                                            <label>
+                                                <input type="checkbox" name="confirm_destination" value="1" required>
+                                                <?php esc_html_e( 'Destino verificado', 'taxocommerce-redirects' ); ?>
+                                            </label>
+                                            <code><?php echo esc_html( $terminal ); ?></code>
+                                            <button type="submit" class="button-link"><?php esc_html_e( 'Consolidar cadena', 'taxocommerce-redirects' ); ?></button>
+                                        </form>
+                                    <?php else : ?>
+                                        <span class="tc-rd-issue"><?php echo esc_html( $terminal->get_error_message() ); ?></span>
+                                    <?php endif;
+                                endif; ?>
+
                                 <?php if ( ! is_wp_error( $target ) ) : ?>
                                     <a href="<?php echo esc_url( $target ); ?>" target="_blank" rel="noopener">Destino</a>
                                 <?php endif; ?>
@@ -325,6 +346,26 @@ final class Admin {
             $status = isset( $_POST['status_code'] ) ? absint( $_POST['status_code'] ) : 301;
             $result = Store::save( $origin, $target, $status, $id );
             self::success( is_wp_error( $result ) ? $result->get_error_message() : 'Redirección guardada.', is_wp_error( $result ) );
+        }
+        if ( 'flatten_chain' === $task ) {
+            $id = isset( $_POST['redirect_id'] ) ? absint( $_POST['redirect_id'] ) : 0;
+            // phpcs:ignore WordPress.Security.NonceVerification.Missing -- The management nonce was verified above.
+            $confirmed = isset( $_POST['confirmed_target'] ) && is_string( $_POST['confirmed_target'] )
+                ? sanitize_text_field( wp_unslash( $_POST['confirmed_target'] ) ) : '';
+            // phpcs:ignore WordPress.Security.NonceVerification.Missing -- The management nonce was verified above.
+            if ( empty( $_POST['confirm_destination'] ) ) {
+                self::success( __( 'Confirma que has revisado el destino final.', 'taxocommerce-redirects' ), true );
+            }
+            $rule = Store::get( $id );
+            $terminal = Store::chain_destination( $id );
+            if ( ! $rule || is_wp_error( $terminal ) || ! hash_equals( (string) $terminal, $confirmed ) ) {
+                self::success( __( 'La cadena ha cambiado o no puede consolidarse. Revisa de nuevo el destino.', 'taxocommerce-redirects' ), true );
+            }
+            $result = Store::save( $rule->origin_url, $terminal, absint( $rule->status_code ), $id );
+            self::success(
+                is_wp_error( $result ) ? $result->get_error_message() : __( 'Cadena consolidada sin modificar las demás reglas.', 'taxocommerce-redirects' ),
+                is_wp_error( $result )
+            );
         }
         if ( 'delete' === $task ) {
             $id = isset( $_POST['redirect_id'] ) ? absint( $_POST['redirect_id'] ) : 0;

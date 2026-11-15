@@ -1,3 +1,11 @@
+## 2026-11-14 - Retirada del puente temporal TaxoCommerce Connections (#2671)
+
+- Eliminado de GitHub el plugin autónomo `taxocommerce-connections/` (Compatibility Bridge), ya consolidado en TaxoCommerce Insights.
+- Se conservan sin cambios en Insights las integraciones, clases históricas, identificadores de opciones y credenciales de Google, Bing, Merchant, Amazon y Pinterest.
+- Las pruebas de familia, la regresión de Insights y la validación de STAGING ya no exigen la presencia del plugin retirado.
+- El desplegador ignora el puente en actualizaciones incrementales y sincronizaciones completas: no lo reinstala ni modifica sus archivos remotos.
+- No se borran automáticamente plugins de WordPress ni archivos en `uploads`: su desactivación y borrado corresponden a la limpieza administrativa de cada instalación tras comprobar Insights. Producción no se modifica.
+
 ## 2026-11-10 - Import-Export 0.4.29: eliminar programación de colas propias (#2530)
 
 - Quitadas las llamadas que creaban tareas programadas de importación/exportación en Action Scheduler y WP-Cron. Se mantiene la secuencia HTTP interna con regulador de carga, los controles y el watchdog activado con el tráfico.

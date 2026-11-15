@@ -4,13 +4,30 @@ Tags: diagnostics, security, performance, maintenance, monitoring
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.2.32
+Stable tag: 0.2.40
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Server, WordPress and plugin diagnostics with administrator-controlled reports and local checks.
 
 == Description ==
+
+Version 0.2.40 prevents a fatal error when the Processes diagnostic class is temporarily unavailable during an incremental FTPS update. The previous process list and controls remain usable until the transfer finishes.
+
+Version 0.2.39 adds administrator-only, on-demand job diagnostics inside Processes. Each Action Scheduler task has a bounded, redacted log view; WP-Cron jobs show callback availability without inventing execution history. Existing protected cancellation and cooperative stop remain unchanged, with the WP-Cron event signature corrected. No general PHP kill or arbitrary run-now action is provided.
+
+Version 0.2.38 adds read-only queue diagnostics **inside Procesos**, above the existing application-task manager: oldest overdue WP-Cron event, oldest pending Action Scheduler hook, latest failed attempt, activity during the last hour and cautious interpretation of backlogs versus recurring errors. Reads are limited, neither schedule nor cancel tasks, and do not infer that a runner is stopped from a single snapshot. No background execution duration is recorded or displayed. Active local HTTP audit workers additionally show the configured 1–8 URL batch size, completed/total count and the approximate next pending position (including paused runs). These are progress indicators, not an exposed stored cursor or a promise that a stopped job will resume. The Sistema/MySQL/Servidor sections and existing cancellation permissions are unchanged.
+
+
+Version 0.2.37 introduces a manual, phased family validation pilot for Core: read-only functionality cases followed by code-file inspection, with five adaptive workload settings, pause/resume and separate KPI columns. Other active modules remain clearly not integrated. Runs are never started by opening the page.
+
+Version 0.2.35 completes all 420 entries in each of the five existing gettext catalogs (es_ES, en_US, fr_FR, de_DE and nl_NL), including administrative controls, diagnostic messages and explanatory text. WordPress uses the active site/user locale. A full source-code audit for strings outside gettext and end-to-end language validation remain necessary before claiming full interface localization.
+
+
+## Actualización 0.2.33 — idiomas
+
+Se han ampliado las traducciones locales en es_ES, en_US, fr_FR, de_DE y nl_NL. El catálogo de inglés incorpora las claves que le faltaban y se han regenerado los archivos MO. La cobertura completa de la interfaz y la carga efectiva de traducciones siguen pendientes de validación.
+
 
 * Admin header: plugin title, a single local `Description` with the static `Plugin URI` link below it (left); a wider collapsed `CHANGELOG.md` history (center); local version and release date (right). No duplicated information panel or external requests.
 

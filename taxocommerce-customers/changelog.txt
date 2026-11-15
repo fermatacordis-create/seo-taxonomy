@@ -1,0 +1,9 @@
+= 0.1.1 (2026-11-14) =
+* Anonymize CRM personal data and prevent WooCommerce hooks from repopulating erased records.
+* Restrict customer management, imports, exports, erasure and private notes with dedicated capabilities.
+* Start historical sync only on explicit click, resume partial batches and keep pagination size stable.
+* Export to a private server-side temporary CSV file in bounded batches with a signed download.
+* Add regression coverage; no production deployment.
+
+= 0.1.0 (2026-11-13) =
+* Initial standalone customers CRM for WooCommerce registered/guest purchasers and manual contacts, with batch CSV and private notes.

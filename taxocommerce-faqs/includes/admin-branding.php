@@ -13,7 +13,17 @@ $tc_brand_info = require __DIR__ . '/official-excerpt.php';
 $tc_brand_on_screen = static function () use ( $tc_brand_slug ) {
     // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only WordPress admin route.
     $page = isset( $_GET['page'] ) && is_string( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
-    return $page === $tc_brand_slug || 0 === strpos( $page, $tc_brand_slug . '-' );
+    if ( $page === $tc_brand_slug || 0 === strpos( $page, $tc_brand_slug . '-' ) ) {
+        return true;
+    }
+    // Core can host the FAQ editor and Autocheck under its Content route.
+    // Scope the shared hero to FAQ content; never affect other Core screens.
+    if ( 'taxocommerce-core-content' !== $page || 'taxocommerce-faqs' !== $tc_brand_slug ) {
+        return false;
+    }
+    // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only Core content selector.
+    $type = isset( $_GET['tc_type'] ) && is_string( $_GET['tc_type'] ) ? sanitize_key( wp_unslash( $_GET['tc_type'] ) ) : '';
+    return 'faqs' === $type;
 };
 
 add_filter( 'admin_body_class', static function ( $classes ) use ( $tc_brand_on_screen ) {

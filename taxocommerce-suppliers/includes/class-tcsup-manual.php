@@ -29,6 +29,7 @@ final class TCSUP_Manual {
 				<a href="#tcsup-user-csv"><?php esc_html_e( 'Importar un CSV', 'taxocommerce-suppliers' ); ?></a>
 				<a href="#tcsup-user-templates"><?php esc_html_e( 'Plantillas', 'taxocommerce-suppliers' ); ?></a>
 				<a href="#tcsup-user-inventory"><?php esc_html_e( 'Inventario y aceptación', 'taxocommerce-suppliers' ); ?></a>
+				<a href="#tcsup-user-providers"><?php esc_html_e( 'Gestión de proveedores', 'taxocommerce-suppliers' ); ?></a>
 				<a href="#tcsup-user-prices"><?php esc_html_e( 'Precios', 'taxocommerce-suppliers' ); ?></a>
 				<a href="#tcsup-user-images"><?php esc_html_e( 'Imágenes', 'taxocommerce-suppliers' ); ?></a>
 				<a href="#tcsup-user-purchasing"><?php esc_html_e( 'Compras', 'taxocommerce-suppliers' ); ?></a>
@@ -63,6 +64,7 @@ final class TCSUP_Manual {
 						<tr><td><?php echo wp_kses_post( __( 'CSV Import', 'taxocommerce-suppliers' ) ); ?></td><td><?php echo wp_kses_post( __( 'Subir, analizar, asignar columnas e importar.', 'taxocommerce-suppliers' ) ); ?></td><td><?php echo wp_kses_post( __( 'Guarda el CSV original e inserta o actualiza filas del catálogo intermedio; no publica productos.', 'taxocommerce-suppliers' ) ); ?></td></tr>
 						<tr><td><?php echo wp_kses_post( __( 'CSV Templates', 'taxocommerce-suppliers' ) ); ?></td><td><?php echo wp_kses_post( __( 'Descargar cabecera canónica, crear plantillas desde un archivo JSON/CSV/TXT o texto pegado, descargar, consultar y eliminar plantillas personalizadas.', 'taxocommerce-suppliers' ) ); ?></td><td><?php echo wp_kses_post( __( 'Eliminar una plantilla personalizada borra su definición, no las filas ya importadas.', 'taxocommerce-suppliers' ) ); ?></td></tr>
 						<tr><td><?php echo wp_kses_post( __( 'Inventory', 'taxocommerce-suppliers' ) ); ?></td><td><?php echo wp_kses_post( __( 'Filtrar filas, aceptar, revisar, descartar o devolver a pendiente.', 'taxocommerce-suppliers' ) ); ?></td><td><?php echo wp_kses_post( __( '<strong>Aceptar</strong> puede escribir un producto WooCommerce y metadatos; las otras decisiones modifican el estado de selección.', 'taxocommerce-suppliers' ) ); ?></td></tr>
+						<tr><td><?php echo wp_kses_post( __( 'Gestión de proveedores', 'taxocommerce-suppliers' ) ); ?></td><td><?php echo wp_kses_post( __( 'Ver los proveedores importados, crear y editar sus fichas privadas, contactos, direcciones, plazos y observaciones.', 'taxocommerce-suppliers' ) ); ?></td><td><?php echo wp_kses_post( __( 'Solo modifica la tabla de fichas, nunca productos del inventario ni pedidos WooCommerce.', 'taxocommerce-suppliers' ) ); ?></td></tr>
 						<tr><td><?php echo wp_kses_post( __( 'Prices', 'taxocommerce-suppliers' ) ); ?></td><td><?php echo wp_kses_post( __( 'Editar costes de proveedor, IVA, moneda, márgenes y precios Woo.', 'taxocommerce-suppliers' ) ); ?></td><td><?php echo wp_kses_post( __( 'Guardar actualiza los datos del proveedor; solo aplica precios WooCommerce cuando se marca <em>Apply Woo prices</em>.', 'taxocommerce-suppliers' ) ); ?></td></tr>
 						<tr><td><?php echo wp_kses_post( __( 'External Images', 'taxocommerce-suppliers' ) ); ?></td><td><?php echo wp_kses_post( __( 'Editar URL y modo de imagen por referencia.', 'taxocommerce-suppliers' ) ); ?></td><td><?php echo wp_kses_post( __( 'Guarda referencias y su estado; no descarga archivos a Media.', 'taxocommerce-suppliers' ) ); ?></td></tr>
 						<tr><td><?php echo wp_kses_post( __( 'Purchasing', 'taxocommerce-suppliers' ) ); ?></td><td><?php echo wp_kses_post( __( 'Ver pedidos activos y sus posibles proveedores.', 'taxocommerce-suppliers' ) ); ?></td><td><?php echo wp_kses_post( __( 'Consulta pedidos y presenta enlaces externos; no compra automáticamente ni modifica estados de pedidos.', 'taxocommerce-suppliers' ) ); ?></td></tr>
@@ -72,6 +74,13 @@ final class TCSUP_Manual {
 				</table></div>
 			</section>
 
+            <section id="tcsup-user-providers" class="tcsup-manual-section">
+                <h2><?php esc_html_e( 'Gestión de proveedores', 'taxocommerce-suppliers' ); ?></h2>
+                <p><?php echo esc_html( __( 'La lista se crea automáticamente con los nombres distintos de proveedor que figuran en el inventario intermedio. Al importar el primer producto de un proveedor nuevo, su ficha aparecerá sin datos y podrás completarla. No se dan de alta proveedores ajenos al catálogo.', 'taxocommerce-suppliers' ) ); ?></p>
+                <p><?php echo esc_html( __( 'Pulsa Crear ficha o Editar para registrar razón social, NIF, contactos comerciales, teléfonos, correos, dirección, plazo habitual de entrega y observaciones internas. Son datos privados de administración y no se publican en WooCommerce.', 'taxocommerce-suppliers' ) ); ?></p>
+                <p><?php echo esc_html( __( 'Eliminar ficha borra únicamente los datos de contacto. Si el proveedor continúa en el inventario, seguirá visible y se podrá volver a rellenar. Eliminar la ficha no borra ni modifica importaciones, productos, precios o pedidos.', 'taxocommerce-suppliers' ) ); ?></p>
+				<p><?php echo esc_html( __( 'Para editar muchas fichas, descarga el CSV desde Gestión de proveedores. El archivo incluye también proveedores sin ficha. Rellena las columnas conservando los nombres de proveedor y vuelve a importarlo. Se validan las identidades existentes; los nombres desconocidos se omiten. Los campos vacíos sobrescriben los valores anteriores. La importación se procesa por bloques y permite detenerse sin revertir los bloques ya completados.', 'taxocommerce-suppliers' ) ); ?></p>
+            </section>
 			<section id="tcsup-user-csv" class="tcsup-manual-section">
 				<h2><?php esc_html_e( '3. Importación CSV paso a paso', 'taxocommerce-suppliers' ); ?></h2>
 				<h3><?php esc_html_e( '3.1 Analizar el archivo', 'taxocommerce-suppliers' ); ?></h3>

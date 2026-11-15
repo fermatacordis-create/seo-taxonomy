@@ -299,6 +299,54 @@ final class Assisted_Delete {
         return true;
     }
 
+    /**
+     * Suggest the most specific WooCommerce category that remains populated after
+     * this product is removed. Never register a redirect without explicit approval.
+     *
+     * @param int $product_id Published product ID.
+     * @return string Safe internal target or empty string.
+     */
+    private static function suggested_product_category( $product_id ) {
+        if ( ! taxonomy_exists( 'product_cat' ) ) {
+            return '';
+        }
+        $terms = get_the_terms( $product_id, 'product_cat' );
+        if ( ! is_array( $terms ) ) {
+            return '';
+        }
+        $default_category = absint( get_option( 'default_product_cat', 0 ) );
+        $choices = array();
+        foreach ( $terms as $term ) {
+            if ( ! $term instanceof \WP_Term || $term->term_id === $default_category || (int) $term->count <= 1 ) {
+                continue;
+            }
+            $url = get_term_link( $term );
+            if ( is_wp_error( $url ) ) {
+                continue;
+            }
+            $safe = Store::normalize_target( $url );
+            if ( is_wp_error( $safe ) || '/' === $safe ) {
+                continue;
+            }
+            $choices[] = array(
+                'path' => $safe,
+                'depth' => count( get_ancestors( $term->term_id, 'product_cat', 'taxonomy' ) ),
+                'count' => (int) $term->count,
+                'id' => (int) $term->term_id,
+            );
+        }
+        usort( $choices, static function ( $a, $b ) {
+            if ( $a['depth'] !== $b['depth'] ) {
+                return $b['depth'] <=> $a['depth'];
+            }
+            if ( $a['count'] !== $b['count'] ) {
+                return $b['count'] <=> $a['count'];
+            }
+            return $a['id'] <=> $b['id'];
+        } );
+        return $choices ? (string) $choices[0]['path'] : '';
+    }
+
     public static function render_confirmation() {
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only confirmation screen.
         $type = isset( $_GET['tc_type'] ) ? sanitize_key( wp_unslash( $_GET['tc_type'] ) ) : '';
@@ -311,6 +359,7 @@ final class Assisted_Delete {
         $can_redirect = 'publish' === $data['status'];
         $warning = 'product_cat' === $type ? self::category_preflight( $id ) : true;
         $permanent = 'trash' === $data['status'];
+        $suggested_category = 'product' === $type && $can_redirect ? self::suggested_product_category( $id ) : '';
         ?>
         <div class="wrap tc-rd tc-rd-confirm">
             <h1>Eliminar <?php echo esc_html( self::ALLOWED[ $type ] ); ?></h1>
@@ -340,7 +389,12 @@ final class Assisted_Delete {
                         <label class="tc-rd-choice"><input type="radio" name="mode" value="redirect" checked> Eliminar y registrar redirección 301</label>
                         <div class="tc-rd-destination">
                             <label for="tc-rd-delete-target">Destino del redirect</label>
-                            <input id="tc-rd-delete-target" type="text" class="large-text" name="target_url" placeholder="/categoria-destino/" maxlength="255">
+                            <input id="tc-rd-delete-target" type="text" class="large-text" name="target_url" placeholder="/categoria-destino/" maxlength="255" value="<?php echo esc_attr( $suggested_category ); ?>">
+                            <?php if ( '' !== $suggested_category ) : ?>
+                                <p class="description"><?php esc_html_e( 'Categoría WooCommerce sugerida: contiene otros productos y es la más específica disponible. Revisa que sea adecuada antes de confirmar; puedes sustituirla por un producto equivalente.', 'taxocommerce-redirects' ); ?></p>
+                            <?php else : ?>
+                                <p class="description"><?php esc_html_e( 'No se ha identificado una categoría específica con otros productos. Selecciona un destino realmente equivalente o elimina sin redirección.', 'taxocommerce-redirects' ); ?></p>
+                            <?php endif; ?>
                             <p class="description">Destino interno del mismo sitio. No se genera ningún redirect hasta que confirmes.</p>
                         </div>
                     <?php endif; ?>

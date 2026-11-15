@@ -1,3 +1,25 @@
+= 0.4.85 (2026-11-14) =
+* Auto-discover active and inactive TaxoCommerce plugins using WordPress get_plugins and local ZIP filenames, deduplicate built-in suppliers and register new Accounting/Customers cards without Core updates. Keep native WordPress install and activation screens (WordPress.org-compatible). Issue #2669.
+
+= 0.4.84 (2026-11-13) =
+* Fix WordPress.org release packaging to use the confirmed official taxocommerce-core slug, main PHP filename, text domain and five gettext catalogs. Remove obsolete long-slug packaging transformation, ensure the published ZIP contains the same Core code validated in staging, and add regression checks. Issue #2625.
+
+= 0.4.83 (2026-11-13) =
+* Address WordPress.org manual-review findings: delegate extension installation/activation/deactivation to WordPress native plugin administration while retaining discovery and authenticated download of local ZIP packages; remove Core's custom upload/installer and obsolete handlers. Make JSON output-buffer cleanup unconditional, separate read-only country GET from validated POST, replace dynamic CSS with static rules, prefix Core anomaly filters, and remove installation-specific post-slug exceptions. Retain native Code Check rules without suppressing remaining warnings. Issue #2625.
+
+= 0.4.82 (2026-11-13) =
+* Group native Core Code Check results by severity: red confirmed errors, amber review warnings, green files without findings, grey unchecked files. Show source location, rule and recommended review action. JSON adds classified_findings while keeping existing results and summary unchanged. No external checker or functional code changes. Issue #2623.
+
+= 0.4.81 (2026-11-13) =
+* Core Code Check now reports the actual number of findings and rule types, displays all captured evidence and shows Review Required instead of an apparent pass when PHP succeeds but WordPress/security findings exist. JSON gains a consistent summary, without invoking any external plugin. Incomplete or truncated scans never pass. Issue #2621.
+
+= 0.4.80 (2026-11-13) =
+* Extend Core's own PHP/WordPress/security Code Check with local, token-based WordPress.org manual-review criteria, source lines, PHP sessions and SQL indicators. No Plugin Check dependency or network requests. Preserve CPU batches and JSON export; regression tests cover reported source locations and distinguish contextual warnings from confirmed failures. Issue #2619.
+* Fix false duplicate-symbol reports after interpolated PHP strings; retain official Plugin Check status as not executed.
+
+= 0.4.79 (2026-11-13) =
+* Keep the exact Core dashboard header and version history on both Autocheck subtabs. Place independent Functionality Check and Code Check below the persistent navigation; retain bounded code analysis and JSON downloads. No changes to the review findings or store data.
+
 = 0.4.78 (2026-11-11) =
 * Fix local Plugin Check on existing stores: Core in taxocommerce-core/ uses its matching native gettext domain and five bundled catalogs. Build the public WordPress.org distribution from the same sources with its assigned long folder, entrypoint, gettext domain and catalogs, strictly checking both packages. Issue #2565.
 

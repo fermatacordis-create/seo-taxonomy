@@ -1,3 +1,6 @@
+= 0.4.32 (2026-11-13) =
+* Code Check equiparado a Core 0.4.82: reglas autónomas PHP/WordPress/seguridad, clasificación por gravedad, detalles de archivos y recomendaciones, resumen y JSON; sin modificar el Autotest funcional. Issue #2626.
+
 = 0.4.29 (2026-11-10) =
 * Retire own Action Scheduler and WP-Cron backups for CSV queues; preserve signed loopback, load regulation, watchdog and existing job state. Clean up only legacy hooks of this plugin. Issue #2530.
 

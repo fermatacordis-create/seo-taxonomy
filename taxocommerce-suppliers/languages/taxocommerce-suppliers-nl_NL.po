@@ -1,199 +1,199 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: TaxoCommerce Suppliers 0.2.8\n"
+"Project-Id-Version: TaxoCommerce Suppliers 0.2.27\n"
 "Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "1. Objetivo, acceso y precauciones"
-msgstr ""
+msgstr "1. Doel, toegang en voorzorgsmaatregelen"
 
 msgid "1. Upload supplier CSV"
-msgstr ""
+msgstr "1. CSV van leverancier uploaden"
 
 msgid "1.1 Qué resuelve"
-msgstr ""
+msgstr "1.1 Wat dit oplost"
 
 msgid "1.2 Dónde se encuentra"
-msgstr ""
+msgstr "1.2 Waar u dit vindt"
 
 msgid "1.3 Antes de operar"
-msgstr ""
+msgstr "1.3 Voordat u begint"
 
 msgid "10. Arquitectura y límites del módulo"
-msgstr ""
+msgstr "10. Architectuur en beperkingen van de module"
 
 msgid "10.1 Arranque y activación"
-msgstr ""
+msgstr "10.1 Opstarten en activering"
 
 msgid "11. Directorios, clases y responsabilidades"
-msgstr ""
+msgstr "11. Mappen, klassen en verantwoordelijkheden"
 
 msgid "12. Modelo de datos, identidad y persistencia"
-msgstr ""
+msgstr "12. Gegevensmodel, identiteit en opslag"
 
 msgid "12.1 Tabla de catálogo"
-msgstr ""
+msgstr "12.1 Catalogustabel"
 
 msgid "12.2 Tabla de imágenes"
-msgstr ""
+msgstr "12.2 Afbeeldingentabel"
 
 msgid "12.3 Opciones, transients y archivos"
-msgstr ""
+msgstr "12.3 Opties, transients en bestanden"
 
 msgid "13. Motor CSV y transformaciones"
-msgstr ""
+msgstr "13. CSV-verwerking en transformaties"
 
 msgid "13.1 Pasos internos"
-msgstr ""
+msgstr "13.1 Interne stappen"
 
 msgid "13.2 Modos y deduplicación"
-msgstr ""
+msgstr "13.2 Modi en deduplicatie"
 
 msgid "13.3 Límites operativos"
-msgstr ""
+msgstr "13.3 Operationele beperkingen"
 
 msgid "14. Aceptación, sincronización y compras WooCommerce"
-msgstr ""
+msgstr "14. Acceptatie, synchronisatie en inkoop in WooCommerce"
 
 msgid "14.1 Selección de productos"
-msgstr ""
+msgstr "14.1 Productselectie"
 
 msgid "14.2 Márgenes y existencias"
-msgstr ""
+msgstr "14.2 Marges en voorraad"
 
 msgid "14.3 Consulta de compras y compatibilidad HPOS"
-msgstr ""
+msgstr "14.3 Inkoopopvraging en HPOS-compatibiliteit"
 
 msgid "15. API pública, hooks y contratos"
-msgstr ""
+msgstr "15. Openbare API, hooks en contracten"
 
 msgid "15.1 Funciones consumibles por otros plugins"
-msgstr ""
+msgstr "15.1 Functies voor andere plugins"
 
 msgid "15.2 Acciones administrativas"
-msgstr ""
+msgstr "15.2 Beheeracties"
 
 msgid "16. Seguridad, límites y compatibilidad"
-msgstr ""
+msgstr "16. Beveiliging, beperkingen en compatibiliteit"
 
 msgid "16.1 Acceso y formularios"
-msgstr ""
+msgstr "16.1 Toegang en formulieren"
 
 msgid "16.2 SQL, ficheros y datos de terceros"
-msgstr ""
+msgstr "16.2 SQL, bestanden en gegevens van derden"
 
 msgid "16.3 Dependencias y exclusiones"
-msgstr ""
+msgstr "16.3 Afhankelijkheden en uitsluitingen"
 
 msgid "17. Pruebas, mantenimiento y entrega"
-msgstr ""
+msgstr "17. Tests, onderhoud en oplevering"
 
 msgid "17.1 Autotest"
-msgstr ""
+msgstr "17.1 Zelftest"
 
 msgid "17.2 Matriz mínima antes de fusionar"
-msgstr ""
+msgstr "17.2 Minimale testmatrix vóór samenvoegen"
 
 msgid "17.3 Proceso de cambios"
-msgstr ""
+msgstr "17.3 Wijzigingsproces"
 
 msgid "17.4 Cómo mantener esta documentación"
-msgstr ""
+msgstr "17.4 Deze documentatie onderhouden"
 
 msgid "2. Pestañas y resultados de las acciones"
-msgstr ""
+msgstr "2. Tabbladen en resultaten van acties"
 
 msgid "2. Review normalization"
-msgstr ""
+msgstr "2. Normalisatie controleren"
 
 msgid "3. Importación CSV paso a paso"
-msgstr ""
+msgstr "3. CSV-import stap voor stap"
 
 msgid "3.1 Analizar el archivo"
-msgstr ""
+msgstr "3.1 Bestand analyseren"
 
 msgid "3.2 Resultado y comprobación"
-msgstr ""
+msgstr "3.2 Resultaat en controle"
 
 msgid "3.3 Actualización exclusiva de precios"
-msgstr ""
+msgstr "3.3 Alleen prijzen bijwerken"
 
 msgid "3.4 Casos VEVOR"
-msgstr ""
+msgstr "3.4 VEVOR-gevallen"
 
 msgid "3.5 Limitaciones reales"
-msgstr ""
+msgstr "3.5 Huidige beperkingen"
 
 msgid "4. Plantillas CSV"
-msgstr ""
+msgstr "4. CSV-sjablonen"
 
 msgid "4.1 Guardar un mapeo"
-msgstr ""
+msgstr "4.1 Toewijzing opslaan"
 
 msgid "4.2 Crear una plantilla sin importar productos"
-msgstr ""
+msgstr "4.2 Een sjabloon maken zonder producten te importeren"
 
 msgid "4.3 Eliminar una plantilla"
-msgstr ""
+msgstr "4.3 Sjabloon verwijderen"
 
 msgid "5. Inventario intermedio y decisiones"
-msgstr ""
+msgstr "5. Tussenvoorraad en beslissingen"
 
 msgid "5.1 Localizar una referencia"
-msgstr ""
+msgstr "5.1 Een referentie zoeken"
 
 msgid "5.2 Qué significa cada decisión"
-msgstr ""
+msgstr "5.2 Betekenis van elke beslissing"
 
 msgid "5.3 Aceptar un producto nuevo"
-msgstr ""
+msgstr "5.3 Een nieuw product accepteren"
 
 msgid "5.4 Aceptar uno existente"
-msgstr ""
+msgstr "5.4 Een bestaand product accepteren"
 
 msgid "5.5 Acciones masivas"
-msgstr ""
+msgstr "5.5 Bulkacties"
 
 msgid "6. Precios, impuestos y márgenes"
-msgstr ""
+msgstr "6. Prijzen, belastingen en marges"
 
 msgid "6.1 Configurar márgenes"
-msgstr ""
+msgstr "6.1 Marges instellen"
 
 msgid "6.2 Corregir una fila"
-msgstr ""
+msgstr "6.2 Een rij corrigeren"
 
 msgid "6.3 Aplicar precios a WooCommerce"
-msgstr ""
+msgstr "6.3 Prijzen toepassen in WooCommerce"
 
 msgid "7. Imágenes externas"
-msgstr ""
+msgstr "7. Externe afbeeldingen"
 
 msgid "7.1 Diferencia entre referencia y archivo local"
-msgstr ""
+msgstr "7.1 Verschil tussen verwijzing en lokaal bestand"
 
 msgid "8. Compras a proveedores"
-msgstr ""
+msgstr "8. Inkopen bij leveranciers"
 
 msgid "8.1 Cómo utiliza los proveedores"
-msgstr ""
+msgstr "8.1 Hoe leveranciers worden gebruikt"
 
 msgid "8.2 Qué queda fuera"
-msgstr ""
+msgstr "8.2 Wat buiten de reikwijdte valt"
 
 msgid "9. Autotest y resolución de problemas"
-msgstr ""
+msgstr "9. Zelftest en probleemoplossing"
 
 msgid "A default WooCommerce product category is required before accepting new products."
-msgstr ""
+msgstr "Voor het accepteren van nieuwe producten is een standaardproductcategorie in WooCommerce vereist."
 
 msgid "A supplier name is required."
-msgstr ""
+msgstr "De naam van de leverancier is verplicht."
 
 msgid "A template name is required."
-msgstr ""
+msgstr "De naam van het sjabloon is verplicht."
 
 msgid "Accept"
 msgstr "Accepteren"
@@ -205,13 +205,13 @@ msgid "Actions"
 msgstr "Acties"
 
 msgid "Active sales"
-msgstr ""
+msgstr "Actieve verkopen"
 
 msgid "Analyze CSV"
 msgstr "CSV analyseren"
 
 msgid "Another acceptance process is already working on this supplier product."
-msgstr ""
+msgstr "Een ander acceptatieproces is al bezig met dit leveranciersproduct."
 
 msgid "Apply"
 msgstr "Toepassen"
@@ -220,19 +220,19 @@ msgid "Apply Woo prices"
 msgstr "WooCommerce-prijzen toepassen"
 
 msgid "Archivo de plantilla inválido. Utiliza JSON, CSV o TXT de hasta 64 KiB."
-msgstr ""
+msgstr "Ongeldig sjabloonbestand. Gebruik JSON, CSV of TXT van maximaal 64 KiB."
 
 msgid "Asigna al menos el ID externo y el nombre del producto."
-msgstr ""
+msgstr "Wijs minimaal de externe ID en productnaam toe."
 
 msgid "Autocheck"
 msgstr "Zelfcontrole"
 
 msgid "Autocheck de Suppliers"
-msgstr ""
+msgstr "Zelftest van Suppliers"
 
 msgid "Autocheck de disponibilidad, no de resultados comerciales o de importación. No repara ni modifica tablas."
-msgstr ""
+msgstr "Beschikbaarheidscontrole, geen controle van commerciële resultaten of importresultaten. Herstelt of wijzigt geen tabellen."
 
 msgid "Aviso"
 msgstr "Waarschuwing"
@@ -253,7 +253,7 @@ msgid "CSV file"
 msgstr "CSV-bestand"
 
 msgid "CSV mapping template saved."
-msgstr ""
+msgstr "CSV-toewijzingssjabloon opgeslagen."
 
 msgid "CSV rows stay here until they are accepted, sent to review, or discarded."
 msgstr "CSV-rijen blijven hier totdat ze worden geaccepteerd, beoordeeld of afgewezen."
@@ -262,13 +262,13 @@ msgid "CSV template"
 msgstr "CSV-sjabloon"
 
 msgid "Cada fila debe tener dos columnas de correspondencia."
-msgstr ""
+msgstr "Elke rij moet twee toewijzingskolommen bevatten."
 
 msgid "Cada fila debe tener dos columnas: campo de TaxoCommerce y columna del proveedor."
-msgstr ""
+msgstr "Elke rij moet twee kolommen bevatten: TaxoCommerce-veld en leverancierskolom."
 
 msgid "Canonical URL"
-msgstr ""
+msgstr "Canonieke URL"
 
 msgid "Columns mapped"
 msgstr "Gekoppelde kolommen"
@@ -310,7 +310,7 @@ msgid "Descargar JSON"
 msgstr "JSON downloaden"
 
 msgid "Descargar cabecera CSV canónica"
-msgstr ""
+msgstr "Canonieke CSV-kopregel downloaden"
 
 msgid "Descargar resultados (JSON)"
 msgstr "Resultaten (JSON) downloaden"
@@ -319,7 +319,7 @@ msgid "Description"
 msgstr "Beschrijving"
 
 msgid "Diagnóstico manual y de solo lectura. No importa CSV, no modifica productos ni precios, no descarga imágenes, no crea pedidos y no hace solicitudes HTTP."
-msgstr ""
+msgstr "Handmatige, alleen-lezen diagnose. Importeert geen CSV, wijzigt geen producten of prijzen, downloadt geen afbeeldingen, maakt geen bestellingen en verstuurt geen HTTP-verzoeken."
 
 msgid "Discard"
 msgstr "Afwijzen"
@@ -328,7 +328,7 @@ msgid "Discarded"
 msgstr "Afgewezen"
 
 msgid "Duplicate"
-msgstr ""
+msgstr "Duplicaat"
 
 msgid "Ejecuta el Autocheck antes de descargar el JSON."
 msgstr "Voer Autocheck uit voordat je het JSON-rapport downloadt."
@@ -337,7 +337,7 @@ msgid "Ejecutar Autocheck"
 msgstr "Zelfcontrole uitvoeren"
 
 msgid "El nombre de una columna de origen está vacío o es demasiado largo."
-msgstr ""
+msgstr "De naam van een bronkolom is leeg of te lang."
 
 msgid "Error"
 msgstr "Fout"
@@ -352,16 +352,16 @@ msgid "External identity"
 msgstr "Externe identificatie"
 
 msgid "External image URLs"
-msgstr ""
+msgstr "URL's van externe afbeeldingen"
 
 msgid "External image URLs are stored as references in"
 msgstr "Externe afbeeldings-URL's worden als verwijzingen opgeslagen in"
 
 msgid "External image references saved."
-msgstr ""
+msgstr "Externe afbeeldingsverwijzingen opgeslagen."
 
 msgid "Faltan las correspondencias obligatorias: identificador externo y nombre del producto."
-msgstr ""
+msgstr "Verplichte toewijzingen ontbreken: externe ID en productnaam."
 
 msgid "Fecha de ejecución:"
 msgstr "Uitvoeringsdatum:"
@@ -376,13 +376,13 @@ msgid "For regional products"
 msgstr "Voor regionale producten"
 
 msgid "Formato del texto pegado"
-msgstr ""
+msgstr "Indeling van geplakte tekst"
 
 msgid "Formato no admitido. Utiliza JSON, CSV o TXT."
-msgstr ""
+msgstr "Niet-ondersteunde indeling. Gebruik JSON, CSV of TXT."
 
 msgid "Gestiona catálogos, compras, precios y relaciones con proveedores."
-msgstr ""
+msgstr "Beheert catalogi, inkoop, prijzen en leveranciersrelaties."
 
 msgid "Guardar plantilla"
 msgstr "Sjabloon opslaan"
@@ -391,58 +391,58 @@ msgid "Ignored"
 msgstr "Genegeerd"
 
 msgid "Import into intermediate inventory"
-msgstr ""
+msgstr "Importeren naar tussenvoorraad"
 
 msgid "Incl. tax"
 msgstr "Incl. btw"
 
 msgid "Intermediate supplier inventory"
-msgstr ""
+msgstr "Tussenvoorraad van leveranciers"
 
 msgid "Introduce un nombre de plantilla válido."
-msgstr ""
+msgstr "Voer een geldige sjabloonnaam in."
 
 msgid "Introduce un nombre válido para la plantilla (máximo 100 caracteres)."
-msgstr ""
+msgstr "Voer een geldige sjabloonnaam in (maximaal 100 tekens)."
 
 msgid "Inventory"
 msgstr "Voorraad"
 
 msgid "JSON: {\"mapping\":{\"proveedor_id_externo\":\"ID\",\"nombre\":\"Nombre\"}}. CSV/TXT: dos columnas separadas por coma o punto y coma, una línea por correspondencia (campo interno, columna del proveedor). Si subes un archivo, tiene prioridad sobre el texto pegado."
-msgstr ""
+msgstr "JSON: {\"mapping\":{\"proveedor_id_externo\":\"ID\",\"nombre\":\"Nombre\"}}. CSV/TXT: twee kolommen gescheiden door een komma of puntkomma, één regel per toewijzing (intern veld, leverancierskolom). Als u een bestand uploadt, krijgt dat voorrang op de geplakte tekst."
 
 msgid "La definición JSON no es válida."
-msgstr ""
+msgstr "De JSON-definitie is ongeldig."
 
 msgid "La definición contiene campos desconocidos o valores no válidos."
-msgstr ""
+msgstr "De definitie bevat onbekende velden of ongeldige waarden."
 
 msgid "La definición contiene campos duplicados."
-msgstr ""
+msgstr "De definitie bevat dubbele velden."
 
 msgid "La definición debe contener entre 1 y 65536 bytes."
-msgstr ""
+msgstr "De definitie moet tussen 1 en 65536 bytes bevatten."
 
 msgid "La plantilla contiene campos canónicos desconocidos o valores inválidos."
-msgstr ""
+msgstr "Het sjabloon bevat onbekende canonieke velden of ongeldige waarden."
 
 msgid "La plantilla no contiene correspondencias."
-msgstr ""
+msgstr "Het sjabloon bevat geen toewijzingen."
 
 msgid "La plantilla tiene campos duplicados."
-msgstr ""
+msgstr "Het sjabloon bevat dubbele velden."
 
 msgid "Las plantillas relacionan las columnas del CSV del proveedor con los campos de TaxoCommerce. No ejecutan código ni importan productos al guardarse."
-msgstr ""
+msgstr "Sjablonen koppelen de CSV-kolommen van de leverancier aan TaxoCommerce-velden. Bij opslaan wordt geen code uitgevoerd en worden geen producten geïmporteerd."
 
 msgid "Legacy"
-msgstr ""
+msgstr "Verouderd"
 
 msgid "Los resultados se generan al pulsar el botón. Se conserva el último durante una hora para descargarlo en JSON."
-msgstr ""
+msgstr "Resultaten worden aangemaakt na het klikken op de knop. Het laatste resultaat blijft één uur beschikbaar om als JSON te downloaden."
 
 msgid "MPN"
-msgstr ""
+msgstr "MPN"
 
 msgid "Manual"
 msgstr "Handleiding"
@@ -454,7 +454,7 @@ msgid "Manual de usuario"
 msgstr "Gebruikershandleiding"
 
 msgid "Manual técnico para futuros desarrolladores"
-msgstr ""
+msgstr "Technische handleiding voor toekomstige ontwikkelaars"
 
 msgid "Market"
 msgstr "Markt"
@@ -475,16 +475,16 @@ msgid "New"
 msgstr "Nieuw"
 
 msgid "No existe esa plantilla personalizada."
-msgstr ""
+msgstr "Dit aangepaste sjabloon bestaat niet."
 
 msgid "No hay correspondencias de columnas."
-msgstr ""
+msgstr "Er zijn geen kolomtoewijzingen."
 
 msgid "No product brand taxonomy is available."
-msgstr ""
+msgstr "Er is geen taxonomie voor productmerken beschikbaar."
 
 msgid "No se pudo exportar la plantilla."
-msgstr ""
+msgstr "Het sjabloon kon niet worden geëxporteerd."
 
 msgid "No se pudo generar el informe JSON."
 msgstr "Het JSON-rapport kon niet worden gemaakt."
@@ -493,19 +493,19 @@ msgid "No templates have been created on this site."
 msgstr "Er zijn nog geen sjablonen aangemaakt op deze website."
 
 msgid "No tienes permisos para consultar el manual."
-msgstr ""
+msgstr "U hebt geen toestemming om de handleiding te bekijken."
 
 msgid "No tienes permisos para ejecutar el autotest."
-msgstr ""
+msgstr "U hebt geen toestemming om de zelftest uit te voeren."
 
 msgid "Nombre de la plantilla"
-msgstr ""
+msgstr "Naam van het sjabloon"
 
 msgid "O pegar la definición en el campo siguiente:"
-msgstr ""
+msgstr "Of plak de definitie in het volgende veld:"
 
 msgid "Only CSV files are accepted. XLS/XLSX and web scraping are intentionally excluded."
-msgstr ""
+msgstr "Alleen CSV-bestanden worden geaccepteerd. XLS/XLSX en webscraping worden bewust niet ondersteund."
 
 msgid "Only supplier-provided CSV files are processed. This plugin contains no scraper, crawler, remote runner, or automatic web extraction."
 msgstr "Alleen CSV-bestanden van leveranciers worden verwerkt. Er is geen automatische webextractie."
@@ -514,7 +514,7 @@ msgid "Optional template name"
 msgstr "Optionele sjabloonnaam"
 
 msgid "Order lines"
-msgstr ""
+msgstr "Bestelregels"
 
 msgid "Pending"
 msgstr "In afwachting"
@@ -526,19 +526,19 @@ msgid "Price control"
 msgstr "Prijsbeheer"
 
 msgid "Price data saved."
-msgstr ""
+msgstr "Prijsgegevens opgeslagen."
 
 msgid "Price excl. tax"
-msgstr ""
+msgstr "Prijs exclusief btw"
 
 msgid "Price incl. tax"
-msgstr ""
+msgstr "Prijs inclusief btw"
 
 msgid "Price update mode never creates supplier catalogue rows. Map supplier external ID or SKU plus at least one price column; include the market country for regional products."
 msgstr "De prijsupdate maakt geen leverancierscatalogusregels aan. Koppel de externe ID of SKU en minstens één prijskolom; vermeld ook het marktland voor regionale producten."
 
 msgid "Price updates require an identity column and at least one price column. VEVOR also requires market country and external ID."
-msgstr ""
+msgstr "Prijsupdates vereisen een identificatiekolom en minimaal één prijskolom. VEVOR vereist ook het land van de markt en een externe ID."
 
 msgid "Prices"
 msgstr "Prijzen"
@@ -550,7 +550,7 @@ msgid "Product name"
 msgstr "Productnaam"
 
 msgid "Proveedor (opcional)"
-msgstr ""
+msgstr "Leverancier (optioneel)"
 
 msgid "Published"
 msgstr "Gepubliceerd"
@@ -574,7 +574,7 @@ msgid "Review"
 msgstr "Beoordelen"
 
 msgid "Sale"
-msgstr ""
+msgstr "Aanbieding"
 
 msgid "Save"
 msgstr "Opslaan"
@@ -586,7 +586,7 @@ msgid "Save margins"
 msgstr "Marges opslaan"
 
 msgid "Save this mapping as a reusable template"
-msgstr ""
+msgstr "Deze toewijzing opslaan als herbruikbaar sjabloon"
 
 msgid "Select all rows on this page"
 msgstr "Alle rijen op deze pagina selecteren"
@@ -595,13 +595,13 @@ msgid "Sin permisos para descargar el Autocheck."
 msgstr "Geen toestemming om Autocheck te downloaden."
 
 msgid "Solo se admiten definiciones JSON, CSV o TXT."
-msgstr ""
+msgstr "Alleen JSON-, CSV- of TXT-definities worden geaccepteerd."
 
 msgid "Source language"
 msgstr "Brontaal"
 
 msgid "Stable variant key"
-msgstr ""
+msgstr "Stabiele variatiesleutel"
 
 msgid "Status"
 msgstr "Status"
@@ -610,16 +610,16 @@ msgid "Stock"
 msgstr "Voorraad"
 
 msgid "Stock quantity"
-msgstr ""
+msgstr "Voorraadhoeveelheid"
 
 msgid "Stock state"
-msgstr ""
+msgstr "Voorraadstatus"
 
 msgid "Stock text"
-msgstr ""
+msgstr "Voorraadtekst"
 
 msgid "Subir definición JSON, CSV o TXT (máximo 64 KiB)"
-msgstr ""
+msgstr "JSON-, CSV- of TXT-definitie uploaden (maximaal 64 KiB)"
 
 msgid "Supplier"
 msgstr "Leverancier"
@@ -628,25 +628,25 @@ msgid "Supplier Catalogue"
 msgstr "Leverancierscatalogus"
 
 msgid "Supplier ID"
-msgstr ""
+msgstr "Leveranciers-ID"
 
 msgid "Supplier Price Update CSV"
-msgstr ""
+msgstr "CSV voor het bijwerken van leveranciersprijzen"
 
 msgid "Supplier SKU"
 msgstr "Leveranciers-SKU"
 
 msgid "Supplier SKU is already linked in WooCommerce to a different supplier."
-msgstr ""
+msgstr "De leveranciers-SKU is in WooCommerce al aan een andere leverancier gekoppeld."
 
 msgid "Supplier catalogue intake, product decisions, purchasing, price control, and external image references."
-msgstr ""
+msgstr "Inname van leverancierscatalogi, productbeslissingen, inkoop, prijsbeheer en externe afbeeldingsverwijzingen."
 
 msgid "Supplier catalogue row was not found."
-msgstr ""
+msgstr "De leverancierscatalogusrij is niet gevonden."
 
 msgid "Supplier category"
-msgstr ""
+msgstr "Leverancierscategorie"
 
 msgid "Supplier cost remains separate from the WooCommerce selling price. You can correct imported supplier prices without re-importing a CSV."
 msgstr "Leverancierskosten blijven gescheiden van WooCommerce-verkoopprijzen en kunnen zonder nieuwe CSV-import worden aangepast."
@@ -655,19 +655,19 @@ msgid "Supplier price"
 msgstr "Leveranciersprijs"
 
 msgid "Supplier product"
-msgstr ""
+msgstr "Leveranciersproduct"
 
 msgid "Supplier product ID"
 msgstr "Leveranciersproduct-ID"
 
 msgid "Supplier product ID and product name must be mapped before importing."
-msgstr ""
+msgstr "De leveranciersproduct-ID en productnaam moeten vóór de import worden toegewezen."
 
 msgid "Supplier product URL"
-msgstr ""
+msgstr "URL van leveranciersproduct"
 
 msgid "Supplier-linked"
-msgstr ""
+msgstr "Gekoppeld aan leverancier"
 
 msgid "Suppliers"
 msgstr "Leveranciers"
@@ -679,13 +679,13 @@ msgid "Synchronized"
 msgstr "Gesynchroniseerd"
 
 msgid "Tax %"
-msgstr ""
+msgstr "Btw %"
 
 msgid "TaxoCommerce Suppliers"
-msgstr ""
+msgstr "TaxoCommerce Suppliers"
 
 msgid "TaxoCommerce canonical CSV"
-msgstr ""
+msgstr "Canonieke CSV van TaxoCommerce"
 
 msgid "TaxoCommerce field"
 msgstr "TaxoCommerce-veld"
@@ -694,31 +694,31 @@ msgid "Template"
 msgstr "Sjabloon"
 
 msgid "The CSV could not be read."
-msgstr ""
+msgstr "De CSV kon niet worden gelezen."
 
 msgid "The CSV exceeds the WordPress upload limit."
-msgstr ""
+msgstr "De CSV overschrijdt de uploadlimiet van WordPress."
 
 msgid "The CSV header is not valid."
-msgstr ""
+msgstr "De CSV-kopregel is ongeldig."
 
 msgid "The CSV upload failed."
-msgstr ""
+msgstr "De CSV-upload is mislukt."
 
 msgid "The VEVOR CSV is missing one or more required official feed columns."
-msgstr ""
+msgstr "Een of meer verplichte officiële feedkolommen ontbreken in de VEVOR-CSV."
 
 msgid "The analyzed CSV session expired. Upload the file again."
-msgstr ""
+msgstr "De geanalyseerde CSV-sessie is verlopen. Upload het bestand opnieuw."
 
 msgid "The selected regional feed is processed locally. No network request is made."
 msgstr "De geselecteerde regionale feed wordt lokaal verwerkt. Er worden geen netwerkverzoeken gedaan."
 
 msgid "The supplier catalogue row no longer exists."
-msgstr ""
+msgstr "De rij in de leverancierscatalogus bestaat niet meer."
 
 msgid "The supplier import storage directory is not writable."
-msgstr ""
+msgstr "De opslagmap voor leveranciersimports is niet beschrijfbaar."
 
 msgid "They are not downloaded into WordPress Media."
 msgstr "Ze worden niet naar de WordPress-mediabibliotheek gedownload."
@@ -727,7 +727,7 @@ msgid "URLs"
 msgstr "URL's"
 
 msgid "Una columna de origen está vacía o es demasiado larga."
-msgstr ""
+msgstr "Een bronkolom is leeg of te lang."
 
 msgid "Unchanged"
 msgstr "Ongewijzigd"
@@ -739,7 +739,7 @@ msgid "Versión"
 msgstr "Versie"
 
 msgid "Without source"
-msgstr ""
+msgstr "Zonder bron"
 
 msgid "Woo ID"
 msgstr "WooCommerce-ID"
@@ -751,34 +751,34 @@ msgid "Woo sale"
 msgstr "WooCommerce-aanbiedingsprijs"
 
 msgid "WooCommerce did not return a product ID."
-msgstr ""
+msgstr "WooCommerce heeft geen product-ID teruggegeven."
 
 msgid "WooCommerce is required to accept supplier products."
-msgstr ""
+msgstr "WooCommerce is vereist om leveranciersproducten te accepteren."
 
 msgid "WooCommerce must be active to resolve sales into supplier purchases."
-msgstr ""
+msgstr "WooCommerce moet actief zijn om verkopen aan leveranciersinkopen te koppelen."
 
 msgid "WooCommerce product"
-msgstr ""
+msgstr "WooCommerce-product"
 
 msgid "WooCommerce product could not be loaded."
-msgstr ""
+msgstr "WooCommerce-product kon niet worden geladen."
 
 msgid "Ya existe una plantilla con ese nombre."
-msgstr ""
+msgstr "Er bestaat al een sjabloon met deze naam."
 
 msgid "Ya existe una plantilla con ese nombre. Elige otro para no sobrescribirla."
-msgstr ""
+msgstr "Er bestaat al een sjabloon met deze naam. Kies een andere om overschrijven te voorkomen."
 
 msgid "You do not have permission to manage TaxoCommerce Suppliers."
-msgstr ""
+msgstr "U hebt geen toestemming om TaxoCommerce Suppliers te beheren."
 
 msgid "You do not have permission to manage supplier imports."
-msgstr ""
+msgstr "U hebt geen toestemming om leveranciersimports te beheren."
 
 msgid "You do not have permission to manage supplier products."
-msgstr ""
+msgstr "U hebt geen toestemming om leveranciersproducten te beheren."
 
 msgid "Índice"
 msgstr "Inhoud"
@@ -1062,10 +1062,968 @@ msgstr "Inhoudsopgave van de documentatie"
 msgid "Sistema"
 msgstr "Systeem"
 
-#. Description of the plugin
-msgid "Supplier catalogue intake, purchasing, product decisions, supplier prices, WooCommerce linking, and external image references."
-msgstr "Invoer van leverancierscatalogi, inkoop, productbeslissingen, leveranciersprijzen, koppeling met WooCommerce en verwijzingen naar externe afbeeldingen."
+msgid "<code>PAGE</code> identifica exclusivamente al plugin independiente; conservar slugs y nonces."
+msgstr "<code>PAGE</code> identificeert uitsluitend de zelfstandige plugin; behoud slugs en nonces."
 
-#. Family card description
-msgid "Supplier catalogue, purchasing, prices, and external images."
-msgstr "Leverancierscatalogus, inkoop, prijzen en externe afbeeldingen."
+msgid "<code>TCSUP_Admin</code>"
+msgstr "<code>TCSUP_Admin</code>"
+
+msgid "<code>TCSUP_Admin</code>: menú, pestañas, filtros, formularios, márgenes y avisos."
+msgstr "<code>TCSUP_Admin</code>: menu, tabbladen, filters, formulieren, marges en meldingen."
+
+msgid "<code>TCSUP_Autotest::render()</code> espera una acción POST manual con nonce <code>tcsup_autotest</code>; <code>run()</code> consulta clases, registro de acciones, opciones, tablas/columnas y API de WooCommerce. <strong>Un test correcto solo confirma disponibilidad estructural</strong>, no calidad de datos, precios, stock ni éxito de importación. No utilizar para reparación automática del esquema."
+msgstr "<code>TCSUP_Autotest::render()</code> verwacht een handmatige POST-actie met nonce <code>tcsup_autotest</code>; <code>run()</code> controleert klassen, geregistreerde acties, opties, tabellen/kolommen en de WooCommerce-API. <strong>Een geslaagde test bevestigt alleen de structurele beschikbaarheid</strong>, niet de gegevenskwaliteit, prijzen, voorraad of het slagen van een import. Gebruik dit niet voor automatische reparatie van het schema."
+
+msgid "<code>TCSUP_Autotest</code>: comprobaciones locales bajo demanda."
+msgstr "<code>TCSUP_Autotest</code>: lokale controles op aanvraag."
+
+msgid "<code>TCSUP_CSV::handle_analyze()</code> valida el fichero, lo almacena en uploads, detecta delimitador y guarda el estado por usuario. <code>handle_import()</code> comprueba sesión/plantilla, valida columnas obligatorias, sanea datos y recorre las filas. Los métodos <code>fields()</code> y <code>builtin_templates()</code> definen el contrato canónico."
+msgstr "<code>TCSUP_CSV::handle_analyze()</code> valideert het bestand, slaat het op in uploads, herkent het scheidingsteken en bewaart de status per gebruiker. <code>handle_import()</code> controleert sessie en sjabloon, valideert verplichte kolommen, schoont gegevens op en doorloopt de rijen. De methoden <code>fields()</code> en <code>builtin_templates()</code> definiëren het canonieke contract."
+
+msgid "<code>TCSUP_CSV</code>"
+msgstr "<code>TCSUP_CSV</code>"
+
+msgid "<code>TCSUP_CSV</code>: campos, plantillas, análisis, transformación, importación, descarga canónica."
+msgstr "<code>TCSUP_CSV</code>: velden, sjablonen, analyse, transformatie, import en standaarddownloads."
+
+msgid "<code>TCSUP_Manual</code>: estas guías."
+msgstr "<code>TCSUP_Manual</code>: deze handleidingen."
+
+msgid "<code>TCSUP_Products::accept()</code> obtiene la fila y adquiere un lock MySQL con <code>GET_LOCK</code> antes de delegar a <code>accept_unlocked()</code>; se libera con <code>RELEASE_LOCK</code>. <code>existing_product()</code> busca por <code>object_id</code>, metadatos de vínculo y, cuando es seguro, SKU. Para VEVOR con país no debe reutilizarse un producto solo por SKU; el SKU interno nuevo se forma como <code>vevor-{country}-row-{id}</code>."
+msgstr "<code>TCSUP_Products::accept()</code> haalt de rij op en verkrijgt een MySQL-vergrendeling met <code>GET_LOCK</code> voordat de verwerking aan <code>accept_unlocked()</code> wordt overgedragen; de vergrendeling wordt vrijgegeven met <code>RELEASE_LOCK</code>. <code>existing_product()</code> zoekt op <code>object_id</code>, koppelingsmetadata en, wanneer dat veilig is, SKU. Bij VEVOR met land mag een product niet uitsluitend op basis van de SKU opnieuw worden gebruikt; de nieuwe interne SKU wordt gevormd als <code>vevor-{country}-row-{id}</code>."
+
+msgid "<code>TCSUP_Products</code>"
+msgstr "<code>TCSUP_Products</code>"
+
+msgid "<code>TCSUP_Products</code>: aceptación, WooCommerce, marcas, costes e imágenes."
+msgstr "<code>TCSUP_Products</code>: acceptatie, WooCommerce, merken, kosten en afbeeldingen."
+
+msgid "<code>TCSUP_Purchasing::collect_order_lines()</code> usa <code>wc_get_orders()</code> y los métodos de pedidos/líneas WooCommerce. El filtro <code>taxocommerce_suppliers_purchasing_order_statuses</code> define los estados activos (por defecto pending, on-hold y processing). <code>sources_for_line()</code> resuelve primero la variación/producto exacto y luego el padre; <code>sources_for_product()</code> admite estados aceptado y otros legados previstos en el código. La pantalla no crea órdenes de compra."
+msgstr "<code>TCSUP_Purchasing::collect_order_lines()</code> gebruikt <code>wc_get_orders()</code> en WooCommerce-methoden voor bestellingen en bestelregels. Het filter <code>taxocommerce_suppliers_purchasing_order_statuses</code> bepaalt de actieve statussen (standaard pending, on-hold en processing). <code>sources_for_line()</code> probeert eerst de exacte variatie of het product en daarna het hoofdproduct; <code>sources_for_product()</code> accepteert de status geaccepteerd en andere in de code ondersteunde oudere statussen. Het scherm maakt geen inkooporders aan."
+
+msgid "<code>TCSUP_Purchasing</code>: consulta de ventas y proveedores vinculados."
+msgstr "<code>TCSUP_Purchasing</code>: opvragen van verkopen en gekoppelde leveranciers."
+
+msgid "<code>TCSUP_Schema</code>: esquema y actualización mediante <code>dbDelta()</code>."
+msgstr "<code>TCSUP_Schema</code>: schema en updates via <code>dbDelta()</code>."
+
+msgid "<code>assets/admin.css</code>, <code>tests/smoke.php</code>"
+msgstr "<code>assets/admin.css</code>, <code>tests/smoke.php</code>"
+
+msgid "<code>includes/class-tcsup-admin.php</code>"
+msgstr "<code>includes/class-tcsup-admin.php</code>"
+
+msgid "<code>includes/class-tcsup-autotest.php</code>"
+msgstr "<code>includes/class-tcsup-autotest.php</code>"
+
+msgid "<code>includes/class-tcsup-csv.php</code>"
+msgstr "<code>includes/class-tcsup-csv.php</code>"
+
+msgid "<code>includes/class-tcsup-manual.php</code>"
+msgstr "<code>includes/class-tcsup-manual.php</code>"
+
+msgid "<code>includes/class-tcsup-products.php</code>"
+msgstr "<code>includes/class-tcsup-products.php</code>"
+
+msgid "<code>includes/class-tcsup-purchasing.php</code>"
+msgstr "<code>includes/class-tcsup-purchasing.php</code>"
+
+msgid "<code>includes/class-tcsup-schema.php</code>"
+msgstr "<code>includes/class-tcsup-schema.php</code>"
+
+msgid "<code>row_hash()</code> y <code>changed_fields()</code> permiten identificar cambios. Las filas existentes conservan su identidad y se actualizan; las nuevas entran con <code>estado_seleccion=pendiente</code>. En conflictos de SKU/ID, el código puede marcar <code>revisar</code> y <code>conflicto</code>. Toda modificación del importador requiere casos de prueba de reimportación, duplicación y países."
+msgstr "<code>row_hash()</code> en <code>changed_fields()</code> helpen wijzigingen herkennen. Bestaande rijen behouden hun identiteit en worden bijgewerkt; nieuwe rijen krijgen <code>estado_seleccion=pendiente</code>. Bij SKU-/ID-conflicten kan de code <code>revisar</code> en <code>conflicto</code> instellen. Wijzigingen aan de importfunctie vereisen tests voor herimport, duplicaten en landen."
+
+msgid "<code>taxocommerce-suppliers.php</code>"
+msgstr "<code>taxocommerce-suppliers.php</code>"
+
+msgid "<code>taxocommerce_suppliers_csv_templates</code>"
+msgstr "<code>taxocommerce_suppliers_csv_templates</code>"
+
+msgid "<code>taxocommerce_suppliers_db_version</code>"
+msgstr "<code>taxocommerce_suppliers_db_version</code>"
+
+msgid "<code>taxocommerce_suppliers_get_sources( $product_id )</code> devuelve filas del catálogo proveedor asociadas al producto; <code>taxocommerce_suppliers_get_external_images( $product_id )</code> devuelve referencias de imágenes activas. Comprobar <code>function_exists()</code> antes de usar estas funciones desde módulos opcionales; no asumir que las imágenes son adjuntos locales."
+msgstr "<code>taxocommerce_suppliers_get_sources( $product_id )</code> retourneert rijen uit de leverancierscatalogus die aan het product gekoppeld zijn; <code>taxocommerce_suppliers_get_external_images( $product_id )</code> retourneert actieve afbeeldingsverwijzingen. Controleer <code>function_exists()</code> voordat optionele modules deze functies gebruiken; ga er niet van uit dat afbeeldingen lokale bijlagen zijn."
+
+msgid "<code>taxocommerce_suppliers_sale_margin</code> y <code>taxocommerce_suppliers_regular_margin</code>"
+msgstr "<code>taxocommerce_suppliers_sale_margin</code> y <code>taxocommerce_suppliers_regular_margin</code>"
+
+msgid "<code>tcsup_analyze_csv</code>, <code>tcsup_import_csv</code>"
+msgstr "<code>tcsup_analyze_csv</code>, <code>tcsup_import_csv</code>"
+
+msgid "<code>tcsup_csv_{user_id}</code>"
+msgstr "<code>tcsup_csv_{user_id}</code>"
+
+msgid "<code>tcsup_price_update</code>, <code>tcsup_images_update</code>"
+msgstr "<code>tcsup_price_update</code>, <code>tcsup_images_update</code>"
+
+msgid "<code>tcsup_row_action</code>, <code>tcsup_bulk_action</code>"
+msgstr "<code>tcsup_row_action</code>, <code>tcsup_bulk_action</code>"
+
+msgid "<code>tcsup_save_template</code>, <code>tcsup_delete_template</code>, <code>tcsup_download_template</code>"
+msgstr "<code>tcsup_save_template</code>, <code>tcsup_delete_template</code>, <code>tcsup_download_template</code>"
+
+msgid "<code>tcsup_settings</code>"
+msgstr "<code>tcsup_settings</code>"
+
+msgid "<code>wp-content/uploads/taxocommerce-suppliers/originals/</code>"
+msgstr "<code>wp-content/uploads/taxocommerce-suppliers/originals/</code>"
+
+msgid "<code>{$wpdb->prefix}seo_proveedores_productos</code> (nombre lógico; prefijo real del sitio calculado por <code>TCSUP_Schema::catalog_table()</code>). Conserva <code>proveedor</code>, <code>proveedor_id_externo</code>, <code>sku</code>, <code>source_row_key</code>, <code>pais_origen</code>, nombre, marca, categoría de origen, precios, impuestos, moneda, stock, imágenes, <code>object_id</code>, hashes, estados y fechas de importación/sincronización."
+msgstr "<code>${wpdb->prefix}seo_proveedores_productos</code> (logische naam; het daadwerkelijke sitevoorvoegsel wordt berekend door <code>TCSUP_Schema::catalog_table()</code>). Bevat <code>proveedor</code>, <code>proveedor_id_externo</code>, <code>sku</code>, <code>source_row_key</code>, <code>pais_origen</code>, naam, merk, broncategorie, prijzen, belastingen, valuta, voorraad, afbeeldingen, <code>object_id</code>, hashes, statussen en import-/synchronisatiedatums."
+
+msgid "<code>{$wpdb->prefix}seo_supplier_images</code> contiene <code>supplier</code>, <code>supplier_product_id</code>, <code>supplier_sku</code>, <code>catalog_row_id</code>, <code>product_id</code>, <code>image_url</code>, <code>image_hash</code>, posición, imagen principal, estado y marcas de tiempo. La clave única es <code>(supplier, supplier_sku, image_hash)</code>. Guardar referencias externas desactiva las anteriores y activa/inserta las vigentes; cambiar a Local/Inherit desactiva referencias activas."
+msgstr "<code>${wpdb->prefix}seo_supplier_images</code> bevat <code>supplier</code>, <code>supplier_product_id</code>, <code>supplier_sku</code>, <code>catalog_row_id</code>, <code>product_id</code>, <code>image_url</code>, <code>image_hash</code>, positie, hoofdafbeelding, status en tijdstempels. De unieke sleutel is <code>(supplier, supplier_sku, image_hash)</code>. Het opslaan van externe verwijzingen deactiveert de vorige en activeert of voegt de huidige toe; overschakelen naar Local/Inherit deactiveert actieve verwijzingen."
+
+msgid "<strong>Aceptar</strong> puede escribir un producto WooCommerce y metadatos; las otras decisiones modifican el estado de selección."
+msgstr "<strong>Accepteren</strong> kan een WooCommerce-product en metagegevens wijzigen; andere beslissingen veranderen de selectiestatus."
+
+msgid "<strong>Alcance:</strong> plugin autónomo <code>taxocommerce-suppliers/</code>, con WordPress 6.5+, PHP 7.4+ y dependencia declarada de WooCommerce. TaxoCommerce Core es opcional para el menú y registro familiar. No confundir este código con el plugin SEO monolítico ni trasladar mejoras al legado."
+msgstr "<strong>Reikwijdte:</strong> zelfstandige plugin <code>taxocommerce-suppliers/</code>, voor WordPress 6.5+, PHP 7.4+ en met WooCommerce als opgegeven afhankelijkheid. TaxoCommerce Core is optioneel voor het gezamenlijke menu en de registratie. Verwar deze code niet met de monolithische SEO-plugin en breng geen verbeteringen over naar de verouderde code."
+
+msgid "<strong>Autotest</strong> se ejecuta con su propio botón y nonce; inspecciona disponibilidad en modo de solo lectura y muestra Correcto / Aviso / Error. No comprueba el contenido semántico de cada CSV ni garantiza que un servidor externo sirva una imagen."
+msgstr "<strong>Zelftest</strong> wordt uitgevoerd met een eigen knop en nonce; controleert alleen-lezen of onderdelen beschikbaar zijn en toont Geslaagd / Waarschuwing / Fout. De test controleert niet de betekenis van iedere CSV en garandeert niet dat een externe server een afbeelding aanbiedt."
+
+msgid "<strong>Flujo:</strong> CSV local → análisis/mapeo temporal → fila de <code>seo_proveedores_productos</code> → decisión humana → vinculación o borrador WooCommerce → metadatos de origen e imágenes externas → consulta comercial de pedidos. No existe extracción web, crawler, ejecutor externo o pedido automático dentro de Suppliers."
+msgstr "<strong>Verloop:</strong> lokale CSV → tijdelijke analyse/toewijzing → rij in <code>seo_proveedores_productos</code> → menselijke beslissing → WooCommerce-koppeling of concept → bronmetadata en externe afbeeldingen → commerciële opvraging van bestellingen. Suppliers voert geen webextractie, crawler, externe verwerking of automatische bestellingen uit."
+
+msgid "Abre <strong>TaxoCommerce Core → Suppliers</strong> si Core está activo, o el menú independiente <strong>TaxoCommerce Suppliers</strong>. Su dirección administrativa es <code>admin.php?page=taxocommerce-suppliers</code>. Se requiere una cuenta autorizada para gestionar WooCommerce o las opciones del sitio."
+msgstr "Open <strong>TaxoCommerce Core → Suppliers</strong> als Core actief is, of het zelfstandige menu <strong>TaxoCommerce Suppliers</strong>. Het beheeradres is <code>admin.php?page=taxocommerce-suppliers</code>. Een account met rechten om WooCommerce of de websiteopties te beheren is vereist."
+
+msgid "Active WooCommerce sales matched against accepted supplier sources. This is the purchasing/procurement layer; shipping weight and delivery cost remain in TaxoCommerce Logistics."
+msgstr "Actieve WooCommerce-verkopen, gekoppeld aan geaccepteerde leveranciersbronnen. Dit is de inkoopfunctie; verzendgewicht en bezorgkosten blijven onderdeel van TaxoCommerce Logistics."
+
+msgid "Al finalizar, el aviso distingue filas procesadas, nuevas, actualizadas, sin cambios y con error. El resultado se examina en <strong>Inventory</strong> (o en <strong>Prices</strong> para la plantilla de actualización de costes). Revisa las referencias sin país, sin SKU o con conflictos antes de aceptarlas."
+msgstr "Na afronding onderscheidt de melding verwerkte, nieuwe, bijgewerkte, ongewijzigde en mislukte rijen. Bekijk het resultaat onder <strong>Inventory</strong> (of <strong>Prices</strong> bij een sjabloon voor kostenupdates). Controleer referenties zonder land of SKU en referenties met conflicten voordat u ze accepteert."
+
+msgid "Alta como borrador oculto; vínculo existente; colisión de SKU; categoría por defecto; márgenes y stock."
+msgstr "Een verborgen concept aanmaken; bestaande koppeling; SKU-conflict; standaardcategorie; marges en voorraad."
+
+msgid "Antes de editar, inspeccionar clases relacionadas y compatibilidad de tablas compartidas. Cada cambio debe disponer de Issue, PR vinculado, pruebas y nota en <code>CHANGELOG.md</code>. Ajustar <code>readme.txt</code> y versión del archivo principal antes de publicar en WordPress.org, conservar el <code>changelog.txt</code> histórico y excluir los scripts <code>tests/</code> del ZIP. La validación debe hacerse en STAGING; <strong>PRODUCCIÓN requiere autorización expresa</strong>."
+msgstr "Controleer vóór wijzigingen de betrokken klassen en de compatibiliteit van gedeelde tabellen. Elke wijziging vereist een Issue, gekoppelde PR, tests en een vermelding in <code>CHANGELOG.md</code>. Werk <code>readme.txt</code> en de versie van het hoofdbestand bij vóór publicatie op WordPress.org, behoud het historische <code>changelog.txt</code> en sluit scripts in <code>tests/</code> uit van het ZIP-bestand. Valideer in STAGING; <strong>PRODUCTIE vereist uitdrukkelijke toestemming</strong>."
+
+msgid "Bootstrap, versión, alta en Core y API pública."
+msgstr "Opstarten, versie, registratie in Core en openbare API."
+
+msgid "CSV originales subidos; no están en la carpeta instalable del plugin y no se deben confundir con tests."
+msgstr "Geüploade oorspronkelijke CSV-bestanden staan buiten de installatiemap van de plugin en zijn geen tests."
+
+msgid "Cabecera válida e inválida; separadores; plantilla personalizada; reimportación; modo precio sin altas nuevas."
+msgstr "Geldige en ongeldige kopregels; scheidingstekens; aangepast sjabloon; herimport; prijsmodus zonder nieuwe producten."
+
+msgid "Cabeceras oficiales, segmento p_ de URL, país, dominio e identidad."
+msgstr "Officiële kopregels, p_-URL-segment, land, domein en identiteit."
+
+msgid "Componentes, hooks, opciones, tablas y columnas indicadas por el control."
+msgstr "Controleer de componenten, hooks, opties, tabellen en kolommen in het rapport."
+
+msgid "Comprueba el nombre del archivo, el separador detectado y la vista previa de hasta ocho filas. El CSV debe disponer de cabecera y tener un tamaño admitido por WordPress."
+msgstr "Controleer de bestandsnaam, het gevonden scheidingsteken en de voorbeeldweergave van maximaal acht rijen. De CSV moet kopregels bevatten en binnen de uploadlimiet van WordPress vallen."
+
+msgid "Conservar locks de aceptación, compatibilidad SKU/país y metadatos."
+msgstr "Behoud acceptatievergrendelingen, SKU-/landcompatibiliteit en metagegevens."
+
+msgid "Consulta pedidos y presenta enlaces externos; no compra automáticamente ni modifica estados de pedidos."
+msgstr "Leest bestellingen en toont externe links; koopt niet automatisch en wijzigt geen bestelstatussen."
+
+msgid "Descargar cabecera canónica, crear plantillas desde un archivo JSON/CSV/TXT o texto pegado, descargar, consultar y eliminar plantillas personalizadas."
+msgstr "Download de canonieke kopregel, maak sjablonen vanuit JSON/CSV/TXT of geplakte tekst en bekijk, download of verwijder aangepaste sjablonen."
+
+msgid "Devuelve una fila a <code>pendiente</code> desde la acción masiva."
+msgstr "Zet een rij via de bulkactie terug naar <code>pendiente</code>."
+
+msgid "Durante el análisis CSV, asigna los campos, abre <strong>Save this mapping as a reusable template</strong> y escribe un nombre. Se conservan los nombres de las columnas de origen, no su posición fija: si un proveedor reordena columnas sin cambiar sus nombres, la plantilla puede reutilizarse."
+msgstr "Wijs tijdens de CSV-analyse de velden toe, open <strong>Save this mapping as a reusable template</strong> en voer een naam in. De namen van de bronkolommen worden bewaard, niet hun vaste positie. Als een leverancier kolommen herschikt zonder hun namen te wijzigen, kan het sjabloon opnieuw worden gebruikt."
+
+msgid "Ejemplo JSON: <code>{\"mapping\":{\"proveedor_id_externo\":\"Supplier ID\",\"nombre\":\"Product Name\",\"precio_con_iva\":\"Price\"}}</code>. Para CSV/TXT utiliza dos columnas separadas por coma o punto y coma. Guarda la plantilla, selecciónala posteriormente en <strong>CSV Import</strong> y revisa la asignación antes de importar. Puedes descargar el JSON de respaldo junto al nombre de cualquier plantilla personalizada."
+msgstr "JSON-voorbeeld: <code>{\"mapping\":{\"proveedor_id_externo\":\"Supplier ID\",\"nombre\":\"Product Name\",\"precio_con_iva\":\"Price\"}}</code>. Gebruik voor CSV/TXT twee kolommen gescheiden door een komma of puntkomma. Sla het sjabloon op, selecteer het later onder <strong>CSV Import</strong> en controleer de toewijzing vóór de import. U kunt de JSON-back-up bij ieder aangepast sjabloon downloaden."
+
+msgid "El archivo principal registra <code>taxocommerce_suppliers_activate()</code> para crear/actualizar tablas y establecer márgenes iniciales. En <code>plugins_loaded</code> (prioridad 30), <code>taxocommerce_suppliers_boot()</code> llama a <code>TCSUP_Schema::maybe_install()</code> y <code>TCSUP_Admin::boot()</code>. Las pestañas Manual y Autotest se cargan desde sus clases propias. El registro en Core se realiza con <code>taxocommerce_core_register_modules</code> y el filtro de catálogo familiar."
+msgstr "Het hoofdbestand registreert <code>taxocommerce_suppliers_activate()</code> voor het aanmaken of bijwerken van tabellen en het instellen van beginmarges. Bij <code>plugins_loaded</code> (prioriteit 30) roept <code>taxocommerce_suppliers_boot()</code> <code>TCSUP_Schema::maybe_install()</code> en <code>TCSUP_Admin::boot()</code> aan. De tabbladen Manual en Autotest worden via hun eigen klassen geladen. Registratie in Core verloopt via <code>taxocommerce_core_register_modules</code> en het filter van de pluginfamilie."
+
+msgid "El código actual lee el CSV local con <code>SplFileObject</code>. No añadir llamadas de red, colas automáticas o nuevos scrapers como parte de una corrección documental. La aceptación en WooCommerce se realiza por una acción distinta de importar. El registro de resultados de la pantalla muestra contadores, no constituye un historial permanente por fila."
+msgstr "De huidige code leest de lokale CSV met <code>SplFileObject</code>. Voeg bij een documentatiecorrectie geen netwerkverzoeken, automatische wachtrijen of nieuwe scrapers toe. Het accepteren in WooCommerce gebeurt via een andere actie dan importeren. De resultaatweergave bevat tellers en is geen permanent historisch overzicht per rij."
+
+msgid "El módulo guarda URLs y metadatos de imágenes del proveedor en una tabla propia; <strong>no descarga los archivos ni crea adjuntos en la Biblioteca de Medios</strong>. Elegir Local o Inherit desactiva las referencias externas activas de esa fila, pero no genera automáticamente nuevas imágenes locales. Comprueba los derechos de uso y la disponibilidad de las URLs en el sitio de origen."
+msgstr "De module bewaart URL's en metadata van leveranciersafbeeldingen in een eigen tabel; <strong>downloadt geen bestanden en maakt geen bijlagen in de mediabibliotheek aan</strong>. Local of Inherit kiezen deactiveert de actieve externe verwijzingen van die rij, maar maakt niet automatisch nieuwe lokale afbeeldingen aan. Controleer gebruiksrechten en beschikbaarheid van de URL's bij de bron."
+
+msgid "El módulo intenta localizar una vinculación previa por ID de objeto, metadatos de catálogo/proveedor o SKU compatible. Puede actualizar precios calculados con los márgenes configurados, existencia, marca, referencias externas y metadatos del proveedor. Confirma que el vínculo es correcto antes de aceptar; las referencias VEVOR por mercado no deben tratarse como un único producto."
+msgstr "De module probeert eerdere koppelingen te vinden via object-ID, catalogus-/leveranciersmetadata of een compatibele SKU. Ze kan met de ingestelde marges berekende prijzen, voorraad, merk, externe verwijzingen en leveranciersmetadata bijwerken. Controleer de koppeling vóór acceptatie; VEVOR-referenties van verschillende markten mogen niet als één product worden behandeld."
+
+msgid "Eliminar una plantilla personalizada borra su definición, no las filas ya importadas."
+msgstr "Een aangepast sjabloon verwijderen wist de definitie, niet de eerder geïmporteerde rijen."
+
+msgid "En <strong>CSV Import</strong>, selecciona una plantilla y escribe el nombre del proveedor. Las plantillas pueden proponer uno."
+msgstr "Selecteer onder <strong>CSV Import</strong> een sjabloon en voer de leveranciersnaam in. Een sjabloon kan een naam voorstellen."
+
+msgid "En <strong>CSV Templates</strong>, despliega <strong>Crear nueva plantilla de proveedor</strong>. Escribe un nombre y, opcionalmente, el proveedor. Sube una definición JSON, CSV o TXT (máximo 64 KiB) o pega su contenido. Las definiciones usan pares de <code>campo interno</code> y <code>columna de origen</code>; al menos <code>proveedor_id_externo</code> y <code>nombre</code> deben estar presentes."
+msgstr "Vouw onder <strong>CSV Templates</strong> <strong>Crear nueva plantilla de proveedor</strong> uit. Voer een naam en eventueel een leverancier in. Upload een JSON-, CSV- of TXT-definitie (maximaal 64 KiB) of plak de inhoud. Definities bestaan uit paren <code>campo interno</code> en <code>columna de origen</code>; minimaal <code>proveedor_id_externo</code> en <code>nombre</code> zijn vereist."
+
+msgid "En <strong>External Images</strong>, filtra la lista y pulsa <strong>Edit</strong> sobre una referencia. Elige <strong>External references</strong>, <strong>Local Media</strong> o <strong>Inherit existing behavior</strong>. Si utilizas referencias externas, pega una URL por línea y pulsa <strong>Save external images</strong>."
+msgstr "Filter onder <strong>External Images</strong> de lijst en klik bij een referentie op <strong>Edit</strong>. Kies <strong>External references</strong>, <strong>Local Media</strong> of <strong>Inherit existing behavior</strong>. Als u externe verwijzingen gebruikt, plak dan één URL per regel en klik op <strong>Save external images</strong>."
+
+msgid "En <strong>Inventory</strong>, filtra por proveedor, decisión, país y texto (nombre, SKU o ID externo). La lista muestra 50 filas por página con precio, stock, estado de selección, estado de sincronización y, si existe, enlace al producto WooCommerce."
+msgstr "Filter onder <strong>Inventory</strong> op leverancier, beslissing, land en tekst (naam, SKU of externe ID). De lijst toont 50 rijen per pagina met prijs, voorraad, selectiestatus, synchronisatiestatus en eventueel een link naar het WooCommerce-product."
+
+msgid "En <strong>Prices</strong>, guarda los porcentajes <strong>Default sale margin</strong> y <strong>Default regular margin</strong>. Los valores de instalación son 20 % y 45 %, respectivamente. Al aceptar un producto con coste numérico se calcula el precio mediante <em>coste base × (1 + margen/100)</em>; el módulo toma preferentemente <code>precio_con_iva</code> y, si no está, <code>precio_sin_iva</code>. Comprueba siempre que ese origen y el tratamiento fiscal sean los adecuados."
+msgstr "Sla onder <strong>Prices</strong> de percentages <strong>Default sale margin</strong> en <strong>Default regular margin</strong> op. De standaardwaarden zijn respectievelijk 20% en 45%. Bij acceptatie van een product met numerieke kosten wordt de prijs berekend als <em>basiskosten × (1 + marge/100)</em>; de module gebruikt bij voorkeur <code>precio_con_iva</code> en anders <code>precio_sin_iva</code>. Controleer altijd of de bron en de belastingbehandeling correct zijn."
+
+msgid "En <strong>Review normalization</strong>, asigna las columnas de origen a los campos de TaxoCommerce. Para una importación normal son obligatorios el identificador externo y el nombre del producto. La plantilla VEVOR utiliza su propia normalización."
+msgstr "Wijs onder <strong>Review normalization</strong> de bronkolommen toe aan TaxoCommerce-velden. Een normale import vereist een externe ID en productnaam. VEVOR heeft eigen normalisatie."
+
+msgid "En modo <code>canonical</code> se esperan las cabeceras de los campos internos; <code>mapping</code> usa nombres del fichero; <code>vevor</code> transforma las seis cabeceras oficiales, extrae el ID numérico de 12 dígitos de <code>p_</code> e infiere el país desde el dominio cuando el CSV no lo indica. <code>price_update</code> solo actualiza fuentes identificadas de manera inequívoca y no crea filas."
+msgstr "In de modus <code>canonical</code> worden de kopregels van interne velden verwacht; <code>mapping</code> gebruikt de kolomnamen uit het bestand; <code>vevor</code> zet zes officiële kopregels om, haalt de numerieke 12-cijferige ID uit <code>p_</code> en leidt het land af uit het domein als de CSV dit niet vermeldt. <code>price_update</code> werkt alleen ondubbelzinnig geïdentificeerde bronnen bij en maakt geen rijen aan."
+
+msgid "Estado de aceptación, <code>object_id</code> y producto/variación del pedido."
+msgstr "Acceptatiestatus, <code>object_id</code> en product/variatie van de bestelling."
+
+msgid "Evitar migraciones destructivas y preservar tablas compartidas/legadas."
+msgstr "Vermijd destructieve migraties en behoud gedeelde en verouderde tabellen."
+
+msgid "Extensión .csv, límite de subida, permisos de almacenamiento, cabecera y delimitador."
+msgstr "Extensie .csv, uploadlimiet, opslagrechten, kopregel en scheidingsteken."
+
+msgid "Filtrar filas, aceptar, revisar, descartar o devolver a pendiente."
+msgstr "Rijen filteren, accepteren, ter controle markeren, afwijzen of terugzetten naar in afwachting."
+
+msgid "Guarda el CSV original e inserta o actualiza filas del catálogo intermedio; no publica productos."
+msgstr "Slaat de oorspronkelijke CSV op en voegt rijen toe aan of werkt rijen bij in de tussencatalogus; publiceert geen producten."
+
+msgid "Guarda referencias y su estado; no descarga archivos a Media."
+msgstr "Slaat verwijzingen en hun status op; downloadt geen bestanden naar de mediabibliotheek."
+
+msgid "Guardar actualiza los datos del proveedor; solo aplica precios WooCommerce cuando se marca <em>Apply Woo prices</em>."
+msgstr "Opslaan werkt leveranciersgegevens bij; WooCommerce-prijzen worden alleen toegepast als <em>Apply Woo prices</em> is aangevinkt."
+
+msgid "Guardar evidencia y revisar despliegue antes de ejecutar migraciones."
+msgstr "Bewaar bewijs en controleer de uitrol voordat u migraties uitvoert."
+
+msgid "Han pasado dos horas o el archivo original ya no es legible."
+msgstr "Er zijn twee uur verstreken of het oorspronkelijke bestand kan niet meer worden gelezen."
+
+msgid "Haz una copia de seguridad de las tablas de proveedores y de la base de datos antes de una importación importante. Importar un CSV <strong>no publica productos de inmediato</strong>, pero aceptar una fila sí puede crear un producto o modificar otro ya vinculado. Trabaja primero con pocas referencias y comprueba país, proveedor, SKU, precios e IVA. El módulo no realiza scraping ni descarga catálogos de sitios web."
+msgstr "Maak vóór een belangrijke import een back-up van de leverancierstabellen en de database. Het importeren van een CSV <strong>publiceert producten niet direct</strong>, maar een rij accepteren kan een product aanmaken of een bestaand gekoppeld product wijzigen. Begin met enkele referenties en controleer land, leverancier, SKU, prijzen en btw. De module voert geen scraping uit en downloadt geen catalogi van websites."
+
+msgid "La acción <strong>Delete</strong> solo aparece para las personalizadas. No elimina productos, filas del inventario ni archivos CSV ya almacenados. Después de cambiar un formato de proveedor, verifica el mapeo antes de importar de nuevo."
+msgstr "De actie <strong>Delete</strong> verschijnt alleen voor aangepaste sjablonen. Ze verwijdert geen producten, voorraadr ijen of eerder opgeslagen CSV-bestanden. Controleer na een wijziging van het leveranciersformaat de toewijzing voordat u opnieuw importeert."
+
+msgid "La clave única definida en esquema es <code>(proveedor, pais_origen, proveedor_id_externo, source_row_key)</code>. Para datos VEVOR con país, la importación busca esa identidad compuesta y aplica una reconciliación limitada para filas heredadas sin <code>source_row_key</code>. Para otros proveedores también verifica identificador externo y SKU, y marca conflictos si conducen a filas distintas. <strong>No eliminar país o clave de variante</strong> para simplificar consultas: se producirían colisiones entre mercados."
+msgstr "De unieke sleutel in het schema is <code>(proveedor, pais_origen, proveedor_id_externo, source_row_key)</code>. Voor VEVOR-gegevens met land zoekt de import naar deze samengestelde identiteit en voert beperkte afstemming uit voor oude rijen zonder <code>source_row_key</code>. Bij andere leveranciers controleert de module ook externe ID en SKU en markeert conflicten als die naar verschillende rijen verwijzen. <strong>Verwijder het land of de variatiesleutel niet</strong> om opvragingen te vereenvoudigen: dat veroorzaakt botsingen tussen markten."
+
+msgid "La consulta actual usa <code>limit = -1</code> para pedidos activos, por lo que en tiendas de gran volumen conviene evaluar su coste antes de ampliar el panel. No substituir la API WooCommerce por consultas directas a <code>wp_posts</code>: debe mantenerse la compatibilidad HPOS."
+msgstr "De huidige opvraging gebruikt <code>limit = -1</code> voor actieve bestellingen. Beoordeel daarom bij grote winkels de belasting voordat u het paneel uitbreidt. Vervang de WooCommerce-API niet door directe opvragingen van <code>wp_posts</code>: HPOS-compatibiliteit moet behouden blijven."
+
+msgid "La importación se ejecuta al confirmar el formulario: no se ofrece aquí una cola de scraping o importación XLS/XLSX. Una sesión de análisis caduca a las dos horas; si aparece <em>session expired</em>, vuelve a subir el fichero. No cierres ni repitas la operación sobre un catálogo grande sin comprobar antes su resultado."
+msgstr "De import wordt uitgevoerd wanneer het formulier wordt bevestigd: er is hier geen scrapingwachtrij of XLS/XLSX-import. Een analysesessie verloopt na twee uur; verschijnt <em>session expired</em>, upload het bestand dan opnieuw. Sluit of herhaal de bewerking bij een grote catalogus niet zonder eerst het resultaat te controleren."
+
+msgid "La lista de 40 filas por página permite modificar <strong>Excl. tax</strong>, <strong>Incl. tax</strong>, <strong>Tax %</strong> y <strong>Currency</strong>. Pulsar <strong>Save</strong> actualiza los datos de proveedor y sus metadatos asociados cuando existe un producto vinculado; no requiere volver a importar el CSV."
+msgstr "Met de lijst van 40 rijen per pagina kunt u <strong>Excl. tax</strong>, <strong>Incl. tax</strong>, <strong>Tax %</strong> en <strong>Currency</strong> wijzigen. <strong>Save</strong> werkt leveranciersgegevens en de bijbehorende metadata bij als er een product gekoppeld is; de CSV hoeft niet opnieuw te worden geïmporteerd."
+
+msgid "La pantalla usa la capacidad <code>manage_woocommerce</code> si WooCommerce está activo, con acceso alternativo para <code>manage_options</code>. Cada operación que modifica estado debe comprobar capacidad y nonce con <code>check_admin_referer()</code>. Las lecturas de filtros GET se saneán y las salidas de usuario pasan por las funciones de escape de WordPress."
+msgstr "Het scherm gebruikt de bevoegdheid <code>manage_woocommerce</code> als WooCommerce actief is, met een alternatief voor <code>manage_options</code>. Elke bewerking die de status verandert moet bevoegdheid en nonce controleren met <code>check_admin_referer()</code>. GET-filterwaarden worden opgeschoond en gebruikersgegevens worden veilig weergegeven met de escape-functies van WordPress."
+
+msgid "La pestaña <strong>CSV Templates</strong> muestra únicamente las plantillas guardadas en esta instalación de WordPress; permite crearlas desde un archivo JSON/CSV/TXT o texto pegado, consultarlas, descargarlas y eliminarlas. <strong>CSV Import</strong> ofrece los formatos genéricos CSV canónico y actualización de precios. No se suministran plantillas de proveedores precargadas."
+msgstr "Het tabblad <strong>CSV Templates</strong> toont alleen sjablonen die in deze WordPress-installatie zijn opgeslagen; u kunt ze maken op basis van JSON/CSV/TXT of geplakte tekst, bekijken, downloaden en verwijderen. <strong>CSV Import</strong> biedt de algemene indelingen canonieke CSV en prijsupdates. Er worden geen leverancierssjablonen vooraf geïnstalleerd."
+
+msgid "La pestaña <strong>Purchasing</strong> consulta por defecto pedidos WooCommerce <strong>pending</strong>, <strong>on-hold</strong> y <strong>processing</strong>. Muestra número de pedido, línea, cantidad, proveedor, ID/SKU, coste y, cuando existe, enlace <strong>Purchase</strong>. También presenta los casos <em>Without source</em> para que se revise su vinculación."
+msgstr "Het tabblad <strong>Purchasing</strong> haalt standaard WooCommerce-bestellingen met de statussen <strong>pending</strong>, <strong>on-hold</strong> en <strong>processing</strong> op. Het toont bestelnummer, bestelregel, aantal, leverancier, ID/SKU, kosten en indien beschikbaar de link <strong>Purchase</strong>. Ook gevallen <em>Without source</em> worden weergegeven zodat de koppeling kan worden gecontroleerd."
+
+msgid "La relación WooCommerce usa, entre otros, los metadatos <code>_seo_proveedor</code>, <code>_seo_proveedor_id_externo</code>, <code>_seo_proveedor_catalogo_id</code>, <code>_seo_proveedor_pais</code>, <code>_seo_proveedor_sku</code> y <code>_seo_imagenes_externas</code>. Una migración de esquema o identidades debe considerar los consumidores externos de estas claves."
+msgstr "De WooCommerce-koppeling gebruikt onder andere de metavelden <code>_seo_proveedor</code>, <code>_seo_proveedor_id_externo</code>, <code>_seo_proveedor_catalogo_id</code>, <code>_seo_proveedor_pais</code>, <code>_seo_proveedor_sku</code> en <code>_seo_imagenes_externas</code>. Bij migratie van schema of identiteit moet rekening worden gehouden met externe gebruikers van deze sleutels."
+
+msgid "La valoración de peso, portes y coste de entrega se realiza en <strong>TaxoCommerce Logistics</strong>. Suppliers ofrece la relación comercial con el proveedor, pero no sustituye la gestión del pedido en WooCommerce."
+msgstr "De berekening van gewicht, verzendkosten en leveringskosten gebeurt in <strong>TaxoCommerce Logistics</strong>. Suppliers biedt de commerciële relatie met de leverancier, maar vervangt het orderbeheer in WooCommerce niet."
+
+msgid "Los campos <strong>Woo regular</strong> y <strong>Woo sale</strong> están habilitados únicamente para productos vinculados. Marca explícitamente <strong>Apply Woo prices</strong> para modificar los precios del producto WooCommerce. Si no lo marcas, solo se actualizan los datos de coste/metadatos del proveedor. Revisa moneda, impuestos y descuentos antes de guardar."
+msgstr "De velden <strong>Woo regular</strong> en <strong>Woo sale</strong> zijn alleen beschikbaar voor gekoppelde producten. Vink <strong>Apply Woo prices</strong> expliciet aan om WooCommerce-productprijzen te wijzigen. Zonder dit vinkje worden alleen de leverancierskosten en metadata bijgewerkt. Controleer valuta, belastingen en kortingen voordat u opslaat."
+
+msgid "Los márgenes definidos en opciones se aplican sobre el precio base, priorizando <code>precio_con_iva</code>, y se redondean con la precisión de WooCommerce. Stock numérico activa gestión de existencias y cantidad; sin cantidad se determina disponibilidad según el estado textual admitido. Estos comportamientos <strong>son efectos de aceptar</strong> y deben cubrirse por pruebas de regresión antes de cualquier cambio."
+msgstr "De ingestelde marges worden toegepast op de basisprijs, bij voorkeur <code>precio_con_iva</code>, en afgerond met de WooCommerce-precisie. Een numerieke voorraad activeert voorraadbeheer en aantallen; zonder aantal wordt de beschikbaarheid bepaald via de ondersteunde tekststatus. Deze gedragingen <strong>zijn gevolgen van acceptatie</strong> en moeten vóór wijzigingen met regressietests worden afgedekt."
+
+msgid "Los scripts tests se excluyen del ZIP distribuible."
+msgstr "Testscripts worden uitgesloten van het distributie-ZIP-bestand."
+
+msgid "Marca la fila <code>descartado</code> y sincronización ignorada."
+msgstr "Markeert de rij als <code>descartado</code> en negeert de synchronisatie."
+
+msgid "Marca la fila <code>revisar</code>."
+msgstr "Markeert de rij als <code>revisar</code>."
+
+msgid "Marca las filas deseadas de la página actual, elige <strong>Accept / link to WooCommerce</strong>, <strong>Mark for review</strong>, <strong>Discard</strong> o <strong>Return to pending</strong> y pulsa <strong>Apply</strong>. Consulta los recuentos de procesadas y errores. No interpretes el selector <em>Select all rows on this page</em> como selección de todo el catálogo."
+msgstr "Selecteer de gewenste rijen op de huidige pagina, kies <strong>Accept / link to WooCommerce</strong>, <strong>Mark for review</strong>, <strong>Discard</strong> of <strong>Return to pending</strong> en klik op <strong>Apply</strong>. Bekijk de aantallen verwerkte rijen en fouten. Het keuzemenu <em>Select all rows on this page</em> selecteert niet de volledige catalogus."
+
+msgid "Modo de imagen, URLs guardadas, consumidor de imágenes externas y sitio de origen."
+msgstr "Afbeeldingsmodus, opgeslagen URL's, afnemer van externe afbeeldingen en bronwebsite."
+
+msgid "Márgenes comerciales (por defecto 20 y 45); valores acotados por el controlador de ajustes."
+msgstr "Commerciële marges (standaard 20 en 45); waarden worden begrensd door de instellingencontroller."
+
+msgid "No equivale a borrar un producto WooCommerce ya creado."
+msgstr "Dit staat niet gelijk aan het verwijderen van een bestaand WooCommerce-product."
+
+msgid "No introducir lógica de UI/importación dentro del bootstrap."
+msgstr "Voeg geen interface- of importlogica toe aan het opstartbestand."
+
+msgid "No resuelve automáticamente un conflicto de identidad."
+msgstr "Dit lost een identiteitsconflict niet automatisch op."
+
+msgid "No utilizar métodos de instalación, aceptación, importación ni envío."
+msgstr "Gebruik geen installatie-, acceptatie-, import- of verzendmethoden."
+
+msgid "Opcionalmente introduce un nombre para guardar la asignación como plantilla reutilizable y pulsa <strong>Import into intermediate inventory</strong>."
+msgstr "Voer desgewenst een naam in om de toewijzing als herbruikbaar sjabloon op te slaan en klik op <strong>Import into intermediate inventory</strong>."
+
+msgid "Para importar un CSV regional de VEVOR, selecciona el proveedor en <strong>CSV Import</strong>. El módulo reconoce las columnas <code>Name</code>, <code>URL to product</code>, <code>categoryPath</code>, <code>URL to image</code>, <code>Currency</code> y <code>Sales</code> y determina el mercado por la URL o la columna Country. No se precarga ninguna plantilla VEVOR. Cada mercado conserva su identidad sin fusionar productos por SKU."
+msgstr "Om een regionale VEVOR-CSV te importeren selecteert u de leverancier onder <strong>CSV Import</strong>. De module herkent de kolommen <code>Name</code>, <code>URL to product</code>, <code>categoryPath</code>, <code>URL to image</code>, <code>Currency</code> en <code>Sales</code> en bepaalt de markt via de URL of de kolom Country. Er wordt geen VEVOR-sjabloon vooraf geladen. Elke markt behoudt zijn eigen identiteit; producten worden niet alleen op SKU samengevoegd."
+
+msgid "Pedidos activos sin fuente, con fuente exacta, variación que hereda fuente del padre y enlaces válidos."
+msgstr "Actieve bestellingen zonder bron, met exacte bron, variatie die de bron van het hoofdproduct erft en geldige links."
+
+msgid "Permisos y nonces, escape, SQL preparado, PHP lint, smoke, Plugin Check y ZIP sin <code>tests/</code>."
+msgstr "Rechten en nonces, uitvoerescapes, voorbereide SQL, PHP-lint, rooktests, Plugin Check en ZIP zonder <code>tests/</code>."
+
+msgid "Precios de fuente/Woo y vínculos de imágenes."
+msgstr "Bron-/WooCommerce-prijzen en afbeeldingskoppelingen."
+
+msgid "Presentación y regresión de la interfaz/contratos."
+msgstr "Weergave en regressietests van interface en contracten."
+
+msgid "Primero busca una fuente aceptada para el producto de la línea; si es una variación sin fuente, intenta usar la del producto padre. Si hay varias fuentes, presenta alternativas. <strong>Purchase</strong> abre la página del proveedor en otra pestaña: no envía pedidos, no realiza pagos ni reserva stock."
+msgstr "Eerst zoekt de module een geaccepteerde bron voor het product op de bestelregel. Bij een variatie zonder bron probeert ze de bron van het hoofdproduct. Bij meerdere bronnen worden alternatieven getoond. <strong>Purchase</strong> opent de leverancierspagina in een nieuw tabblad: er worden geen bestellingen verzonden, betalingen uitgevoerd of voorraden gereserveerd."
+
+msgid "Puede modificar precio, stock y metadatos de un producto existente."
+msgstr "Kan de prijs, voorraad en metagegevens van een bestaand product wijzigen."
+
+msgid "Puntos de extensión y precauciones"
+msgstr "Uitbreidingspunten en aandachtspunten"
+
+msgid "Referencias externas nuevas, duplicadas, cambio de modo y ausencia de descargas a Media."
+msgstr "Nieuwe externe verwijzingen, duplicaten, moduswissels en geen downloads naar de mediabibliotheek."
+
+msgid "Registro familiar: <code>taxocommerce_core_register_modules</code> y <code>taxocommerce_core_family_extensions</code>. Filtro de compras: <code>taxocommerce_suppliers_purchasing_order_statuses</code>. Mantener las firmas de métodos y nombres de acciones para no romper integraciones de la familia."
+msgstr "Registratie in de familie: <code>taxocommerce_core_register_modules</code> en <code>taxocommerce_core_family_extensions</code>. Inkoopfilter: <code>taxocommerce_suppliers_purchasing_order_statuses</code>. Behoud methodesignaturen en actienamen om integraties binnen de familie niet te verbreken."
+
+msgid "Repetir Analyze CSV y revisar el mapeo."
+msgstr "Voer Analyze CSV opnieuw uit en controleer de toewijzing."
+
+msgid "Resolver identidad/categoría antes de volver a aceptar."
+msgstr "Los het identiteit-/categorieprobleem op voordat u het opnieuw accepteert."
+
+msgid "Respetar identidad, prevención de duplicados, VEVOR y formato CSV."
+msgstr "Respecteer identiteit, voorkom duplicaten en behoud VEVOR- en CSV-contracten."
+
+msgid "Revisa antes los datos que motivaron su descarte."
+msgstr "Controleer eerst de gegevens die tot afwijzing hebben geleid."
+
+msgid "Revisar vínculo de catálogo y producto."
+msgstr "Controleer de koppeling tussen catalogus en product."
+
+msgid "Selecciona <strong>Supplier Price Update CSV</strong> cuando solo debas renovar costes de referencias existentes. Exige una identidad (ID externo o SKU) y al menos una columna de precio; para VEVOR exige <strong>ID externo y país</strong>. Este modo <strong>no crea filas nuevas</strong>. Los registros no identificados o ambiguos se contabilizan como error."
+msgstr "Kies <strong>Supplier Price Update CSV</strong> als u alleen kosten van bestaande referenties wilt bijwerken. Een identificatie (externe ID of SKU) en minimaal één prijskolom zijn vereist; voor VEVOR zijn <strong>externe ID en land</strong> vereist. Deze modus <strong>maakt geen nieuwe rijen aan</strong>. Niet-identificeerbare of dubbelzinnige gegevens worden als fout geteld."
+
+msgid "Selecciona un archivo <strong>.csv</strong> y pulsa <strong>Analyze CSV</strong>. El módulo admite separadores de punto y coma, coma o tabulador; intenta detectar el apropiado."
+msgstr "Selecteer een <strong>.csv</strong>-bestand en klik op <strong>Analyze CSV</strong>. De module ondersteunt puntkomma's, komma's en tabs als scheidingsteken en probeert dit automatisch te herkennen."
+
+msgid "Selección y aceptación de filas; la interfaz del inventario envía las acciones individuales por <code>tcsup_bulk_action</code>."
+msgstr "Selectie en acceptatie van rijen; de voorraadinterface verzendt afzonderlijke acties via <code>tcsup_bulk_action</code>."
+
+msgid "Si no hay coincidencia, usa <code>WC_Product_Simple</code> y crea un borrador oculto con la categoría WooCommerce predeterminada. Para fuentes ya enlazadas puede actualizar precio, stock, marca, metadatos y enlaces de imagen. Tras guardar actualiza <code>object_id</code>, <code>hash_aplicado</code>, <code>snapshot_aplicado</code> y estado de sincronización."
+msgstr "Als er geen overeenkomst is, gebruikt de module <code>WC_Product_Simple</code> en maakt een verborgen concept aan in de standaardcategorie van WooCommerce. Bij al gekoppelde bronnen kan ze prijs, voorraad, merk, metadata en afbeeldingslinks bijwerken. Na het opslaan worden <code>object_id</code>, <code>hash_aplicado</code>, <code>snapshot_aplicado</code> en de synchronisatiestatus bijgewerkt."
+
+msgid "Si no se encuentra un producto existente y hay categoría WooCommerce predeterminada válida, se crea un <strong>producto simple en borrador, oculto del catálogo</strong>, asociado a esa categoría. No se publica automáticamente ni se asigna directamente a la categoría final del árbol comercial. Debes revisar y completar el producto antes de publicarlo desde WooCommerce."
+msgstr "Als er geen bestaand product is gevonden en er een geldige standaardcategorie voor WooCommerce bestaat, wordt een <strong>eenvoudig product als concept aangemaakt, verborgen in de catalogus</strong>, gekoppeld aan die categorie. Het wordt niet automatisch gepubliceerd of direct toegewezen aan de uiteindelijke commerciële categorie. Controleer en voltooi het product in WooCommerce vóór publicatie."
+
+msgid "Si una funcionalidad cambia, actualizar tanto el procedimiento operativo (botones, riesgos, resultados) como el contrato técnico (clases, tablas, hooks y pruebas). No inventar opciones que no existan en el plugin. Conservar esta estructura de dos manuales completos en la pestaña Manual para que el siguiente desarrollador no dependa de conversaciones anteriores."
+msgstr "Wanneer een functie verandert, moeten zowel de gebruiksinstructies (knoppen, risico's, resultaten) als het technische contract (klassen, tabellen, hooks en tests) worden bijgewerkt. Verzin geen opties die niet in de plugin bestaan. Behoud beide volledige handleidingen in het tabblad Manual, zodat een volgende ontwikkelaar niet afhankelijk is van eerdere gesprekken."
+
+msgid "Solo diagnóstico; no repara tablas ni procesa pedidos."
+msgstr "Alleen diagnose; herstelt geen tabellen en verwerkt geen bestellingen."
+
+msgid "Subida/análisis e inserción/actualización intermedia."
+msgstr "Upload/analyse en tussentijds toevoegen/bijwerken."
+
+msgid "Subir, analizar, asignar columnas e importar."
+msgstr "Uploaden, analyseren, kolommen toewijzen en importeren."
+
+msgid "Suppliers recibe catálogos CSV facilitados por proveedores, los normaliza y mantiene en un inventario intermedio. Permite revisar cada referencia antes de crear o enlazar productos WooCommerce, corregir los costes, conservar referencias de imágenes externas y consultar qué proveedor corresponde a una venta."
+msgstr "Suppliers ontvangt CSV-catalogi van leveranciers, normaliseert deze en bewaart ze in een tussencatalogus. U kunt iedere referentie controleren voordat u WooCommerce-producten aanmaakt of koppelt, kosten corrigeren, externe afbeeldingsverwijzingen bewaren en opzoeken welke leverancier bij een verkoop hoort."
+
+msgid "There are no pending, on-hold, or processing WooCommerce order lines to purchase."
+msgstr "Er zijn geen WooCommerce-bestelregels in afwachting, in de wacht of in behandeling om in te kopen."
+
+msgid "Transient de análisis, cabeceras, vista previa y ruta temporal; duración de dos horas."
+msgstr "Analysetransient, kopregels, voorbeeldweergave en tijdelijk pad; twee uur geldig."
+
+msgid "Usar APIs de pedidos WooCommerce; no SQL directo sobre tablas de pedidos."
+msgstr "Gebruik WooCommerce-bestel-API's; geen directe SQL op besteltabellen."
+
+msgid "Utilizar <code>$wpdb->prepare()</code>, con <code>%i</code> para identificadores cuando proceda, y evitar interpolar entradas no fiables. No asumir que una URL externa es un archivo local. Los CSV originales residen bajo <code>uploads</code> y pueden contener información comercial: antes de ampliar los endpoints, comprobar autorización, accesibilidad pública, tipos de fichero y límites. No introducir exportaciones o rutas de descarga de originales sin petición explícita y evaluación de seguridad."
+msgstr "Gebruik <code>$wpdb->prepare()</code>, met <code>%i</code> voor identificatoren waar passend, en vermijd het rechtstreeks invoegen van niet-vertrouwde waarden. Ga er niet van uit dat een externe URL een lokaal bestand is. Oorspronkelijke CSV-bestanden staan onder <code>uploads</code> en kunnen commerciële informatie bevatten. Controleer vóór uitbreiding van endpoints de autorisatie, publieke toegankelijkheid, bestandstypen en limieten. Voeg geen export of downloadroutes voor oorspronkelijke bestanden toe zonder expliciet verzoek en veiligheidsbeoordeling."
+
+msgid "VEVOR US/DE/NL/FR con igual SKU, variante distinta, país ausente, ID y URL erróneos."
+msgstr "VEVOR US/DE/NL/FR met dezelfde SKU, andere variant, ontbrekend land, foutieve ID en URL."
+
+msgid "Verificar referencias; Suppliers no importa archivos a Media."
+msgstr "Controleer de verwijzingen; Suppliers importeert geen bestanden in de mediabibliotheek."
+
+msgid "Versión %s. Guía de operación y referencia para futuros desarrolladores del <strong>plugin independiente</strong>. Abrir esta pestaña no importa CSV, modifica precios ni ejecuta compras."
+msgstr "Versie %s. Gebruiksaanwijzing en referentie voor toekomstige ontwikkelaars van de <strong>zelfstandige plugin</strong>. Dit tabblad openen importeert geen CSV-bestanden, wijzigt geen prijzen en voert geen inkopen uit."
+
+msgid "Versión del esquema, actualmente <code>1.0.0</code>; <code>maybe_install()</code> comprueba tablas y puede ejecutar dbDelta."
+msgstr "Schemaversie, momenteel <code>1.0.0</code>; <code>maybe_install()</code> controleert tabellen en kan dbDelta uitvoeren."
+
+msgid "WooCommerce es obligatorio para aceptación de productos y consultas de compras; TaxoCommerce Core es opcional para agrupar el menú. El módulo no gestiona pesos y transportes (Logistics), no ejecuta scraping (Scrappers) y no publica automáticamente productos. No modificar el plugin monolítico ni asumir que sus clases antiguas siguen disponibles."
+msgstr "WooCommerce is verplicht voor het accepteren van producten en het opvragen van inkopen; TaxoCommerce Core is optioneel voor het gezamenlijke menu. De module beheert geen gewichten of verzending (Logistics), voert geen scraping uit (Scrappers) en publiceert niet automatisch producten. Wijzig de monolithische plugin niet en ga er niet van uit dat de oude klassen beschikbaar zijn."
+
+msgid "WooCommerce, categoría por defecto, SKU ocupado y mensajes de conflicto."
+msgstr "WooCommerce, standaardcategorie, bezette SKU en conflictmeldingen."
+
+msgid "Plugin y versión"
+msgstr "Plugin en versie"
+
+msgid "Constante de versión ausente."
+msgstr "Versieconstante ontbreekt."
+
+msgid "API de pedidos y productos disponible."
+msgstr "Bestel- en product-API beschikbaar."
+
+msgid "WooCommerce no está disponible para productos o compras."
+msgstr "WooCommerce is niet beschikbaar voor producten of inkopen."
+
+msgid "Clases del plugin"
+msgstr "Pluginklassen"
+
+msgid "Faltan: "
+msgstr "Ontbrekend: "
+
+msgid "Todos los componentes principales están cargados."
+msgstr "Alle hoofdcomponenten zijn geladen."
+
+msgid "Administración"
+msgstr "Beheer"
+
+msgid "Controladores registrados"
+msgstr "Geregistreerde controllers"
+
+msgid "No registrados: "
+msgstr "Niet geregistreerd: "
+
+msgid "Los 10 controladores están registrados; ninguno se ejecuta."
+msgstr "Alle 10 controllers zijn geregistreerd; geen ervan wordt uitgevoerd."
+
+msgid "Servicios"
+msgstr "Diensten"
+
+msgid "Funciones públicas"
+msgstr "Openbare functies"
+
+msgid "Consulta de fuentes e imágenes de proveedor (sin invocar operaciones)."
+msgstr "Opvragen van leveranciersbronnen en -afbeeldingen (zonder bewerkingen uit te voeren)."
+
+msgid "Configuración"
+msgstr "Configuratie"
+
+msgid "Plantillas CSV personalizadas"
+msgstr "Aangepaste CSV-sjablonen"
+
+msgid "Estructura válida; "
+msgstr "Geldige structuur; "
+
+msgid " plantillas almacenadas."
+msgstr " opgeslagen sjablonen."
+
+msgid "La opción no contiene un array."
+msgstr "De optie bevat geen array."
+
+msgid "Formatos CSV genéricos"
+msgstr "Algemene CSV-indelingen"
+
+msgid "Solo los dos formatos de importación, sin plantillas de proveedores precargadas."
+msgstr "Alleen de twee importindelingen, zonder vooraf ingestelde leverancierssjablonen."
+
+msgid "Se han detectado perfiles de proveedor precargados."
+msgstr "Er zijn vooraf ingestelde leveranciersprofielen gevonden."
+
+msgid "Margen de venta"
+msgstr "Verkoopmarge"
+
+msgid "Margen regular"
+msgstr "Reguliere marge"
+
+msgid "Valor numérico guardado."
+msgstr "Numerieke waarde opgeslagen."
+
+msgid "Opción ausente o no numérica; revisar ajustes."
+msgstr "Optie ontbreekt of is niet numeriek; controleer de instellingen."
+
+msgid "Persistencia"
+msgstr "Gegevensopslag"
+
+msgid "Versión del esquema"
+msgstr "Schemaversie"
+
+msgid "Versión guardada: "
+msgstr "Opgeslagen versie: "
+
+msgid "sin registrar"
+msgstr "niet geregistreerd"
+
+msgid ". No se ejecutan migraciones."
+msgstr ". Er worden geen migraties uitgevoerd."
+
+msgid "Base de datos"
+msgstr "Database"
+
+msgid "Conexión o esquema no disponibles."
+msgstr "Databaseverbinding of schema niet beschikbaar."
+
+msgid "Catálogo intermedio"
+msgstr "Tussencatalogus"
+
+msgid "Imágenes externas"
+msgstr "Externe afbeeldingen"
+
+msgid "No se encuentra la tabla "
+msgstr "Tabel niet gevonden: "
+
+msgid "Columnas ausentes: "
+msgstr "Ontbrekende kolommen: "
+
+msgid "Tabla y columnas esenciales disponibles."
+msgstr "Tabel en vereiste kolommen beschikbaar."
+
+msgid "Consulta de estados"
+msgstr "Statusopvraging"
+
+msgid "Filtro de estados cargado; no se consultan ni modifican pedidos."
+msgstr "Statusfilter geladen; bestellingen worden niet opgevraagd of gewijzigd."
+
+msgid "Version"
+msgstr "Versie"
+
+msgid "Last updated"
+msgstr "Laatst bijgewerkt"
+
+msgid "Version history and improvements"
+msgstr "Versiegeschiedenis en verbeteringen"
+
+msgid "Access denied."
+msgstr "Toegang geweigerd."
+
+msgid "Run Code Check first."
+msgstr "Voer eerst de codecontrole uit."
+
+msgid "Unable to create JSON."
+msgstr "Kan JSON niet maken."
+
+msgid "Autotest sections"
+msgstr "Onderdelen van de zelftest"
+
+msgid "Functionality Check"
+msgstr "Functionaliteitscontrole"
+
+msgid "Code Check"
+msgstr "Codecontrole"
+
+msgid "PHP syntax, WordPress structure and security indicators for this plugin only. No other checker is required. Findings do not replace official Plugin Check or a security audit."
+msgstr "PHP-syntaxis, WordPress-structuur en beveiligingsindicatoren uitsluitend voor deze plugin. Geen andere controletool nodig. De resultaten vervangen de officiële Plugin Check of een beveiligingsaudit niet."
+
+msgid "CPU usage"
+msgstr "CPU-gebruik"
+
+msgid "Run Code Check"
+msgstr "Codecontrole uitvoeren"
+
+msgid "Progress"
+msgstr "Voortgang"
+
+msgid "Stop"
+msgstr "Stoppen"
+
+msgid "Continue batch"
+msgstr "Batch voortzetten"
+
+msgid "Resume"
+msgstr "Hervatten"
+
+msgid "Download JSON"
+msgstr "JSON downloaden"
+
+msgid "File"
+msgstr "Bestand"
+
+msgid "Security"
+msgstr "Beveiliging"
+
+msgid "Price history"
+msgstr "Prijsgeschiedenis"
+
+msgid "Read-only price snapshots. The first entry reflects the first captured price, not a reconstructed earlier price."
+msgstr "Alleen-lezen prijsgeschiedenis. De eerste vermelding is de eerst vastgelegde prijs, niet een gereconstrueerde eerdere prijs."
+
+msgid "Date"
+msgstr "Datum"
+
+msgid "Supplier excl. tax"
+msgstr "Leverancier excl. btw"
+
+msgid "Supplier incl. tax"
+msgstr "Leverancier incl. btw"
+
+msgid "Effective price"
+msgstr "Effectieve prijs"
+
+msgid "Source"
+msgstr "Bron"
+
+msgid "No price changes have been recorded yet."
+msgstr "Er zijn nog geen prijswijzigingen vastgelegd."
+
+msgid "Historial de precios"
+msgstr "Prijsgeschiedenis"
+
+msgid "Official plugin page"
+msgstr "Officiële pluginpagina"
+
+msgid "1 - Very low"
+msgstr "1 - Zeer laag"
+
+msgid "2 - Low"
+msgstr "2 - Laag"
+
+msgid "3 - Normal"
+msgstr "3 - Normaal"
+
+msgid "4 - High"
+msgstr "4 - Hoog"
+
+msgid "5 - Maximum"
+msgstr "5 - Maximaal"
+
+msgid "Added: "
+msgstr "Toegevoegd: "
+
+msgid "CSV columns do not match the history export format."
+msgstr "De CSV-kolommen komen niet overeen met het exportformaat van de prijsgeschiedenis."
+
+msgid "CSV exported. Rows: "
+msgstr "CSV geëxporteerd. Rijen: "
+
+msgid "CSV file missing."
+msgstr "CSV-bestand ontbreekt."
+
+msgid "CSV header is missing."
+msgstr "CSV-kopregel ontbreekt."
+
+msgid "CSV identity uses supplier, external ID, country and source row key. Unmatched rows are skipped; duplicates are not re-imported. File limit: 15 MB."
+msgstr "De koppeling gebruikt leverancier, externe ID, land en rijsleutel. Niet-gevonden regels en duplicaten worden overgeslagen. Limiet: 15 MB."
+
+msgid "Cannot open the CSV file."
+msgstr "Kan het CSV-bestand niet openen."
+
+msgid "Cannot store temporary CSV file."
+msgstr "Kan tijdelijk CSV-bestand niet opslaan."
+
+msgid "Change"
+msgstr "Wijziging"
+
+msgid "Duplicates: "
+msgstr "Duplicaten: "
+
+msgid "Export history CSV"
+msgstr "Prijsgeschiedenis als CSV exporteren"
+
+msgid "Export the filtered history as CSV or import an exported CSV in batches. Existing prices and margins remain unchanged."
+msgstr "Exporteer gefilterde prijsgeschiedenis als CSV of importeer CSV in batches. Huidige prijzen en marges blijven ongewijzigd."
+
+msgid "Exporting price history..."
+msgstr "Prijsgeschiedenis wordt geëxporteerd..."
+
+msgid "From date"
+msgstr "Vanaf datum"
+
+msgid "History CSV file"
+msgstr "CSV-bestand met prijsgeschiedenis"
+
+msgid "Import / export historical prices"
+msgstr "Historische prijzen importeren / exporteren"
+
+msgid "Import finished. "
+msgstr "Import voltooid. "
+
+msgid "Import history CSV"
+msgstr "Prijsgeschiedenis uit CSV importeren"
+
+msgid "Import is already processing."
+msgstr "Er wordt al een import verwerkt."
+
+msgid "Import session expired. Upload the CSV again."
+msgstr "Importsessie verlopen. Upload de CSV opnieuw."
+
+msgid "Importing historical prices..."
+msgstr "Historische prijzen worden geïmporteerd..."
+
+msgid "Insufficient permissions."
+msgstr "Onvoldoende rechten."
+
+msgid "Invalid CSV file or file is larger than 15 MB."
+msgstr "Ongeldig CSV-bestand of groter dan 15 MB."
+
+msgid "Invalid import session."
+msgstr "Ongeldige importsessie."
+
+msgid "Invalid: "
+msgstr "Ongeldig: "
+
+msgid "No historical prices match these filters."
+msgstr "Geen historische prijzen gevonden voor deze filters."
+
+msgid "Previous selling price"
+msgstr "Vorige verkoopprijs"
+
+msgid "Previous supplier cost"
+msgstr "Vorige leverancierskosten"
+
+msgid "Price history inventory"
+msgstr "Overzicht van prijsgeschiedenis"
+
+msgid "Processing speed"
+msgstr "Verwerkingssnelheid"
+
+msgid "Product or SKU"
+msgstr "Product of SKU"
+
+msgid "Review price movements across all products. CSV import only adds historical observations; it never changes current catalogue or WooCommerce prices."
+msgstr "Bekijk prijswijzigingen van alle producten. CSV-import voegt alleen historische gegevens toe en wijzigt nooit actuele catalogus- of WooCommerce-prijzen."
+
+msgid "Selling price"
+msgstr "Verkoopprijs"
+
+msgid "Server request failed."
+msgstr "Serververzoek mislukt."
+
+msgid "Supplier cost"
+msgstr "Leverancierskosten"
+
+msgid "To date"
+msgstr "Tot datum"
+
+msgid "Unmatched: "
+msgstr "Niet gekoppeld: "
+
+msgid "historical observations matching the filters"
+msgstr "overeenkomende historische prijsregistraties"
+
+msgid "Commercial name"
+msgstr "Handelsnaam"
+
+msgid "Legal business name"
+msgstr "Statutaire bedrijfsnaam"
+
+msgid "Tax ID"
+msgstr "Fiscaal nummer"
+
+msgid "Company phone"
+msgstr "Telefoon bedrijf"
+
+msgid "Company email"
+msgstr "E-mail bedrijf"
+
+msgid "Website"
+msgstr "Website"
+
+msgid "Sales contact"
+msgstr "Commercieel contact"
+
+msgid "Contact role"
+msgstr "Functie contactpersoon"
+
+msgid "Sales contact phone"
+msgstr "Telefoon commercieel contact"
+
+msgid "Sales contact email"
+msgstr "E-mail commercieel contact"
+
+msgid "Street address"
+msgstr "Straatadres"
+
+msgid "Postal code"
+msgstr "Postcode"
+
+msgid "City"
+msgstr "Plaats"
+
+msgid "Province or region"
+msgstr "Provincie of regio"
+
+msgid "Typical delivery time"
+msgstr "Gebruikelijke levertijd"
+
+msgid "Supplier record saved."
+msgstr "Leveranciersfiche opgeslagen."
+
+msgid "Contact record deleted. The supplier and its products remain in the catalogue."
+msgstr "Contactfiche verwijderd. Leverancier en producten blijven in de catalogus."
+
+msgid "This supplier no longer exists in the catalogue."
+msgstr "Deze leverancier staat niet meer in de catalogus."
+
+msgid "The supplier record could not be saved."
+msgstr "De leveranciersfiche kon niet worden opgeslagen."
+
+msgid "Supplier management"
+msgstr "Leveranciersbeheer"
+
+msgid "Suppliers are discovered automatically from imported inventory. New suppliers appear after their first successful catalogue import; only their private contact details are edited here."
+msgstr "Leveranciers worden automatisch uit de geïmporteerde voorraad gehaald. Nieuwe leveranciers verschijnen na de eerste geslaagde import; hier worden alleen privécontactgegevens bewerkt."
+
+msgid "The requested supplier is not in the inventory."
+msgstr "De gevraagde leverancier staat niet in de voorraad."
+
+msgid "Search suppliers"
+msgstr "Leveranciers zoeken"
+
+msgid "%d suppliers in the catalogue"
+msgstr "%d leveranciers in de catalogus"
+
+msgid "Catalogue products"
+msgstr "Catalogusproducten"
+
+msgid "Record"
+msgstr "Fiche"
+
+msgid "Action"
+msgstr "Actie"
+
+msgid "Not completed"
+msgstr "Niet ingevuld"
+
+msgid "Saved"
+msgstr "Opgeslagen"
+
+msgid "Create record"
+msgstr "Fiche aanmaken"
+
+msgid "No suppliers found in the imported catalogue."
+msgstr "Geen leveranciers gevonden in de geïmporteerde catalogus."
+
+msgid "Edit supplier record"
+msgstr "Leveranciersfiche bewerken"
+
+msgid "Create supplier record"
+msgstr "Leveranciersfiche aanmaken"
+
+msgid "Supplier identity comes from the inventory and cannot be changed here. These details are private to store administrators."
+msgstr "De leveranciersidentiteit komt uit de voorraad en kan hier niet worden gewijzigd. Deze gegevens zijn alleen voor beheerders zichtbaar."
+
+msgid "Company details"
+msgstr "Bedrijfsgegevens"
+
+msgid "Sales contact details"
+msgstr "Gegevens commercieel contact"
+
+msgid "Address and logistics"
+msgstr "Adres en logistiek"
+
+msgid "Internal notes and incidents"
+msgstr "Interne notities en incidenten"
+
+msgid "Contact preferences, delivery delays, incorrect shipments or other notes..."
+msgstr "Contactvoorkeuren, leveringsvertragingen, foutieve zendingen of andere notities..."
+
+msgid "Save supplier record"
+msgstr "Leveranciersfiche opslaan"
+
+msgid "Delete only the contact record? Catalogue products will not be removed."
+msgstr "Alleen de contactfiche verwijderen? Catalogusproducten blijven behouden."
+
+msgid "Delete contact record"
+msgstr "Contactfiche verwijderen"
+
+msgid "Gestión de proveedores"
+msgstr "Leveranciersbeheer"
+
+msgid "Ver los proveedores importados, crear y editar sus fichas privadas, contactos, direcciones, plazos y observaciones."
+msgstr "Geïmporteerde leveranciers bekijken en privéfiches met contacten, adressen, levertijden en notities beheren."
+
+msgid "Solo modifica la tabla de fichas, nunca productos del inventario ni pedidos WooCommerce."
+msgstr "Wijzigt alleen de fiches, nooit voorraadproducten of WooCommerce-bestellingen."
+
+msgid "La lista se crea automáticamente con los nombres distintos de proveedor que figuran en el inventario intermedio. Al importar el primer producto de un proveedor nuevo, su ficha aparecerá sin datos y podrás completarla. No se dan de alta proveedores ajenos al catálogo."
+msgstr "De lijst wordt automatisch opgebouwd uit unieke leveranciersnamen in de tussenvoorraad. Na import van het eerste product van een nieuwe leverancier verschijnt een lege fiche die kan worden aangevuld. Leveranciers buiten de catalogus kunnen niet worden toegevoegd."
+
+msgid "Pulsa Crear ficha o Editar para registrar razón social, NIF, contactos comerciales, teléfonos, correos, dirección, plazo habitual de entrega y observaciones internas. Son datos privados de administración y no se publican en WooCommerce."
+msgstr "Klik op Fiche aanmaken of Bewerken om bedrijfsnaam, fiscaal nummer, contactpersonen, telefoons, e-mails, adres, gebruikelijke levertijd en interne notities vast te leggen. Deze beheerdersgegevens worden niet in WooCommerce gepubliceerd."
+
+msgid "Eliminar ficha borra únicamente los datos de contacto. Si el proveedor continúa en el inventario, seguirá visible y se podrá volver a rellenar. Eliminar la ficha no borra ni modifica importaciones, productos, precios o pedidos."
+msgstr "Fiche verwijderen wist alleen de contactgegevens. Zolang de leverancier in de voorraad staat, blijft deze zichtbaar en kan de fiche opnieuw worden ingevuld. Importen, producten, prijzen en bestellingen blijven ongewijzigd."
+
+msgid "Exporting supplier records..."
+msgstr "Leveranciersfiches exporteren..."
+
+msgid "Exported supplier records: "
+msgstr "Geëxporteerde leveranciersfiches: "
+
+msgid "Importing supplier records..."
+msgstr "Leveranciersfiches importeren..."
+
+msgid "Import completed. "
+msgstr "Import voltooid. "
+
+msgid "Created: "
+msgstr "Aangemaakt: "
+
+msgid "Updated: "
+msgstr "Bijgewerkt: "
+
+msgid "Unchanged: "
+msgstr "Ongewijzigd: "
+
+msgid "Unknown: "
+msgstr "Onbekend: "
+
+msgid "Stopping import after the current batch..."
+msgstr "Import stopt na de huidige batch..."
+
+msgid "Import stopped. Completed batches are retained."
+msgstr "Import gestopt. Voltooide batches blijven behouden."
+
+msgid "First invalid or unmatched rows: "
+msgstr "Eerste ongeldige of niet-overeenkomende rijen: "
+
+msgid "Bulk import / export of supplier records"
+msgstr "Bulkimport / -export van leveranciersfiches"
+
+msgid "Export all inventory suppliers as an editable CSV, including blank records. Import the same CSV to create or replace their private contact details; products, prices and orders never change."
+msgstr "Exporteer alle leveranciers naar een bewerkbare CSV, ook lege fiches. Importeer deze CSV om privécontactgegevens aan te maken of bij te werken; producten, prijzen en bestellingen blijven ongewijzigd."
+
+msgid "Export supplier records CSV"
+msgstr "Leveranciersfiches als CSV exporteren"
+
+msgid "Supplier records CSV file"
+msgstr "CSV-bestand met leveranciersfiches"
+
+msgid "Import supplier records CSV"
+msgstr "Leveranciersfiches uit CSV importeren"
+
+msgid "Cancel import"
+msgstr "Import stoppen"
+
+msgid "Only suppliers already present in Inventory can be imported. Blank CSV cells replace existing values. Export a backup first. Files up to 50 MB (or the server limit) are processed in small batches without cron."
+msgstr "Alleen leveranciers uit de voorraad kunnen worden geïmporteerd. Lege CSV-cellen vervangen bestaande waarden. Exporteer eerst een back-up. Bestanden tot 50 MB (of de serverlimiet) worden in batches zonder cron verwerkt."
+
+msgid "Invalid supplier records CSV or the file exceeds 50 MB."
+msgstr "Ongeldige leveranciers-CSV of bestand groter dan 50 MB."
+
+msgid "The CSV columns do not match the supplier record export. Download a fresh CSV first."
+msgstr "De CSV-kolommen komen niet overeen met de fiche-export. Download eerst een nieuwe CSV."
+
+msgid "Invalid or expired supplier import session."
+msgstr "Ongeldige of verlopen leveranciersimportsessie."
+
+msgid "Supplier import is already running."
+msgstr "Er wordt al een leveranciersimport verwerkt."
+
+msgid "Para editar muchas fichas, descarga el CSV desde Gestión de proveedores. El archivo incluye también proveedores sin ficha. Rellena las columnas conservando los nombres de proveedor y vuelve a importarlo. Se validan las identidades existentes; los nombres desconocidos se omiten. Los campos vacíos sobrescriben los valores anteriores. La importación se procesa por bloques y permite detenerse sin revertir los bloques ya completados."
+msgstr "Om veel fiches te bewerken exporteert u de CSV vanuit Leveranciersbeheer, inclusief leveranciers zonder fiche. Vul de kolommen in zonder leveranciersnamen te wijzigen en importeer het bestand opnieuw. Onbekende namen worden overgeslagen. Lege cellen overschrijven oude waarden. De import loopt in batches en kan worden gestopt zonder afgeronde batches terug te draaien."

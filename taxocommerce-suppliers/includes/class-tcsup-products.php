@@ -404,6 +404,7 @@ final class TCSUP_Products {
 			array( 'id' => absint( $row['id'] ) )
 		);
 
+		TCSUP_Price_History::capture( absint( $row['id'] ), 'sync' );
 		return array( 'product_id' => $product_id, 'created' => $is_new );
 	}
 
@@ -588,6 +589,8 @@ final class TCSUP_Products {
 			self::redirect( 'prices', array( 'tc_error' => 'missing' ) );
 		}
 
+		TCSUP_Price_History::capture( $id, 'baseline' );
+
 		$without_tax = isset( $_POST['precio_sin_iva'] ) ? self::decimal( sanitize_text_field( wp_unslash( $_POST['precio_sin_iva'] ) ) ) : null;
 		$with_tax    = isset( $_POST['precio_con_iva'] ) ? self::decimal( sanitize_text_field( wp_unslash( $_POST['precio_con_iva'] ) ) ) : null;
 		$tax         = isset( $_POST['iva_porcentaje'] ) ? self::decimal( sanitize_text_field( wp_unslash( $_POST['iva_porcentaje'] ) ) ) : null;
@@ -618,6 +621,8 @@ final class TCSUP_Products {
 			update_post_meta( $product_id, '_seo_proveedor_iva_porcentaje', null === $tax ? '' : $tax );
 			update_post_meta( $product_id, '_seo_proveedor_moneda', $currency );
 		}
+
+		TCSUP_Price_History::capture( $id, 'manual' );
 
 		if ( $product_id && ! empty( $_POST['apply_woo'] ) && class_exists( 'WooCommerce' ) ) {
 			$product = wc_get_product( $product_id );

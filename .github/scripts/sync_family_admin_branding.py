@@ -30,6 +30,7 @@ PLUGINS = {
     "system-check": ("dashicons-shield", "Comprueba el estado de WordPress, el servidor y los plugins."),
     "templates": ("dashicons-layout", "Gestiona plantillas, enrutado de páginas y reglas de presentación."),
     "tasks": ("dashicons-clipboard", "Private task management, calendar and indicators."),
+    "customers": ("dashicons-groups", "Private customer directory and contact management."),
 }
 
 def main():
@@ -51,6 +52,25 @@ def main():
                   .replace("__TC_HISTORY_PHP__", history_php)
                   .replace("__TC_HISTORY_HTML__", history_html)
                   .replace("__TC_DOMAIN__", "taxocommerce-" + slug))
+        # FAQs also render inside the optional Core Content screen. The
+        # additional route is a generic plugin-specific exception to the
+        # canonical screen selector, not a different header layout.
+        if slug == "faqs":
+            old_route = "    return $page === $tc_brand_slug || 0 === strpos( $page, $tc_brand_slug . '-' );"
+            extra_route = """    if ( $page === $tc_brand_slug || 0 === strpos( $page, $tc_brand_slug . '-' ) ) {
+        return true;
+    }
+    // Core can host the FAQ editor and Autocheck under its Content route.
+    // Scope the shared hero to FAQ content; never affect other Core screens.
+    if ( 'taxocommerce-core-content' !== $page || 'taxocommerce-faqs' !== $tc_brand_slug ) {
+        return false;
+    }
+    // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only Core content selector.
+    $type = isset( $_GET['tc_type'] ) && is_string( $_GET['tc_type'] ) ? sanitize_key( wp_unslash( $_GET['tc_type'] ) ) : '';
+    return 'faqs' === $type;"""
+            if old_route not in result:
+                raise SystemExit("Canonical branding screen selector changed; review the FAQs route")
+            result = result.replace(old_route, extra_route, 1)
         info_path = ROOT / ("taxocommerce-" + slug) / "includes/official-excerpt.php"
         info_result = official_template.replace("__TC_DOMAIN__", "taxocommerce-" + slug)
         if args.check:

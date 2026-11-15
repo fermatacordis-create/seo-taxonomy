@@ -1,3 +1,19 @@
+= 0.2.40 (2026-11-15) =
+* Prevent Processes fatal when the optional Process_Details class arrives after the process manager in an incremental FTPS update. Load detail class lazily and preserve existing process controls with a temporary warning. Added partial-install regression test. Issue #2711.
+
+= 0.2.39 (2026-11-15) =
+* Add per-task diagnostic links for WP-Cron, Action Scheduler and registered workers; show up to 20 native Scheduler log entries on demand with credential redaction, callback availability and the most recent historical failure.
+* Preserve critical task protection and cooperative stop; repair WP-Cron cancellation signature mismatch and export-worker identifiers containing colons. No arbitrary task execution or PHP process kill. Issue #2699.
+
+= 0.2.38 (2026-11-15) =
+* Read-only cron/Action Scheduler queue-health diagnostics inside Procesos only: oldest overdue hook, pending/failed attempts, recent activity, no false proof of a stopped runner. Existing cancellation controls unchanged. HTTP worker rows now show current batch limit, completed/total URLs and approximate next-pending position. Issue #2694.
+
+= 0.2.37 =
+* Add manual Core family-validation pilot: functional cases then code inspection, adaptive load control, stop/resume and two KPI columns. Other modules remain not integrated. Issue #2685.
+
+= 0.2.36 (2026-11-13) =
+* Code Check añade las reglas nativas de Core 0.4.82, clasificación por errores/avisos/limpios/no verificados, recomendaciones y JSON, conservando sus chequeos especiales de PHP mínimo, rutas, duplicidades y seguridad y sin modificar el Autocheck funcional. Issue #2626.
+
 = 0.2.32 (2026-11-10) =
 * Three-zone admin header: unique local Description and static link on left, wider collapsed CHANGELOG.md in center, version/date on right; no duplicate panel. Issue #2521.
 

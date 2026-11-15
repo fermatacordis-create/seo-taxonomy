@@ -1,3 +1,22 @@
+## [0.3.44] — 2026-11-13 — Code Check equiparado a Core 0.4.82 (#2626)
+
+- Code Check equiparado a Core 0.4.82: reglas autónomas PHP/WordPress/seguridad, clasificación por gravedad, detalles de archivos y recomendaciones, resumen y JSON; sin modificar el Autotest funcional. Issue #2626.
+- Continúa siendo una revisión estática independiente del Plugin Check oficial, con ejecución por bloques y control de CPU.
+
+## [0.3.43] — 2026-11-13 — Traducciones del manual de usuario y controles de aprendizaje (#2062)
+
+- Añade 46 traducciones por idioma en ES/EN/FR/DE/NL (230 entradas) del manual: inicio del aprendizaje, prioridades, lecciones, intérprete, mantenimiento M12, calidad y reevaluación, buscador, conocimiento portable, backups, logs y preguntas frecuentes.
+- Conserva numeración de las secciones 7–11 en los cinco idiomas y los identificadores técnicos, y recompila los MO sin entradas vacías.
+- Refuerza el test de gettext para detectar la ausencia de la sección de búsqueda en la documentación traducida, sin modificar lógica, datos, cron, aprendizaje, WooCommerce ni importación.
+- Restan 136/137/138/136/136 entradas gettext pendientes (ES/EN/FR/DE/NL); no se declara completada la interfaz ni validado cada literal de PHP/JS.
+
+## [0.3.42] — 2026-11-12 — Traducciones de conocimiento, copias y controles de Dependiente (#2062)
+
+- Traduce 87 cadenas adicionales en los cinco idiomas ES/EN/FR/DE/NL (435 entradas gettext). Incluye restauración, backup, conocimiento portable, importación/fusión, aprendizaje, categorías de documentación y títulos de manuales.
+- Mantiene intactas las reglas de aprendizaje, la base de datos, procesos L1-L10/M11/M12, seguridad, API y los datos existentes. Los MO se regeneran con solo las cadenas traducidas y cabeceras válidas.
+- Amplía el test i18n para exigir la traducción de controles y documentación en los cinco idiomas.
+- Persisten 182/183/184/182/182 cadenas vacías en los PO (ES/EN/FR/DE/NL), principalmente textos descriptivos largos, más los textos todavía no extraídos desde PHP/JS.
+
 ## [0.3.41] — 2026-11-10 — Cabecera en tres zonas sin contenido duplicado (#2521)
 
 - Izquierda: nombre, descripción local del plugin y un único enlace estático `Plugin URI` bajo el texto.

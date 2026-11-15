@@ -173,4 +173,97 @@ try {
     tcs_smoke_expect( strpos( $error->getMessage(), 'Acceso' ) !== false, 'Unexpected permissions error.' );
 }
 tcs_smoke_expect( $GLOBALS['tcs_mutations'] === 0, 'No test may send mail, modify options or schedule tasks.' );
+
+// i18n regression: key administrative controls must be available in all five
+// native WordPress locales, not just in a partial POT.
+$tcs_required_i18n = array(
+    'Estado del sistema',
+    'Tablas más grandes',
+    'Motor original no disponible.',
+    'Comprobación básica',
+    'Rendimiento de consultas MySQL',
+    'Procesos',
+    'Autocheck',
+    'Último diagnóstico del servidor',
+    'Version history and improvements',
+);
+foreach ( array( 'es_ES', 'en_US', 'fr_FR', 'de_DE', 'nl_NL' ) as $tcs_locale ) {
+    $tcs_po_path = dirname( __DIR__ ) . '/languages/taxocommerce-system-check-' . $tcs_locale . '.po';
+    $tcs_po_text = file_get_contents( $tcs_po_path );
+    tcs_smoke_expect( false !== $tcs_po_text, 'PO catalog missing for ' . $tcs_locale );
+    $tcs_found = array();
+    foreach ( preg_split( '/\R\s*\R/u', $tcs_po_text ) as $tcs_block ) {
+        if ( ! preg_match( '/^msgid "((?:\\\\.|[^"])*)"$/m', $tcs_block, $tcs_id_match ) ||
+            ! preg_match( '/^msgstr "((?:\\\\.|[^"])*)"$/m', $tcs_block, $tcs_value_match ) ) {
+            continue;
+        }
+        $tcs_id = json_decode( '"' . $tcs_id_match[1] . '"' );
+        $tcs_value = json_decode( '"' . $tcs_value_match[1] . '"' );
+        if ( in_array( $tcs_id, $tcs_required_i18n, true ) && is_string( $tcs_value ) && '' !== $tcs_value ) {
+            $tcs_found[ $tcs_id ] = true;
+        }
+    }
+    foreach ( $tcs_required_i18n as $tcs_key ) {
+        tcs_smoke_expect( ! empty( $tcs_found[ $tcs_key ] ), 'Missing ' . $tcs_locale . ' translation: ' . $tcs_key );
+    }
+}
+
+// Verify every gettext message in every locale, including multi-line PO strings,
+// against the binary MO that WordPress actually loads.
+function tcs_i18n_parse_message( $block ) {
+    $values = array( 'msgid' => null, 'msgstr' => null );
+    $current = null;
+    foreach ( preg_split( '/\R/u', $block ) as $line ) {
+        if ( preg_match( '/^(msgid|msgstr) (".*")$/', $line, $match ) ) {
+            $current = $match[1];
+            $decoded = json_decode( $match[2], true );
+            if ( ! is_string( $decoded ) ) {
+                throw new RuntimeException( 'Invalid PO quoted string.' );
+            }
+            $values[ $current ] = $decoded;
+        } elseif ( null !== $current && preg_match( '/^(".*")$/', $line, $match ) ) {
+            $decoded = json_decode( $match[1], true );
+            if ( ! is_string( $decoded ) ) {
+                throw new RuntimeException( 'Invalid PO continuation.' );
+            }
+            $values[ $current ] .= $decoded;
+        } else {
+            $current = null;
+        }
+    }
+    return $values;
+}
+$tcs_expected_locales = array( 'es_ES', 'en_US', 'fr_FR', 'de_DE', 'nl_NL' );
+foreach ( $tcs_expected_locales as $tcs_locale ) {
+    $tcs_prefix = dirname( __DIR__ ) . '/languages/taxocommerce-system-check-' . $tcs_locale;
+    $tcs_po = file_get_contents( $tcs_prefix . '.po' );
+    $tcs_bytes = file_get_contents( $tcs_prefix . '.mo' );
+    tcs_smoke_expect( false !== $tcs_po && false !== $tcs_bytes && strlen( $tcs_bytes ) > 28, 'Missing locale catalog: ' . $tcs_locale );
+    $tcs_pairs = array();
+    foreach ( preg_split( '/\R\s*\R/u', $tcs_po ) as $tcs_block ) {
+        $tcs_entry = tcs_i18n_parse_message( $tcs_block );
+        if ( null === $tcs_entry['msgid'] ) {
+            continue;
+        }
+        tcs_smoke_expect( null !== $tcs_entry['msgstr'], 'Missing gettext translation: ' . $tcs_locale );
+        tcs_smoke_expect( '' !== $tcs_entry['msgstr'] || '' === $tcs_entry['msgid'], 'Untranslated gettext entry: ' . $tcs_locale . ': ' . $tcs_entry['msgid'] );
+        tcs_smoke_expect( ! array_key_exists( $tcs_entry['msgid'], $tcs_pairs ), 'Duplicate msgid in ' . $tcs_locale );
+        $tcs_pairs[ $tcs_entry['msgid'] ] = $tcs_entry['msgstr'];
+    }
+    tcs_smoke_expect( count( $tcs_pairs ) >= 421, 'Translation catalog regressed below original 420 strings in ' . $tcs_locale );
+    $tcs_header = unpack( 'Vmagic/Vrevision/Vcount/Vorig/Vtrans/Vhashsize/Vhash', substr( $tcs_bytes, 0, 28 ) );
+    tcs_smoke_expect( 0x950412de === $tcs_header['magic'] && count( $tcs_pairs ) === $tcs_header['count'], 'Invalid gettext MO header/count for ' . $tcs_locale );
+    tcs_smoke_expect( $tcs_header['orig'] + $tcs_header['count'] * 8 <= strlen( $tcs_bytes ), 'Invalid MO source index for ' . $tcs_locale );
+    tcs_smoke_expect( $tcs_header['trans'] + $tcs_header['count'] * 8 <= strlen( $tcs_bytes ), 'Invalid MO translation index for ' . $tcs_locale );
+    for ( $tcs_n = 0; $tcs_n < $tcs_header['count']; ++$tcs_n ) {
+        $tcs_original = unpack( 'Vlen/Voffset', substr( $tcs_bytes, $tcs_header['orig'] + 8 * $tcs_n, 8 ) );
+        $tcs_translation = unpack( 'Vlen/Voffset', substr( $tcs_bytes, $tcs_header['trans'] + 8 * $tcs_n, 8 ) );
+        tcs_smoke_expect( $tcs_original['offset'] + $tcs_original['len'] < strlen( $tcs_bytes ), 'MO source offset out of range.' );
+        tcs_smoke_expect( $tcs_translation['offset'] + $tcs_translation['len'] < strlen( $tcs_bytes ), 'MO translation offset out of range.' );
+        $tcs_key = substr( $tcs_bytes, $tcs_original['offset'], $tcs_original['len'] );
+        $tcs_value = substr( $tcs_bytes, $tcs_translation['offset'], $tcs_translation['len'] );
+        tcs_smoke_expect( array_key_exists( $tcs_key, $tcs_pairs ), 'MO contains unknown key: ' . $tcs_locale );
+        tcs_smoke_expect( $tcs_pairs[ $tcs_key ] === $tcs_value, 'MO value differs from PO in ' . $tcs_locale . ': ' . $tcs_key );
+    }
+}
 echo "System Check Auto Test and User/Technical Guide: OK\n";

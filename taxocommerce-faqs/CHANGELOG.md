@@ -1,3 +1,16 @@
+## [0.1.20] — 2026-11-14 — Autocheck inmediato y cabecera también en Contenidos de Core (#2675)
+
+- El Autocheck funcional adopta el formato de Import-Export: ejecución manual inmediata de las 25 comprobaciones, dos botones (ejecutar y descargar el último JSON), 6 grupos plegables y resultados con indicadores visuales.
+- Retirados de la interfaz los controles «Guardar estado ANTES» / «Comprobar DESPUÉS» y sus paneles de comparación. Se conserva el método de comparación únicamente por compatibilidad y no se modifican los informes antiguos guardados por usuario y sitio.
+- Los envíos históricos con parámetros de fase o grupo se tratan como ejecución normal completa; los JSON contienen solo datos técnicos y conservan permisos y nonce.
+- Se reconoce también la ruta de FAQs dentro de Core (`taxocommerce-core-content&tc_type=faqs`) para mostrar la misma cabecera en FAQs, Autocheck y Manual. El resto de las secciones de Core no se ve afectado.
+- Code Check, CRUD, importación/exportación CSV, SQL y datos de FAQs no cambian. Producción excluida del despliegue.
+
+## [0.1.19] — 2026-11-13 — Code Check equiparado a Core 0.4.82 (#2626)
+
+- Code Check equiparado a Core 0.4.82: reglas autónomas PHP/WordPress/seguridad, clasificación por gravedad, detalles de archivos y recomendaciones, resumen y JSON; sin modificar el Autotest funcional. Issue #2626.
+- Continúa siendo una revisión estática independiente del Plugin Check oficial, con ejecución por bloques y control de CPU.
+
 ## [0.1.18] — 2026-11-10 — Cabecera en tres zonas sin contenido duplicado (#2521)
 
 - Izquierda: nombre, descripción local del plugin y un único enlace estático `Plugin URI` bajo el texto.

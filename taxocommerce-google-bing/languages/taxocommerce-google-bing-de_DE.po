@@ -58,15 +58,15 @@ msgstr ""
 
 #: includes/analysis/analista-competitivo.php:849
 msgid "No tienes permisos para generar el informe competitivo."
-msgstr ""
+msgstr "Sie haben keine Berechtigung, den Wettbewerbsbericht zu erstellen."
 
 #: includes/analysis/analista-competitivo.php:881
 msgid "No tienes permisos para exportar el informe competitivo."
-msgstr ""
+msgstr "Sie haben keine Berechtigung, den Wettbewerbsbericht zu exportieren."
 
 #: includes/analysis/analista-competitivo.php:887
 msgid "Todavía no existe un informe competitivo guardado."
-msgstr ""
+msgstr "Es wurde noch kein Wettbewerbsbericht gespeichert."
 
 #: includes/analysis/analista-competitivo.php:926
 msgid "Informe competitivo generado y guardado."
@@ -291,7 +291,7 @@ msgstr "Schnellüberblick"
 
 #: includes/analysis/analista-informe.php:235
 msgid "Lo importante del periodo sin recorrer todos los informes."
-msgstr ""
+msgstr "Die wichtigsten Informationen des Zeitraums, ohne alle Berichte zu öffnen."
 
 #: includes/analysis/analista-informe.php:303
 msgid "Tráfico y conversión"
@@ -368,7 +368,7 @@ msgstr ""
 
 #: includes/analysis/analista-informe.php:393
 msgid "Todavía no has definido palabras clave de seguimiento."
-msgstr ""
+msgstr "Es wurden noch keine Keywords zur Überwachung festgelegt."
 
 #: includes/analysis/analista-informe.php:397
 msgid ""
@@ -416,7 +416,7 @@ msgstr "Prognose"
 
 #: includes/analysis/analista-informe.php:427
 msgid "La comparación externa todavía no tiene posiciones disponibles."
-msgstr ""
+msgstr "Positionen für den externen Vergleich sind noch nicht verfügbar."
 
 #: includes/analysis/analista-informe.php:427
 msgid ""
@@ -519,7 +519,7 @@ msgstr "Typ"
 msgid ""
 "No hay señales de Trends suficientemente relevantes almacenadas en este "
 "momento."
-msgstr ""
+msgstr "Derzeit sind keine ausreichend relevanten Trends-Daten gespeichert."
 
 #: includes/analysis/analista-informe.php:476
 msgid "Configurar comparación"
@@ -577,11 +577,11 @@ msgstr "Überwachungsindikator"
 #: includes/analysis/analista-informe.php:616
 msgid ""
 "No hay directrices suficientes para este bloque con los datos actuales."
-msgstr ""
+msgstr "Die aktuellen Daten reichen für Handlungsempfehlungen in diesem Abschnitt nicht aus."
 
 #: includes/analysis/analista-informe.php:754
 msgid "Google Trends no está entregando señales almacenadas."
-msgstr ""
+msgstr "Google Trends liefert keine gespeicherten Signale."
 
 #: includes/analysis/analista-informe.php:754
 msgid ""
@@ -632,7 +632,7 @@ msgstr "Analista"
 msgid ""
 "La página ya no calcula todos los informes al abrirse. Ejecuta únicamente el"
 " bloque que necesites."
-msgstr ""
+msgstr "Beim Öffnen der Seite werden nicht mehr alle Berichte berechnet. Starten Sie nur den benötigten Bereich."
 
 #: includes/analysis/analista-informe.php:853
 #: includes/class-taxocommerce-google-bing-trends-hierarchy.php:289
@@ -647,7 +647,7 @@ msgstr "Zeitraum ändern"
 
 #: includes/analysis/analista-informe.php:862
 msgid "No se ha cargado el motor de informes parciales de Analista."
-msgstr ""
+msgstr "Die Teilbericht-Engine von Insights konnte nicht geladen werden."
 
 #: includes/analysis/analista-json.php:255
 msgid "No tienes permisos para exportar Analista."
@@ -669,7 +669,7 @@ msgstr "Kein Bericht geladen."
 
 #: includes/analysis/analista-lazy.php:88 taxocommerce-google-bing.php:288
 msgid "Pulsa uno de los botones anteriores para ejecutar solo ese análisis."
-msgstr ""
+msgstr "Klicken Sie auf eine der obigen Schaltflächen, um nur diese Analyse auszuführen."
 
 #: includes/analysis/analista-lazy.php:124
 msgid "Qué hacer para vender más"
@@ -693,7 +693,7 @@ msgstr "Tracking prüfen."
 
 #: includes/analysis/analista-lazy.php:137
 msgid "No hay sesiones suficientes para diagnosticar ventas."
-msgstr ""
+msgstr "Nicht genügend Sitzungen zur Analyse der Verkäufe."
 
 #: includes/analysis/analista-lazy.php:139
 msgid "Revisar el checkout."
@@ -766,7 +766,7 @@ msgstr ""
 
 #: includes/analysis/analista-lazy.php:161
 msgid "Search Console no tiene datos utilizables para este periodo."
-msgstr ""
+msgstr "Search Console enthält für diesen Zeitraum keine verwertbaren Daten."
 
 #: includes/analysis/analista-lazy.php:186
 msgid "Consultas principales"
@@ -788,19 +788,19 @@ msgstr "Suchanfrage"
 #: includes/analysis/analista-lazy.php:187
 #: includes/analysis/analista-lazy.php:226
 msgid "Posición"
-msgstr ""
+msgstr "Position"
 
 #: includes/analysis/analista-lazy.php:187
 msgid "Intento"
-msgstr ""
+msgstr "Suchabsicht"
 
 #: includes/analysis/analista-lazy.php:221
 msgid "No hay directrices de catálogo disponibles para este periodo."
-msgstr ""
+msgstr "Für diesen Zeitraum liegen keine Katalogempfehlungen vor."
 
 #: includes/analysis/analista-lazy.php:225
 msgid "Catálogo y demanda"
-msgstr ""
+msgstr "Katalog und Nachfrage"
 
 #: includes/analysis/analista-lazy.php:225
 msgid ""
@@ -810,11 +810,11 @@ msgstr ""
 
 #: includes/analysis/analista-lazy.php:226
 msgid "Oportunidad"
-msgstr ""
+msgstr "Chance"
 
 #: includes/analysis/analista-lazy.php:226
 msgid "Decisión"
-msgstr ""
+msgstr "Entscheidung"
 
 #: includes/analysis/analista-lazy.php:226
 #: includes/google/seo-google-demand-catalog.php:1669
@@ -823,43 +823,43 @@ msgstr "Produkte"
 
 #: includes/analysis/analista-lazy.php:267
 msgid "No hay datos de proveedores disponibles."
-msgstr ""
+msgstr "Keine Lieferantendaten verfügbar."
 
 #: includes/analysis/analista-lazy.php:271
 msgid "Estado de proveedores"
-msgstr ""
+msgstr "Lieferantenstatus"
 
 #: includes/analysis/analista-lazy.php:271
 msgid "Este informe consulta únicamente la fuente local de proveedores."
-msgstr ""
+msgstr "Dieser Bericht liest nur die lokale Lieferantendatenquelle."
 
 #: includes/analysis/analista-lazy.php:272
 msgid "Proveedor"
-msgstr ""
+msgstr "Lieferant"
 
 #: includes/analysis/analista-lazy.php:272
 msgid "Total"
-msgstr ""
+msgstr "Gesamt"
 
 #: includes/analysis/analista-lazy.php:272
 msgid "Vinculados"
-msgstr ""
+msgstr "Verknüpft"
 
 #: includes/analysis/analista-lazy.php:272
 msgid "Pendientes"
-msgstr ""
+msgstr "Ausstehend"
 
 #: includes/analysis/analista-lazy.php:272
 msgid "Errores"
-msgstr ""
+msgstr "Fehler"
 
 #: includes/analysis/analista-lazy.php:272
 msgid "Última importación"
-msgstr ""
+msgstr "Letzter Import"
 
 #: includes/analysis/analista-lazy.php:272
 msgid "Última sincronización"
-msgstr ""
+msgstr "Letzte Synchronisierung"
 
 #: includes/analysis/analista-lazy.php:307
 msgid "Frescura operativa · Action Scheduler"
@@ -988,136 +988,136 @@ msgstr ""
 
 #: includes/class-taxocommerce-connections-admin.php:135
 msgid "Google OAuth test failed."
-msgstr ""
+msgstr "Der Google-OAuth-Test ist fehlgeschlagen."
 
 #: includes/class-taxocommerce-connections-admin.php:136
 msgid "Google denied authorization."
-msgstr ""
+msgstr "Google hat die Autorisierung verweigert."
 
 #. translators: %d: number of accessible Google Search Console properties.
 #: includes/class-taxocommerce-connections-admin.php:150
 msgid "Accessible properties: %d."
-msgstr ""
+msgstr "Zugängliche Properties: %d."
 
 #: includes/class-taxocommerce-connections-admin.php:201
 msgid "Connections"
-msgstr ""
+msgstr "Verbindungen"
 
 #: includes/class-taxocommerce-connections-admin.php:202
 msgid ""
 "External data connections used by TaxoCommerce and the download screens. "
 "Credentials and OAuth are stored here for Google Search Console, Google "
 "Analytics, Bing, Google Trends, Amazon, and Pinterest."
-msgstr ""
+msgstr "Verbindungen zu externen Anbietern und Ansichten zum Herunterladen von Daten. Zugangsdaten und OAuth für Search Console, Google Analytics, Bing, Google Trends, Amazon und Pinterest werden hier verwaltet."
 
 #: includes/class-taxocommerce-connections-admin.php:221
 msgid "Save Google"
-msgstr ""
+msgstr "Google speichern"
 
 #: includes/class-taxocommerce-connections-admin.php:226
 msgid "Test Google"
-msgstr ""
+msgstr "Google testen"
 
 #: includes/class-taxocommerce-connections-admin.php:231
 msgid "Cómo conectar Google Merchant Center"
-msgstr ""
+msgstr "Google Merchant Center verbinden"
 
 #. translators: %s: URL de acceso a Google Merchant Center.
 #: includes/class-taxocommerce-connections-admin.php:233
 msgid ""
 "Abre <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\">Google "
 "Merchant Center</a> con la cuenta que administra tu tienda."
-msgstr ""
+msgstr "Öffnen Sie <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\">Google Merchant Center</a> mit dem Konto, das Ihren Shop verwaltet."
 
 #. translators: %s: URL de acceso a Google Merchant Center.
 #: includes/class-taxocommerce-connections-admin.php:234
 msgid ""
 "Selecciona tu cuenta y copia su ID numérico de Merchant Center (no es el ID "
 "de Google Analytics ni el de Google Ads)."
-msgstr ""
+msgstr "Wählen Sie Ihr Konto und kopieren Sie dessen numerische Merchant-Center-ID (nicht die ID von Google Analytics oder Google Ads)."
 
 #: includes/class-taxocommerce-connections-admin.php:235
 msgid "Introduce el ID en este campo y pulsa «Save Merchant»."
-msgstr ""
+msgstr "Geben Sie die ID in dieses Feld ein und klicken Sie auf Merchant speichern."
 
 #: includes/class-taxocommerce-connections-admin.php:236
 msgid ""
 "Comprueba que la identidad de Google utilizada por TaxoCommerce tiene acceso"
 " a esa cuenta de Merchant Center y que Merchant API está habilitada cuando "
 "corresponda."
-msgstr ""
+msgstr "Prüfen Sie, ob das von TaxoCommerce verwendete Google-Konto Zugriff auf das Merchant-Center-Konto hat und die Merchant API bei Bedarf aktiviert ist."
 
 #: includes/class-taxocommerce-connections-admin.php:237
 msgid ""
 "Pulsa «Test Merchant». Si falla, revisa el acceso de esa identidad; guardar "
 "el ID no concede permisos automáticamente."
-msgstr ""
+msgstr "Klicken Sie auf Merchant testen. Prüfen Sie bei einem Fehler den Zugriff dieses Kontos; das Speichern der ID erteilt nicht automatisch Berechtigungen."
 
 #: includes/class-taxocommerce-connections-admin.php:239
 msgid "Ayuda oficial de Merchant Center"
-msgstr ""
+msgstr "Offizielle Merchant-Center-Hilfe"
 
 #: includes/class-taxocommerce-connections-admin.php:239
 msgid "Documentación oficial de Merchant API"
-msgstr ""
+msgstr "Offizielle Merchant-API-Dokumentation"
 
 #: includes/class-taxocommerce-connections-admin.php:245
 msgid "Save Merchant"
-msgstr ""
+msgstr "Merchant speichern"
 
 #: includes/class-taxocommerce-connections-admin.php:250
 msgid "Test Merchant"
-msgstr ""
+msgstr "Merchant testen"
 
 #: includes/class-taxocommerce-connections-admin.php:273
 msgid "Save Bing"
-msgstr ""
+msgstr "Bing speichern"
 
 #: includes/class-taxocommerce-connections-admin.php:278
 msgid "Test Bing"
-msgstr ""
+msgstr "Bing testen"
 
 #: includes/class-taxocommerce-connections-admin.php:300
 msgid "Save Amazon"
-msgstr ""
+msgstr "Amazon speichern"
 
 #: includes/class-taxocommerce-connections-admin.php:305
 msgid "Test Creators API"
-msgstr ""
+msgstr "Creators API testen"
 
 #: includes/class-taxocommerce-connections-admin.php:331
 msgid "Save Pinterest"
-msgstr ""
+msgstr "Pinterest speichern"
 
 #: includes/class-taxocommerce-connections-admin.php:340
 msgid "Test Pinterest"
-msgstr ""
+msgstr "Pinterest testen"
 
 #: includes/class-taxocommerce-connections-admin.php:351
 msgid "Save Pinterest Merchant"
-msgstr ""
+msgstr "Pinterest Merchant speichern"
 
 #: includes/class-taxocommerce-connections-amazon.php:163
 msgid ""
 "Creators API is not configured. Affiliate links can still work with only a "
 "Partner Tag."
-msgstr ""
+msgstr "Die Creators API ist nicht konfiguriert. Affiliate-Links können auch nur mit einem Partner Tag funktionieren."
 
 #: includes/class-taxocommerce-connections-amazon.php:198
 msgid "Amazon did not return an access_token."
-msgstr ""
+msgstr "Amazon hat keinen access_token zurückgegeben."
 
 #: includes/class-taxocommerce-connections-amazon.php:210
 msgid "Falta el Partner Tag de Amazon Associates."
-msgstr ""
+msgstr "Der Amazon-Associates-Partner-Tag fehlt."
 
 #: includes/class-taxocommerce-connections-amazon.php:242
 msgid "Error de Creators API."
-msgstr ""
+msgstr "Fehler in der Creators API."
 
 #: includes/class-taxocommerce-connections-amazon.php:263
 msgid "Enter a search query for Amazon."
-msgstr ""
+msgstr "Geben Sie eine Suchanfrage für Amazon ein."
 
 #: includes/class-taxocommerce-connections-google-bing.php:68
 msgid ""
@@ -1157,65 +1157,65 @@ msgstr ""
 
 #: includes/class-taxocommerce-connections-pinterest.php:147
 msgid "OpenSSL is not available."
-msgstr ""
+msgstr "OpenSSL ist nicht verfügbar."
 
 #: includes/class-taxocommerce-connections-pinterest.php:155
 msgid "The secret could not be encrypted."
-msgstr ""
+msgstr "Das Geheimnis konnte nicht verschlüsselt werden."
 
 #: includes/class-taxocommerce-connections-pinterest.php:213
 msgid "Pinterest did not return an Access Token."
-msgstr ""
+msgstr "Pinterest hat kein Zugriffstoken zurückgegeben."
 
 #: includes/class-taxocommerce-connections-pinterest.php:241
 msgid "Pinterest no tiene Access Token guardado."
-msgstr ""
+msgstr "Für Pinterest ist kein Zugriffstoken gespeichert."
 
 #: includes/class-taxocommerce-connections-pinterest.php:252
 msgid "The Pinterest token has expired; authorize the account again."
-msgstr ""
+msgstr "Das Pinterest-Token ist abgelaufen; autorisieren Sie das Konto erneut."
 
 #: includes/class-taxocommerce-connections-pinterest.php:325
 msgid "Select a board before testing Pinterest."
-msgstr ""
+msgstr "Wählen Sie vor dem Pinterest-Test eine Pinnwand aus."
 
 #: includes/class-taxocommerce-connections-pinterest.php:341
 msgid "You do not have permission to connect Pinterest."
-msgstr ""
+msgstr "Sie haben keine Berechtigung, Pinterest zu verbinden."
 
 #: includes/class-taxocommerce-connections-pinterest.php:395
 msgid "The OAuth state is invalid or expired."
-msgstr ""
+msgstr "Der OAuth-Status ist ungültig oder abgelaufen."
 
 #: includes/class-taxocommerce-connections-pinterest.php:398
 msgid "The OAuth user does not have permission."
-msgstr ""
+msgstr "Der OAuth-Benutzer hat keine Berechtigung."
 
 #: includes/class-taxocommerce-connections-pinterest.php:481
 msgid "Invalid domain verification code."
-msgstr ""
+msgstr "Ungültiger Code zur Domainverifizierung."
 
 #: includes/class-taxocommerce-connections-status.php:136
 msgid "Estado de las conexiones"
-msgstr ""
+msgstr "Verbindungsstatus"
 
 #: includes/class-taxocommerce-connections-status.php:137
 msgid ""
 "Estados de credenciales y verificaciones manuales. Abrir esta pantalla no "
 "llama a proveedores externos."
-msgstr ""
+msgstr "Status von Zugangsdaten und manuellen Prüfungen. Das Öffnen dieser Ansicht fragt keine externen Anbieter ab."
 
 #: includes/class-taxocommerce-connections-status.php:153
 msgid "Prueba la conexión para verificarla."
-msgstr ""
+msgstr "Testen Sie die Verbindung zur Überprüfung."
 
 #: includes/class-taxocommerce-connections-status.php:155
 msgid "Configuración local guardada; sin validación externa."
-msgstr ""
+msgstr "Lokale Einstellungen gespeichert; keine externe Prüfung erfolgt."
 
 #: includes/class-taxocommerce-connections-status.php:163
 msgid "Comprobar"
-msgstr ""
+msgstr "Prüfen"
 
 #: includes/class-taxocommerce-connections-status.php:167
 msgid ""
@@ -1223,15 +1223,15 @@ msgid ""
 " manual reciente (máximo 7 días). Cambiar credenciales exige repetirla. Los "
 "enlaces de afiliados y los catálogos configurados no equivalen a una "
 "conexión API validada."
-msgstr ""
+msgstr "Verbunden bedeutet, dass der Anbieter innerhalb der letzten 7 Tage bei einem manuellen Test erfolgreich geantwortet hat. Nach Änderung der Zugangsdaten erneut testen. Affiliate-Links und eingerichtete Kataloge bedeuten keine geprüfte API-Verbindung."
 
 #: includes/class-taxocommerce-connections-status.php:305
 msgid "Sin permisos para comprobar conexiones."
-msgstr ""
+msgstr "Sie haben keine Berechtigung, Verbindungen zu prüfen."
 
 #: includes/class-taxocommerce-connections-status.php:312
 msgid "La conexión no está preparada para comprobarse."
-msgstr ""
+msgstr "Die Verbindung ist noch nicht für einen Test bereit."
 
 #: includes/class-taxocommerce-google-bing-auto-test.php:119
 msgid "No tienes permisos para ejecutar Auto Test."
@@ -1239,44 +1239,44 @@ msgstr "Du hast keine Berechtigung, den Auto-Test auszuführen."
 
 #: includes/class-taxocommerce-google-bing-auto-test.php:149
 msgid "Sin permisos para descargar el diagnóstico."
-msgstr ""
+msgstr "Sie haben keine Berechtigung, die Diagnose herunterzuladen."
 
 #: includes/class-taxocommerce-google-bing-auto-test.php:160
 msgid "No existe un informe válido para esta instalación."
-msgstr ""
+msgstr "Für diese Installation liegt kein gültiger Bericht vor."
 
 #: includes/class-taxocommerce-google-bing-auto-test.php:164
 msgid "No se ha podido generar el informe JSON."
-msgstr ""
+msgstr "Der JSON-Bericht konnte nicht erstellt werden."
 
 #: includes/class-taxocommerce-google-bing-auto-test.php:681
 msgid "No tienes permiso para abrir Auto Test."
-msgstr ""
+msgstr "Sie haben keine Berechtigung, den Selbsttest zu öffnen."
 
 #: includes/class-taxocommerce-google-bing-auto-test.php:695
 msgid "Auto Test — TaxoCommerce Insights"
-msgstr ""
+msgstr "Selbsttest — TaxoCommerce Insights"
 
 #: includes/class-taxocommerce-google-bing-auto-test.php:696
 msgid ""
 "Diagnóstico por módulos y comparación antes/después de actualizar el plugin."
 " No modifica fuentes, informes, credenciales ni conexiones; solo conserva "
 "dos pequeños resultados por administrador."
-msgstr ""
+msgstr "Diagnose je Modul und Vergleich vor/nach dem Update. Ändert weder Quellen, Berichte, Zugangsdaten noch Verbindungen; speichert lediglich zwei kleine Ergebnisse je Administrator."
 
 #: includes/class-taxocommerce-google-bing-auto-test.php:704
 msgid "Referencia anterior al despliegue"
-msgstr ""
+msgstr "Referenz vor der Bereitstellung"
 
 #: includes/class-taxocommerce-google-bing-auto-test.php:710
 msgid ""
 "No hay referencia. Ejecuta «Guardar estado ANTES» antes de actualizar el "
 "plugin."
-msgstr ""
+msgstr "Noch keine Referenz vorhanden. Klicken Sie vor dem Update auf VORHER-Zustand speichern."
 
 #: includes/class-taxocommerce-google-bing-auto-test.php:714
 msgid "Última ejecución"
-msgstr ""
+msgstr "Letzte Ausführung"
 
 #: includes/class-taxocommerce-google-bing-auto-test.php:720
 msgid "Aún no se ha realizado ningún autochequeo."

@@ -3,3 +3,20 @@
 
 /* Read-only user/developer manuals: indexed sections, accessible tables and mobile layout. */
 .tcsup-manual{max-width:1180px;margin:8px 0 32px}.tcsup-manual h1{font-size:25px;margin:28px 0 12px}.tcsup-manual h2{font-size:19px;margin:0 0 14px}.tcsup-manual h3{font-size:15px;margin:20px 0 8px}.tcsup-manual p,.tcsup-manual li{font-size:14px;line-height:1.65}.tcsup-manual li{margin:0 0 6px}.tcsup-manual-section,.tcsup-manual-index{background:#fff;border:1px solid #dcdcde;border-radius:5px;padding:20px 24px;margin:18px 0}.tcsup-manual-section{scroll-margin-top:45px}.tcsup-manual-index strong{display:block;margin:14px 0 5px}.tcsup-manual-index a{display:inline-block;margin:4px 16px 4px 0}.tcsup-manual-scroll{overflow-x:auto;max-width:100%;margin:16px 0}.tcsup-manual-scroll table{min-width:670px}.tcsup-manual-scroll th,.tcsup-manual-scroll td{text-align:left;vertical-align:top;line-height:1.5;padding:9px 10px}.tcsup-manual code{overflow-wrap:anywhere;word-break:break-word}@media(max-width:782px){.tcsup-manual h1{font-size:22px}.tcsup-manual-section,.tcsup-manual-index{padding:15px}.tcsup-manual-scroll table{min-width:600px}}
+
+/* Bulk history CSV controls and filter bar. */
+.tcsup-history-filters,.tcsup-history-controls{display:flex;align-items:end;gap:12px;flex-wrap:wrap;margin:12px 0 18px}
+.tcsup-history-filters label,.tcsup-history-controls label{display:flex;flex-direction:column;gap:4px}
+.tcsup-history-controls form{display:flex;align-items:end;flex-wrap:wrap;gap:12px}
+#tcsup-history-progress{display:block;width:100%;max-width:550px;height:14px;margin:10px 0}
+#tcsup-history-progress[hidden]{display:none}
+@media(max-width:782px){.tcsup-history-filters label,.tcsup-history-controls label{width:100%}.tcsup-history-filters input,.tcsup-history-controls input{max-width:100%;width:100%}}
+
+/* CPU-batched private supplier records CSV controls. */
+.tcsup-profiles-transfer{margin:22px 0 6px;border-top:1px solid #dcdcde;padding-top:18px}
+.tcsup-profiles-transfer h3{margin:0 0 8px}
+.tcsup-profiles-transfer .tcsup-history-controls form{display:flex;align-items:flex-end;flex-wrap:wrap;gap:12px}
+.tcsup-profiles-transfer .tcsup-history-controls form label{display:flex;flex-direction:column;gap:6px}
+#tcsup-profiles-progress{display:block;width:100%;max-width:550px;height:14px;margin:10px 0}
+#tcsup-profiles-progress[hidden]{display:none}
+#tcsup-profiles-errors{margin:8px 0;overflow-wrap:anywhere}

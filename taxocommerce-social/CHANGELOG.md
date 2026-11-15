@@ -1,3 +1,56 @@
+## [0.1.23] — 2026-11-14 — Propiedad autónoma de tareas WP-Cron heredadas (#2688)
+
+- Social adopta programaciones futuras almacenadas en las tablas compartidas cuando el antiguo ejecutor `seo_social_network_publish_manual_scheduled` ya no está registrado: primero registra y confirma el ejecutor propio; después retira exclusivamente el evento huérfano.
+- Conserva tablas, opciones, fechas, plantillas y conexiones existentes, sin migraciones, copias ni dependencias obligatorias entre plugins.
+- En coexistencia temporal con un ejecutor heredado activo, no crea eventos duplicados. No reenvía intentos pendientes/publicados ni programaciones vencidas de forma automática.
+- Los callbacks manuales propios comprueban que la programación existe, no está pausada y ha vencido antes de publicar: las tareas obsoletas o canceladas no se envían.
+- Prueba independiente de regresión de adopción, fallos de programación, pausas, deduplicación, entradas canceladas y fechas vencidas, integrada en CI.
+
+## [0.1.22] — 2026-11-14 — Edición de fecha y estado en Vista compacta (#2667)
+
+- La Vista compacta muestra directamente los botones **Editar** y **Borrar programación** en cada fila gestionable, con formularios desplegables y diseño adaptado a móvil.
+- Editar permite cambiar fecha y hora y seleccionar **Programada** o **Pausada** para las programaciones propias de Social. Borrar cancela la tarea de envío sin borrar la entrada o página ni afectar a otras redes.
+- La pausa se guarda de manera persistente junto a la fecha de agenda. Se eliminan los eventos de WP-Cron actuales y heredados, se evita su restauración automática y se bloquea la ejecución si la pausa sigue activa.
+- Reanudar exige una fecha futura y restaura la programación de WordPress. El exportador de la agenda indica si el registro está programada o pausada.
+- Las campañas opcionales conservan su gestión propia: edición de fecha y borrado; no se presenta una pausa ficticia. Se preservan comprobaciones de permisos, nonce, origen, red y fecha original.
+- Prueba de regresión para estado de pausa/reanudación, aislamiento entre redes y controles compactos.
+
+## [0.1.21] — 2026-11-13 — Edición y cancelación desde el calendario (#2663)
+
+- Añade controles **Editar** y **Cancelar** a cada evento programado en la vista mensual y en la vista compacta; no es necesario utilizar CSV.
+- La cancelación exige confirmación y anula solo la programación seleccionada, también si su fecha ya pasó y permanece en la agenda; conserva la entrada/landing y las demás redes.
+- La edición reprograma la fecha y hora futuras utilizando los mecanismos existentes del módulo propietario. Los eventos de campañas se gestionan mediante sus propias funciones si el plugin Campaigns está instalado, sin dependencia obligatoria.
+- La verificación de permisos, nonce, identificadores y marca temporal evita actuar sobre una programación que se haya cambiado desde la visualización del calendario.
+- Pruebas independientes de cancelación, reprogramación, comprobación de origen y aislamiento entre redes.
+
+## [0.1.20] — 2026-11-13 — Importador único con reconocimiento de cancelaciones (#2660)
+
+- El importador CSV existente reconoce ahora los archivos con la columna `accion=cancelar` y los deriva a la previsualización segura de cancelaciones. Las fechas vencidas no se rechazan como nuevas programaciones.
+- Conserva el flujo previo de alta/reprogramación para CSV sin `accion`; nunca ejecuta publicaciones al importar órdenes de cancelación.
+- Reutiliza la validación de contenido, red y fecha exacta, con confirmación explícita; sin cambios de otras cuentas, agendas ni plugins.
+- Añade prueba independiente de detección de CSV y de validación de fechas y redes.
+
+## [0.1.19] — 2026-11-13 — Cancelación exacta por CSV (#2660)
+
+- Nueva acción de importación masiva solo para cancelar programaciones; CSV separado con columnas contenido_id, redes, fecha_hora y accion=cancelar.
+- Previsualización sin escrituras y confirmación protegida por nonce/capability; se valida contenido, red, fecha y coincidencia exacta con el calendario actual para no eliminar reprogramaciones ni contenido ajeno.
+- Cancela WP-Cron actual y heredado sin ejecutar publicaciones; preserva contenidos, cuentas, programaciones de otras redes, importador normal e historial.
+
+## [0.1.18] — 2026-11-13 — Publicaciones y Autocheck operativo (#2630)
+
+- Registrada la programación automática de contenidos nuevos cuando no está activa la antigua implementación monolítica; evita dos productores simultáneos en la misma agenda.
+- Recuperación acotada de eventos de agenda futuros sin WP-Cron, respetando eventos heredados aún operativos y publicaciones previamente enviadas. Los vencidos nunca se publican automáticamente.
+- Reprogramación explícita limpia eventos antiguos sin duplicar; ante rechazo de WP-Cron conserva la programación anterior. El Programador marca errores de programación/reintento en lugar de informar éxito falso.
+- El publicador manual conserva la agenda vencida cuando una red rechaza la publicación; el Autocheck puede detectarla y se evita un reenvío automático potencialmente duplicado.
+- Pinterest solicita `boards:write` en OAuth y comprueba el permiso guardado antes de enviar. Las conexiones antiguas requieren nueva autorización del administrador.
+- Cinco verificaciones locales nuevas: eventos WP-Cron asociados a agenda, tareas activas, configuración/expiración/permisos, imágenes Pinterest y últimos resultados por red. Autocheck sigue sin emitir publicaciones ni peticiones externas.
+- Pruebas de regresión para agenda vencida, cola sin evento y publicación fallida; cambios solo en el plugin Social. No se modifican cuentas, credenciales ni contenidos.
+
+## [0.1.17] — 2026-11-13 — Code Check equiparado a Core 0.4.82 (#2626)
+
+- Code Check equiparado a Core 0.4.82: reglas autónomas PHP/WordPress/seguridad, clasificación por gravedad, detalles de archivos y recomendaciones, resumen y JSON; sin modificar el Autotest funcional. Issue #2626.
+- Continúa siendo una revisión estática independiente del Plugin Check oficial, con ejecución por bloques y control de CPU.
+
 ## [0.1.16] — 2026-11-11 — Recuperación de importación/exportación CSV en Calendario
 
 - Recuperados en Calendario los controles Descargar plantilla CSV, Exportar contenidos, Exportar agenda, Exportar historial y Validar CSV antes de importar.

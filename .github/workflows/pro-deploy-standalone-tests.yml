@@ -1,0 +1,46 @@
+name: PRO standalone deploy - offline regression tests
+
+on:
+  pull_request:
+    branches:
+      - staging
+    paths:
+      - '.github/scripts/deploy_pro_ftps_native.py'
+      - '.github/scripts/pro_deploy_preflight.py'
+      - '.github/scripts/pro_ftps_root_probe.py'
+      - '.github/workflows/despliege_de_main_a_pro.yml'
+      - '.github/workflows/pro-deploy-standalone-tests.yml'
+      - '.github/tests/test_pro_historic_modular_workflow.py'
+      - '.github/tests/test_pro_ftps_native.py'
+  push:
+    branches:
+      - staging
+    paths:
+      - '.github/scripts/deploy_pro_ftps_native.py'
+      - '.github/scripts/pro_deploy_preflight.py'
+      - '.github/workflows/despliege_de_main_a_pro.yml'
+      - '.github/workflows/pro-deploy-standalone-tests.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Verify no-monolith deploy semantics and rollback without remote writes
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Compile standalone production tools
+        run: |
+          python3 -m py_compile \
+            .github/scripts/deploy_pro_ftps_native.py \
+            .github/scripts/pro_deploy_preflight.py \
+            .github/scripts/pro_ftps_root_probe.py \
+            .github/scripts/select_pro_release_delta.py
+      - name: Verify safe PRO deploy contracts and mocked FTPS rollback
+        run: |
+          python3 -m unittest discover -s .github/tests -p test_pro_historic_modular_workflow.py -v
+          python3 -m unittest discover -s .github/tests -p test_pro_ftps_native.py -v
+          python3 -m unittest discover -s .github/tests -p test_select_pro_release_delta.py -v
+          python3 -m unittest discover -s .github/tests -p test_pro_ftps_root_probe.py -v
+          python3 -m unittest discover -s .github/tests -p test_staging_check_subida_a_pro.py -v

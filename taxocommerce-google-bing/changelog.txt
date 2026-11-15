@@ -1,3 +1,33 @@
+= 1.1.61 (2026-11-13) =
+* Independent competitive visibility selection: use verified Google taxonomy IDs even when Best Sellers products are not selected for display. Issue #2643.
+
+= 1.1.60 (2026-11-13) =
+* Refresh selected external competitive sources through sequential, bounded requests: Merchant Best Sellers, existing rate-limited Trends sync, and one verified Google category per Merchant Visibility step.
+* Keep explicit source diagnostics in saved reports and JSON, preserve cached snapshots and manual report generation. Issue #2643.
+
+= 1.1.59 (2026-11-13) =
+* Keep Competition visible after Generate or Save configuration, restoring the saved snapshot at the selected period without repeating market API calls.
+* Preserve all other Analysis reports, JSON export, independent security nonces and unavailable-source statuses. Issue #2639.
+
+= 1.1.58 (2026-11-13) =
+* Configurable market analysis: WooCommerce categories, user-supplied competitors and suppliers, selectable signals and market modes.
+* Merchant-only verified domain visibility, explicit unavailable supplier data and secured manual settings. Issue #2633.
+
+= 1.1.57 (2026-11-13) =
+* Code Check equiparado a Core 0.4.82: reglas autónomas PHP/WordPress/seguridad, clasificación por gravedad, detalles de archivos y recomendaciones, resumen y JSON; sin modificar el Autotest funcional. Issue #2626.
+
+= 1.1.55 (2026-11-12) =
+
+* Fix expired-link error on Analysis JSON download buttons after AJAX refresh: generate raw nonce URLs for JavaScript, escape only at HTML output.
+* Preserve WordPress nonce checks, administrator permissions, historical data and all report types.
+* Add regression test for both single-report JSON and action-plan JSON download URLs. Issue #2608.
+
+= 1.1.53 (2026-11-12) =
+
+* Competition AJAX invokes Insights' independent Merchant/Trends renderer even when legacy SEO is active.
+* Isolate options, generation/download nonce and admin URLs from old SEO Analista. Preserve legacy historical reports.
+* Add coexistence regression and secure action contract. Issue #2594.
+
 = 1.1.52 (2026-11-12) =
 
 * Rebuild Competition report around cached Merchant Best Sellers, bounded official Merchant competitive visibility, Trends and own Search Console/Bing data.

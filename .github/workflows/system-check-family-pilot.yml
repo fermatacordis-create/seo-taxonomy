@@ -1,0 +1,35 @@
+name: System Check family validation pilot
+
+on:
+  pull_request:
+    paths:
+      - 'taxocommerce-system-check/**'
+      - '.github/workflows/system-check-family-pilot.yml'
+  push:
+    branches:
+      - staging
+    paths:
+      - 'taxocommerce-system-check/**'
+      - '.github/workflows/system-check-family-pilot.yml'
+
+jobs:
+  core-pilot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          tools: none
+      - name: PHP syntax
+        run: |
+          php -l taxocommerce-system-check/taxocommerce-system-check.php
+          php -l taxocommerce-system-check/includes/class-taxocommerce-system-check-family-runner.php
+          php -l taxocommerce-system-check/tests/family-runner-pilot-smoke.php
+      - name: Pilot regression contract
+        run: php taxocommerce-system-check/tests/family-runner-pilot-smoke.php
+      - name: Partial FTPS delivery regression
+        run: |
+          php -l taxocommerce-system-check/includes/class-taxocommerce-system-check-processes.php
+          php -l taxocommerce-system-check/tests/process-details-partial-deploy-smoke.php
+          php taxocommerce-system-check/tests/process-details-partial-deploy-smoke.php

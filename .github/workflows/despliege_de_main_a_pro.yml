@@ -12,13 +12,9 @@ on:
         required: false
         type: string
         default: ''
+  # Manual releases always publish all pending changes from staging.
+  # GitHub displays its native branch selector; only staging is accepted below.
   workflow_dispatch:
-    inputs:
-      target_plugin:
-        description: 'Optional installed plugin slug (empty: all changed plugins)'
-        required: false
-        type: string
-        default: ''
 
 permissions:
   contents: read
@@ -28,12 +24,9 @@ concurrency:
   group: taxocommerce-production-deploy
   cancel-in-progress: false
 
-env:
-  PRO_SITE_URL: https://www.distribuidordeherramientas.es
-
 jobs:
   deploy:
-    name: Publicar SOLO archivos modificados en plugins instalados
+    name: Copiar archivos modificados de STAGING a PRO
     runs-on: ubuntu-latest
     timeout-minutes: 90
     steps:
@@ -65,300 +58,39 @@ jobs:
             echo "Approved source SHA: $ACTUAL_SHA"
           fi
 
-      - name: Comprobar restauracion del despliegue modular sin escribir en PRO
+      - name: Verificar selector y copia de archivos (sin conectar a PRO)
         run: |
           set -euo pipefail
-          python3 -m unittest discover -s .github/tests -p test_pro_historic_modular_workflow.py -v
-          python3 -m py_compile .github/scripts/fetch_pro_installed_modules.py
-          python3 -m py_compile .github/scripts/select_pro_release_delta.py
+          python3 -m py_compile .github/scripts/select_pro_release_delta.py .github/scripts/deploy_pro_ftps_native.py
           python3 -m unittest discover -s .github/tests -p test_select_pro_release_delta.py -v
-          python3 -m unittest discover -s .github/scripts/tests -p test_fetch_pro_installed_modules.py -v
+          python3 -m unittest discover -s .github/tests -p test_pro_ftps_native.py -v
 
-      - name: Descubrir plugins TaxoCommerce disponibles en MAIN
-        id: family
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          mapfile -t modules < <(
-            find . -maxdepth 1 -mindepth 1 -type d -name 'taxocommerce-*' -printf '%f\n' | sort
-          )
-
-          valid_modules=()
-          for module in "${modules[@]}"; do
-            if [[ "$module" =~ ^taxocommerce-[a-z0-9-]+$ ]] && [ -f "$module/$module.php" ]; then
-              valid_modules+=("$module")
-            fi
-          done
-
-          if [ "${#valid_modules[@]}" -eq 0 ]; then
-            echo "::error::No se encontraron plugins TaxoCommerce válidos en STAGING."
-            exit 1
-          fi
-
-          modules_json="$(python3 - "${valid_modules[@]}" <<'PY'
-          import json
-          import sys
-          print(json.dumps(sys.argv[1:], separators=(",", ":")))
-          PY
-          )"
-
-          echo "modules=$modules_json" >> "$GITHUB_OUTPUT"
-          echo "Plugins TaxoCommerce disponibles en STAGING: $modules_json"
-
-      - name: Leer y validar plugins instalados en PRO (REST con reintentos)
-        id: installed
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 .github/scripts/fetch_pro_installed_modules.py >> "$GITHUB_OUTPUT"
-
-
-      - name: Seleccionar solo archivos modificados desde el ultimo release PRO correcto
+      - name: Comparar cambios de STAGING con ultimo despliegue correcto
         id: delta
         shell: bash
         env:
-          ALL_MODULES_JSON: ${{ steps.family.outputs.modules }}
-          INSTALLED_MODULES_JSON: ${{ steps.installed.outputs.modules }}
-          TARGET_PLUGIN: ${{ inputs.target_plugin || '' }}
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
           set -euo pipefail
-          # Read the last successful PRO release from PUBLIC run metadata.
-          # Job-log downloads caused HTTP 401 in runs #194 and #195.
-          # No GitHub token is needed and the release fails closed on missing data.
-          runs_url="https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/despliege_de_main_a_pro.yml/runs?branch=staging&status=success&per_page=15"
-          base_sha="$(curl --fail --silent --show-error --location --retry 3 --retry-delay 2 \
-            -H 'Accept: application/vnd.github+json' \
-            -H 'User-Agent: TaxoCommerce-PRO-Deploy' \
-            "$runs_url" | jq -er '[.workflow_runs[]? | select(.status == "completed" and .conclusion == "success" and .head_branch == "staging") | .head_sha][0]')"
-          if ! [[ "$base_sha" =~ ^[0-9a-f]{40}$ ]]; then
-            echo '::error::No se ha podido verificar el ultimo release PRO correcto.'
-            exit 1
-          fi
-          git cat-file -e "$base_sha^{commit}"
-          if ! git merge-base --is-ancestor "$base_sha" HEAD; then
-            echo "::error::El ultimo release PRO no es ancestro de STAGING: $base_sha"
-            exit 1
-          fi
-          echo "Base PRO verificada: $base_sha"
-
-          python3 .github/scripts/select_pro_release_delta.py \
-            --base-sha "$base_sha" \
-            --installed-json "$INSTALLED_MODULES_JSON" \
-            --allowed-json "$ALL_MODULES_JSON" \
-            --target-plugin "$TARGET_PLUGIN" \
+          python3 .github/scripts/select_pro_release_delta.py --all-changed \
             --output "$RUNNER_TEMP/taxocommerce-pro-changed.json"
-          count="$(jq 'length' "$RUNNER_TEMP/taxocommerce-pro-changed.json")"
-          echo "selected_count=$count" >> "$GITHUB_OUTPUT"
-          if [ "$count" -eq 0 ]; then
-            echo "Ningun archivo instalable ha cambiado. Sin transferencia a produccion."
-          fi
+          count="$(jq '[.[] | length] | add // 0' "$RUNNER_TEMP/taxocommerce-pro-changed.json")"
+          echo "changed_count=$count" >> "$GITHUB_OUTPUT"
+          echo "$count archivo(s) modificado(s) para PRODUCCION."
 
-      - name: Instalar cliente FTPS y compresor ZIP (solo si hay cambios)
-        if: steps.delta.outputs.selected_count != '0'
-        shell: bash
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y lftp zip
-
-      - name: Sincronizar SOLO archivos modificados de los plugins seleccionados
-        if: steps.delta.outputs.selected_count != '0'
+      - name: Copiar solo los archivos modificados a PRO por FTPS
+        if: steps.delta.outputs.changed_count != '0'
         shell: bash
         env:
-          ALL_MODULES_JSON: ${{ steps.family.outputs.modules }}
-          INSTALLED_MODULES_JSON: ${{ steps.installed.outputs.modules }}
-          DELTA_FILE: ${{ runner.temp }}/taxocommerce-pro-changed.json
           FTP_SERVER: ${{ secrets.FTP_SERVER }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          DELTA_FILE: ${{ runner.temp }}/taxocommerce-pro-changed.json
         run: |
           set -euo pipefail
+          python3 .github/scripts/deploy_pro_ftps_native.py "$DELTA_FILE"
 
-          mapfile -t selected_modules < <(jq -r 'keys[]' "$DELTA_FILE")
-          if [ "${#selected_modules[@]}" -eq 0 ]; then
-            echo "No hay cambios para publicar. No se transfiere ningun ZIP."
-            exit 0
-          fi
-          SELECTED_MODULES_JSON="$(jq -c 'keys' "$DELTA_FILE")"
-          export SELECTED_MODULES_JSON
-          echo "Validacion previa: ${#selected_modules[@]} plugin(s) modificado(s) en PRO."
-          for module in "${selected_modules[@]}"; do
-            test -f "$module/$module.php"
-            test -f "$module/readme.txt"
-          done
-          deploy_token="$(openssl rand -hex 32)"
-          token_hash="$(printf '%s' "$deploy_token" | sha256sum | awk '{print $1}')"
-          handoff=".taxocommerce-deploy/$GITHUB_RUN_ID"
-
-          cleanup_handoff() {
-            lftp -u "$FTP_USERNAME","$FTP_PASSWORD" -p 21 "$FTP_SERVER" <<EOF || true
-          set cmd:fail-exit no
-          set ftp:ssl-force true
-          set ftp:ssl-protect-data true
-          set ssl:verify-certificate yes
-          rm -r "$handoff"
-          bye
-          EOF
-          }
-          trap cleanup_handoff EXIT
-
-          # Prepare the handoff directory only. Never expose the token until
-          # selected changed-file ZIPs have been uploaded.
-          lftp -u "$FTP_USERNAME","$FTP_PASSWORD" -p 21 "$FTP_SERVER" <<EOF
-          set cmd:fail-exit no
-          set ftp:ssl-force true
-          set ftp:ssl-protect-data true
-          set ssl:verify-certificate yes
-          mkdir -p "$handoff"
-          set cmd:fail-exit yes
-          cd "$handoff"
-          bye
-          EOF
-
-          for module in "${selected_modules[@]}"; do
-            package="/tmp/$module.zip"
-            rm -f "$package"
-
-            if [ "$module" = "taxocommerce-facturacion" ]; then
-              echo "Including the same Dompdf bundle from the historical module in Billing..."
-              test -f includes/facturas/dompdf/autoload.inc.php
-              rm -rf "$module/includes/dompdf"
-              cp -a includes/facturas/dompdf "$module/includes/dompdf"
-            fi
-
-            mapfile -d '' -t changed_files < <(
-              jq -j --arg module "$module" '.[$module][] + "\u0000"' "$DELTA_FILE"
-            )
-            if [ "${#changed_files[@]}" -eq 0 ]; then
-              echo "::error::$module sin archivos modificados seleccionados."
-              exit 1
-            fi
-            echo "Empaquetando $module: ${#changed_files[@]} archivo(s) cambiado(s)..."
-            ( cd "$module" && zip -q "$package" "${changed_files[@]}" )
-            unzip -t "$package" >/dev/null
-            # Never ship FTP sync-state files, hidden handoff data or Git metadata.
-            if unzip -Z1 "$package" | grep -E '(^|/)(\.ftp-deploy-sync-state\.json|\.taxocommerce-deploy)(/|$)'; then
-              echo "::error::$module contains deployment artifacts"
-              exit 1
-            fi
-
-            echo "Subiendo un único paquete temporal para $module..."
-            lftp -u "$FTP_USERNAME","$FTP_PASSWORD" -p 21 "$FTP_SERVER" <<EOF
-          set cmd:fail-exit yes
-          set ftp:ssl-force true
-          set ftp:ssl-protect-data true
-          set ssl:verify-certificate yes
-          put "$package" -o "$handoff/$module.zip"
-          bye
-          EOF
-          done
-
-          # The REST permission callback requires this marker to exist. Upload
-          # and read back the marker immediately BEFORE the POST, not before the
-          # potentially lengthy FTPS loop. Do not log the secret token.
-          : > /tmp/taxocommerce-deploy-marker
-          lftp -u "$FTP_USERNAME","$FTP_PASSWORD" -p 21 "$FTP_SERVER" <<EOF
-          set cmd:fail-exit yes
-          set ftp:ssl-force true
-          set ftp:ssl-protect-data true
-          set ssl:verify-certificate yes
-          cd "$handoff"
-          put /tmp/taxocommerce-deploy-marker -o ".token-$token_hash"
-          get ".token-$token_hash" -o /tmp/taxocommerce-deploy-marker-verified
-          bye
-          EOF
-          if ! cmp -s /tmp/taxocommerce-deploy-marker /tmp/taxocommerce-deploy-marker-verified; then
-            echo "::error::El marcador FTPS de autorización no se ha podido verificar."
-            exit 1
-          fi
-
-          http_code="$(curl --silent --show-error --retry 3 --retry-delay 2 \
-            -o /tmp/taxocommerce-deploy-response.json \
-            -w '%{http_code}' \
-            -X POST \
-            --data-urlencode "run_id=$GITHUB_RUN_ID" \
-            --data-urlencode "deploy_token=$deploy_token" \
-            --data-urlencode "modules=$SELECTED_MODULES_JSON" \
-            "$PRO_SITE_URL/wp-json/taxocommerce/v1/deploy-active-modules")"
-
-          if [[ "$http_code" != 2* ]]; then
-            echo "::error::WordPress PRO rechazó la sincronización con HTTP $http_code"
-            cat /tmp/taxocommerce-deploy-response.json || true
-            exit 1
-          fi
-
-          export DEPLOY_RESPONSE="$(cat /tmp/taxocommerce-deploy-response.json)"
-
-          python3 - <<'PY'
-          import json
-          import os
-          import re
-          import hashlib
-          import zipfile
-          from pathlib import Path
-
-          selected = json.loads(os.environ["SELECTED_MODULES_JSON"])
-          payload = json.loads(os.environ["DEPLOY_RESPONSE"])
-          updated = payload.get("updated", [])
-
-          updated_by_slug = {
-              str(item.get("slug", "")): item
-              for item in updated
-              if isinstance(item, dict)
-          }
-
-          if set(updated_by_slug) != set(selected):
-              raise SystemExit(
-                  "PRO no confirmó exactamente los plugins instalados. "
-                  f"Seleccionados={selected}; actualizados={sorted(updated_by_slug)}"
-              )
-
-          for slug in selected:
-              main_file = Path(slug) / f"{slug}.php"
-              text = main_file.read_text(encoding="utf-8", errors="replace")
-              match = re.search(r"^\s*\*\s*Version:\s*([^\r\n]+)", text, re.MULTILINE)
-              expected = match.group(1).strip() if match else ""
-
-              item = updated_by_slug[slug]
-              received = str(item.get("version", ""))
-              changed = [str(path) for path in item.get("changed", [])]
-              unchanged = int(item.get("unchanged", 0))
-
-              if not expected or received != expected:
-                  raise SystemExit(
-                      f"Versión remota incorrecta para {slug}: "
-                      f"esperada={expected!r}; recibida={received!r}"
-                  )
-
-              # Verify every changed file against WordPress SHA-256; no other files were uploaded.
-              package = Path('/tmp') / (slug + '.zip')
-              with zipfile.ZipFile(package) as archive:
-                  file_names = [info.filename for info in archive.infolist() if not info.is_dir()]
-                  if not file_names or len(set(file_names)) != len(file_names):
-                      raise SystemExit(f"{slug}: invalid or duplicate ZIP entries")
-                  manifest = {name: hashlib.sha256(archive.read(name)).hexdigest() for name in file_names}
-              expected_digest = hashlib.sha256(
-                  json.dumps(manifest, ensure_ascii=True, sort_keys=True,
-                             separators=(',', ':')).encode('utf-8')
-              ).hexdigest()
-              confirmed_digest = str(item.get('manifest_sha256', ''))
-              confirmed_count = int(item.get('verified_files', -1))
-              if confirmed_count != len(manifest) or confirmed_digest != expected_digest:
-                  raise SystemExit(
-                      f"{slug}: incomplete or mismatched deployed files: "
-                      f"expected={len(manifest)} remote={confirmed_count}; "
-                      "manifest hashes do not match"
-                  )
-              print(f"{slug}: {confirmed_count} files verified by SHA-256 in WordPress plugin directory")
-              print(f"{slug}: PRO verificado en versión {received}")
-              print(f"{slug}: {len(changed)} archivo(s) actualizado(s), {unchanged} sin cambios")
-              for path in changed:
-                  print(f"  ACTUALIZADO: {path}")
-          PY
-
-          # On HTTP 2xx WordPress already removed the handoff directory.
-          # Keep EXIT cleanup for failures, not a second rm on success (550).
-          trap - EXIT
-
-          echo "Despliegue parcial terminado: solo se transfirieron y verificaron archivos modificados."
-
+      - name: Sin cambios - no copiar nada
+        if: steps.delta.outputs.changed_count == '0'
+        run: echo "Sin cambios en los plugins de GitHub. PRODUCCION sin modificaciones."

@@ -4,7 +4,7 @@ Tags: faq, woocommerce, questions, csv, vocabulary
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.1.18
+Stable tag: 0.1.20
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,6 +49,12 @@ No. Deactivation and ordinary plugin updates preserve FAQ records.
 On multisite, the cleanup is limited to sites marked as initialized by this module. Removing files manually by FTP does not run `uninstall.php`.
 
 == Changelog ==
+
+= 0.1.20 =
+* Restored the plugin header on the TaxoCommerce Core FAQ content route, including Autocheck and Manual.
+* Unified the functional Autocheck with Import-Export: one-click full suite, last-result JSON, result groups and independent Code Check.
+* Legacy before/after snapshots remain stored but are no longer part of the user interface.
+
 
 = 0.1.16 =
 * Local Description and Plugin URI replace REST excerpt requests and caches in the admin header. Issue #2494.

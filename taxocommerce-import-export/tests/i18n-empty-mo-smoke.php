@@ -21,6 +21,8 @@ foreach ( array( 'es_ES', 'en_US', 'fr_FR', 'de_DE', 'nl_NL' ) as $locale ) {
         throw new RuntimeException( 'Unexpected MO header in ' . $locale );
     }
     $count = $header['count'];
+    $required_translations = array( 'Páginas', 'Crear CSV por bloques', 'Detener importación actual', 'Descargar CSV terminado', 'No se pudo crear el CSV temporal.', 'Importar ZIP de Media', 'El ZIP no contiene media.csv.', 'Media · imágenes', 'Qué se transporta' );
+    $seen_translations = array();
     if ( $count > ( strlen( $data ) - 28 ) / 16 ) {
         throw new RuntimeException( 'Invalid MO table size in ' . $locale );
     }
@@ -33,11 +35,19 @@ foreach ( array( 'es_ES', 'en_US', 'fr_FR', 'de_DE', 'nl_NL' ) as $locale ) {
         }
         $original = substr( $data, $o['offset'], $o['length'] );
         $translated = substr( $data, $t['offset'], $t['length'] );
+        if ( in_array( $original, $required_translations, true ) && '' !== $translated ) {
+            $seen_translations[ $original ] = true;
+        }
         if ( '' !== $original && '' === str_replace( chr( 0 ), '', $translated ) ) {
             throw new RuntimeException( 'Empty translation hides UI label in ' . $locale . ': ' . $original );
         }
     }
-    echo $locale . ': ' . $count . ' valid MO entries; untranslated messages safely fallback to msgid.' . PHP_EOL;
+    foreach ( $required_translations as $required ) {
+        if ( empty( $seen_translations[ $required ] ) ) {
+            throw new RuntimeException( 'Missing expected translated UI control for ' . $locale . ': ' . $required );
+        }
+    }
+    echo $locale . ': ' . $count . ' valid MO entries; user-facing controls translated; untranslated messages fallback to msgid.' . PHP_EOL;
 }
 $exporter = file_get_contents( $root . '/includes/class-taxocommerce-import-export-exporter.php' );
 if ( false === strpos( $exporter, "'pages' => array(" ) ||

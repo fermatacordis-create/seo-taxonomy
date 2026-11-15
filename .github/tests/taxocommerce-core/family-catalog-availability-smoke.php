@@ -39,6 +39,7 @@ function trailingslashit( $value ) { return rtrim( $value, '/' ) . '/'; }
 function admin_url( $path ) { return 'https://example.test/wp-admin/' . $path; }
 function add_query_arg( $args, $url ) { return $url . ( false !== strpos( $url, '?' ) ? '&' : '?' ) . http_build_query( $args ); }
 function wp_nonce_field( $action, $name ) { echo '<input type="hidden" name="' . esc_attr( $name ) . '" value="test">'; }
+function wp_nonce_url( $url, $action ) { return $url . '&_wpnonce=test'; }
 
 require_once dirname( __DIR__, 3 ) . '/taxocommerce-core/includes/class-taxocommerce-core.php';
 
@@ -80,8 +81,8 @@ $render = static function () use ( $instance ) {
 
 list( $tasks, $all ) = $render();
 tcc_check( false !== strpos( $tasks, 'No instalada' ), 'absent Tasks is explicitly announced' );
-tcc_check( false !== strpos( $tasks, 'Instalar otro ZIP' ), 'authorized ZIP upload is available to administrator' );
-tcc_check( false === strpos( $tasks, 'value="taxocommerce_core_activate_extension"' ), 'absent plugin cannot be activated' );
+tcc_check( false !== strpos( $tasks, 'Instalar ZIP con WordPress' ), 'authorized ZIP upload is available to administrator' );
+tcc_check( false === strpos( $tasks, 'action=activate' ), 'absent plugin cannot be activated' );
 tcc_check( false !== strpos( $all, '19 no instaladas' ), 'missing summary includes the full count' );
 
 $GLOBALS['tcc_plugins'] = array(
@@ -89,14 +90,14 @@ $GLOBALS['tcc_plugins'] = array(
 );
 list( $tasks, $all ) = $render();
 tcc_check( false !== strpos( $tasks, 'Instalada · inactiva' ), 'installed but inactive Tasks is distinguished from missing' );
-tcc_check( false !== strpos( $tasks, 'value="taxocommerce_core_activate_extension"' ), 'inactive plugin has activation action' );
-tcc_check( false === strpos( $tasks, 'Instalar otro ZIP' ), 'installed plugin is not offered a redundant install' );
+tcc_check( false !== strpos( $tasks, 'action=activate' ), 'inactive plugin has activation action' );
+tcc_check( false === strpos( $tasks, 'Instalar ZIP con WordPress' ), 'installed plugin is not offered a redundant install' );
 
 $GLOBALS['tcc_active'] = array( 'taxocommerce-tasks/taxocommerce-tasks.php' );
 $GLOBALS['tcc_tasks_hook'] = true;
 list( $tasks, $all ) = $render();
 tcc_check( false !== strpos( $tasks, '>Activa<' ), 'active Tasks is clearly identified' );
-tcc_check( false !== strpos( $tasks, 'value="taxocommerce_core_deactivate_extension"' ), 'active Tasks has deactivation action' );
+tcc_check( false !== strpos( $tasks, 'action=deactivate' ), 'active Tasks has deactivation action' );
 tcc_check( false !== strpos( $tasks, 'page=taxocommerce-tasks' ), 'active Tasks offers the existing admin page' );
 tcc_check( false !== strpos( $all, '1 activas' ), 'active count reflects Tasks' );
 

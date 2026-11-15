@@ -9,6 +9,8 @@
  */
 defined( 'ABSPATH' ) || exit;
 
+require_once __DIR__ . '/class-taxocommerce-system-check-code-review-rules.php';
+
 final class TaxoCommerce_System_Check_Code_Check {
     const ACTION = 'taxocommerce_system_check_code_check';
     const EXPORT_ACTION = 'taxocommerce_system_check_code_check_json';
@@ -246,6 +248,29 @@ final class TaxoCommerce_System_Check_Code_Check {
             $security['status'] = 'warning';
             $security['message'] = __( 'Potential security issues need a manual code-flow review.', 'taxocommerce-system-check' );
         }
+        // Core 0.4.82 rules are vendored locally: no dependency on Core.
+        $native = TaxoCommerce_System_Check_Code_Review_Rules::scan( $source, $relative );
+        foreach ( array( 'php', 'wordpress', 'security' ) as $group ) {
+            if ( empty( $native[ $group ] ) ) {
+                continue;
+            }
+            if ( 'php' === $group ) {
+                $php['evidence']['native_review'] = $native[ $group ];
+                if ( 'pass' === $php['status'] ) {
+                    $php['status'] = 'warning';
+                }
+            } elseif ( 'wordpress' === $group ) {
+                $wordpress['evidence']['native_review'] = $native[ $group ];
+                if ( 'pass' === $wordpress['status'] ) {
+                    $wordpress['status'] = 'warning';
+                }
+            } else {
+                $security['evidence']['native_review'] = $native[ $group ];
+                if ( 'pass' === $security['status'] ) {
+                    $security['status'] = 'warning';
+                }
+            }
+        }
         return array(
             'php' => $php,
             'wordpress' => $wordpress,
@@ -367,6 +392,9 @@ final class TaxoCommerce_System_Check_Code_Check {
                     'file_inventory_limit' => count( $files ) >= 300 ? 'potentially_truncated' : 'not_reached',
                 ),
                 'official_plugin_check' => 'not_executed',
+                'native_static_review' => 'enabled',
+                'native_rules_revision' => 1,
+                'inventory_truncated' => count( $files ) >= 300,
             );
         } elseif ( is_array( $state ) && 'stop' === $operation ) {
             $state['status'] = 'paused';
@@ -398,6 +426,307 @@ final class TaxoCommerce_System_Check_Code_Check {
             }
         }
         return $counts;
+    }
+
+    /**
+     * Project the System Check diagnostic evidence into Core's presentation
+     * contract without removing existing detailed checks or their JSON fields.
+     */
+    private static function normalized_state( $state ) {
+        $normalized = $state;
+        $normalized['inventory_truncated'] = ! empty( $state['inventory_truncated'] )
+            || 'potentially_truncated' === ( $state['limitations']['file_inventory_limit'] ?? '' );
+        $normalized['results'] = array();
+        foreach ( (array) ( $state['results'] ?? array() ) as $file => $checks ) {
+            $row = array();
+            foreach ( array( 'php', 'wordpress', 'security' ) as $group ) {
+                $check = $checks[ $group ] ?? array();
+                $status = $check['status'] ?? 'skip';
+                $evidence = is_array( $check['evidence'] ?? null ) ? $check['evidence'] : array();
+                $findings = array();
+                foreach ( array( 'findings', 'compatibility', 'signals', 'native_review' ) as $name ) {
+                    foreach ( (array) ( $evidence[ $name ] ?? array() ) as $item ) {
+                        if ( is_array( $item ) && ! empty( $item['rule'] ) ) {
+                            $findings[] = $item;
+                        }
+                    }
+                }
+                if ( 'php' === $group && 'fail' === $status && empty( $findings ) ) {
+                    $findings[] = array( 'rule' => 'php_parse_error', 'line' => absint( $evidence['line'] ?? 0 ), 'severity' => 'error' );
+                }
+                if ( 'wordpress' === $group ) {
+                    foreach ( (array) ( $evidence['missing'] ?? array() ) as $missing ) {
+                        $findings[] = array( 'rule' => 'review_wp_structure', 'field' => (string) $missing );
+                    }
+                    foreach ( (array) ( $evidence['unverified_includes'] ?? array() ) as $item ) {
+                        if ( is_array( $item ) && ! empty( $item['rule'] ) ) {
+                            $findings[] = $item;
+                        }
+                    }
+                }
+                if ( 'security' === $group ) {
+                    foreach ( (array) ( $evidence['calls'] ?? array() ) as $item ) {
+                        if ( is_array( $item ) && isset( $item['function'] ) ) {
+                            $findings[] = array( 'rule' => 'dangerous_call_' . strtolower( (string) $item['function'] ), 'line' => absint( $item['line'] ?? 0 ) );
+                        }
+                    }
+                }
+                if ( in_array( $status, array( 'fail', 'warning' ), true ) && empty( $findings ) ) {
+                    $findings[] = array( 'rule' => 'review_incomplete_evidence' );
+                }
+                $row[ $group ] = array(
+                    'status' => $status,
+                    'evidence' => $findings,
+                );
+            }
+            $normalized['results'][ $file ] = $row;
+        }
+        return $normalized;
+    }
+
+    /**
+     * Summarise actual findings, not the number of scanned PHP files.
+     *
+     * A PHP syntax pass must never conceal WordPress/security review warnings.
+     * An incomplete inventory cannot be presented as an overall pass.
+     *
+     * @param array $state Stored Code Check state.
+     * @return array Summary of the checked files and visible findings.
+     */
+    public static function summary_core( $state ) {
+        $summary = array(
+            'files_scanned' => 0,
+            'files_total' => count( $state['files'] ?? array() ),
+            'findings' => 0,
+            'rules' => array(),
+            'by_group' => array( 'php' => 0, 'wordpress' => 0, 'security' => 0 ),
+            'failed' => 0,
+            'skipped' => 0,
+            'review_files' => 0,
+            'status' => 'incomplete',
+        );
+        foreach ( $state['results'] ?? array() as $checks ) {
+            ++$summary['files_scanned'];
+            $flagged = false;
+            foreach ( array( 'php', 'wordpress', 'security' ) as $group ) {
+                $item = $checks[ $group ] ?? array();
+                if ( 'fail' === ( $item['status'] ?? '' ) ) {
+                    ++$summary['failed'];
+                    $flagged = true;
+                }
+                if ( 'skip' === ( $item['status'] ?? '' ) ) {
+                    ++$summary['skipped'];
+                }
+                foreach ( $item['evidence'] ?? array() as $evidence ) {
+                    if ( ! isset( $evidence['rule'] ) ) {
+                        continue;
+                    }
+                    ++$summary['findings'];
+                    ++$summary['by_group'][ $group ];
+                    $rule = (string) $evidence['rule'];
+                    $summary['rules'][ $rule ] = ( $summary['rules'][ $rule ] ?? 0 ) + 1;
+                    $flagged = true;
+                }
+            }
+            if ( $flagged ) {
+                ++$summary['review_files'];
+            }
+        }
+        ksort( $summary['rules'] );
+        $summary['distinct_rules'] = count( $summary['rules'] );
+        if ( $summary['failed'] ) {
+            $summary['status'] = 'fail';
+        } elseif ( 'completed' === ( $state['status'] ?? '' )
+            && ! $summary['skipped']
+            && ! empty( $summary['files_total'] )
+            && $summary['files_scanned'] === $summary['files_total']
+            && empty( $state['inventory_truncated'] ) ) {
+            $summary['status'] = $summary['findings'] ? 'review' : 'pass';
+        }
+        return $summary;
+    }
+
+    /**
+     * Group findings into actionable levels without changing legacy results.
+     * A warning is not promoted to an error without confirmed evidence.
+     *
+     * @param array $state The existing local Code Check state.
+     * @return array Segmented entries for UI and JSON export.
+     */
+    public static function classified_findings( $state ) {
+        $sections = array(
+            'errors' => array(),
+            'warnings' => array(),
+            'clean' => array(),
+            'unchecked' => array(),
+        );
+        foreach ( $state['results'] ?? array() as $file => $checks ) {
+            $file_has_findings = false;
+            $file_incomplete = false;
+            foreach ( array( 'php', 'wordpress', 'security' ) as $group ) {
+                $item = $checks[ $group ] ?? array( 'status' => 'skip', 'evidence' => array() );
+                $status = $item['status'] ?? 'skip';
+                $evidence = isset( $item['evidence'] ) && is_array( $item['evidence'] ) ? $item['evidence'] : array();
+                if ( 'skip' === $status ) {
+                    $file_incomplete = true;
+                    $sections['unchecked'][] = array( 'file' => $file, 'group' => $group, 'status' => 'unchecked', 'reason' => 'not_checked' );
+                }
+                foreach ( $evidence as $finding ) {
+                    if ( empty( $finding['rule'] ) ) {
+                        continue;
+                    }
+                    $file_has_findings = true;
+                    $severity = 'fail' === $status || in_array( $finding['severity'] ?? '', array( 'error', 'fail' ), true )
+                        || 'php_parse_error' === $finding['rule'] ? 'error' : 'warning';
+                    $entry = array(
+                        'file' => (string) $file,
+                        'line' => isset( $finding['line'] ) ? absint( $finding['line'] ) : null,
+                        'group' => $group,
+                        'rule' => (string) $finding['rule'],
+                        'severity' => $severity,
+                        'description' => self::finding_description( (string) $finding['rule'] ),
+                        'recommendation' => self::finding_recommendation( (string) $finding['rule'] ),
+                        'origin' => isset( $finding['origin'] ) ? (string) $finding['origin'] : 'native_code_check',
+                    );
+                    $sections[ 'error' === $severity ? 'errors' : 'warnings' ][] = $entry;
+                }
+                if ( 'fail' === $status && ! $evidence ) {
+                    $file_has_findings = true;
+                    $sections['errors'][] = array(
+                        'file' => (string) $file,
+                        'line' => null,
+                        'group' => $group,
+                        'rule' => 'check_failed_without_evidence',
+                        'severity' => 'error',
+                        'description' => __( 'The check failed but returned no source location.', 'taxocommerce-system-check' ),
+                        'recommendation' => __( 'Inspect this check and rerun the analysis.', 'taxocommerce-system-check' ),
+                        'origin' => 'native_code_check',
+                    );
+                }
+            }
+            if ( ! $file_has_findings && ! $file_incomplete ) {
+                $sections['clean'][] = array(
+                    'file' => (string) $file,
+                    'status' => 'pass',
+                    'description' => __( 'No findings in the checks implemented for this file.', 'taxocommerce-system-check' ),
+                );
+            }
+        }
+        foreach ( (array) ( $state['files'] ?? array() ) as $file ) {
+            if ( ! isset( $state['results'][ $file ] ) ) {
+                $sections['unchecked'][] = array( 'file' => (string) $file, 'group' => 'all', 'status' => 'unchecked', 'reason' => 'not_scanned' );
+            }
+        }
+        if ( ! empty( $state['inventory_truncated'] ) ) {
+            $sections['unchecked'][] = array( 'file' => '', 'group' => 'all', 'status' => 'unchecked', 'reason' => 'inventory_truncated' );
+        }
+        $sections['counts'] = array(
+            'errors' => count( $sections['errors'] ),
+            'warnings' => count( $sections['warnings'] ),
+            'clean' => count( $sections['clean'] ),
+            'unchecked' => count( $sections['unchecked'] ),
+        );
+        return $sections;
+    }
+
+    /** Translate the known finding category; retain original rule for diagnostics. */
+    private static function finding_description( $rule ) {
+        $labels = array(
+            'review_plugin_installation' => __( 'Plugin installation or upgrade operation needs review.', 'taxocommerce-system-check' ),
+            'review_plugin_lifecycle_activate_plugin' => __( 'Plugin activation must require an explicit user action.', 'taxocommerce-system-check' ),
+            'review_plugin_lifecycle_deactivate_plugins' => __( 'Plugin deactivation must require an explicit user action.', 'taxocommerce-system-check' ),
+            'review_request_nonce' => __( 'Request input needs a verified nonce in its execution path.', 'taxocommerce-system-check' ),
+            'review_request_capability' => __( 'Request handler needs an appropriate user permission check.', 'taxocommerce-system-check' ),
+            'review_request_sanitization' => __( 'Request input needs contextual sanitization and validation.', 'taxocommerce-system-check' ),
+            'review_file_upload' => __( 'File upload requires validation and safe handling.', 'taxocommerce-system-check' ),
+            'review_upload_tmp_name' => __( 'Uploaded temporary file path needs secure validation.', 'taxocommerce-system-check' ),
+            'review_dynamic_inline_style' => __( 'Dynamic CSS needs context-specific validation.', 'taxocommerce-system-check' ),
+            'review_unescaped_output' => __( 'Output variable needs context-appropriate escaping.', 'taxocommerce-system-check' ),
+            'review_nonprefixed_hook' => __( 'Custom WordPress hook is missing the plugin-specific prefix.', 'taxocommerce-system-check' ),
+            'review_unclosed_output_buffer' => __( 'Output buffer may not be closed in the same execution flow.', 'taxocommerce-system-check' ),
+            'review_output_buffer_flow' => __( 'An early exit may bypass output buffer closure.', 'taxocommerce-system-check' ),
+            'review_dynamic_sql_query' => __( 'Dynamic SQL query requires validation of identifiers and parameters.', 'taxocommerce-system-check' ),
+            'review_sql_preparation' => __( 'SQL construction and prepared statements need review.', 'taxocommerce-system-check' ),
+            'review_ajax_nonce' => __( 'AJAX handler may be missing nonce verification.', 'taxocommerce-system-check' ),
+            'missing_abspath_guard' => __( 'Direct-file access protection needs review.', 'taxocommerce-system-check' ),
+            'php_parse_error' => __( 'PHP syntax error.', 'taxocommerce-system-check' ),
+        );
+        return $labels[ $rule ] ?? __( 'Review the flagged code for compliance with WordPress requirements.', 'taxocommerce-system-check' );
+    }
+
+    /** Guidance is a review action, not proof that the code is defective. */
+    private static function finding_recommendation( $rule ) {
+        if ( false !== strpos( $rule, 'plugin_lifecycle' ) || 'review_plugin_installation' === $rule ) {
+            return __( 'Confirm an explicit administrator action and WordPress permissions; otherwise use native WordPress plugin management.', 'taxocommerce-system-check' );
+        }
+        if ( false !== strpos( $rule, 'nonce' ) || false !== strpos( $rule, 'capability' ) ) {
+            return __( 'Verify the nonce and capability along the actual input-handling path.', 'taxocommerce-system-check' );
+        }
+        if ( false !== strpos( $rule, 'sanitization' ) || false !== strpos( $rule, 'upload' ) || false !== strpos( $rule, 'file_' ) ) {
+            return __( 'Validate the input type, sanitize values and check uploads with WordPress APIs.', 'taxocommerce-system-check' );
+        }
+        if ( false !== strpos( $rule, 'sql' ) ) {
+            return __( 'Check SQL parameters and use $wpdb->prepare() for untrusted values.', 'taxocommerce-system-check' );
+        }
+        if ( false !== strpos( $rule, 'output' ) || false !== strpos( $rule, 'escape' ) || false !== strpos( $rule, 'inline_style' ) ) {
+            return __( 'Inspect the execution context and escape output at the point of rendering.', 'taxocommerce-system-check' );
+        }
+        if ( false !== strpos( $rule, 'hook' ) || false !== strpos( $rule, 'generic_' ) ) {
+            return __( 'Use a unique plugin-specific prefix; preserve compatibility through reviewed migration.', 'taxocommerce-system-check' );
+        }
+        if ( false !== strpos( $rule, 'buffer' ) ) {
+            return __( 'Ensure every ob_start() closes in the same logical flow, including error paths.', 'taxocommerce-system-check' );
+        }
+        if ( 'php_parse_error' === $rule ) {
+            return __( 'Correct the PHP syntax and rerun the check.', 'taxocommerce-system-check' );
+        }
+        return __( 'Inspect the source line and validate whether this warning requires a code change.', 'taxocommerce-system-check' );
+    }
+
+    /** Render one accessible severity marker; colour alone is never the label. */
+    private static function severity_dot( $status, $label ) {
+        echo '<span class="tc-cc-indicator tc-cc-indicator--' . esc_attr( $status ) . '"><span class="tc-cc-dot" aria-hidden="true"></span>' . esc_html( $label ) . '</span>';
+    }
+
+    /** Render sections in the same order as the segmented JSON. */
+    private static function render_classified( $state ) {
+        $data = self::classified_findings( $state );
+        $sections = array(
+            'errors' => array( 'error', __( 'Errors to fix', 'taxocommerce-system-check' ), __( 'No confirmed errors in the implemented checks.', 'taxocommerce-system-check' ) ),
+            'warnings' => array( 'warning', __( 'Warnings to review', 'taxocommerce-system-check' ), __( 'No warnings detected.', 'taxocommerce-system-check' ) ),
+            'clean' => array( 'pass', __( 'Files without findings', 'taxocommerce-system-check' ), __( 'No fully checked clean files yet.', 'taxocommerce-system-check' ) ),
+            'unchecked' => array( 'unchecked', __( 'Unchecked or incomplete', 'taxocommerce-system-check' ), __( 'All inventoried files have been checked.', 'taxocommerce-system-check' ) ),
+        );
+        echo '<div class="tc-cc-report">';
+        foreach ( $sections as $name => $meta ) {
+            $items = $data[ $name ];
+            echo '<section class="tc-cc-section tc-cc-section--' . esc_attr( $meta[0] ) . '">';
+            echo '<h3>';
+            self::severity_dot( $meta[0], $meta[1] );
+            echo ' <span class="tc-cc-count">(' . esc_html( (string) count( $items ) ) . ')</span></h3>';
+            if ( ! $items ) {
+                echo '<p>' . esc_html( $meta[2] ) . '</p>';
+            } else {
+                echo '<div class="tc-cc-entries">';
+                foreach ( $items as $item ) {
+                    echo '<div class="tc-cc-entry"><strong>' . esc_html( $item['file'] ?: __( 'Inventory', 'taxocommerce-system-check' ) ) . '</strong>';
+                    if ( isset( $item['line'] ) && null !== $item['line'] ) {
+                        echo ' <span>' . esc_html__( 'Line', 'taxocommerce-system-check' ) . ' ' . esc_html( (string) $item['line'] ) . '</span>';
+                    }
+                    if ( ! empty( $item['rule'] ) ) {
+                        echo ' <code>' . esc_html( $item['rule'] ) . '</code>';
+                    }
+                    echo '<p>' . esc_html( $item['description'] ?? __( 'Not checked.', 'taxocommerce-system-check' ) ) . '</p>';
+                    if ( ! empty( $item['recommendation'] ) ) {
+                        echo '<p><strong>' . esc_html__( 'Recommended action:', 'taxocommerce-system-check' ) . '</strong> ' . esc_html( $item['recommendation'] ) . '</p>';
+                    }
+                    echo '</div>';
+                }
+                echo '</div>';
+            }
+            echo '</section>';
+        }
+        echo '</div>';
     }
 
     private static function status( $item ) {
@@ -444,6 +773,32 @@ final class TaxoCommerce_System_Check_Code_Check {
         submit_button( __( 'Run Code Check', 'taxocommerce-system-check' ), 'primary', 'submit', false );
         echo '</form>';
         if ( is_array( $state ) ) {
+            $normalized = self::normalized_state( $state );
+            $summary = self::summary_core( $normalized );
+            $label = 'fail' === $summary['status']
+                ? __( 'Errors detected', 'taxocommerce-system-check' )
+                : ( 'review' === $summary['status']
+                    ? __( 'Review required: warnings found', 'taxocommerce-system-check' )
+                    : ( 'pass' === $summary['status']
+                        ? __( 'No findings in implemented checks (not a WordPress.org certification)', 'taxocommerce-system-check' )
+                        : __( 'Incomplete: not all files were checked', 'taxocommerce-system-check' ) ) );
+            echo '<div class="notice notice-' . ( 'fail' === $summary['status'] ? 'error' : 'warning' ) . ' inline"><p><strong>'
+                . esc_html( $label ) . '</strong></p>';
+            echo '<p>' . esc_html__( 'Files analysed:', 'taxocommerce-system-check' ) . ' ' . esc_html( (string) $summary['files_scanned'] )
+                . '/' . esc_html( (string) $summary['files_total'] ) . ' · '
+                . esc_html__( 'Findings:', 'taxocommerce-system-check' ) . ' ' . esc_html( (string) $summary['findings'] ) . ' · '
+                . esc_html__( 'Distinct rules:', 'taxocommerce-system-check' ) . ' ' . esc_html( (string) $summary['distinct_rules'] ) . '</p>';
+            echo '<p>PHP: ' . esc_html( (string) $summary['by_group']['php'] )
+                . ' · WordPress: ' . esc_html( (string) $summary['by_group']['wordpress'] )
+                . ' · ' . esc_html__( 'Security:', 'taxocommerce-system-check' ) . ' ' . esc_html( (string) $summary['by_group']['security'] ) . '</p>';
+            if ( $summary['rules'] ) {
+                echo '<details><summary>' . esc_html__( 'All rules with findings', 'taxocommerce-system-check' ) . '</summary><ul>';
+                foreach ( $summary['rules'] as $rule => $occurrences ) {
+                    echo '<li><code>' . esc_html( $rule ) . '</code> (' . esc_html( (string) $occurrences ) . ')</li>';
+                }
+                echo '</ul></details>';
+            }
+            echo '<p>' . esc_html__( 'Native static indicators only. Official Plugin Check, live security and older PHP versions have not been executed here.', 'taxocommerce-system-check' ) . '</p></div>';
             echo '<p><strong>' . esc_html__( 'Progress', 'taxocommerce-system-check' ) . ':</strong> '
                 . esc_html( (string) $state['cursor'] ) . '/' . esc_html( (string) count( $state['files'] ) )
                 . ' · ' . esc_html( $state['status'] ) . '</p>';
@@ -457,6 +812,8 @@ final class TaxoCommerce_System_Check_Code_Check {
                 self::button( 'resume', __( 'Resume', 'taxocommerce-system-check' ), true );
             }
             if ( $state['results'] ) {
+                self::render_classified( $normalized );
+                echo '<details class="tc-cc-legacy"><summary>' . esc_html__( 'Detailed results by file (technical view)', 'taxocommerce-system-check' ) . '</summary>';
                 echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
                 echo '<input type="hidden" name="action" value="' . esc_attr( self::EXPORT_ACTION ) . '">';
                 wp_nonce_field( self::EXPORT_ACTION );
@@ -531,6 +888,9 @@ final class TaxoCommerce_System_Check_Code_Check {
                 echo '</tr>';
             }
             echo '</tbody></table>';
+            if ( $state['results'] ) {
+                echo '</details>';
+            }
         }
         echo '</section>';
     }
@@ -544,6 +904,9 @@ final class TaxoCommerce_System_Check_Code_Check {
         if ( ! is_array( $report ) || ! $report['results'] ) {
             wp_die( esc_html__( 'Run Code Check before downloading results.', 'taxocommerce-system-check' ) );
         }
+        $normalized = self::normalized_state( $report );
+        $report['classified_findings'] = self::classified_findings( $normalized );
+        $report['summary'] = self::summary_core( $normalized );
         $json = wp_json_encode( $report, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE );
         if ( ! is_string( $json ) ) {
             wp_die( esc_html__( 'Unable to generate JSON.', 'taxocommerce-system-check' ) );

@@ -999,6 +999,8 @@ final class TCSUP_CSV {
 			}
 
 			if ( $existing ) {
+				// Preserve the last observed state before an importer overwrites its supplier prices.
+				TCSUP_Price_History::capture( absint( $existing['id'] ), 'baseline' );
 				$changed = self::changed_fields( $existing, $data );
 				$data['estado_sincronizacion'] = $changed ? 'modificado' : (string) ( $existing['estado_sincronizacion'] ?? 'sin_cambios' );
 				$data['cambios_detectados']    = $changed ? implode( ',', $changed ) : '';
@@ -1007,6 +1009,7 @@ final class TCSUP_CSV {
 				if ( false === $result ) {
 					$errors++;
 				} elseif ( $changed ) {
+					TCSUP_Price_History::capture( absint( $existing['id'] ), 'csv' );
 					$updated++;
 				} else {
 					$unchanged++;
@@ -1028,6 +1031,7 @@ final class TCSUP_CSV {
 				if ( false === $result ) {
 					$errors++;
 				} else {
+					TCSUP_Price_History::capture( absint( $wpdb->insert_id ), 'csv' );
 					$inserted++;
 				}
 			}

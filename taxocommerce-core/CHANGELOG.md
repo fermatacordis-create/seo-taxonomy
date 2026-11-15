@@ -1,3 +1,57 @@
+## [0.4.85] — 2026-11-14 — Descubrimiento automático de plugins de la familia (#2669)
+
+- El catálogo de Core integra automáticamente los plugins TaxoCommerce realmente instalados según `get_plugins()`, tanto activos como inactivos; no es necesario actualizar Core para nuevos plugins.
+- El descubrimiento exige prefijo de carpeta `taxocommerce-*` y nombre identificable como TaxoCommerce, excluye el propio Core y software ajeno, evita duplicados y mantiene intacto el catálogo histórico y los filtros de terceros.
+- Detecta ZIPs `taxocommerce-*.zip` del directorio de paquetes local ya soportado (`uploads/taxocommerce-core/plugins`), incluyendo extensiones nuevas todavía no instaladas; muestra su ficha y conserva descarga ZIP, carga mediante el instalador nativo de WordPress, búsqueda en WordPress.org y activación/desactivación nativa con nonce.
+- Las tarjetas de Accounting y Customers instalados/inactivos se reconocen sin activar primero los plugins; Suppliers conserva una sola tarjeta.
+- No se reintroduce un instalador propio prohibido por las revisiones de WordPress.org; no se instalan ni activan plugins automáticamente. Pruebas aisladas de inventario, casos negativos y ZIPs locales.
+- Solo se modifica TaxoCommerce Core y su prueba de regresión. Despliegue del mismo Core en STAGING y Focazul; producción no autorizada.
+
+## [0.4.84] — 2026-11-13 — Paquete de publicación con slug oficial
+
+- Adaptación del empaquetador de WordPress.org al slug confirmado por el equipo revisor: `taxocommerce-core`.
+- El ZIP público mantiene el mismo archivo principal, dominio gettext y código que Core instalado; deja de construir una variante de nombre largo con traducciones reescritas.
+- Excluye los catálogos del slug antiguo y añade validación explícita de estructura, versiones y cinco idiomas. El control oficial sigue ejecutándose en CI con 0 errores y 0 warnings como requisito de publicación.
+- No modifica los servicios ni las tablas de otros plugins, no toca producción. Issue #2625.
+
+## [0.4.83] — 2026-11-13 — Correcciones de revisión manual WordPress.org
+
+- Eliminadas las instalaciones, activaciones y desactivaciones directas de otros plugins desde Core. Las tarjetas conservan la consulta de estado y el acceso a acciones **nativas de WordPress**, con nonces y permisos; los ZIP locales pueden descargarse con autenticación y cargarse desde la pantalla oficial de WordPress.
+- Reemplazados estilos CSS dinámicos por reglas estáticas con el mismo ámbito en `assets/admin.css`; se mantiene el comportamiento visual del menú familiar.
+- `country_request()` ya no lee POST directamente: delega en el validador compartido después de los nonces de cada operación. GET es solo lectura.
+- Garantizado el cierre de buffer en `finally` para JSON de Anomalías, incluso cuando su generación falla.
+- Sustituidos los hooks `seo_reports_*` de Core por nombres `taxocommerce_core_*`, eliminadas exclusiones ligadas exclusivamente a Distribuidor de Herramientas. El resto de exclusiones genéricas se conserva. Pueden personalizarse mediante los nuevos filtros.
+- Pruebas de regresión ajustadas para demostrar que Code Check sigue detectando futuras violaciones sin silenciarlas. No se altera la funcionalidad del catálogo, la estructura de datos, otros plugins ni producción. Issue #2625.
+
+## [0.4.82] — 2026-11-13 — Semáforo y JSON clasificado en Code Check
+
+- Presenta errores confirmados en rojo, advertencias de revisión en naranja, archivos sin incidencias en verde y resultados incompletos en gris. Cada categoría se identifica también por texto, sin depender únicamente del color.
+- Los errores y warnings muestran archivo, línea, regla, explicación y acción recomendada. Los archivos marcados en verde únicamente están libres de hallazgos para las reglas implementadas; no representan una certificación WordPress.org.
+- Exporta `classified_findings` con `errors`, `warnings`, `clean`, `unchecked` y recuentos, preservando íntegros `results` y `summary`. Conserva ejecución local por bloques y control de CPU.
+- Incluye pruebas de clasificación, no verificados y recomendaciones. Issue #2623. No se ha corregido código funcional ni se han alterado otros plugins.
+
+## [0.4.81] — 2026-11-13 — Visibilidad real de los hallazgos de Code Check
+
+- Distingue archivos analizados, cantidad de incidencias y número de reglas activadas. PHP `pass` no oculta las advertencias de WordPress y seguridad.
+- Estado global `review` si existen hallazgos; `fail` para errores detectados y `incomplete` si faltan archivos, hay resultados omitidos o el inventario se ha truncado.
+- Muestra todas las evidencias incluidas en el informe (antes la pantalla recortaba a 8 por sección) y un listado por regla; JSON incorpora resumen reproducible. Mantiene el chequeo local sin ejecutar Plugin Check de WordPress.
+- Pruebas de regresión de estados, totales e inventario incompleto; Issue #2621.
+
+## [0.4.80] — 2026-11-13 — Reglas nativas de revisión de código en Core
+
+- Ampliado el Code Check local con señales de los siete grupos señalados por WordPress.org: instalación/activación/desactivación, buffers, nonces/permisos, entradas y subidas, escapes/estilos inline y prefijos para elementos globales y hooks; añade detección de sesiones PHP y consultas SQL dinámicas.
+- El análisis conserva sintaxis PHP, estructura de WordPress y seguridad preexistentes, control de CPU por lotes y descarga JSON; registra regla, línea, origen y severidad de revisión sin afirmar que se ha ejecutado Plugin Check externo ni auditoría de seguridad en tiempo real.
+- Añadidos casos de regresión de las ubicaciones citadas por WordPress.org y pruebas negativas que evitan falsos positivos. Corregido el contador de llaves en cadenas interpoladas para no confundir métodos de una clase con funciones globales.
+- Solo se ha ampliado la **detección**. No se corrigen aún los hallazgos reportados ni se modifica ninguna otra extensión.
+- Issue #2619.
+
+## [0.4.79] — 2026-11-13 — Cabecera persistente en Core → Autocheck
+
+- Core utiliza exactamente su cabecera original (título, Description, ficha oficial, CHANGELOG local, versión y fecha) en Resumen y Autocheck, sin cabeceras alternativas.
+- Los chequeos de funcionalidades y de código aparecen debajo de la navegación general, como dos subpestañas independientes; mantienen sus botones, informe y JSON propios.
+- El chequeo de código permanece limitado a los archivos PHP de Core y sus lotes/velocidades de CPU. Se añaden regresiones para el encabezado compartido y la navegación independiente.
+- No se introducen todavía las nuevas reglas de la revisión manual de WordPress.org ni se alteran datos, otros plugins o producción.
+
 ## [0.4.78] — 2026-11-11 — Corrige chequeo local y paquete WordPress.org (#2565)
 
 - Corrige los 1.022 errores y la advertencia de discrepancia de dominio de traducción identificados al comprobar Core instalado en `taxocommerce-core/`. El plugin instalado recupera el dominio nativo `taxocommerce-core`, sin modificar menús, tablas ni funciones.

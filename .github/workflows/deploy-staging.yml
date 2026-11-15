@@ -61,7 +61,7 @@ jobs:
       - name: Validate independent Autotest Code Check for the entire new family
         run: |
           set -euo pipefail
-          for plugin in auditor campaigns connections core database dependiente distribution facturacion faqs google-bing images import-export logistica redirects scrappers social suppliers tasks templates vocabulary; do
+          for plugin in auditor campaigns core customers database dependiente distribution facturacion faqs google-bing images import-export logistica redirects scrappers social suppliers tasks templates vocabulary; do
             php -l "taxocommerce-${plugin}/includes/class-taxocommerce-autotest-code.php"
             php .github/tests/autotest-code-vendor-smoke.php "${plugin}"
             node --check "taxocommerce-${plugin}/assets/autotest-code.js"
@@ -117,7 +117,6 @@ jobs:
           find taxocommerce-* -type f -name '*.php' -not -path '*/tests/*' -not -path '*/templates/*' -print0 | while IFS= read -r -d '' file; do
             php -l "$file" > /dev/null
           done
-          php taxocommerce-connections/tests/connections-smoke.php
           php taxocommerce-auditor/tests/auto-test-manual-smoke.php
           php taxocommerce-database/tests/auto-test-smoke.php
           php -l .github/tests/early-i18n-core-registration-smoke.php
@@ -125,10 +124,33 @@ jobs:
           php -l taxocommerce-tasks/includes/class-tctasks-manuals.php
           php -l taxocommerce-tasks/tests/standalone-bootstrap-smoke.php
           php taxocommerce-tasks/tests/standalone-bootstrap-smoke.php
+          php -l taxocommerce-customers/tests/standalone-bootstrap-smoke.php
+          php taxocommerce-customers/tests/standalone-bootstrap-smoke.php
+          php -l taxocommerce-accounting/taxocommerce-accounting.php
+          php -l taxocommerce-accounting/includes/class-tca-provider-invoices.php
+          php -l taxocommerce-accounting/tests/provider-invoice-pdf-smoke.php
+          php taxocommerce-accounting/tests/provider-invoice-pdf-smoke.php
+          php -l taxocommerce-accounting/includes/class-tca-hacienda.php
+          php -l taxocommerce-accounting/tests/hacienda-workspace-smoke.php
+          php taxocommerce-accounting/tests/hacienda-workspace-smoke.php
+          php -l taxocommerce-accounting/tests/live-tax-preparation-smoke.php
+          php taxocommerce-accounting/tests/live-tax-preparation-smoke.php
+          php taxocommerce-accounting/tests/smoke.php
+          node --check taxocommerce-customers/assets/admin.js
           php -l taxocommerce-tasks/includes/class-tctasks-calendar.php
           php -l taxocommerce-tasks/tests/calendar-duration-smoke.php
           php taxocommerce-tasks/tests/calendar-duration-smoke.php
+          php -l taxocommerce-system-check/includes/class-taxocommerce-system-check-queue-health.php
+          php -l taxocommerce-system-check/tests/queue-health-smoke.php
+          php taxocommerce-system-check/tests/queue-health-smoke.php
+          php -l taxocommerce-system-check/tests/url-process-progress-smoke.php
+          php taxocommerce-system-check/tests/url-process-progress-smoke.php
           php taxocommerce-system-check/tests/processes-smoke.php
+          php -l taxocommerce-system-check/includes/class-taxocommerce-system-check-process-details.php
+          php -l taxocommerce-system-check/tests/process-details-smoke.php
+          php taxocommerce-system-check/tests/process-details-smoke.php
+          php -l taxocommerce-system-check/tests/process-details-partial-deploy-smoke.php
+          php taxocommerce-system-check/tests/process-details-partial-deploy-smoke.php
           php -l taxocommerce-system-check/includes/class-taxocommerce-system-check-code-check.php
           php -l taxocommerce-system-check/includes/class-taxocommerce-system-check-code-rules.php
           php -l taxocommerce-system-check/tests/code-check-deep-smoke.php
@@ -186,6 +208,18 @@ jobs:
           php -l taxocommerce-scrappers/tests/lifecycle-smoke.php
           php taxocommerce-scrappers/tests/lifecycle-smoke.php
           php taxocommerce-social/tests/auto-test-manual-smoke.php
+          php -l taxocommerce-social/includes/calendar.php
+          php -l taxocommerce-social/tests/calendar-edit-cancel-smoke.php
+          php taxocommerce-social/tests/calendar-edit-cancel-smoke.php
+          php -l taxocommerce-social/tests/standalone-legacy-cron-smoke.php
+          php taxocommerce-social/tests/standalone-legacy-cron-smoke.php
+          php -l taxocommerce-social/includes/csv-cancel.php
+          php -l taxocommerce-social/tests/csv-cancel-smoke.php
+          php taxocommerce-social/tests/csv-cancel-smoke.php
+          php -l taxocommerce-accounting/taxocommerce-accounting.php
+          php -l taxocommerce-accounting/tests/standalone-bootstrap-smoke.php
+          php taxocommerce-accounting/tests/standalone-bootstrap-smoke.php
+          python3 -m py_compile .github/scripts/activate_accounting_staging.py
           php taxocommerce-suppliers/tests/smoke.php
           php taxocommerce-suppliers/tests/template-creation-smoke.php
           php taxocommerce-system-check/tests/auto-test-guide-smoke.php
@@ -234,6 +268,9 @@ jobs:
           php -l taxocommerce-core/taxocommerce-core.php
           php -l taxocommerce-core/tests/action-scheduler-notice-smoke.php
           php taxocommerce-core/tests/action-scheduler-notice-smoke.php
+          php -l taxocommerce-core/includes/class-taxocommerce-core.php
+          php -l taxocommerce-core/tests/family-extension-discovery-smoke.php
+          php taxocommerce-core/tests/family-extension-discovery-smoke.php
           php -l taxocommerce-core/includes/class-taxocommerce-core-anomalies.php
           php -l taxocommerce-core/includes/class-taxocommerce-core-country.php
           php -l taxocommerce-core/includes/class-taxocommerce-core-hierarchy.php
@@ -344,6 +381,12 @@ jobs:
         # deploy() has a bounded 3-attempt reconnect loop; never retry it 3x in bash.
         # Unbuffered output records progress and the actual failing FTPS phase.
         run: python3 -u .github/scripts/deploy_staging_delta.py deploy --base "$BASE" --target staging --slug "$SLUG" --full "$SYNC"
+      - name: Activate and verify new Accounting plugin on STAGING only
+        if: ${{ matrix.slug == 'taxocommerce-accounting' }}
+        env:
+          TC_STAGING_WP_USER: ${{ secrets.TC_STAGING_WP_USER }}
+          TC_STAGING_WP_PASSWORD: ${{ secrets.TC_STAGING_WP_PASSWORD }}
+        run: python3 .github/scripts/activate_accounting_staging.py
 
   deploy-focazul:
     name: Focazul / ${{ matrix.slug }}

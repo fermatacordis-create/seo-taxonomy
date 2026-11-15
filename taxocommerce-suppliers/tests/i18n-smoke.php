@@ -5,7 +5,7 @@
  * Does not start WordPress, access a database, or mutate site data.
  */
 $base = dirname( __DIR__ );
-$locales = array( 'en_US', 'fr_FR', 'es_ES', 'de_DE' );
+$locales = array( 'en_US', 'fr_FR', 'es_ES', 'de_DE', 'nl_NL' );
 $manual = file_get_contents( $base . '/includes/class-tcsup-manual.php' );
 $admin  = file_get_contents( $base . '/includes/class-tcsup-admin.php' );
 
@@ -59,11 +59,14 @@ foreach ( array(
     }
 }
 
+$pot = tcsup_i18n_parse_po( $base . '/languages/taxocommerce-suppliers.pot' );
+$pot_keys = array_keys( $pot );
+sort( $pot_keys );
 $key_sets = null;
 foreach ( $locales as $locale ) {
     $prefix = $base . '/languages/taxocommerce-suppliers-' . $locale;
     $po = tcsup_i18n_parse_po( $prefix . '.po' );
-    if ( count( $po ) < 491 ) {
+    if ( count( $po ) < 561 ) {
         tcsup_i18n_fail( $locale . ' catalog has too few entries: ' . count( $po ) );
     }
     foreach ( $po as $key => $value ) {
@@ -73,6 +76,14 @@ foreach ( $locales as $locale ) {
     }
     $keys = array_keys( $po );
     sort( $keys );
+    if ( $keys !== $pot_keys ) {
+        tcsup_i18n_fail( 'PO/POT key mismatch for ' . $locale );
+    }
+    foreach ( array( 'Price history', 'Read-only price snapshots. The first entry reflects the first captured price, not a reconstructed earlier price.', 'Code Check', 'Functionality Check', 'Official plugin page' ) as $required_ui ) {
+        if ( empty( $po[ $required_ui ] ) ) {
+            tcsup_i18n_fail( $locale . ' missing visible UI translation: ' . $required_ui );
+        }
+    }
     if ( null === $key_sets ) {
         $key_sets = $keys;
     } elseif ( $keys !== $key_sets ) {
@@ -106,4 +117,4 @@ if ( preg_match( '/__\\s*\\(\\s*\x27<code>[^<]+<\\/code>(?:[, ]+<code>[^<]+<\\/c
 if ( 1 !== substr_count( file_get_contents( $base . '/includes/class-tcsup-autotest.php' ), "echo '<h3>' . esc_html__( 'Resumen'" ) ) {
     tcsup_i18n_fail( 'Autocheck must render the summary once' );
 }
-echo "Suppliers i18n smoke passed: four complete catalogs, native gettext and manual UI\n";
+echo "Suppliers i18n smoke passed: five complete catalogs, native gettext and manual UI\n";

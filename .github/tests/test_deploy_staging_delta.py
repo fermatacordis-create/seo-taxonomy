@@ -81,6 +81,48 @@ class DeltaTests(unittest.TestCase):
         module.upload_plugin(ftp, "focazul", "taxocommerce-templates", ["taxocommerce-templates.php"], required=False)
         ftp.storbinary.assert_not_called()
 
+
+    def test_customers_first_install_is_limited_to_staging_and_focazul_and_complete(self):
+        import os
+        with tempfile.TemporaryDirectory() as temp:
+            old = os.getcwd()
+            os.chdir(temp)
+            try:
+                directory = Path("taxocommerce-customers")
+                directory.mkdir()
+                (directory / "taxocommerce-customers.php").write_text("<?php")
+                (directory / "readme.txt").write_text("Customers plugin")
+                for target in ("staging", "focazul"):
+                    ftp = mock.Mock()
+                    ftp.pwd.return_value = "/site/wp-content/plugins/taxocommerce-customers"
+                    calls = [0]
+                    def cwd(path):
+                        calls[0] += 1
+                        if calls[0] == 1:
+                            raise module.ftplib.error_perm("550 absent")
+                    ftp.cwd.side_effect = cwd
+                    import hashlib
+                    digests = {
+                        "taxocommerce-customers.php": hashlib.sha256(b"<?php").hexdigest(),
+                        "readme.txt": hashlib.sha256(b"Customers plugin").hexdigest(),
+                    }
+                    probes = {}
+                    def remote_hash(ftp_instance, filename):
+                        probes[filename] = probes.get(filename, 0) + 1
+                        return None if probes[filename] == 1 else digests[filename]
+                    with mock.patch.object(module, "plugin_source_files", return_value=[
+                        "taxocommerce-customers.php", "readme.txt"
+                    ]) as manifest:
+                        with mock.patch.object(module, "existing_file_hash", side_effect=remote_hash):
+                            module.upload_plugin(ftp, target, "taxocommerce-customers", ["readme.txt"], required=False)
+                    ftp.mkd.assert_called_once_with("taxocommerce-customers")
+                    manifest.assert_called_once_with("taxocommerce-customers")
+                    self.assertEqual(ftp.storbinary.call_count, 2)
+                with self.assertRaises(ValueError):
+                    module.remote_plugin_dir("production", "taxocommerce-customers")
+            finally:
+                os.chdir(old)
+
     def test_upload_core_checks_correct_site_without_writing_other_site(self):
         ftp = mock.Mock()
         ftp.pwd.return_value = "/asociacionfocazul/wp-content/plugins/taxocommerce-core"

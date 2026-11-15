@@ -40,7 +40,7 @@ msgstr ""
 #: includes/class-taxocommerce-google-bing-bing-service.php:386
 #: includes/class-taxocommerce-google-bing-connections.php:287
 msgid "Eliminar la API key guardada"
-msgstr ""
+msgstr "Eliminar la API key guardada"
 
 #: includes/analysis/analista-bing.php:387
 #: includes/class-taxocommerce-google-bing-bing-service.php:387
@@ -58,23 +58,23 @@ msgstr ""
 
 #: includes/analysis/analista-competitivo.php:849
 msgid "No tienes permisos para generar el informe competitivo."
-msgstr ""
+msgstr "No tienes permisos para generar el informe competitivo."
 
 #: includes/analysis/analista-competitivo.php:881
 msgid "No tienes permisos para exportar el informe competitivo."
-msgstr ""
+msgstr "No tienes permisos para exportar el informe competitivo."
 
 #: includes/analysis/analista-competitivo.php:887
 msgid "Todavía no existe un informe competitivo guardado."
-msgstr ""
+msgstr "Todavía no existe un informe competitivo guardado."
 
 #: includes/analysis/analista-competitivo.php:926
 msgid "Informe competitivo generado y guardado."
-msgstr ""
+msgstr "Informe competitivo generado y guardado."
 
 #: includes/analysis/analista-competitivo.php:937
 msgid "Informe competitivo profundo"
-msgstr ""
+msgstr "Informe competitivo profundo"
 
 #: includes/analysis/analista-competitivo.php:938
 msgid ""
@@ -92,29 +92,29 @@ msgstr ""
 
 #: includes/analysis/analista-competitivo.php:965
 msgid "Configura primero los dominios en"
-msgstr ""
+msgstr "Configura primero los dominios en"
 
 #: includes/analysis/analista-competitivo.php:965
 #: includes/analysis/analista-informe.php:479
 msgid "Competidores"
-msgstr ""
+msgstr "Competidores"
 
 #: includes/analysis/analista-competitivo.php:965
 msgid ". Las palabras vigiladas son opcionales."
-msgstr ""
+msgstr ". Las palabras vigiladas son opcionales."
 
 #: includes/analysis/analista-competitivo.php:971
 msgid "Conclusión ejecutiva"
-msgstr ""
+msgstr "Conclusión ejecutiva"
 
 #: includes/analysis/analista-competitivo.php:984
 #: includes/analysis/analista-informe.php:446
 msgid "Dominio"
-msgstr ""
+msgstr "Dominio"
 
 #: includes/analysis/analista-competitivo.php:986
 msgid "Índice"
-msgstr ""
+msgstr "Índice"
 
 #: includes/analysis/analista-competitivo.php:986
 msgid "Evidencia"
@@ -122,11 +122,11 @@ msgstr "Evidencia"
 
 #: includes/analysis/analista-competitivo.php:1000
 msgid "Dónde estamos por encima"
-msgstr ""
+msgstr "Dónde estamos por encima"
 
 #: includes/analysis/analista-competitivo.php:1009
 msgid "Dónde estamos por debajo"
-msgstr ""
+msgstr "Dónde estamos por debajo"
 
 #: includes/analysis/analista-competitivo.php:1017
 msgid "Plan priorizado"
@@ -145,7 +145,7 @@ msgstr "Prioridad"
 #: includes/analysis/analista-competitivo.php:1018
 #: includes/google/seo-google-info.php:4285
 msgid "Área"
-msgstr ""
+msgstr "Área"
 
 #: includes/analysis/analista-competitivo.php:1018
 msgid "Acción"
@@ -153,23 +153,23 @@ msgstr "Acción"
 
 #: includes/analysis/analista-competitivo.php:1018
 msgid "Impacto"
-msgstr ""
+msgstr "Impacto"
 
 #: includes/analysis/analista-competitivo.php:1018
 msgid "Esfuerzo"
-msgstr ""
+msgstr "Esfuerzo"
 
 #: includes/analysis/analista-competitivo.php:1024
 msgid "Calidad y límites de la evidencia"
-msgstr ""
+msgstr "Calidad y límites de la evidencia"
 
 #: includes/analysis/analista-core.php:220
 msgid "No tienes permisos para configurar Analista."
-msgstr ""
+msgstr "No tienes permisos para configurar Analista."
 
 #: includes/analysis/analista-geo-bridge.php:36
 msgid "Plan de acción"
-msgstr ""
+msgstr "Plan de acción"
 
 #: includes/analysis/analista-geo-bridge.php:36
 msgid ""
@@ -197,11 +197,11 @@ msgstr ""
 
 #: includes/analysis/analista-geo.php:443
 msgid "Sesiones atribuidas a asistentes IA:"
-msgstr ""
+msgstr "Sesiones atribuidas a asistentes IA:"
 
 #: includes/analysis/analista-geo.php:443
 msgid "N/D (GA4 no disponible)."
-msgstr ""
+msgstr "N/D (GA4 no disponible)."
 
 #: includes/analysis/analista-geo.php:445
 msgid ""
@@ -213,7 +213,7 @@ msgstr ""
 
 #: includes/analysis/analista-informe.php:142
 msgid "Cómo avanzan nuestras posiciones"
-msgstr ""
+msgstr "Cómo avanzan nuestras posiciones"
 
 #: includes/analysis/analista-informe.php:142
 msgid ""
@@ -223,15 +223,15 @@ msgstr ""
 
 #: includes/analysis/analista-informe.php:143
 msgid "Actual"
-msgstr ""
+msgstr "Actual"
 
 #: includes/analysis/analista-informe.php:143
 msgid "Periodo anterior"
-msgstr ""
+msgstr "Periodo anterior"
 
 #: includes/analysis/analista-informe.php:159
 msgid "Movimiento de keywords"
-msgstr ""
+msgstr "Movimiento de keywords"
 
 #: includes/analysis/analista-informe.php:159
 msgid ""
@@ -241,7 +241,7 @@ msgstr ""
 
 #: includes/analysis/analista-informe.php:174
 msgid "Cómo se posiciona el catálogo"
-msgstr ""
+msgstr "Cómo se posiciona el catálogo"
 
 #: includes/analysis/analista-informe.php:174
 msgid ""
@@ -251,19 +251,19 @@ msgstr ""
 
 #: includes/analysis/analista-informe.php:174
 msgid "Tipo de URL"
-msgstr ""
+msgstr "Tipo de URL"
 
 #: includes/analysis/analista-informe.php:174
 #: includes/google/seo-google-info.php:4285
 #: includes/google/seo-google-info.php:4293
 msgid "Páginas"
-msgstr ""
+msgstr "Páginas"
 
 #: includes/analysis/analista-informe.php:174
 #: includes/analysis/analista-lazy.php:187
 #: includes/analysis/analista-lazy.php:226
 msgid "Impresiones"
-msgstr ""
+msgstr "Impresiones"
 
 #: includes/analysis/analista-informe.php:174
 #: includes/analysis/analista-lazy.php:187
@@ -276,26 +276,26 @@ msgstr ""
 #: includes/google/seo-google-info.php:4285
 #: includes/google/seo-google-info.php:4550
 msgid "Clics"
-msgstr ""
+msgstr "Clics"
 
 #: includes/analysis/analista-informe.php:174
 #: includes/google/seo-google-demand-catalog.php:1724
 #: includes/google/seo-google-info.php:3399
 #: includes/google/seo-google-info.php:4126
 msgid "Consultas"
-msgstr ""
+msgstr "Consultas"
 
 #: includes/analysis/analista-informe.php:235
 msgid "Lectura rápida"
-msgstr ""
+msgstr "Lectura rápida"
 
 #: includes/analysis/analista-informe.php:235
 msgid "Lo importante del periodo sin recorrer todos los informes."
-msgstr ""
+msgstr "Lo importante del periodo sin recorrer todos los informes."
 
 #: includes/analysis/analista-informe.php:303
 msgid "Tráfico y conversión"
-msgstr ""
+msgstr "Tráfico y conversión"
 
 #: includes/analysis/analista-informe.php:303
 msgid ""
@@ -306,37 +306,37 @@ msgstr ""
 
 #: includes/analysis/analista-informe.php:318
 msgid "Fuente / medio"
-msgstr ""
+msgstr "Fuente / medio"
 
 #: includes/analysis/analista-informe.php:318
 msgid "Canal"
-msgstr ""
+msgstr "Canal"
 
 #: includes/analysis/analista-informe.php:318
 msgid "Sesiones"
-msgstr ""
+msgstr "Sesiones"
 
 #: includes/analysis/analista-informe.php:318
 #: includes/analysis/analista-informe.php:327
 msgid "Usuarios"
-msgstr ""
+msgstr "Usuarios"
 
 #: includes/analysis/analista-informe.php:326
 msgid "Rutas 404 vistas en Analytics"
-msgstr ""
+msgstr "Rutas 404 vistas en Analytics"
 
 #: includes/analysis/analista-informe.php:327
 msgid "Ruta"
-msgstr ""
+msgstr "Ruta"
 
 #: includes/analysis/analista-informe.php:327
 msgid "Vistas"
-msgstr ""
+msgstr "Vistas"
 
 #: includes/analysis/analista-informe.php:341
 #: includes/google/seo-google-info.php:2644
 msgid "Evolución en Google"
-msgstr ""
+msgstr "Evolución en Google"
 
 #: includes/analysis/analista-informe.php:341
 msgid ""
@@ -346,7 +346,7 @@ msgstr ""
 
 #: includes/analysis/analista-informe.php:353
 msgid "Arquitectura que Analista tiene en cuenta"
-msgstr ""
+msgstr "Arquitectura que Analista tiene en cuenta"
 
 #: includes/analysis/analista-informe.php:353
 msgid ""
@@ -358,7 +358,7 @@ msgstr ""
 #: includes/analysis/analista-informe.php:397
 #: includes/analysis/analista-informe.php:481
 msgid "Palabras clave vigiladas"
-msgstr ""
+msgstr "Palabras clave vigiladas"
 
 #: includes/analysis/analista-informe.php:393
 msgid ""
@@ -368,7 +368,7 @@ msgstr ""
 
 #: includes/analysis/analista-informe.php:393
 msgid "Todavía no has definido palabras clave de seguimiento."
-msgstr ""
+msgstr "Todavía no has definido palabras clave de seguimiento."
 
 #: includes/analysis/analista-informe.php:397
 msgid ""
@@ -380,43 +380,43 @@ msgstr ""
 #: includes/analysis/analista-informe.php:398
 #: includes/analysis/analista-informe.php:454
 msgid "Palabra clave"
-msgstr ""
+msgstr "Palabra clave"
 
 #: includes/analysis/analista-informe.php:398
 #: includes/analysis/analista-informe.php:454
 msgid "Nosotros"
-msgstr ""
+msgstr "Nosotros"
 
 #: includes/analysis/analista-informe.php:398
 #: includes/google/seo-google-info.php:3578
 msgid "Antes"
-msgstr ""
+msgstr "Antes"
 
 #: includes/analysis/analista-informe.php:398
 msgid "Movimiento"
-msgstr ""
+msgstr "Movimiento"
 
 #: includes/analysis/analista-informe.php:398
 #: includes/analysis/analista-informe.php:454
 msgid "Mejor competidor"
-msgstr ""
+msgstr "Mejor competidor"
 
 #: includes/analysis/analista-informe.php:398
 msgid "Distancia"
-msgstr ""
+msgstr "Distancia"
 
 #: includes/analysis/analista-informe.php:398
 #: includes/analysis/analista-lazy.php:226
 msgid "Lectura"
-msgstr ""
+msgstr "Lectura"
 
 #: includes/analysis/analista-informe.php:398
 msgid "Proyección"
-msgstr ""
+msgstr "Proyección"
 
 #: includes/analysis/analista-informe.php:427
 msgid "La comparación externa todavía no tiene posiciones disponibles."
-msgstr ""
+msgstr "La comparación externa todavía no tiene posiciones disponibles."
 
 #: includes/analysis/analista-informe.php:427
 msgid ""
@@ -427,7 +427,7 @@ msgstr ""
 
 #: includes/analysis/analista-informe.php:446
 msgid "Nosotros frente a competidores"
-msgstr ""
+msgstr "Nosotros frente a competidores"
 
 #: includes/analysis/analista-informe.php:446
 msgid ""
@@ -436,36 +436,36 @@ msgstr ""
 
 #: includes/analysis/analista-informe.php:446
 msgid "Visibilidad"
-msgstr ""
+msgstr "Visibilidad"
 
 #: includes/analysis/analista-informe.php:446
 msgid "Keywords"
-msgstr ""
+msgstr "Palabras clave"
 
 #: includes/analysis/analista-informe.php:446
 msgid "Top 3"
-msgstr ""
+msgstr "Top 3"
 
 #: includes/analysis/analista-informe.php:446
 msgid "Top 10"
-msgstr ""
+msgstr "Top 10"
 
 #: includes/analysis/analista-informe.php:446
 msgid "Top 20"
-msgstr ""
+msgstr "Top 20"
 
 #: includes/analysis/analista-informe.php:446
 msgid "Top 50"
-msgstr ""
+msgstr "Top 50"
 
 #: includes/analysis/analista-informe.php:446
 #: includes/class-taxocommerce-google-bing-merchant.php:355
 msgid "Evolución"
-msgstr ""
+msgstr "Evolución"
 
 #: includes/analysis/analista-informe.php:454
 msgid "Palabras clave que debemos disputar"
-msgstr ""
+msgstr "Palabras clave que debemos disputar"
 
 #: includes/analysis/analista-informe.php:454
 msgid ""
@@ -475,19 +475,19 @@ msgstr ""
 
 #: includes/analysis/analista-informe.php:454
 msgid "Volumen"
-msgstr ""
+msgstr "Volumen"
 
 #: includes/analysis/analista-informe.php:454
 msgid "Dificultad"
-msgstr ""
+msgstr "Dificultad"
 
 #: includes/analysis/analista-informe.php:454
 msgid "Brecha"
-msgstr ""
+msgstr "Brecha"
 
 #: includes/analysis/analista-informe.php:463
 msgid "Demanda exterior · Google Trends"
-msgstr ""
+msgstr "Demanda exterior · Google Trends"
 
 #: includes/analysis/analista-informe.php:463
 msgid ""
@@ -497,16 +497,16 @@ msgstr ""
 
 #: includes/analysis/analista-informe.php:465
 msgid "Tema"
-msgstr ""
+msgstr "Tema"
 
 #: includes/analysis/analista-informe.php:465
 msgid "Score"
-msgstr ""
+msgstr "Puntuación"
 
 #: includes/analysis/analista-informe.php:465
 #: includes/google/seo-google-opportunity-engine.php:1642
 msgid "Crecimiento"
-msgstr ""
+msgstr "Crecimiento"
 
 #: includes/analysis/analista-informe.php:465
 #: includes/analysis/analista-lazy.php:226
@@ -519,11 +519,11 @@ msgstr "Tipo"
 msgid ""
 "No hay señales de Trends suficientemente relevantes almacenadas en este "
 "momento."
-msgstr ""
+msgstr "No hay señales de Trends suficientemente relevantes almacenadas en este momento."
 
 #: includes/analysis/analista-informe.php:476
 msgid "Configurar comparación"
-msgstr ""
+msgstr "Configurar comparación"
 
 #: includes/analysis/analista-informe.php:476
 msgid ""
@@ -534,7 +534,7 @@ msgstr ""
 
 #: includes/analysis/analista-informe.php:479
 msgid "Un dominio por línea."
-msgstr ""
+msgstr "Un dominio por línea."
 
 #: includes/analysis/analista-informe.php:481
 msgid ""
@@ -556,32 +556,32 @@ msgstr ""
 
 #: includes/analysis/analista-informe.php:528
 msgid "Validación antes de ejecutar"
-msgstr ""
+msgstr "Validación antes de ejecutar"
 
 #: includes/analysis/analista-informe.php:559
 msgid "Comprobaciones para desbloquear"
-msgstr ""
+msgstr "Comprobaciones para desbloquear"
 
 #: includes/analysis/analista-informe.php:574
 msgid "Dependencias antes de ejecutar"
-msgstr ""
+msgstr "Dependencias antes de ejecutar"
 
 #: includes/analysis/analista-informe.php:580
 msgid "Qué revisar"
-msgstr ""
+msgstr "Qué revisar"
 
 #: includes/analysis/analista-informe.php:595
 msgid "Indicador de seguimiento"
-msgstr ""
+msgstr "Indicador de seguimiento"
 
 #: includes/analysis/analista-informe.php:616
 msgid ""
 "No hay directrices suficientes para este bloque con los datos actuales."
-msgstr ""
+msgstr "No hay directrices suficientes para este bloque con los datos actuales."
 
 #: includes/analysis/analista-informe.php:754
 msgid "Google Trends no está entregando señales almacenadas."
-msgstr ""
+msgstr "Google Trends no está entregando señales almacenadas."
 
 #: includes/analysis/analista-informe.php:754
 msgid ""
@@ -591,7 +591,7 @@ msgstr ""
 
 #: includes/analysis/analista-informe.php:816
 msgid "Señales de clientes que no debemos perder"
-msgstr ""
+msgstr "Señales de clientes que no debemos perder"
 
 #: includes/analysis/analista-informe.php:816
 msgid ""
@@ -602,23 +602,23 @@ msgstr ""
 #: includes/analysis/analista-informe.php:816
 #: includes/google/seo-google-opportunity-engine.php:1642
 msgid "Búsqueda"
-msgstr ""
+msgstr "Búsqueda"
 
 #: includes/analysis/analista-informe.php:816
 msgid "Veces"
-msgstr ""
+msgstr "Veces"
 
 #: includes/analysis/analista-informe.php:816
 msgid "Resultados medios"
-msgstr ""
+msgstr "Resultados medios"
 
 #: includes/analysis/analista-informe.php:816
 msgid "Sin resultado"
-msgstr ""
+msgstr "Sin resultado"
 
 #: includes/analysis/analista-informe.php:828
 msgid "Fuentes y calidad de datos"
-msgstr ""
+msgstr "Fuentes y calidad de datos"
 
 #: includes/analysis/analista-informe.php:828
 msgid "· una fuente pendiente pesa 0 en la prioridad"
@@ -626,36 +626,36 @@ msgstr ""
 
 #: includes/analysis/analista-informe.php:852
 msgid "Analista"
-msgstr ""
+msgstr "Analista"
 
 #: includes/analysis/analista-informe.php:852
 msgid ""
 "La página ya no calcula todos los informes al abrirse. Ejecuta únicamente el"
 " bloque que necesites."
-msgstr ""
+msgstr "La página ya no calcula todos los informes al abrirse. Ejecuta únicamente el bloque que necesites."
 
 #: includes/analysis/analista-informe.php:853
 #: includes/class-taxocommerce-google-bing-trends-hierarchy.php:289
 #: includes/google/seo-google-demand-catalog.php:1562
 #: includes/google/seo-google-trends.php:2678 taxocommerce-google-bing.php:260
 msgid "Periodo"
-msgstr ""
+msgstr "Periodo"
 
 #: includes/analysis/analista-informe.php:855 taxocommerce-google-bing.php:266
 msgid "Cambiar periodo"
-msgstr ""
+msgstr "Cambiar periodo"
 
 #: includes/analysis/analista-informe.php:862
 msgid "No se ha cargado el motor de informes parciales de Analista."
-msgstr ""
+msgstr "No se ha cargado el motor de informes parciales de Analista."
 
 #: includes/analysis/analista-json.php:255
 msgid "No tienes permisos para exportar Analista."
-msgstr ""
+msgstr "No tienes permisos para exportar Analista."
 
 #: includes/analysis/analista-json.php:266
 msgid "No se ha podido generar el JSON de Analista."
-msgstr ""
+msgstr "No se ha podido generar el JSON de Analista."
 
 #: includes/analysis/analista-lazy.php:74
 msgid ""
@@ -665,15 +665,15 @@ msgstr ""
 
 #: includes/analysis/analista-lazy.php:88 taxocommerce-google-bing.php:288
 msgid "Ningún informe cargado."
-msgstr ""
+msgstr "Ningún informe cargado."
 
 #: includes/analysis/analista-lazy.php:88 taxocommerce-google-bing.php:288
 msgid "Pulsa uno de los botones anteriores para ejecutar solo ese análisis."
-msgstr ""
+msgstr "Pulsa uno de los botones anteriores para ejecutar solo ese análisis."
 
 #: includes/analysis/analista-lazy.php:124
 msgid "Qué hacer para vender más"
-msgstr ""
+msgstr "Qué hacer para vender más"
 
 #: includes/analysis/analista-lazy.php:124
 msgid ""
@@ -689,15 +689,15 @@ msgstr ""
 
 #: includes/analysis/analista-lazy.php:137
 msgid "Comprobar medición."
-msgstr ""
+msgstr "Comprobar medición."
 
 #: includes/analysis/analista-lazy.php:137
 msgid "No hay sesiones suficientes para diagnosticar ventas."
-msgstr ""
+msgstr "No hay sesiones suficientes para diagnosticar ventas."
 
 #: includes/analysis/analista-lazy.php:139
 msgid "Revisar el checkout."
-msgstr ""
+msgstr "Revisar el checkout."
 
 #: includes/analysis/analista-lazy.php:139
 msgid ""
@@ -708,7 +708,7 @@ msgstr ""
 
 #: includes/analysis/analista-lazy.php:140
 msgid "Revisar carrito y gastos de envío."
-msgstr ""
+msgstr "Revisar carrito y gastos de envío."
 
 #: includes/analysis/analista-lazy.php:140
 msgid ""
@@ -718,7 +718,7 @@ msgstr ""
 
 #: includes/analysis/analista-lazy.php:141
 msgid "Comprobar intención de compra y precios."
-msgstr ""
+msgstr "Comprobar intención de compra y precios."
 
 #: includes/analysis/analista-lazy.php:141
 msgid ""
@@ -728,7 +728,7 @@ msgstr ""
 
 #: includes/analysis/analista-lazy.php:142
 msgid "Separar ventas y afiliación."
-msgstr ""
+msgstr "Separar ventas y afiliación."
 
 #: includes/analysis/analista-lazy.php:142
 msgid ""
@@ -739,7 +739,7 @@ msgstr ""
 
 #: includes/analysis/analista-lazy.php:143
 msgid "Priorizar oportunidades reales."
-msgstr ""
+msgstr "Priorizar oportunidades reales."
 
 #: includes/analysis/analista-lazy.php:143
 msgid ""
@@ -749,7 +749,7 @@ msgstr ""
 
 #: includes/analysis/analista-lazy.php:146
 msgid "Verificar eventos de Analytics."
-msgstr ""
+msgstr "Verificar eventos de Analytics."
 
 #: includes/analysis/analista-lazy.php:146
 msgid ""
@@ -766,11 +766,11 @@ msgstr ""
 
 #: includes/analysis/analista-lazy.php:161
 msgid "Search Console no tiene datos utilizables para este periodo."
-msgstr ""
+msgstr "Search Console no tiene datos utilizables para este periodo."
 
 #: includes/analysis/analista-lazy.php:186
 msgid "Consultas principales"
-msgstr ""
+msgstr "Consultas principales"
 
 #: includes/analysis/analista-lazy.php:186
 msgid ""
@@ -783,24 +783,24 @@ msgstr ""
 #: includes/google/seo-google-info.php:3366
 #: includes/google/seo-google-info.php:4550
 msgid "Consulta"
-msgstr ""
+msgstr "Consulta"
 
 #: includes/analysis/analista-lazy.php:187
 #: includes/analysis/analista-lazy.php:226
 msgid "Posición"
-msgstr ""
+msgstr "Posición"
 
 #: includes/analysis/analista-lazy.php:187
 msgid "Intento"
-msgstr ""
+msgstr "Intento"
 
 #: includes/analysis/analista-lazy.php:221
 msgid "No hay directrices de catálogo disponibles para este periodo."
-msgstr ""
+msgstr "No hay directrices de catálogo disponibles para este periodo."
 
 #: includes/analysis/analista-lazy.php:225
 msgid "Catálogo y demanda"
-msgstr ""
+msgstr "Catálogo y demanda"
 
 #: includes/analysis/analista-lazy.php:225
 msgid ""
@@ -810,11 +810,11 @@ msgstr ""
 
 #: includes/analysis/analista-lazy.php:226
 msgid "Oportunidad"
-msgstr ""
+msgstr "Oportunidad"
 
 #: includes/analysis/analista-lazy.php:226
 msgid "Decisión"
-msgstr ""
+msgstr "Decisión"
 
 #: includes/analysis/analista-lazy.php:226
 #: includes/google/seo-google-demand-catalog.php:1669
@@ -823,43 +823,43 @@ msgstr "Productos"
 
 #: includes/analysis/analista-lazy.php:267
 msgid "No hay datos de proveedores disponibles."
-msgstr ""
+msgstr "No hay datos de proveedores disponibles."
 
 #: includes/analysis/analista-lazy.php:271
 msgid "Estado de proveedores"
-msgstr ""
+msgstr "Estado de proveedores"
 
 #: includes/analysis/analista-lazy.php:271
 msgid "Este informe consulta únicamente la fuente local de proveedores."
-msgstr ""
+msgstr "Este informe consulta únicamente la fuente local de proveedores."
 
 #: includes/analysis/analista-lazy.php:272
 msgid "Proveedor"
-msgstr ""
+msgstr "Proveedor"
 
 #: includes/analysis/analista-lazy.php:272
 msgid "Total"
-msgstr ""
+msgstr "Total"
 
 #: includes/analysis/analista-lazy.php:272
 msgid "Vinculados"
-msgstr ""
+msgstr "Vinculados"
 
 #: includes/analysis/analista-lazy.php:272
 msgid "Pendientes"
-msgstr ""
+msgstr "Pendientes"
 
 #: includes/analysis/analista-lazy.php:272
 msgid "Errores"
-msgstr ""
+msgstr "Errores"
 
 #: includes/analysis/analista-lazy.php:272
 msgid "Última importación"
-msgstr ""
+msgstr "Última importación"
 
 #: includes/analysis/analista-lazy.php:272
 msgid "Última sincronización"
-msgstr ""
+msgstr "Última sincronización"
 
 #: includes/analysis/analista-lazy.php:307
 msgid "Frescura operativa · Action Scheduler"
@@ -988,136 +988,136 @@ msgstr ""
 
 #: includes/class-taxocommerce-connections-admin.php:135
 msgid "Google OAuth test failed."
-msgstr ""
+msgstr "La prueba de OAuth de Google ha fallado."
 
 #: includes/class-taxocommerce-connections-admin.php:136
 msgid "Google denied authorization."
-msgstr ""
+msgstr "Google ha denegado la autorización."
 
 #. translators: %d: number of accessible Google Search Console properties.
 #: includes/class-taxocommerce-connections-admin.php:150
 msgid "Accessible properties: %d."
-msgstr ""
+msgstr "Propiedades accesibles: %d."
 
 #: includes/class-taxocommerce-connections-admin.php:201
 msgid "Connections"
-msgstr ""
+msgstr "Conexiones"
 
 #: includes/class-taxocommerce-connections-admin.php:202
 msgid ""
 "External data connections used by TaxoCommerce and the download screens. "
 "Credentials and OAuth are stored here for Google Search Console, Google "
 "Analytics, Bing, Google Trends, Amazon, and Pinterest."
-msgstr ""
+msgstr "Conexiones con proveedores externos y pantallas para descargar datos. Las credenciales y OAuth de Search Console, Google Analytics, Bing, Google Trends, Amazon y Pinterest se gestionan aquí."
 
 #: includes/class-taxocommerce-connections-admin.php:221
 msgid "Save Google"
-msgstr ""
+msgstr "Guardar Google"
 
 #: includes/class-taxocommerce-connections-admin.php:226
 msgid "Test Google"
-msgstr ""
+msgstr "Probar Google"
 
 #: includes/class-taxocommerce-connections-admin.php:231
 msgid "Cómo conectar Google Merchant Center"
-msgstr ""
+msgstr "Cómo conectar Google Merchant Center"
 
 #. translators: %s: URL de acceso a Google Merchant Center.
 #: includes/class-taxocommerce-connections-admin.php:233
 msgid ""
 "Abre <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\">Google "
 "Merchant Center</a> con la cuenta que administra tu tienda."
-msgstr ""
+msgstr "Abre <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\">Google Merchant Center</a> con la cuenta que administra tu tienda."
 
 #. translators: %s: URL de acceso a Google Merchant Center.
 #: includes/class-taxocommerce-connections-admin.php:234
 msgid ""
 "Selecciona tu cuenta y copia su ID numérico de Merchant Center (no es el ID "
 "de Google Analytics ni el de Google Ads)."
-msgstr ""
+msgstr "Selecciona tu cuenta y copia su ID numérico de Merchant Center (no es el ID de Google Analytics ni el de Google Ads)."
 
 #: includes/class-taxocommerce-connections-admin.php:235
 msgid "Introduce el ID en este campo y pulsa «Save Merchant»."
-msgstr ""
+msgstr "Introduce el ID en este campo y pulsa «Guardar Merchant»."
 
 #: includes/class-taxocommerce-connections-admin.php:236
 msgid ""
 "Comprueba que la identidad de Google utilizada por TaxoCommerce tiene acceso"
 " a esa cuenta de Merchant Center y que Merchant API está habilitada cuando "
 "corresponda."
-msgstr ""
+msgstr "Comprueba que la identidad de Google utilizada por TaxoCommerce tiene acceso a esa cuenta de Merchant Center y que Merchant API está habilitada cuando corresponda."
 
 #: includes/class-taxocommerce-connections-admin.php:237
 msgid ""
 "Pulsa «Test Merchant». Si falla, revisa el acceso de esa identidad; guardar "
 "el ID no concede permisos automáticamente."
-msgstr ""
+msgstr "Pulsa «Probar Merchant». Si falla, comprueba el acceso de esa identidad; guardar el ID no concede permisos automáticamente."
 
 #: includes/class-taxocommerce-connections-admin.php:239
 msgid "Ayuda oficial de Merchant Center"
-msgstr ""
+msgstr "Ayuda oficial de Merchant Center"
 
 #: includes/class-taxocommerce-connections-admin.php:239
 msgid "Documentación oficial de Merchant API"
-msgstr ""
+msgstr "Documentación oficial de Merchant API"
 
 #: includes/class-taxocommerce-connections-admin.php:245
 msgid "Save Merchant"
-msgstr ""
+msgstr "Guardar Merchant"
 
 #: includes/class-taxocommerce-connections-admin.php:250
 msgid "Test Merchant"
-msgstr ""
+msgstr "Probar Merchant"
 
 #: includes/class-taxocommerce-connections-admin.php:273
 msgid "Save Bing"
-msgstr ""
+msgstr "Guardar Bing"
 
 #: includes/class-taxocommerce-connections-admin.php:278
 msgid "Test Bing"
-msgstr ""
+msgstr "Probar Bing"
 
 #: includes/class-taxocommerce-connections-admin.php:300
 msgid "Save Amazon"
-msgstr ""
+msgstr "Guardar Amazon"
 
 #: includes/class-taxocommerce-connections-admin.php:305
 msgid "Test Creators API"
-msgstr ""
+msgstr "Probar Creators API"
 
 #: includes/class-taxocommerce-connections-admin.php:331
 msgid "Save Pinterest"
-msgstr ""
+msgstr "Guardar Pinterest"
 
 #: includes/class-taxocommerce-connections-admin.php:340
 msgid "Test Pinterest"
-msgstr ""
+msgstr "Probar Pinterest"
 
 #: includes/class-taxocommerce-connections-admin.php:351
 msgid "Save Pinterest Merchant"
-msgstr ""
+msgstr "Guardar Pinterest Merchant"
 
 #: includes/class-taxocommerce-connections-amazon.php:163
 msgid ""
 "Creators API is not configured. Affiliate links can still work with only a "
 "Partner Tag."
-msgstr ""
+msgstr "Creators API no está configurada. Los enlaces de afiliación pueden funcionar únicamente con una etiqueta Partner Tag."
 
 #: includes/class-taxocommerce-connections-amazon.php:198
 msgid "Amazon did not return an access_token."
-msgstr ""
+msgstr "Amazon no ha devuelto un access_token."
 
 #: includes/class-taxocommerce-connections-amazon.php:210
 msgid "Falta el Partner Tag de Amazon Associates."
-msgstr ""
+msgstr "Falta el Partner Tag de Amazon Associates."
 
 #: includes/class-taxocommerce-connections-amazon.php:242
 msgid "Error de Creators API."
-msgstr ""
+msgstr "Error de Creators API."
 
 #: includes/class-taxocommerce-connections-amazon.php:263
 msgid "Enter a search query for Amazon."
-msgstr ""
+msgstr "Introduce una consulta de búsqueda para Amazon."
 
 #: includes/class-taxocommerce-connections-google-bing.php:68
 msgid ""
@@ -1157,65 +1157,65 @@ msgstr ""
 
 #: includes/class-taxocommerce-connections-pinterest.php:147
 msgid "OpenSSL is not available."
-msgstr ""
+msgstr "OpenSSL no está disponible."
 
 #: includes/class-taxocommerce-connections-pinterest.php:155
 msgid "The secret could not be encrypted."
-msgstr ""
+msgstr "No se ha podido cifrar el secreto."
 
 #: includes/class-taxocommerce-connections-pinterest.php:213
 msgid "Pinterest did not return an Access Token."
-msgstr ""
+msgstr "Pinterest no ha devuelto un token de acceso."
 
 #: includes/class-taxocommerce-connections-pinterest.php:241
 msgid "Pinterest no tiene Access Token guardado."
-msgstr ""
+msgstr "Pinterest no tiene ningún token de acceso guardado."
 
 #: includes/class-taxocommerce-connections-pinterest.php:252
 msgid "The Pinterest token has expired; authorize the account again."
-msgstr ""
+msgstr "El token de Pinterest ha caducado; vuelve a autorizar la cuenta."
 
 #: includes/class-taxocommerce-connections-pinterest.php:325
 msgid "Select a board before testing Pinterest."
-msgstr ""
+msgstr "Selecciona un tablero antes de probar Pinterest."
 
 #: includes/class-taxocommerce-connections-pinterest.php:341
 msgid "You do not have permission to connect Pinterest."
-msgstr ""
+msgstr "No tienes permisos para conectar Pinterest."
 
 #: includes/class-taxocommerce-connections-pinterest.php:395
 msgid "The OAuth state is invalid or expired."
-msgstr ""
+msgstr "El estado de OAuth no es válido o ha caducado."
 
 #: includes/class-taxocommerce-connections-pinterest.php:398
 msgid "The OAuth user does not have permission."
-msgstr ""
+msgstr "El usuario de OAuth no tiene permisos."
 
 #: includes/class-taxocommerce-connections-pinterest.php:481
 msgid "Invalid domain verification code."
-msgstr ""
+msgstr "Código de verificación de dominio no válido."
 
 #: includes/class-taxocommerce-connections-status.php:136
 msgid "Estado de las conexiones"
-msgstr ""
+msgstr "Estado de las conexiones"
 
 #: includes/class-taxocommerce-connections-status.php:137
 msgid ""
 "Estados de credenciales y verificaciones manuales. Abrir esta pantalla no "
 "llama a proveedores externos."
-msgstr ""
+msgstr "Estado de las credenciales y verificaciones manuales. Abrir esta pantalla no realiza llamadas a proveedores externos."
 
 #: includes/class-taxocommerce-connections-status.php:153
 msgid "Prueba la conexión para verificarla."
-msgstr ""
+msgstr "Prueba la conexión para verificarla."
 
 #: includes/class-taxocommerce-connections-status.php:155
 msgid "Configuración local guardada; sin validación externa."
-msgstr ""
+msgstr "Configuración local guardada; sin validación externa."
 
 #: includes/class-taxocommerce-connections-status.php:163
 msgid "Comprobar"
-msgstr ""
+msgstr "Comprobar"
 
 #: includes/class-taxocommerce-connections-status.php:167
 msgid ""
@@ -1223,15 +1223,15 @@ msgid ""
 " manual reciente (máximo 7 días). Cambiar credenciales exige repetirla. Los "
 "enlaces de afiliados y los catálogos configurados no equivalen a una "
 "conexión API validada."
-msgstr ""
+msgstr "«Conectado» significa que el proveedor ha respondido correctamente a una prueba manual reciente (máximo 7 días). Si cambias las credenciales, debes repetir la prueba. Los enlaces de afiliación y los catálogos configurados no equivalen a una conexión API validada."
 
 #: includes/class-taxocommerce-connections-status.php:305
 msgid "Sin permisos para comprobar conexiones."
-msgstr ""
+msgstr "Sin permisos para comprobar conexiones."
 
 #: includes/class-taxocommerce-connections-status.php:312
 msgid "La conexión no está preparada para comprobarse."
-msgstr ""
+msgstr "La conexión no está preparada para comprobarse."
 
 #: includes/class-taxocommerce-google-bing-auto-test.php:119
 msgid "No tienes permisos para ejecutar Auto Test."
@@ -1239,44 +1239,44 @@ msgstr "No tienes permisos para ejecutar Auto Test."
 
 #: includes/class-taxocommerce-google-bing-auto-test.php:149
 msgid "Sin permisos para descargar el diagnóstico."
-msgstr ""
+msgstr "Sin permisos para descargar el diagnóstico."
 
 #: includes/class-taxocommerce-google-bing-auto-test.php:160
 msgid "No existe un informe válido para esta instalación."
-msgstr ""
+msgstr "No existe un informe válido para esta instalación."
 
 #: includes/class-taxocommerce-google-bing-auto-test.php:164
 msgid "No se ha podido generar el informe JSON."
-msgstr ""
+msgstr "No se ha podido generar el informe JSON."
 
 #: includes/class-taxocommerce-google-bing-auto-test.php:681
 msgid "No tienes permiso para abrir Auto Test."
-msgstr ""
+msgstr "No tienes permisos para abrir Auto Test."
 
 #: includes/class-taxocommerce-google-bing-auto-test.php:695
 msgid "Auto Test — TaxoCommerce Insights"
-msgstr ""
+msgstr "Auto Test — TaxoCommerce Insights"
 
 #: includes/class-taxocommerce-google-bing-auto-test.php:696
 msgid ""
 "Diagnóstico por módulos y comparación antes/después de actualizar el plugin."
 " No modifica fuentes, informes, credenciales ni conexiones; solo conserva "
 "dos pequeños resultados por administrador."
-msgstr ""
+msgstr "Diagnóstico por módulos y comparación antes/después de actualizar el plugin. No modifica fuentes, informes, credenciales ni conexiones; solo conserva dos pequeños resultados por administrador."
 
 #: includes/class-taxocommerce-google-bing-auto-test.php:704
 msgid "Referencia anterior al despliegue"
-msgstr ""
+msgstr "Referencia anterior al despliegue"
 
 #: includes/class-taxocommerce-google-bing-auto-test.php:710
 msgid ""
 "No hay referencia. Ejecuta «Guardar estado ANTES» antes de actualizar el "
 "plugin."
-msgstr ""
+msgstr "No hay referencia. Ejecuta «Guardar estado ANTES» antes de actualizar el plugin."
 
 #: includes/class-taxocommerce-google-bing-auto-test.php:714
 msgid "Última ejecución"
-msgstr ""
+msgstr "Última ejecución"
 
 #: includes/class-taxocommerce-google-bing-auto-test.php:720
 msgid "Aún no se ha realizado ningún autochequeo."

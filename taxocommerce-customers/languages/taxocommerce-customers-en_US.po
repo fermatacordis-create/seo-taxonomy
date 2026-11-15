@@ -1,0 +1,707 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: TaxoCommerce Customers 0.1.1\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "%d customer records"
+msgstr "%d customer records"
+
+msgid "1 - Very low"
+msgstr "1 - Very low"
+
+msgid "2 - Low"
+msgstr "2 - Low"
+
+msgid "3 - Normal"
+msgstr "3 - Normal"
+
+msgid "4 - High"
+msgstr "4 - High"
+
+msgid "5 - Maximum"
+msgstr "5 - Maximum"
+
+msgid "A second table maps each WooCommerce paid order ID to one CRM record, preventing duplicated purchase counts on repeated hooks."
+msgstr "A second table maps each WooCommerce paid order ID to one CRM record, preventing duplicated purchase counts on repeated hooks."
+
+msgid "A WooCommerce page exceeded the processing limit. Select a lower speed and retry."
+msgstr "A WooCommerce page exceeded the processing limit. Select a lower speed and retry."
+
+msgid "Access and customer directory"
+msgstr "Access and customer directory"
+
+msgid "Access denied."
+msgstr "Access denied."
+
+msgid "Action"
+msgstr "Action"
+
+msgid "Add contact"
+msgstr "Add contact"
+
+msgid "AJAX handler may be missing nonce verification."
+msgstr "AJAX handler may be missing nonce verification."
+
+msgid "All inventoried files have been checked."
+msgstr "All inventoried files have been checked."
+
+msgid "All rules with findings"
+msgstr "All rules with findings"
+
+msgid "All sources"
+msgstr "All sources"
+
+msgid "An early exit may bypass output buffer closure."
+msgstr "An early exit may bypass output buffer closure."
+
+msgid "Architecture and dependencies"
+msgstr "Architecture and dependencies"
+
+msgid "Autotest"
+msgstr "Autotest"
+
+msgid "Autotest and data retention"
+msgstr "Autotest and data retention"
+
+msgid "Autotest has separate Functionality Check and Code Check tabs; the latter is a static analysis aid and does not replace the official WordPress Plugin Check."
+msgstr "Autotest has separate Functionality Check and Code Check tabs; the latter is a static analysis aid and does not replace the official WordPress Plugin Check."
+
+msgid "Autotest sections"
+msgstr "Autotest sections"
+
+msgid "Bulk customer import and export"
+msgstr "Bulk customer import and export"
+
+msgid "Cannot read CSV."
+msgstr "Cannot read CSV."
+
+msgid "Cannot store temporary CSV."
+msgstr "Cannot store temporary CSV."
+
+msgid "Check"
+msgstr "Check"
+
+msgid "Check SQL parameters and use $wpdb->prepare() for untrusted values."
+msgstr "Check SQL parameters and use $wpdb->prepare() for untrusted values."
+
+msgid "Choose Add contact, enter a name and at least one email, phone or WhatsApp number, and save the record. No WordPress account is created."
+msgstr "Choose Add contact, enter a name and at least one email, phone or WhatsApp number, and save the record. No WordPress account is created."
+
+msgid "City"
+msgstr "City"
+
+msgid "Clear CRM-only details"
+msgstr "Clear CRM-only details"
+
+msgid "Code Check"
+msgstr "Code Check"
+
+msgid "Company"
+msgstr "Company"
+
+msgid "Confirm an explicit administrator action and WordPress permissions; otherwise use native WordPress plugin management."
+msgstr "Confirm an explicit administrator action and WordPress permissions; otherwise use native WordPress plugin management."
+
+msgid "Contacts exported:"
+msgstr "Contacts exported:"
+
+msgid "Continue batch"
+msgstr "Continue batch"
+
+msgid "Correct the PHP syntax and rerun the check."
+msgstr "Correct the PHP syntax and rerun the check."
+
+msgid "Country"
+msgstr "Country"
+
+msgid "CPU usage"
+msgstr "CPU usage"
+
+msgid "Create and edit manual contacts"
+msgstr "Create and edit manual contacts"
+
+msgid "Created"
+msgstr "Created"
+
+msgid "CRM-only details cleared; WooCommerce orders remain unchanged."
+msgstr "CRM-only details cleared; WooCommerce orders remain unchanged."
+
+msgid "CSV columns must match the export. Empty cells overwrite CRM fields; existing buyer emails cannot be changed by import. Import uses five speeds, progress and Stop."
+msgstr "CSV columns must match the export. Empty cells overwrite CRM fields; existing buyer emails cannot be changed by import. Import uses five speeds, progress and Stop."
+
+msgid "CSV file missing."
+msgstr "CSV file missing."
+
+msgid "CSV headers do not match the customer export format."
+msgstr "CSV headers do not match the customer export format."
+
+msgid "CSV session is already processing."
+msgstr "CSV session is already processing."
+
+msgid "Custom WordPress hook is missing the plugin-specific prefix."
+msgstr "Custom WordPress hook is missing the plugin-specific prefix."
+
+msgid "Customer"
+msgstr "Customer"
+
+msgid "Customer directory"
+msgstr "Customer directory"
+
+msgid "Customer management manuals"
+msgstr "Customer management manuals"
+
+msgid "Customer management tabs"
+msgstr "Customer management tabs"
+
+msgid "Customer not found."
+msgstr "Customer not found."
+
+msgid "Customer record saved."
+msgstr "Customer record saved."
+
+msgid "Customer synchronization complete."
+msgstr "Customer synchronization complete."
+
+msgid "Customers"
+msgstr "Customers"
+
+msgid "Customers and contacts"
+msgstr "Customers and contacts"
+
+msgid "Customers CSV"
+msgstr "Customers CSV"
+
+msgid "Database and identity"
+msgstr "Database and identity"
+
+msgid "Deactivate the plugin without deleting user accounts or orders. CRM data persists unless explicitly removed using WordPress privacy tools or database administration."
+msgstr "Deactivate the plugin without deleting user accounts or orders. CRM data persists unless explicitly removed using WordPress privacy tools or database administration."
+
+msgid "Delete contact"
+msgstr "Delete contact"
+
+msgid "Delete contact removes an unlinked manual record. For buyers with orders, Clear CRM-only details removes optional CRM notes and labels without touching WooCommerce orders."
+msgstr "Delete contact removes an unlinked manual record. For buyers with orders, Clear CRM-only details removes optional CRM notes and labels without touching WooCommerce orders."
+
+msgid "Detail"
+msgstr "Detail"
+
+msgid "Detailed results by file (technical view)"
+msgstr "Detailed results by file (technical view)"
+
+msgid "Direct-file access protection needs review."
+msgstr "Direct-file access protection needs review."
+
+msgid "Distinct rules:"
+msgstr "Distinct rules:"
+
+msgid "Download JSON"
+msgstr "Download JSON"
+
+msgid "Dynamic CSS needs context-specific validation."
+msgstr "Dynamic CSS needs context-specific validation."
+
+msgid "Dynamic SQL query requires validation of identifiers and parameters."
+msgstr "Dynamic SQL query requires validation of identifiers and parameters."
+
+msgid "Edit customer record"
+msgstr "Edit customer record"
+
+msgid "Edit record"
+msgstr "Edit record"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Ensure every ob_start() closes in the same logical flow, including error paths."
+msgstr "Ensure every ob_start() closes in the same logical flow, including error paths."
+
+msgid "Enter a name and at least one valid email, phone or WhatsApp number."
+msgstr "Enter a name and at least one valid email, phone or WhatsApp number."
+
+msgid "Errors"
+msgstr "Errors"
+
+msgid "Errors detected"
+msgstr "Errors detected"
+
+msgid "Errors to fix"
+msgstr "Errors to fix"
+
+msgid "Every administrative mutation checks a capability and a WordPress nonce. Input is validated and output escaped."
+msgstr "Every administrative mutation checks a capability and a WordPress nonce. Input is validated and output escaped."
+
+msgid "Existing records are updated by local ID. A new row with no ID creates a manual contact, not a WooCommerce account. Source and WooCommerce user ID are read-only."
+msgstr "Existing records are updated by local ID. A new row with no ID creates a manual contact, not a WooCommerce account. Source and WooCommerce user ID are read-only."
+
+msgid "Export a backup first. Existing rows use their internal ID; a blank ID creates a manual contact. The source and WooCommerce user ID are read-only. Empty cells overwrite CRM values; linked buyer emails are protected. Files up to 50 MB (or your server limit)."
+msgstr "Export a backup first. Existing rows use their internal ID; a blank ID creates a manual contact. The source and WooCommerce user ID are read-only. Empty cells overwrite CRM values; linked buyer emails are protected. Files up to 50 MB (or your server limit)."
+
+msgid "Export all customer records and private notes, then edit the CSV and import it in small batches. Import never creates WordPress accounts, orders or invoices."
+msgstr "Export all customer records and private notes, then edit the CSV and import it in small batches. Import never creates WordPress accounts, orders or invoices."
+
+msgid "Export customers CSV"
+msgstr "Export customers CSV"
+
+msgid "Exporting contacts..."
+msgstr "Exporting contacts..."
+
+msgid "File"
+msgstr "File"
+
+msgid "File upload requires validation and safe handling."
+msgstr "File upload requires validation and safe handling."
+
+msgid "Files analysed:"
+msgstr "Files analysed:"
+
+msgid "Files without findings"
+msgstr "Files without findings"
+
+msgid "Filter"
+msgstr "Filter"
+
+msgid "Findings:"
+msgstr "Findings:"
+
+msgid "First name"
+msgstr "First name"
+
+msgid "From Import / Export, export a CSV backup before editing customer records in a spreadsheet."
+msgstr "From Import / Export, export a CSV backup before editing customer records in a spreadsheet."
+
+msgid "Functionality Check"
+msgstr "Functionality Check"
+
+msgid "Guest"
+msgstr "Guest"
+
+msgid "Historical scans run in bounded AJAX requests without a cron dependency. New paid-order events refresh links immediately."
+msgstr "Historical scans run in bounded AJAX requests without a cron dependency. New paid-order events refresh links immediately."
+
+msgid "If a manual contact later buys using the same exact email, it can be linked to the WooCommerce order without losing its notes. Names and phone numbers are never matched automatically."
+msgstr "If a manual contact later buys using the same exact email, it can be linked to the WooCommerce order without losing its notes. Names and phone numbers are never matched automatically."
+
+msgid "Import / Export"
+msgstr "Import / Export"
+
+msgid "Import complete."
+msgstr "Import complete."
+
+msgid "Import customers CSV"
+msgstr "Import customers CSV"
+
+msgid "Import sessions use short-lived tokens and private temporary files. Only CRM contact fields are writable. CSV export protects spreadsheet cells against formula execution."
+msgstr "Import sessions use short-lived tokens and private temporary files. Only CRM contact fields are writable. CSV export protects spreadsheet cells against formula execution."
+
+msgid "Importing contacts..."
+msgstr "Importing contacts..."
+
+msgid "Incomplete: not all files were checked"
+msgstr "Incomplete: not all files were checked"
+
+msgid "Information"
+msgstr "Information"
+
+msgid "Inspect the execution context and escape output at the point of rendering."
+msgstr "Inspect the execution context and escape output at the point of rendering."
+
+msgid "Inspect the source line and validate whether this warning requires a code change."
+msgstr "Inspect the source line and validate whether this warning requires a code change."
+
+msgid "Inspect this check and rerun the analysis."
+msgstr "Inspect this check and rerun the analysis."
+
+msgid "Insufficient permissions."
+msgstr "Insufficient permissions."
+
+msgid "Internal labels"
+msgstr "Internal labels"
+
+msgid "Invalid CSV or file exceeds 50 MB."
+msgstr "Invalid CSV or file exceeds 50 MB."
+
+msgid "Invalid or expired CSV session."
+msgstr "Invalid or expired CSV session."
+
+msgid "Invalid or expired sync session."
+msgstr "Invalid or expired sync session."
+
+msgid "Inventory"
+msgstr "Inventory"
+
+msgid "Large CSV imports and exports"
+msgstr "Large CSV imports and exports"
+
+msgid "Last execution"
+msgstr "Last execution"
+
+msgid "Last name"
+msgstr "Last name"
+
+msgid "Last purchase"
+msgstr "Last purchase"
+
+msgid "Last updated"
+msgstr "Last updated"
+
+msgid "Line"
+msgstr "Line"
+
+msgid "Manual"
+msgstr "Manual"
+
+msgid "Manual contacts and guest purchases with the same exact email can merge. Records with different registered user IDs never merge automatically."
+msgstr "Manual contacts and guest purchases with the same exact email can merge. Records with different registered user IDs never merge automatically."
+
+msgid "Manual customer deleted."
+msgstr "Manual customer deleted."
+
+msgid "Manuals"
+msgstr "Manuals"
+
+msgid "Native static indicators only. Official Plugin Check, live security and older PHP versions have not been executed here."
+msgstr "Native static indicators only. Official Plugin Check, live security and older PHP versions have not been executed here."
+
+msgid "New manual contact"
+msgstr "New manual contact"
+
+msgid "New paid orders are picked up by WooCommerce events. Stop pauses a historical scan; it does not delete customers already imported."
+msgstr "New paid orders are picked up by WooCommerce events. Stop pauses a historical scan; it does not delete customers already imported."
+
+msgid "No confirmed errors in the implemented checks."
+msgstr "No confirmed errors in the implemented checks."
+
+msgid "No customer records match these filters."
+msgstr "No customer records match these filters."
+
+msgid "No findings in implemented checks (not a WordPress.org certification)"
+msgstr "No findings in implemented checks (not a WordPress.org certification)"
+
+msgid "No findings in the checks implemented for this file."
+msgstr "No findings in the checks implemented for this file."
+
+msgid "No fully checked clean files yet."
+msgstr "No fully checked clean files yet."
+
+msgid "No warnings detected."
+msgstr "No warnings detected."
+
+msgid "Not checked."
+msgstr "Not checked."
+
+msgid "Not specified"
+msgstr "Not specified"
+
+msgid "Official plugin page"
+msgstr "Official plugin page"
+
+msgid "On the first visit with WooCommerce enabled, synchronization of historical paid orders starts automatically in small batches. The Synchronize WooCommerce buyers button starts a new scan."
+msgstr "On the first visit with WooCommerce enabled, synchronization of historical paid orders starts automatically in small batches. The Synchronize WooCommerce buyers button starts a new scan."
+
+msgid "Only record customer contact preferences you are permitted to retain. A contact method is not proof of marketing consent."
+msgstr "Only record customer contact preferences you are permitted to retain. A contact method is not proof of marketing consent."
+
+msgid "Open TaxoCommerce > Customers when Core is active, or the Customers menu in a standalone installation."
+msgstr "Open TaxoCommerce > Customers when Core is active, or the Customers menu in a standalone installation."
+
+msgid "Operation stopped. Completed batches are retained."
+msgstr "Operation stopped. Completed batches are retained."
+
+msgid "Output buffer may not be closed in the same execution flow."
+msgstr "Output buffer may not be closed in the same execution flow."
+
+msgid "Output variable needs context-appropriate escaping."
+msgstr "Output variable needs context-appropriate escaping."
+
+msgid "Paid buyers are read from WooCommerce, including guest checkouts. Email and WhatsApp contacts can also be added without creating store accounts."
+msgstr "Paid buyers are read from WooCommerce, including guest checkouts. Email and WhatsApp contacts can also be added without creating store accounts."
+
+msgid "Passed"
+msgstr "Passed"
+
+msgid "Personal data and permissions"
+msgstr "Personal data and permissions"
+
+msgid "Phone"
+msgstr "Phone"
+
+msgid "PHP syntax error."
+msgstr "PHP syntax error."
+
+msgid "PHP syntax, WordPress structure and security indicators for this plugin only. No other checker is required. Findings do not replace official Plugin Check or a security audit."
+msgstr "PHP syntax, WordPress structure and security indicators for this plugin only. No other checker is required. Findings do not replace official Plugin Check or a security audit."
+
+msgid "Plugin activation must require an explicit user action."
+msgstr "Plugin activation must require an explicit user action."
+
+msgid "Plugin deactivation must require an explicit user action."
+msgstr "Plugin deactivation must require an explicit user action."
+
+msgid "Plugin installation or upgrade operation needs review."
+msgstr "Plugin installation or upgrade operation needs review."
+
+msgid "Postal code"
+msgstr "Postal code"
+
+msgid "Preferred contact channel"
+msgstr "Preferred contact channel"
+
+msgid "Private customer and purchaser management."
+msgstr "Private customer and purchaser management."
+
+msgid "Private notes and incidents"
+msgstr "Private notes and incidents"
+
+msgid "Processing and completed paid orders are included according to WooCommerce paid-status settings. Unpaid orders and guest orders without an email are excluded."
+msgstr "Processing and completed paid orders are included according to WooCommerce paid-status settings. Unpaid orders and guest orders without an email are excluded."
+
+msgid "Processing speed"
+msgstr "Processing speed"
+
+msgid "Progress"
+msgstr "Progress"
+
+msgid "Province or region"
+msgstr "Province or region"
+
+msgid "Purchases"
+msgstr "Purchases"
+
+msgid "Read-only schema, WooCommerce connection, CSV and translation checks. No customer records are altered."
+msgstr "Read-only schema, WooCommerce connection, CSV and translation checks. No customer records are altered."
+
+msgid "Recommended action:"
+msgstr "Recommended action:"
+
+msgid "Registered"
+msgstr "Registered"
+
+msgid "Rejected"
+msgstr "Rejected"
+
+msgid "Request handler needs an appropriate user permission check."
+msgstr "Request handler needs an appropriate user permission check."
+
+msgid "Request input needs a verified nonce in its execution path."
+msgstr "Request input needs a verified nonce in its execution path."
+
+msgid "Request input needs contextual sanitization and validation."
+msgstr "Request input needs contextual sanitization and validation."
+
+msgid "Resume"
+msgstr "Resume"
+
+msgid "Review required: warnings found"
+msgstr "Review required: warnings found"
+
+msgid "Review the flagged code for compliance with WordPress requirements."
+msgstr "Review the flagged code for compliance with WordPress requirements."
+
+msgid "Run Autotest"
+msgstr "Run Autotest"
+
+msgid "Run Code Check"
+msgstr "Run Code Check"
+
+msgid "Run Code Check first."
+msgstr "Run Code Check first."
+
+msgid "Run the functional Autotest first."
+msgstr "Run the functional Autotest first."
+
+msgid "Save record"
+msgstr "Save record"
+
+msgid "Search name, email or phone"
+msgstr "Search name, email or phone"
+
+msgid "Security"
+msgstr "Security"
+
+msgid "Security and CSV operations"
+msgstr "Security and CSV operations"
+
+msgid "Security:"
+msgstr "Security:"
+
+msgid "Source"
+msgstr "Source"
+
+msgid "SQL construction and prepared statements need review."
+msgstr "SQL construction and prepared statements need review."
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Stop"
+msgstr "Stop"
+
+msgid "Stop import"
+msgstr "Stop import"
+
+msgid "Street address"
+msgstr "Street address"
+
+msgid "Synchronize past purchases"
+msgstr "Synchronize past purchases"
+
+msgid "Synchronize WooCommerce buyers"
+msgstr "Synchronize WooCommerce buyers"
+
+msgid "Syncing paid WooCommerce orders..."
+msgstr "Syncing paid WooCommerce orders..."
+
+msgid "TaxoCommerce Customer CRM"
+msgstr "TaxoCommerce Customer CRM"
+
+msgid "TaxoCommerce Customers"
+msgstr "TaxoCommerce Customers"
+
+msgid "Technical manual"
+msgstr "Technical manual"
+
+msgid "The adapter uses wc_get_orders(), wc_get_order() and order hooks; it never queries or writes WooCommerce order tables directly."
+msgstr "The adapter uses wc_get_orders(), wc_get_order() and order hooks; it never queries or writes WooCommerce order tables directly."
+
+msgid "The check failed but returned no source location."
+msgstr "The check failed but returned no source location."
+
+msgid "The customers table contains an optional unique WooCommerce user ID and an optional normalized unique email; contacts without email can still be entered manually using a phone number."
+msgstr "The customers table contains an optional unique WooCommerce user ID and an optional normalized unique email; contacts without email can still be entered manually using a phone number."
+
+msgid "The directory includes WooCommerce customers with paid orders, guest buyers identified by billing email, and contacts added manually."
+msgstr "The directory includes WooCommerce customers with paid orders, guest buyers identified by billing email, and contacts added manually."
+
+msgid "The export/import flow is chunked and has five speeds; notes can contain line breaks inside quoted CSV fields. Data is not sent to any third-party API."
+msgstr "The export/import flow is chunked and has five speeds; notes can contain line breaks inside quoted CSV fields. Data is not sent to any third-party API."
+
+msgid "These are private CRM details. Editing them does not change WooCommerce orders, customer accounts or billing records."
+msgstr "These are private CRM details. Editing them does not change WooCommerce orders, customer accounts or billing records."
+
+msgid "These records are private to store managers and administrators. Personal notes are not shown on the public site and are not sent to marketing services."
+msgstr "These records are private to store managers and administrators. Personal notes are not shown on the public site and are not sent to marketing services."
+
+msgid "This email is already associated with another customer."
+msgstr "This email is already associated with another customer."
+
+msgid "This plugin is independent of TaxoCommerce Core, Suppliers, Billing, Campaigns and Tasks. WooCommerce is required only for buyer synchronization."
+msgstr "This plugin is independent of TaxoCommerce Core, Suppliers, Billing, Campaigns and Tasks. WooCommerce is required only for buyer synchronization."
+
+msgid "Unable to create JSON."
+msgstr "Unable to create JSON."
+
+msgid "Unable to produce JSON."
+msgstr "Unable to produce JSON."
+
+msgid "Unable to save this customer record."
+msgstr "Unable to save this customer record."
+
+msgid "Unchanged"
+msgstr "Unchanged"
+
+msgid "Unchecked or incomplete"
+msgstr "Unchecked or incomplete"
+
+msgid "Unexpected server response."
+msgstr "Unexpected server response."
+
+msgid "Unnamed contact"
+msgstr "Unnamed contact"
+
+msgid "Updated"
+msgstr "Updated"
+
+msgid "Uploaded temporary file path needs secure validation."
+msgstr "Uploaded temporary file path needs secure validation."
+
+msgid "Use a unique plugin-specific prefix; preserve compatibility through reviewed migration."
+msgstr "Use a unique plugin-specific prefix; preserve compatibility through reviewed migration."
+
+msgid "Use Edit record to update company, address, contact preferences, internal labels and private notes. CRM changes never rewrite WooCommerce billing data."
+msgstr "Use Edit record to update company, address, contact preferences, internal labels and private notes. CRM changes never rewrite WooCommerce billing data."
+
+msgid "Use the search box and source selector to find customers. The Purchases column counts paid orders linked to each record."
+msgstr "Use the search box and source selector to find customers. The Purchases column counts paid orders linked to each record."
+
+msgid "User manual"
+msgstr "User manual"
+
+msgid "Validate the input type, sanitize values and check uploads with WordPress APIs."
+msgstr "Validate the input type, sanitize values and check uploads with WordPress APIs."
+
+msgid "Verify the nonce and capability along the actual input-handling path."
+msgstr "Verify the nonce and capability along the actual input-handling path."
+
+msgid "Version"
+msgstr "Version"
+
+msgid "Version history and improvements"
+msgstr "Version history and improvements"
+
+msgid "Warnings to review"
+msgstr "Warnings to review"
+
+msgid "WhatsApp"
+msgstr "WhatsApp"
+
+msgid "WooCommerce did not return a paginated order list."
+msgstr "WooCommerce did not return a paginated order list."
+
+msgid "WooCommerce is inactive. Manual customer management remains available."
+msgstr "WooCommerce is inactive. Manual customer management remains available."
+
+msgid "WooCommerce is not available. Manual contacts remain usable."
+msgstr "WooCommerce is not available. Manual contacts remain usable."
+
+msgid "WooCommerce remains responsible for account details, orders and fiscal retention. The WordPress personal-data tools include CRM export and erasure support."
+msgstr "WooCommerce remains responsible for account details, orders and fiscal retention. The WordPress personal-data tools include CRM export and erasure support."
+
+msgid "WooCommerce synchronization"
+msgstr "WooCommerce synchronization"
+
+msgid "WooCommerce-related buyer identity is retained while orders are subject to store retention requirements."
+msgstr "WooCommerce-related buyer identity is retained while orders are subject to store retention requirements."
+
+msgid "WordPress custom tables store private CRM fields and compact order ID references; WooCommerce HPOS APIs remain the source of orders and payment status."
+msgstr "WordPress custom tables store private CRM fields and compact order ID references; WooCommerce HPOS APIs remain the source of orders and payment status."
+
+msgid "You do not have permission to manage customer records."
+msgstr "You do not have permission to manage customer records."
+
+msgid "Autocheck"
+msgstr "Autocheck"
+
+msgid "Fecha de ejecución:"
+msgstr "Execution date:"
+
+msgid "Only a minimal WooCommerce relationship is retained in the CRM."
+msgstr "Only a minimal WooCommerce relationship is retained in the CRM."
+
+msgid "CRM personal information was anonymized; WooCommerce orders retain their own legal retention rules."
+msgstr "CRM personal information was anonymized; WooCommerce orders retain their own legal retention rules."
+
+msgid "This CRM record has been anonymized following a privacy request. The WooCommerce order references are retained."
+msgstr "This CRM record has been anonymized following a privacy request. The WooCommerce order references are retained."
+
+msgid "Anonymized CRM records cannot be repopulated."
+msgstr "Anonymized CRM records cannot be repopulated."
+
+msgid "Cannot create private export file."
+msgstr "Cannot create private export file."
+
+msgid "Cannot write private export file."
+msgstr "Cannot write private export file."
+
+msgid "Export session is already processing."
+msgstr "Export session is already processing."
+
+msgid "Cannot query CRM records."
+msgstr "Cannot query CRM records."
+
+msgid "Cannot read private export file."
+msgstr "Cannot read private export file."

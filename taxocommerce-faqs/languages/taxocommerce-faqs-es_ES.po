@@ -650,3 +650,33 @@ msgid ""
 "CSV UTF-8; hasta 500 filas y 2 MB por importación. Solo se actualiza un ID "
 "existente; las nuevas filas reciben ID nuevo."
 msgstr "CSV UTF-8; hasta 500 filas y 2 MB por importación. Solo se actualiza un ID existente; las nuevas filas reciben ID nuevo."
+
+msgid "Ejecutar Autocheck"
+msgstr "Ejecutar Autocheck"
+
+msgid "Descargar resultados (JSON)"
+msgstr "Descargar resultados (JSON)"
+
+msgid "Autocheck de FAQs"
+msgstr "Autocheck de FAQs"
+
+msgid "Diagnóstico manual y no destructivo: comprueba funciones y configuración sin crear, editar, eliminar ni importar preguntas."
+msgstr "Diagnóstico manual y no destructivo: comprueba funciones y configuración sin crear, editar, eliminar ni importar preguntas."
+
+msgid "Todavía no se ha ejecutado el Autocheck en este sitio."
+msgstr "Todavía no se ha ejecutado el Autocheck en este sitio."
+
+msgid "Correctos"
+msgstr "Correctos"
+
+msgid "Errores"
+msgstr "Errores"
+
+msgid "Omitidos / externos"
+msgstr "Omitidos / externos"
+
+msgid "No ejecutados"
+msgstr "No ejecutados"
+
+msgid "Los controles comprueban contratos y lecturas, no operaciones reales. Los casos omitidos requieren validación manual en STAGING; el Code Check no sustituye a WordPress Plugin Check."
+msgstr "Los controles comprueban contratos y lecturas, no operaciones reales. Los casos omitidos requieren validación manual en STAGING; el Code Check no sustituye a WordPress Plugin Check."

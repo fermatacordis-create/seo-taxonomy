@@ -1,0 +1,398 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: nl_NL\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "1. Set the start date; 2. import paid WooCommerce orders page by page; 3. enter actual supplier invoices and expenses; 4. verify tax classification and the issued invoice before validating an entry; 5. review months and export the ledger for your accountant."
+msgstr "1. Set the start date; 2. import paid WooCommerce orders page by page; 3. enter actual supplier invoices and expenses; 4. verify tax classification and the issued invoice before validating an entry; 5. review months and export the ledger for your accountant."
+
+msgid "Accounting"
+msgstr "Boekhouding"
+
+msgid "Accounting sections"
+msgstr "Boekhoudonderdelen"
+
+msgid "Action"
+msgstr "Actie"
+
+msgid "Add received invoice / expense"
+msgstr "Factuur / uitgave toevoegen"
+
+msgid "All records live in a dedicated WordPress-prefix table, with unique source/source_id keys. Imports use WooCommerce WC_Order APIs and never change orders. No TaxoCommerce sibling is required. Validated entries are immutable; corrections need a new adjustment record in a later version."
+msgstr "All records live in a dedicated WordPress-prefix table, with unique source/source_id keys. Imports use WooCommerce WC_Order APIs and never change orders. No TaxoCommerce sibling is required. Validated entries are immutable; corrections need a new adjustment record in a later version."
+
+msgid "Assets"
+msgstr "Vaste activa"
+
+msgid "Autocheck"
+msgstr "Autocheck"
+
+msgid "Base"
+msgstr "Grondslag"
+
+msgid "Base country:"
+msgstr "Base country:"
+
+msgid "CSV and JSON are internal fiscal registers, not official AEAT files. Each export has a 20,000-row upper bound."
+msgstr "CSV and JSON are internal fiscal registers, not official AEAT files. Each export has a 20,000-row upper bound."
+
+msgid "Cannot read orders."
+msgstr "Cannot read orders."
+
+msgid "Changing this date does not erase previously imported records."
+msgstr "Changing this date does not erase previously imported records."
+
+msgid "Concept"
+msgstr "Omschrijving"
+
+msgid "Currency:"
+msgstr "Currency:"
+
+msgid "Date"
+msgstr "Datum"
+
+msgid "Deductible VAT percentage (review first)"
+msgstr "Aftrekbare btw in % (controleren)"
+
+msgid "Deductible input VAT"
+msgstr "Aftrekbare voorbelasting"
+
+msgid "Developer guide"
+msgstr "Technische handleiding"
+
+msgid "Difference"
+msgstr "Verschil"
+
+msgid "Document"
+msgstr "Document"
+
+msgid "Domestic VAT (verify)"
+msgstr "Binnenlandse btw (controleren)"
+
+msgid "Download Autocheck JSON"
+msgstr "Autocheck-JSON downloaden"
+
+msgid "Exempt"
+msgstr "Vrijgesteld"
+
+msgid "Expenses"
+msgstr "Uitgaven"
+
+msgid "Exports"
+msgstr "Exporteren"
+
+msgid "Failure of draft/review checks means fiscal data needs validation, not that the plugin runtime has failed."
+msgstr "Failure of draft/review checks means fiscal data needs validation, not that the plugin runtime has failed."
+
+msgid "Fecha de ejecución:"
+msgstr "Fecha de ejecución:"
+
+msgid "Financial year:"
+msgstr "Boekjaar:"
+
+msgid "First real commercial date:"
+msgstr "Startdatum echte transacties:"
+
+msgid "Fiscal ledger settings"
+msgstr "Instellingen fiscaal register"
+
+msgid "Fiscal register, VAT review, supplier invoices and export. No tax return is filed automatically."
+msgstr "Fiscal register, VAT review, supplier invoices and export. No tax return is filed automatically."
+
+msgid "Import page %d (up to 25 orders)"
+msgstr "Pagina %d importeren (max. 25 bestellingen)"
+
+msgid "Imports only paid-status orders dated after the configured start. All imported records remain drafts until invoice and VAT verification; repeated imports do not duplicate them."
+msgstr "Imports only paid-status orders dated after the configured start. All imported records remain drafts until invoice and VAT verification; repeated imports do not duplicate them."
+
+msgid "Input VAT amount"
+msgstr "Voorbelasting"
+
+msgid "Insufficient permissions."
+msgstr "Insufficient permissions."
+
+msgid "Internal exports"
+msgstr "Interne exports"
+
+msgid "Intra-EU"
+msgstr "Intracommunautair"
+
+msgid "Invalid year."
+msgstr "Invalid year."
+
+msgid "Invoice number"
+msgstr "Factuurnummer"
+
+msgid "Issued invoice number"
+msgstr "Uitgaand factuurnummer"
+
+msgid "Manual"
+msgstr "Handleiding"
+
+msgid "Model 303 — preliminary working figures"
+msgstr "Model 303 — preliminary working figures"
+
+msgid "Month"
+msgstr "Maand"
+
+msgid "Monthly fiscal summary (validated domestic entries only)"
+msgstr "Maandelijks btw-overzicht (goedgekeurde binnenlandse posten)"
+
+msgid "Next import page"
+msgstr "Volgende importpagina"
+
+msgid "No entries in this section."
+msgstr "Geen boekingen in deze sectie."
+
+msgid "Notes / document reference"
+msgstr "Opmerkingen / bewijsstuk"
+
+msgid "Other tax forms (390, 347, 349, 200) require their own eligibility rules and are not generated in this first version."
+msgstr "Other tax forms (390, 347, 349, 200) require their own eligibility rules and are not generated in this first version."
+
+msgid "Output VAT"
+msgstr "Verschuldigde btw"
+
+msgid "Party"
+msgstr "Relatie"
+
+msgid "Pending review"
+msgstr "Nog te controleren"
+
+msgid "Purchases / expenses"
+msgstr "Inkoop / uitgaven"
+
+msgid "Read-only functional Autocheck"
+msgstr "Functionele alleen-lezencontrole"
+
+msgid "Received invoices"
+msgstr "Ontvangen facturen"
+
+msgid "Refund requires credit-note and VAT verification."
+msgstr "Refund requires credit-note and VAT verification."
+
+msgid "Requires review"
+msgstr "Controle vereist"
+
+msgid "Reverse charge"
+msgstr "Btw verlegd"
+
+msgid "Sales"
+msgstr "Verkopen"
+
+msgid "Save draft"
+msgstr "Concept opslaan"
+
+msgid "Save settings"
+msgstr "Instellingen opslaan"
+
+msgid "Settings"
+msgstr "Instellingen"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Summary"
+msgstr "Overzicht"
+
+msgid "Supplier"
+msgstr "Leverancier"
+
+msgid "Tax identification"
+msgstr "Fiscaal nummer"
+
+msgid "Tax returns"
+msgstr "Belastingaangiften"
+
+msgid "Taxable base"
+msgstr "Belastbare grondslag"
+
+msgid "TaxoCommerce Accounting"
+msgstr "TaxoCommerce Boekhouding"
+
+msgid "The simplified amounts above are NOT an official Model 303, and do not include reverse charge, imports, exemptions, regional VAT regimes, carryovers or corrections. Do not submit them to the tax authority without professional review."
+msgstr "The simplified amounts above are NOT an official Model 303, and do not include reverse charge, imports, exemptions, regional VAT regimes, carryovers or corrections. Do not submit them to the tax authority without professional review."
+
+msgid "Total"
+msgstr "Totaal"
+
+msgid "Unverified order: reconcile the issued invoice, taxes and possible refunds before approval."
+msgstr "Unverified order: reconcile the issued invoice, taxes and possible refunds before approval."
+
+msgid "User guide"
+msgstr "Gebruikershandleiding"
+
+msgid "VAT"
+msgstr "Btw"
+
+msgid "VAT treatment"
+msgstr "Btw-behandeling"
+
+msgid "Validate"
+msgstr "Valideren"
+
+msgid "WooCommerce is unavailable."
+msgstr "WooCommerce is unavailable."
+
+msgid "WooCommerce sales / refunds"
+msgstr "WooCommerce-verkopen / terugbetalingen"
+
+msgid "Year contains over 400 entries; use the exports for full reporting. This dashboard is limited."
+msgstr "Year contains over 400 entries; use the exports for full reporting. This dashboard is limited."
+
+msgid "Invoice storage is unavailable."
+msgstr "De opslag voor facturen is niet beschikbaar."
+
+msgid "Secure invoice encryption is unavailable."
+msgstr "Veilige versleuteling van facturen is niet beschikbaar."
+
+msgid "Invoice cannot be decrypted or has been modified."
+msgstr "De factuur kan niet worden ontsleuteld of is gewijzigd."
+
+msgid "Purchase entry not found."
+msgstr "Inkoopboeking niet gevonden."
+
+msgid "Select a PDF smaller than 10 MB."
+msgstr "Selecteer een PDF kleiner dan 10 MB."
+
+msgid "Select a valid PDF invoice."
+msgstr "Selecteer een geldige PDF-factuur."
+
+msgid "Supplier invoice PDF"
+msgstr "PDF-leveranciersfactuur"
+
+msgid "Document pending"
+msgstr "Document ontbreekt"
+
+msgid "Attach supplier PDF (up to 10 MB)"
+msgstr "Leveranciers-PDF bijvoegen (max. 10 MB)"
+
+msgid "Upload PDF"
+msgstr "PDF uploaden"
+
+msgid "Invoice document not found."
+msgstr "Factuurdocument niet gevonden."
+
+msgid "Supplier invoice PDF securely attached to the purchase."
+msgstr "PDF-leveranciersfactuur veilig aan de aankoop gekoppeld."
+
+msgid "Select a valid PDF smaller than 10 MB."
+msgstr "Selecteer een geldige PDF kleiner dan 10 MB."
+
+msgid "Could not store the encrypted supplier invoice. No accounting data was changed."
+msgstr "De versleutelde leveranciersfactuur kon niet worden opgeslagen. Er zijn geen boekhoudgegevens gewijzigd."
+
+msgid "The purchase record was not found."
+msgstr "De inkoopboeking is niet gevonden."
+
+msgid "Supplier PDF originals can be attached to saved purchase and expense rows. Downloads require WordPress authentication. The files are encrypted at rest using the current site salts; preserve those salts in backups. CSV/JSON exports do not include PDFs."
+msgstr "Originele PDF's van leveranciers kunnen worden gekoppeld aan opgeslagen inkopen en uitgaven. Downloads vereisen WordPress-authenticatie. Bestanden worden versleuteld met de huidige sitesalts; bewaar deze in back-ups. CSV/JSON-exports bevatten geen PDF's."
+
+msgid "Hacienda"
+msgstr "Belastingdienst"
+
+msgid "Issued invoices book"
+msgstr "Register uitgaande facturen"
+
+msgid "Sales and refunds registered in the local ledger. Verify invoice series, dates, tax details and corrections."
+msgstr "Geregistreerde verkopen en terugbetalingen. Controleer factuurreeksen, data, btw en correcties."
+
+msgid "Received invoices book"
+msgstr "Register ontvangen facturen"
+
+msgid "Supplier invoices and expenses. Confirm deductible VAT and retain the original purchase documents."
+msgstr "Leveranciersfacturen en kosten. Controleer aftrekbare btw en bewaar de originele bewijsstukken."
+
+msgid "Investment goods book"
+msgstr "Register investeringsgoederen"
+
+msgid "Review capital goods separately; adjustments and asset-specific information are not calculated."
+msgstr "Controleer investeringsgoederen afzonderlijk; correcties en specifieke activagegevens worden niet berekend."
+
+msgid "Intra-EU operations book"
+msgstr "Register intracommunautaire transacties"
+
+msgid "Review transactions classified as intra-EU. Check VAT ID, transaction type and country before filing."
+msgstr "Controleer intracommunautaire transacties, btw-nummer, transactietype en land vóór indiening."
+
+msgid "Model 303 — VAT"
+msgstr "Model 303 — btw"
+
+msgid "Indicative quarterly domestic VAT balance only. Special regimes, non-domestic transactions, adjustments and the official return boxes are missing."
+msgstr "Alleen indicatief kwartaalsaldo binnenlandse btw. Bijzondere regelingen, buitenlandse transacties, correcties en officiële velden ontbreken."
+
+msgid "Model 390 — annual VAT"
+msgstr "Model 390 — jaaroverzicht btw"
+
+msgid "Indicative annual domestic VAT summary. Exemptions, carryovers, official totals and filing eligibility require separate verification."
+msgstr "Indicatief jaaroverzicht binnenlandse btw. Vrijstellingen, verrekeningen, officiële totalen en indienplicht moeten worden gecontroleerd."
+
+msgid "Model 347 — third-party transactions"
+msgstr "Model 347 — transacties met derden"
+
+msgid "Raw sales and purchase movements for reconciliation. The statutory thresholds, exclusions, counterparties and declaration records are NOT calculated."
+msgstr "Ruwe inkoop- en verkooptransacties voor controle. Wettelijke drempels, uitsluitingen, tegenpartijen en officiële aangifteregels worden NIET berekend."
+
+msgid "Model 349 — intra-EU transactions"
+msgstr "Model 349 — intracommunautaire transacties"
+
+msgid "Only transactions tagged as intra-EU are listed. Fiscal operation keys, partner VAT IDs, required periodicity and official files are not produced."
+msgstr "Alleen als intracommunautair gemarkeerde transacties worden getoond. Fiscale codes, gevalideerde btw-nummers, perioden en officiële bestanden worden niet gemaakt."
+
+msgid "Model 200 — corporate income tax"
+msgstr "Model 200 — vennootschapsbelasting"
+
+msgid "Only raw transactions are available. A balance sheet, profit and loss account, tax adjustments and applicability checks are not implemented."
+msgstr "Alleen ruwe transacties beschikbaar. Balans, winst-en-verliesrekening, fiscale correcties en toetsing van de indienplicht ontbreken."
+
+msgid "Hacienda — tax reports and records"
+msgstr "Belastingdienst — fiscale rapporten en registers"
+
+msgid "These are internal working reports, NOT official AEAT tax forms. They are not accepted for submission. The filing obligations depend on the business and tax regime."
+msgstr "Interne werkrapporten, GEEN officiële AEAT-formulieren en niet indienbaar. Verplichtingen hangen af van bedrijf en belastingregime."
+
+msgid "Tax documents"
+msgstr "Belastingdocumenten"
+
+msgid "VAT quarter"
+msgstr "Btw-kwartaal"
+
+msgid "Matching accounting entries"
+msgstr "Bijbehorende boekingen"
+
+msgid "More than 20,000 entries match. Download is blocked rather than silently omitting data."
+msgstr "Meer dan 20.000 boekingen. Download geblokkeerd om gegevensverlies zonder melding te voorkomen."
+
+msgid "Download working data (not for filing)"
+msgstr "Werkgegevens downloaden (niet indienbaar)"
+
+msgid "Open official AEAT information and filing"
+msgstr "Officiële AEAT-informatie en indienprocedure openen"
+
+msgid "To file a return, use the official AEAT procedure and verify all fields and fiscal obligations. No data is transmitted automatically."
+msgstr "Gebruik de officiële AEAT-procedure en controleer alle velden en fiscale verplichtingen. Er worden geen gegevens automatisch verzonden."
+
+msgid "No accounting entries for this period."
+msgstr "Geen boekingen in deze periode."
+
+msgid "Only validated domestic operations are included in the indicative VAT figures. Drafts and other regimes require review. This is not a complete tax return."
+msgstr "Indicatieve btw bevat alleen gevalideerde binnenlandse transacties. Concepten en andere regimes vereisen controle. Geen volledige aangifte."
+
+msgid "Preview shows 20 entries. Download to inspect the complete matching register."
+msgstr "Voorbeeld toont 20 boekingen. Download voor het volledige register."
+
+msgid "Invalid tax report selection."
+msgstr "Ongeldige keuze van fiscaal rapport."
+
+msgid "PREPARATORY WORKING DATA — NOT AN OFFICIAL AEAT RETURN OR VALID FILING FILE."
+msgstr "VOORBEREIDENDE GEGEVENS — GEEN OFFICIËLE AEAT-AANGIFTE OF GELDIG INDIENBESTAND."
+
+msgid "Official AEAT blank workbook templates (not filled by TaxoCommerce):"
+msgstr "Officiële lege AEAT-boektemplates (niet ingevuld door TaxoCommerce):"
+
+msgid "Download AEAT XLSX template — legal entities"
+msgstr "AEAT-XLSX-template downloaden — rechtspersonen"
+
+msgid "Download AEAT XLSX template — general"
+msgstr "AEAT-XLSX-template downloaden — algemeen"

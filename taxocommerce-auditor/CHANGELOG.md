@@ -1,3 +1,8 @@
+## [0.3.23] — 2026-11-13 — Code Check unificado con Core 0.4.82 (#2626)
+
+- Code Check ampliado con las mismas reglas, clasificación por gravedad, información por archivo/línea y JSON que Core 0.4.82; sin cambiar el Autotest funcional ni la ejecución por lotes. Issue #2626.
+- Los resultados son comprobaciones estáticas locales, no equivalentes al Plugin Check oficial de WordPress.org ni a una auditoría de seguridad ejecutada.
+
 ## [0.3.22] — 2026-11-11 — Detección de categorías sin Hub secundario desde seo_relations
 
 - La regla `category_no_native_secondary_hub` consulta la relación canónica `hub_secondary_to_category` en `seo_relations`, no `_taxocommerce_core_parent_hub_secondary` en term_meta. Se evitan falsos positivos de categorías con relación válida.

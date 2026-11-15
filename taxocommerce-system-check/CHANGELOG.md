@@ -1,3 +1,62 @@
+## [0.2.40] — 2026-11-15 — Evitar fatal durante actualizaciones FTPS parciales (#2711)
+
+- Corrección urgente del error `Class TaxoCommerce_System_Check_Process_Details not found` observado en STAGING al abrir Procesos.
+- La pantalla carga el módulo de diagnóstico bajo demanda si existe; si aún no ha llegado durante una transferencia incremental, continúa mostrando los indicadores y controles de cancelación anteriores con un aviso de diagnóstico temporalmente no disponible, sin error fatal.
+- La carga inicial del plugin tolera temporalmente la ausencia del archivo hasta completar la actualización. No cambia las protecciones de paradas ni las consultas de Action Scheduler y WP-Cron.
+- Prueba de regresión que simula la llegada no atómica de archivos (primero el gestor y después el módulo de detalles) y verifica la recuperación. No se despliega a producción.
+
+## [0.2.39] — 2026-11-15 — Diagnóstico y logs por tarea en Procesos (#2699)
+
+- Procesos incorpora una columna de diagnóstico para tareas de WP-Cron, Action Scheduler y trabajadores de larga duración. Cada consulta detallada está limitada a una tarea y requiere permisos de administrador y nonce.
+- Los logs nativos de Action Scheduler se muestran bajo demanda (últimas 20 entradas) y se ocultan valores que parezcan credenciales. Enlace al último intento fallido desde el resumen de colas.
+- Señal de posible tarea huérfana cuando el hook no tiene callback registrado en la petición actual; no confundir prefijos `seo_` con dependencia demostrada del antiguo monolítico.
+- WP-Cron no conserva historial individual por defecto; no se inventan causas de fallos ni se exponen los argumentos de los jobs.
+- Se mantienen las protecciones de cancelación y paradas cooperativas; ningún kill de PHP/SO ni ejecución arbitraria de hooks. Se corrigen la firma de cancelación individual WP-Cron (botón y validador diferían) y la normalización de identificadores `export:usuario:uuid` para permitir la parada cooperativa de exportaciones ya soportada.
+- Pruebas de regresión de logs, lectura, control de acceso, máscara de credenciales y colas. Sin cambios en Sistema, plugins ajenos o producción.
+
+## [0.2.38] — 2026-11-15 — Diagnóstico de colas en Procesos (#2694)
+
+- Amplía **solo la pestaña «Procesos»** con un bloque de diagnóstico WP-Cron y Action Scheduler de solo lectura. «Sistema», «MySQL» y «Servidor» permanecen intactos.
+- WP-Cron: hook y antigüedad del evento que acumula el mayor retraso (más de 15 minutos), y aviso de dependencia de un cron externo si está desactivado WP-Cron nativo.
+- Action Scheduler: tarea pendiente más antigua, último intento fallido (hook y fecha), número de tareas completadas/fallidas durante la última hora y distinción entre cola atrasada con actividad, errores recientes o ausencia de actividad concluyente.
+- No se deduce falsamente que el ejecutor esté detenido. No se mide duración de PHP si el motor no la expone. No se ejecutan ni modifican tareas, ni se amplían los permisos de cancelación preexistentes.
+- Los procesos de auditoría HTTP muestran además el límite efectivo de URLs por lote (1–8), el progreso registrado y la posición orientativa de la siguiente URL pendiente, también tras una pausa. No cambia la selección, el orden, la reanudación ni la cancelación del motor.
+- Tres consultas de lectura acotadas sobre Action Scheduler, sin dependencias entre plugins. Pruebas aisladas y actualización de catálogos ES/EN/FR/DE/NL.
+
+## [0.2.37] — 2026-11-14 — Piloto de validación de familia con carga adaptativa (#2685)
+
+- Plugin Validation añade indicadores separados de funcionalidades y código y un orquestador manual de cinco velocidades.
+- La primera integración ejecuta casos de lectura del autocheck Core por lotes y después reutiliza el escáner de código del propio Core por archivos. No ejecuta el test de escritura UAT.
+- Pausa, reanudación, resultados parciales por usuario y ajuste adaptativo con tiempo, memoria y CPU PHP disponible. Los demás módulos figuran como no integrados hasta su validación.
+- Seguridad: capacidad manage_options y nonce por acción AJAX. Sin tareas automáticas, sin alteración del monolítico ni de los motores de otros plugins.
+- Prueba de regresión: tests/family-runner-pilot-smoke.php. Pendientes validación en WordPress real y extensión a los demás módulos.
+
+## [0.2.36] — 2026-11-13 — Code Check homogéneo con Core 0.4.82 (#2626)
+
+- Code Check añade las reglas nativas de Core 0.4.82, clasificación por errores/avisos/limpios/no verificados, recomendaciones y JSON, conservando sus chequeos especiales de PHP mínimo, rutas, duplicidades y seguridad y sin modificar el Autocheck funcional. Issue #2626.
+- Las reglas se ejecutan dentro del propio plugin, sin depender de Core, Plugin Check ni de un servidor externo. Conserva el procesamiento por lotes y la descarga del informe técnico previo.
+
+## [0.2.35] — 2026-11-13 — Completar los cinco catálogos de System Check (#2062)
+
+- Completa las 356 entradas gettext que estaban vacías: 61 ES, 110 EN, 62 FR, 62 DE y 61 NL. Audita llamadas gettext en los 23 archivos PHP e incorpora 66 cadenas adicionales que faltaban en el POT (330 traducciones nuevas), principalmente de Autocheck, Procesos y cabecera. Los cinco PO quedan con 420 claves, sin vacíos, iguales al POT.
+- Traduce mensajes de diagnósticos, seguridad, registros PHP, permisos, enlaces, auditoría y guías. Los nombres técnicos y los parámetros se conservan; en las traducciones se evitan referencias heredadas a «SEO System» y cifras exclusivas de una instalación.
+- Recompila los cinco MO con 421 entradas por idioma, contando cabecera, y sincroniza la versión del POT. La prueba local verifica claves, valores, offsets y contenido de MO en los cinco idiomas.
+- No modifica consultas, auditorías, datos, ajustes, eventos, interfaces ni dependencias. La cobertura completa de textos PHP/JS no incluidos en gettext y la prueba real en WordPress de los cinco idiomas siguen pendientes en #2062.
+
+## [0.2.34] — 2026-11-12 — Traducciones de diagnóstico, registros y MySQL (#2062)
+
+- Traduce 67 textos administrativos adicionales en cada uno de los cinco idiomas ES/EN/FR/DE/NL (335 entradas gettext), incluidos controles de servidor, configuración SQL, recursos, registros PHP, estados e informes.
+- Reconstruye los cinco archivos MO respetando los índices y la cabecera GNU gettext, omitiendo cadenas vacías para conservar el fallback de WordPress.
+- Mantiene intactos los chequeos, servicios, datos, permisos, operaciones de red y lógica del plugin. Amplía la comprobación offline de textos de interfaz en Auto Test.
+- Todavía quedan 61/110/62/62/61 entradas PO vacías en ES/EN/FR/DE/NL; no se declara completada la internacionalización ni validado cada literal PHP/JS.
+
+## [0.2.33] — 2026-11-12 — Traducciones parciales y sincronización gettext (#2062)
+
+- Completa 45 etiquetas y mensajes adicionales en cada idioma ES/EN/FR/DE/NL: estados, informes, servidor, MySQL, seguridad y ejecución de comprobaciones (225 traducciones).
+- Recupera 47 claves gettext ausentes del catálogo en_US y sincroniza los cinco catálogos con 354 claves; incorpora 5 claves que faltaban en la plantilla POT.
+- Regenera los cinco archivos MO con cabecera gettext y 354 entradas traducibles por idioma, conservando los textos existentes.
+- Cambios limitados a catálogos, versión, documentación e inventario; no modifica los diagnósticos ni declara completada la internacionalización de la interfaz. Quedan cadenas vacías y requieren revisión los textos que no usan gettext.
+
 ## [0.2.32] — 2026-11-10 — Cabecera en tres zonas sin contenido duplicado (#2521)
 
 - Izquierda: nombre, descripción local del plugin y un único enlace estático `Plugin URI` bajo el texto.

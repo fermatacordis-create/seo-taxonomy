@@ -1,0 +1,40 @@
+name: PRO FTPS read-only root verification (no writes)
+on:
+  pull_request:
+    branches:
+      - staging
+    paths:
+      - '.github/workflows/pro-ftps-readonly-probe.yml'
+      - '.github/scripts/pro_ftps_root_probe.py'
+      - '.github/tests/test_pro_ftps_root_probe.py'
+  push:
+    branches:
+      - staging
+    paths:
+      - '.github/workflows/pro-ftps-readonly-probe.yml'
+      - '.github/scripts/pro_ftps_root_probe.py'
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    name: Verify installed plugin root without modifying PRO
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Checkout probe
+        uses: actions/checkout@v6
+      - name: Check syntax and safety properties
+        run: |
+          python3 -m py_compile .github/scripts/pro_ftps_root_probe.py
+          python3 -m unittest discover -s .github/tests -p test_pro_ftps_root_probe.py -v
+      - name: Verify existing STAGING FTPS account against PRO plugin versions (read-only)
+        if: github.event_name == 'push'
+        env:
+          FTP_SERVER: ${{ secrets.STAGING_FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.STAGING_FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.STAGING_FTP_PASSWORD }}
+          PRO_CORE_EXPECTED_VERSION: '0.4.84'
+          PRO_WOO_EXPECTED_VERSION: '11.3.0'
+        run: python3 .github/scripts/pro_ftps_root_probe.py --shared-account-pro-root

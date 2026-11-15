@@ -73,6 +73,25 @@ class ProChangedFilesTests(unittest.TestCase):
             "taxocommerce-core": ["CHANGELOG.md", "includes/main.php"],
         })
 
+    def test_all_changed_files_are_selected_without_installed_plugins_inventory(self):
+        self.write("taxocommerce-core/includes/main.php", "<?php // updated")
+        self.write("taxocommerce-auditor/includes/helper.php", "<?php // added")
+        head = self.commit()
+        with mock.patch.object(MODULE, "git", side_effect=self.git):
+            result = MODULE.selected_delta(self.base, head, None, None, "", self.root)
+        self.assertEqual(result, {
+            "taxocommerce-auditor": ["includes/helper.php"],
+            "taxocommerce-core": ["includes/main.php"],
+        })
+
+    def test_all_changed_mode_does_not_block_on_deleted_source_files(self):
+        (self.root / "taxocommerce-core/includes/main.php").unlink()
+        self.write("taxocommerce-auditor/includes/helper.php", "<?php // updated")
+        head = self.commit()
+        with mock.patch.object(MODULE, "git", side_effect=self.git):
+            result = MODULE.selected_delta(self.base, head, None, None, "", self.root)
+        self.assertEqual(result, {"taxocommerce-auditor": ["includes/helper.php"]})
+
     def test_no_changed_files_does_not_deploy_any_plugin(self):
         self.assertEqual(self.select(self.base), {})
 

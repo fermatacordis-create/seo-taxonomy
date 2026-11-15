@@ -10,16 +10,26 @@ defined( 'ABSPATH' ) || exit;
 // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound -- Stable TCSUP_ public class names are an existing namespace/API contract; renaming would break extensions.
 final class TCSUP_Schema {
 
-	const DB_VERSION = '1.0.0';
+	const DB_VERSION = '1.2.0';
 
 	public static function catalog_table() {
 		global $wpdb;
 		return $wpdb->prefix . 'seo_proveedores_productos';
 	}
 
+	public static function history_table() {
+		global $wpdb;
+		return $wpdb->prefix . 'seo_proveedores_productos_historico';
+	}
+
 	public static function images_table() {
 		global $wpdb;
 		return $wpdb->prefix . 'seo_supplier_images';
+	}
+
+	public static function profiles_table() {
+		global $wpdb;
+		return $wpdb->prefix . 'seo_proveedores_fichas';
 	}
 
 	public static function install() {
@@ -30,6 +40,8 @@ final class TCSUP_Schema {
 		$charset = $wpdb->get_charset_collate();
 		$catalog = self::catalog_table();
 		$images  = self::images_table();
+		$history = self::history_table();
+		$profiles = self::profiles_table();
 
 		$sql_catalog = "CREATE TABLE {$catalog} (
 			id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -85,6 +97,23 @@ final class TCSUP_Schema {
 			KEY hash_producto (hash_producto)
 		) {$charset};";
 
+		$sql_history = "CREATE TABLE {$history} (
+			id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+			catalog_id BIGINT UNSIGNED NOT NULL,
+			product_id BIGINT UNSIGNED NOT NULL DEFAULT 0,
+			fecha DATETIME NOT NULL,
+			precio_proveedor_sin_iva DECIMAL(18,6) NULL,
+			precio_proveedor_con_iva DECIMAL(18,6) NULL,
+			precio_normal DECIMAL(18,6) NULL,
+			precio_oferta DECIMAL(18,6) NULL,
+			precio_venta DECIMAL(18,6) NULL,
+			moneda VARCHAR(12) NOT NULL DEFAULT 'EUR',
+			origen VARCHAR(30) NOT NULL DEFAULT '',
+			PRIMARY KEY  (id),
+			KEY catalog_fecha (catalog_id,fecha),
+			KEY product_fecha (product_id,fecha)
+		) {$charset};";
+
 		$sql_images = "CREATE TABLE {$images} (
 			id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 			supplier VARCHAR(190) NOT NULL,
@@ -111,8 +140,38 @@ final class TCSUP_Schema {
 			KEY idx_status (status)
 		) {$charset};";
 
+		// The imported catalogue remains the sole source of supplier identities.
+		// This table stores optional private contact information only.
+		$sql_profiles = "CREATE TABLE {$profiles} (
+			id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+			proveedor VARCHAR(190) NOT NULL,
+			nombre_comercial VARCHAR(190) NOT NULL DEFAULT '',
+			razon_social VARCHAR(190) NOT NULL DEFAULT '',
+			nif VARCHAR(40) NOT NULL DEFAULT '',
+			telefono VARCHAR(60) NOT NULL DEFAULT '',
+			email VARCHAR(190) NOT NULL DEFAULT '',
+			web VARCHAR(255) NOT NULL DEFAULT '',
+			contacto_nombre VARCHAR(190) NOT NULL DEFAULT '',
+			contacto_cargo VARCHAR(100) NOT NULL DEFAULT '',
+			contacto_telefono VARCHAR(60) NOT NULL DEFAULT '',
+			contacto_email VARCHAR(190) NOT NULL DEFAULT '',
+			direccion VARCHAR(255) NOT NULL DEFAULT '',
+			codigo_postal VARCHAR(20) NOT NULL DEFAULT '',
+			localidad VARCHAR(120) NOT NULL DEFAULT '',
+			provincia VARCHAR(120) NOT NULL DEFAULT '',
+			pais VARCHAR(120) NOT NULL DEFAULT '',
+			plazo_entrega VARCHAR(120) NOT NULL DEFAULT '',
+			observaciones LONGTEXT NULL,
+			creado DATETIME NOT NULL,
+			actualizado DATETIME NOT NULL,
+			PRIMARY KEY  (id),
+			UNIQUE KEY proveedor (proveedor)
+		) {$charset};";
+
 		dbDelta( $sql_catalog );
 		dbDelta( $sql_images );
+		dbDelta( $sql_history );
+		dbDelta( $sql_profiles );
 
 		update_option( 'taxocommerce_suppliers_db_version', self::DB_VERSION, false );
 	}
@@ -124,7 +183,7 @@ final class TCSUP_Schema {
 		}
 
 		global $wpdb;
-		foreach ( array( self::catalog_table(), self::images_table() ) as $table ) {
+		foreach ( array( self::catalog_table(), self::images_table(), self::history_table(), self::profiles_table() ) as $table ) {
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Read the current supplier inventory/schema for this admin operation; stale cache would misreport changes.
 			$exists = $wpdb->get_var(
 				$wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $table ) )

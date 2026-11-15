@@ -20,15 +20,23 @@ tcc_extension_assert( false === strpos( $home, "'slug'        => 'taxocommerce-c
 tcc_extension_assert( false === strpos( $core, "'taxocommerce-core-modules',\n\t\t\tarray( \$this, 'render_modules' )" ), 'Extensions submenu registration removed' );
 tcc_extension_assert( false !== strpos( $core, 'redirect_old_extensions_page' ), 'old bookmarks redirect to Core' );
 tcc_extension_assert( false !== strpos( $core, "admin.php?page=taxocommerce-core#tcc-extensions" ), 'old bookmark has anchored target' );
-tcc_extension_assert( false !== strpos( $core, "'page'       => 'taxocommerce-core'," ), 'extension POST result redirects to Core' );
 tcc_extension_assert( false !== strpos( $core, 'get_plugins()' ), 'live installed plugins are detected' );
 tcc_extension_assert( false !== strpos( $core, "extension_is_active( \$plugin_file )" ), 'live activation state is checked' );
 tcc_extension_assert( false !== strpos( $core, 'local_package_path( $extension )' ), 'local ZIP is detected' );
 tcc_extension_assert( false !== strpos( $core, 'tcc-extensions-grid' ), 'cards exist' );
-foreach ( array( 'taxocommerce_core_deactivate_extension', 'taxocommerce_core_activate_extension', 'taxocommerce_core_upload_extension', 'taxocommerce_core_install_extension' ) as $action ) {
-    tcc_extension_assert( false !== strpos( $core, 'value="' . $action . '"' ), $action . ' retained in cards' );
+foreach ( array( 'taxocommerce_core_install_extension', 'taxocommerce_core_upload_extension', 'taxocommerce_core_activate_extension', 'taxocommerce_core_deactivate_extension' ) as $action ) {
+    tcc_extension_assert( false === strpos( $core, 'admin_post_' . $action ), $action . ' must not be registered by Core' );
+    tcc_extension_assert( false === strpos( $core, 'value="' . $action . '"' ), $action . ' must not be submitted from Core cards' );
 }
-tcc_extension_assert( false !== strpos( $core, "wp_nonce_field( 'taxocommerce_core_extension_action', 'taxocommerce_core_nonce' )" ), 'POST actions still require nonces' );
+tcc_extension_assert( false === strpos( $core, 'new Plugin_Upgrader' ), 'Core does not install other plugins' );
+tcc_extension_assert( false === strpos( $core, 'activate_plugin(' ), 'Core does not activate other plugins' );
+tcc_extension_assert( false === strpos( $core, 'deactivate_plugins(' ), 'Core does not deactivate other plugins' );
+tcc_extension_assert( false === strpos( $core, 'wp_add_inline_style(' ), 'Core does not generate dynamic inline CSS' );
+tcc_extension_assert( false !== strpos( $core, "'activate_url' =>" ), 'native WordPress activation link exists' );
+tcc_extension_assert( false !== strpos( $core, "'deactivate_url' =>" ), 'native WordPress deactivation link exists' );
+tcc_extension_assert( false !== strpos( $core, 'plugin-install.php?tab=upload' ), 'manual ZIP upload uses native WordPress' );
+tcc_extension_assert( false !== strpos( $core, 'public function download_extension()' ), 'local package download remains available' );
+tcc_extension_assert( false !== strpos( $core, "check_admin_referer( 'taxocommerce_core_download_extension' )" ), 'local download has CSRF protection' );
 tcc_extension_assert( false !== strpos( $core, "current_user_can( 'install_plugins' )" ), 'install controls respect capability' );
 tcc_extension_assert( false !== strpos( $core, "current_user_can( 'activate_plugins' )" ), 'activation controls respect capability' );
 tcc_extension_assert( false !== strpos( $css, '@media(max-width:782px){.tcc-extensions-grid{grid-template-columns:1fr}' ), 'single-column mobile cards' );

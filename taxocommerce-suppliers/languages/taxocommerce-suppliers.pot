@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: TaxoCommerce Suppliers 0.2.9\n"
+"Project-Id-Version: TaxoCommerce Suppliers 0.2.27\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1599,10 +1599,431 @@ msgstr ""
 msgid "Filtro de estados cargado; no se consultan ni modifican pedidos."
 msgstr ""
 
-#. Description of the plugin
-msgid "Supplier catalogue intake, purchasing, product decisions, supplier prices, WooCommerce linking, and external image references."
+msgid "Version"
 msgstr ""
 
-#. Family card description
-msgid "Supplier catalogue, purchasing, prices, and external images."
+msgid "Last updated"
+msgstr ""
+
+msgid "Version history and improvements"
+msgstr ""
+
+msgid "Access denied."
+msgstr ""
+
+msgid "Run Code Check first."
+msgstr ""
+
+msgid "Unable to create JSON."
+msgstr ""
+
+msgid "Autotest sections"
+msgstr ""
+
+msgid "Functionality Check"
+msgstr ""
+
+msgid "Code Check"
+msgstr ""
+
+msgid "PHP syntax, WordPress structure and security indicators for this plugin only. No other checker is required. Findings do not replace official Plugin Check or a security audit."
+msgstr ""
+
+msgid "CPU usage"
+msgstr ""
+
+msgid "Run Code Check"
+msgstr ""
+
+msgid "Progress"
+msgstr ""
+
+msgid "Stop"
+msgstr ""
+
+msgid "Continue batch"
+msgstr ""
+
+msgid "Resume"
+msgstr ""
+
+msgid "Download JSON"
+msgstr ""
+
+msgid "File"
+msgstr ""
+
+msgid "Security"
+msgstr ""
+
+msgid "Price history"
+msgstr ""
+
+msgid "Read-only price snapshots. The first entry reflects the first captured price, not a reconstructed earlier price."
+msgstr ""
+
+msgid "Date"
+msgstr ""
+
+msgid "Supplier excl. tax"
+msgstr ""
+
+msgid "Supplier incl. tax"
+msgstr ""
+
+msgid "Effective price"
+msgstr ""
+
+msgid "Source"
+msgstr ""
+
+msgid "No price changes have been recorded yet."
+msgstr ""
+
+msgid "Historial de precios"
+msgstr ""
+
+msgid "Official plugin page"
+msgstr ""
+
+msgid "1 - Very low"
+msgstr ""
+
+msgid "2 - Low"
+msgstr ""
+
+msgid "3 - Normal"
+msgstr ""
+
+msgid "4 - High"
+msgstr ""
+
+msgid "5 - Maximum"
+msgstr ""
+
+msgid "Added: "
+msgstr ""
+
+msgid "CSV columns do not match the history export format."
+msgstr ""
+
+msgid "CSV exported. Rows: "
+msgstr ""
+
+msgid "CSV file missing."
+msgstr ""
+
+msgid "CSV header is missing."
+msgstr ""
+
+msgid "CSV identity uses supplier, external ID, country and source row key. Unmatched rows are skipped; duplicates are not re-imported. File limit: 15 MB."
+msgstr ""
+
+msgid "Cannot open the CSV file."
+msgstr ""
+
+msgid "Cannot store temporary CSV file."
+msgstr ""
+
+msgid "Change"
+msgstr ""
+
+msgid "Duplicates: "
+msgstr ""
+
+msgid "Export history CSV"
+msgstr ""
+
+msgid "Export the filtered history as CSV or import an exported CSV in batches. Existing prices and margins remain unchanged."
+msgstr ""
+
+msgid "Exporting price history..."
+msgstr ""
+
+msgid "From date"
+msgstr ""
+
+msgid "History CSV file"
+msgstr ""
+
+msgid "Import / export historical prices"
+msgstr ""
+
+msgid "Import finished. "
+msgstr ""
+
+msgid "Import history CSV"
+msgstr ""
+
+msgid "Import is already processing."
+msgstr ""
+
+msgid "Import session expired. Upload the CSV again."
+msgstr ""
+
+msgid "Importing historical prices..."
+msgstr ""
+
+msgid "Insufficient permissions."
+msgstr ""
+
+msgid "Invalid CSV file or file is larger than 15 MB."
+msgstr ""
+
+msgid "Invalid import session."
+msgstr ""
+
+msgid "Invalid: "
+msgstr ""
+
+msgid "No historical prices match these filters."
+msgstr ""
+
+msgid "Previous selling price"
+msgstr ""
+
+msgid "Previous supplier cost"
+msgstr ""
+
+msgid "Price history inventory"
+msgstr ""
+
+msgid "Processing speed"
+msgstr ""
+
+msgid "Product or SKU"
+msgstr ""
+
+msgid "Review price movements across all products. CSV import only adds historical observations; it never changes current catalogue or WooCommerce prices."
+msgstr ""
+
+msgid "Selling price"
+msgstr ""
+
+msgid "Server request failed."
+msgstr ""
+
+msgid "Supplier cost"
+msgstr ""
+
+msgid "To date"
+msgstr ""
+
+msgid "Unmatched: "
+msgstr ""
+
+msgid "historical observations matching the filters"
+msgstr ""
+
+msgid "Commercial name"
+msgstr ""
+
+msgid "Legal business name"
+msgstr ""
+
+msgid "Tax ID"
+msgstr ""
+
+msgid "Company phone"
+msgstr ""
+
+msgid "Company email"
+msgstr ""
+
+msgid "Website"
+msgstr ""
+
+msgid "Sales contact"
+msgstr ""
+
+msgid "Contact role"
+msgstr ""
+
+msgid "Sales contact phone"
+msgstr ""
+
+msgid "Sales contact email"
+msgstr ""
+
+msgid "Street address"
+msgstr ""
+
+msgid "Postal code"
+msgstr ""
+
+msgid "City"
+msgstr ""
+
+msgid "Province or region"
+msgstr ""
+
+msgid "Typical delivery time"
+msgstr ""
+
+msgid "Supplier record saved."
+msgstr ""
+
+msgid "Contact record deleted. The supplier and its products remain in the catalogue."
+msgstr ""
+
+msgid "This supplier no longer exists in the catalogue."
+msgstr ""
+
+msgid "The supplier record could not be saved."
+msgstr ""
+
+msgid "Supplier management"
+msgstr ""
+
+msgid "Suppliers are discovered automatically from imported inventory. New suppliers appear after their first successful catalogue import; only their private contact details are edited here."
+msgstr ""
+
+msgid "The requested supplier is not in the inventory."
+msgstr ""
+
+msgid "Search suppliers"
+msgstr ""
+
+msgid "%d suppliers in the catalogue"
+msgstr ""
+
+msgid "Catalogue products"
+msgstr ""
+
+msgid "Record"
+msgstr ""
+
+msgid "Action"
+msgstr ""
+
+msgid "Not completed"
+msgstr ""
+
+msgid "Saved"
+msgstr ""
+
+msgid "Create record"
+msgstr ""
+
+msgid "No suppliers found in the imported catalogue."
+msgstr ""
+
+msgid "Edit supplier record"
+msgstr ""
+
+msgid "Create supplier record"
+msgstr ""
+
+msgid "Supplier identity comes from the inventory and cannot be changed here. These details are private to store administrators."
+msgstr ""
+
+msgid "Company details"
+msgstr ""
+
+msgid "Sales contact details"
+msgstr ""
+
+msgid "Address and logistics"
+msgstr ""
+
+msgid "Internal notes and incidents"
+msgstr ""
+
+msgid "Contact preferences, delivery delays, incorrect shipments or other notes..."
+msgstr ""
+
+msgid "Save supplier record"
+msgstr ""
+
+msgid "Delete only the contact record? Catalogue products will not be removed."
+msgstr ""
+
+msgid "Delete contact record"
+msgstr ""
+
+msgid "Gestión de proveedores"
+msgstr ""
+
+msgid "Ver los proveedores importados, crear y editar sus fichas privadas, contactos, direcciones, plazos y observaciones."
+msgstr ""
+
+msgid "Solo modifica la tabla de fichas, nunca productos del inventario ni pedidos WooCommerce."
+msgstr ""
+
+msgid "La lista se crea automáticamente con los nombres distintos de proveedor que figuran en el inventario intermedio. Al importar el primer producto de un proveedor nuevo, su ficha aparecerá sin datos y podrás completarla. No se dan de alta proveedores ajenos al catálogo."
+msgstr ""
+
+msgid "Pulsa Crear ficha o Editar para registrar razón social, NIF, contactos comerciales, teléfonos, correos, dirección, plazo habitual de entrega y observaciones internas. Son datos privados de administración y no se publican en WooCommerce."
+msgstr ""
+
+msgid "Eliminar ficha borra únicamente los datos de contacto. Si el proveedor continúa en el inventario, seguirá visible y se podrá volver a rellenar. Eliminar la ficha no borra ni modifica importaciones, productos, precios o pedidos."
+msgstr ""
+
+msgid "Exporting supplier records..."
+msgstr ""
+
+msgid "Exported supplier records: "
+msgstr ""
+
+msgid "Importing supplier records..."
+msgstr ""
+
+msgid "Import completed. "
+msgstr ""
+
+msgid "Created: "
+msgstr ""
+
+msgid "Updated: "
+msgstr ""
+
+msgid "Unchanged: "
+msgstr ""
+
+msgid "Unknown: "
+msgstr ""
+
+msgid "Stopping import after the current batch..."
+msgstr ""
+
+msgid "Import stopped. Completed batches are retained."
+msgstr ""
+
+msgid "First invalid or unmatched rows: "
+msgstr ""
+
+msgid "Bulk import / export of supplier records"
+msgstr ""
+
+msgid "Export all inventory suppliers as an editable CSV, including blank records. Import the same CSV to create or replace their private contact details; products, prices and orders never change."
+msgstr ""
+
+msgid "Export supplier records CSV"
+msgstr ""
+
+msgid "Supplier records CSV file"
+msgstr ""
+
+msgid "Import supplier records CSV"
+msgstr ""
+
+msgid "Cancel import"
+msgstr ""
+
+msgid "Only suppliers already present in Inventory can be imported. Blank CSV cells replace existing values. Export a backup first. Files up to 50 MB (or the server limit) are processed in small batches without cron."
+msgstr ""
+
+msgid "Invalid supplier records CSV or the file exceeds 50 MB."
+msgstr ""
+
+msgid "The CSV columns do not match the supplier record export. Download a fresh CSV first."
+msgstr ""
+
+msgid "Invalid or expired supplier import session."
+msgstr ""
+
+msgid "Supplier import is already running."
+msgstr ""
+
+msgid "Para editar muchas fichas, descarga el CSV desde Gestión de proveedores. El archivo incluye también proveedores sin ficha. Rellena las columnas conservando los nombres de proveedor y vuelve a importarlo. Se validan las identidades existentes; los nombres desconocidos se omiten. Los campos vacíos sobrescriben los valores anteriores. La importación se procesa por bloques y permite detenerse sin revertir los bloques ya completados."
 msgstr ""

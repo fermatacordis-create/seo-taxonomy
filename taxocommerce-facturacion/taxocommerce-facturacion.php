@@ -3,8 +3,8 @@
  * Plugin Name: TaxoCommerce Billing
  * Plugin URI: https://asociacionfocazul.com/taxocommerce-facturacion/
  * Description: WooCommerce invoices, proformas, and PDF quotations migrated 1:1 from TaxoCommerce SEO.
- * Version: 0.1.14
- * Release Date: 2026-11-10
+ * Version: 0.1.15
+ * Release Date: 2026-11-13
  * Requires at least: 6.5
  * Requires PHP: 7.4
  * Requires Plugins: woocommerce
@@ -21,7 +21,7 @@ require_once __DIR__ . '/includes/class-taxocommerce-autotest-code.php';
 \TaxoCommerce_Facturacion_Autotest_Code::boot();
 
 
-define( 'TAXOCOMMERCE_FACTURACION_VERSION', '0.1.14' );
+define( 'TAXOCOMMERCE_FACTURACION_VERSION', '0.1.15' );
 define( 'TAXOCOMMERCE_FACTURACION_FILE', __FILE__ );
 define( 'TAXOCOMMERCE_FACTURACION_DIR', plugin_dir_path( __FILE__ ) );
 define( 'TAXOCOMMERCE_FACTURACION_URL', plugin_dir_url( __FILE__ ) );

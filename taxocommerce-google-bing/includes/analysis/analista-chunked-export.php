@@ -13,6 +13,7 @@ final class TaxoCommerce_Insights_Chunked_Export {
     const NONCE = 'taxocommerce_insights_chunked_export';
     const OPTION_PREFIX = 'tgb_chunked_json_';
     const TTL = 3600;
+    const COMPLETE_TTL = 86400;
 
     public static function steps() {
         return array(
@@ -55,7 +56,12 @@ final class TaxoCommerce_Insights_Chunked_Export {
         if ( ! is_array( $state ) || empty( $state['file'] ) || empty( $state['id'] ) ) {
             return array();
         }
-        if ( (int) ($state['created'] ?? 0) < time() - self::TTL ) {
+        // Incomplete work expires after an hour. A completed report remains
+        // downloadable for 24 hours from completion, not from the first block.
+        $completed = ! empty( $state['complete'] );
+        $since = $completed ? (int) ( $state['completed_at'] ?? $state['created'] ?? 0 ) : (int) ( $state['updated_at'] ?? $state['created'] ?? 0 );
+        $ttl = $completed ? self::COMPLETE_TTL : self::TTL;
+        if ( $since < time() - $ttl || ! is_file( $state['file'] ) || ! is_readable( $state['file'] ) ) {
             self::remove( $state );
             return array();
         }
@@ -122,9 +128,16 @@ final class TaxoCommerce_Insights_Chunked_Export {
     }
 
     private static function download_url( $state ) {
-        return wp_nonce_url(
-            add_query_arg( array( 'action' => self::ACTION . '_download', 'job' => $state['id'] ), admin_url( 'admin-post.php' ) ),
-            self::NONCE, 'nonce'
+        // This URL is returned through AJAX and assigned as an href by JS.
+        // wp_nonce_url() HTML-escapes ampersands, so the server would receive
+        // amp;nonce instead of nonce and reject the completed download.
+        return add_query_arg(
+            array(
+                'action' => self::ACTION . '_download',
+                'job'    => $state['id'],
+                'nonce'  => wp_create_nonce( self::NONCE ),
+            ),
+            admin_url( 'admin-post.php' )
         );
     }
 
@@ -148,6 +161,7 @@ final class TaxoCommerce_Insights_Chunked_Export {
             $state = array(
                 'id' => wp_generate_password( 32, false, false ),
                 'created' => time(),
+                'updated_at' => time(),
                 'days' => $days,
                 'speed' => $speed,
                 'file' => $file,
@@ -159,6 +173,11 @@ final class TaxoCommerce_Insights_Chunked_Export {
         }
 
         $state = self::load();
+        // A read-only status request restores the latest completed report after
+        // a browser refresh. The administrator and AJAX nonce are checked above.
+        if ( 'status' === $op ) {
+            wp_send_json_success( $state ? self::response( $state ) : array( 'complete' => false, 'available' => false ) );
+        }
         $job = isset( $_POST['job'] ) ? sanitize_text_field( wp_unslash( $_POST['job'] ) ) : '';
         if ( ! $state || ! hash_equals( $state['id'], $job ) ) {
             wp_send_json_error( array( 'message' => 'Exportación caducada; inicia una nueva.' ), 409 );
@@ -166,9 +185,6 @@ final class TaxoCommerce_Insights_Chunked_Export {
         if ( 'cancel' === $op ) {
             self::remove( $state );
             wp_send_json_success( array( 'cancelled' => true ) );
-        }
-        if ( 'status' === $op ) {
-            wp_send_json_success( self::response( $state ) );
         }
         if ( 'step' !== $op ) {
             wp_send_json_error( array( 'message' => 'Operación desconocida.' ), 400 );
@@ -247,6 +263,7 @@ final class TaxoCommerce_Insights_Chunked_Export {
             wp_send_json_error( array( 'message' => 'No se pudo guardar el bloque.' ), 500 );
         }
         $state['next']++;
+        $state['updated_at'] = time();
         if ( $state['next'] === count( $steps ) ) {
             // Final validation is separate from the heavy source calculations.
             $contents = file_get_contents( $state['file'] );
@@ -265,6 +282,7 @@ final class TaxoCommerce_Insights_Chunked_Export {
                 wp_send_json_error( array( 'message' => 'Los bloques no forman un JSON válido.' ), 500 );
             }
             $state['complete'] = true;
+            $state['completed_at'] = time();
         }
         update_option( self::key(), $state, false );
         $elapsed = (int) round( 1000 * ( microtime( true ) - $started ) );

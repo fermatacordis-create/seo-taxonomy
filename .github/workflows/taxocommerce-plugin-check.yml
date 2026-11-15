@@ -80,6 +80,7 @@ jobs:
                   name.split("/", 1)[0]
                   for name in diff
                   if name.startswith("taxocommerce-") and "/" in name
+                  and (Path(name.split("/", 1)[0]) / (name.split("/", 1)[0] + ".php")).is_file()
               })
           for slug in selected:
               if not valid.fullmatch(slug):
@@ -118,12 +119,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          # Core's existing GitHub/staging directory stays stable, but its
-          # WordPress.org distribution MUST use the slug already assigned.
+          # WordPress.org confirmed the public slug taxocommerce-core.
+          # Package the installed and public plugin from the exact same files.
           TARGET_SLUG="$PLUGIN"
-          if [ "$PLUGIN" = "taxocommerce-core" ]; then
-            TARGET_SLUG="taxocommerce-core-catalog-content-management-for-woocommerce"
-          fi
           echo "target_slug=$TARGET_SLUG" >> "$GITHUB_OUTPUT"
           mkdir -p "build/$TARGET_SLUG"
           rsync -a --exclude='tests/' --exclude='.*' --exclude='node_modules/' \
@@ -131,19 +129,12 @@ jobs:
             --exclude='*.pyc' --exclude='*.pot' --include='/CHANGELOG.md' --exclude='*.md' \
             "$PLUGIN/" "build/$TARGET_SLUG/"
           if [ "$PLUGIN" = "taxocommerce-core" ]; then
-            # Check the already-installed short-slug directory *and* the
-            # assigned WordPress.org long-slug distribution independently.
-            mkdir -p "build/$PLUGIN"
-            rsync -a --exclude='tests/' --exclude='.*' --exclude='node_modules/' \
-              --exclude='uploads/' --exclude='*.bak' --exclude='*.log' \
-              --exclude='*.pyc' --exclude='*.pot' --include='/CHANGELOG.md' --exclude='*.md' \
-              "$PLUGIN/" "build/$PLUGIN/"
+            # Never ship the obsolete long-slug translations in the short-slug ZIP.
+            find "build/$TARGET_SLUG/languages" -maxdepth 1 -type f \
+              -name 'taxocommerce-core-catalog-content-management-for-woocommerce-*' -delete
             php "$PLUGIN/tests/slug-compatibility-smoke.php"
             python3 -m unittest discover -s .github/tests -p test_package_core_wordpress_org.py -v
             python3 .github/scripts/package_core_wordpress_org.py "build/$TARGET_SLUG"
-            # Do not ship official-slug catalogs in the short-slug smoke package.
-            find "build/$PLUGIN/languages" -maxdepth 1 -type f -name "$TARGET_SLUG-*" -delete
-            test -f "build/$PLUGIN/$PLUGIN.php"
           fi
           test -f "build/$TARGET_SLUG/$TARGET_SLUG.php"
           test -f "build/$TARGET_SLUG/readme.txt"
@@ -185,16 +176,6 @@ jobs:
             "$PLUGIN" "$GITHUB_SHA" "$GITHUB_RUN_ID" > "$PLUGIN-plugin-check-source.txt"
           echo "## Plugin Check: $PLUGIN" >> "$GITHUB_STEP_SUMMARY"
           echo "Candidate SHA: \`$GITHUB_SHA\`" >> "$GITHUB_STEP_SUMMARY"
-      - name: Official WordPress Plugin Check - installed Core / 0 errors, 0 warnings
-        if: matrix.plugin == 'taxocommerce-core'
-        uses: wordpress/plugin-check-action@v1
-        with:
-          build-dir: ./build/taxocommerce-core
-          slug: taxocommerce-core
-          wp-version: latest
-          ignore-warnings: false
-          ignore-errors: false
-          strict: true
       - name: Official WordPress Plugin Check - errors and warnings must pass
         uses: wordpress/plugin-check-action@v1
         with:

@@ -1,3 +1,11 @@
+= 0.1.20 (2026-11-14) =
+* Autocheck funcional homogéneo con Import-Export: ejecutar, JSON del último resultado y grupos de diagnóstico, sin interfaz antes/después.
+* Cabecera visible también desde Contenidos de TaxoCommerce Core, limitada al contexto FAQs.
+* Conserva 25 pruebas, chequeo de código independiente, permisos, datos y resultados históricos. Issue #2675.
+
+= 0.1.19 (2026-11-13) =
+* Code Check equiparado a Core 0.4.82: reglas autónomas PHP/WordPress/seguridad, clasificación por gravedad, detalles de archivos y recomendaciones, resumen y JSON; sin modificar el Autotest funcional. Issue #2626.
+
 = 0.1.18 (2026-11-10) =
 * Three-zone admin header: unique local Description and static link on left, wider collapsed CHANGELOG.md in center, version/date on right; no duplicate panel. Issue #2521.
 

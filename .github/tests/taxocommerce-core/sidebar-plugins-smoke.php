@@ -15,9 +15,7 @@ class TaxoCommerce_Core_User_Guide {
 }
 function __( $message, $domain = '' ) { return $message; }
 function apply_filters( $hook, $default ) { return $default; }
-$GLOBALS['tc_inline_css'] = array();
-function wp_style_is( $handle, $status ) { return 'taxocommerce-core-admin' === $handle && 'enqueued' === $status; }
-function wp_add_inline_style( $handle, $css ) { $GLOBALS['tc_inline_css'][] = array( 'handle' => $handle, 'css' => $css ); return true; }
+function get_current_screen() { return (object) array( 'id' => 'toplevel_page_taxocommerce-core' ); }
 
 $GLOBALS['menu'] = array();
 $GLOBALS['submenu'] = array();
@@ -69,12 +67,11 @@ foreach ( $internal as $slug ) {
 // admin.php?page=... links and validate user capabilities.
 $core->hide_core_internal_submenus();
 check( $initial === menu_slugs(), 'Core submenu registry must remain intact' );
-$GLOBALS['tc_inline_css'] = array();
 $core->hide_sidebar_submenu();
-check( 1 === count( $GLOBALS['tc_inline_css'] ), 'Core must use WordPress enqueued styles' );
-$style = $GLOBALS['tc_inline_css'][0]['css'];
-check( false !== strpos( $style, 'display:none' ), 'Core-only sidebar must stay compact' );
-
+check( false !== strpos( $core->family_body_class( '' ), 'tcc-family-no-extension-menu' ), 'Only Core pages hide the entire empty submenu' );
+$css = file_get_contents( dirname( __DIR__, 3 ) . '/taxocommerce-core/assets/admin.css' );
+check( false !== strpos( $css, 'page=taxocommerce-core-content' ), 'Core submenu uses static stylesheet rules' );
+check( false !== strpos( $css, 'tcc-family-no-extension-menu' ), 'Empty Core submenu remains hidden via CSS' );
 // With other plugins active, their menu items stay visible.
 $core->register_menu();
 foreach ( array( 'taxocommerce-images', 'taxocommerce-vocabulary', 'seo-facturas' ) as $slug ) {
@@ -88,13 +85,9 @@ check( $expected === array_values( menu_slugs() ), 'WordPress route registry ret
 foreach ( $internal as $slug ) {
     check( isset( $GLOBALS['tc_registered_pages'][ $slug ] ), 'Hiding sidebar must not unregister Core routes: ' . $slug );
 }
-$GLOBALS['tc_inline_css'] = array();
 $core->hide_sidebar_submenu();
-check( 1 === count( $GLOBALS['tc_inline_css'] ), 'Core must use WordPress enqueued styles' );
-$style = $GLOBALS['tc_inline_css'][0]['css'];
-check( false !== strpos( $style, 'page=taxocommerce-core-content' ), 'Core internal pages are hidden visually, not unregistered' );
-check( false === strpos( $style, '> ul.wp-submenu{display:none' ), 'Other plugin entries must remain visible' );
-
+check( false === strpos( $core->family_body_class( '' ), 'tcc-family-no-extension-menu' ), 'Other plugins keep submenu visible' );
+check( false !== strpos( $css, 'page=taxocommerce-core-content' ), 'Core internal links are visually hidden without removing routes' );
 $dashboard = file_get_contents( dirname( __DIR__, 3 ) . '/taxocommerce-core/includes/class-taxocommerce-core-dashboard.php' );
 foreach ( array(
     'TaxoCommerce_Core_Content_Manager::PAGE_SLUG',

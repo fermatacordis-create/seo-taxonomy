@@ -1,6 +1,6 @@
 <?php
 /**
- * Standalone locale smoke for the 19 independent TaxoCommerce plugins.
+ * Standalone locale smoke for independent TaxoCommerce plugins.
  * No WordPress installation, network, database, or plugin code execution.
  * Only the extracted locale-loader closures are executed with WP stubs.
  */
@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 $root = dirname( __DIR__, 2 );
 $slugs = array(
-    'auditor', 'campaigns', 'core', 'database', 'dependiente',
+    'auditor', 'campaigns', 'core', 'customers', 'database', 'dependiente',
     'distribution', 'facturacion', 'faqs', 'google-bing', 'images',
     'import-export', 'logistica', 'redirects', 'scrappers', 'social',
     'suppliers', 'system-check', 'templates', 'vocabulary',

@@ -37,7 +37,12 @@ final class TCSocial_Auto_Test {
             'table_reads'        => array( 'MySQL', 'Lecturas limitadas de registros' ),
             'calendar'           => array( 'Calendario', 'Vistas y detección de coincidencias' ),
             'scheduler'          => array( 'Programador', 'Gestión de tareas y estados' ),
-            'cron'               => array( 'Programador', 'Rutas de WP-Cron disponibles' ),
+            'cron'               => array( 'Programador', 'Registro real de hooks y WP-Cron' ),
+            'schedule_health'    => array( 'Calendario', 'Agenda contrastada con WP-Cron' ),
+            'job_health'         => array( 'Programador', 'Cola de trabajos y eventos pendientes' ),
+            'connection_health'  => array( 'Conexiones', 'Autorizaciones y permisos guardados' ),
+            'pinterest_images'   => array( 'Publicaciones', 'Imágenes de futuros Pins' ),
+            'recent_outcomes'    => array( 'Publicaciones', 'Resultados recientes de envíos' ),
             'csv'                => array( 'Importar / Exportar', 'Simulación y contratos CSV' ),
             'secrets'            => array( 'Seguridad', 'Contrato de cifrado de credenciales' ),
             'publishing'         => array( 'Publicaciones', 'Motor de publicación disponible' ),
@@ -197,11 +202,205 @@ final class TCSocial_Auto_Test {
     }
 
     private static function test_cron() {
-        return has_action( 'tcsocial_programador_run_job' )
-            && has_action( 'tcsocial_network_publish_scheduled' )
-            && has_action( 'tcsocial_network_publish_manual_scheduled' )
-            ? self::pass( 'Tres rutas WP-Cron registradas; no se agenda ni ejecuta ninguna.' )
-            : self::fail( 'Falta un callback de publicación programada.' );
+        if (
+            ! has_action( 'tcsocial_programador_run_job' )
+            || ! has_action( 'tcsocial_network_publish_scheduled' )
+            || ! has_action( 'tcsocial_network_publish_manual_scheduled' )
+        ) {
+            return self::fail( 'Falta un ejecutor WP-Cron del plugin Social.' );
+        }
+        if (
+            ! has_action( 'transition_post_status', 'tcsocial_network_schedule_on_publish' )
+            && ! has_action( 'transition_post_status', 'seo_social_network_schedule_on_publish' )
+        ) {
+            return self::fail( 'La programación automática de contenidos nuevos no está registrada en WordPress.' );
+        }
+        return self::pass( 'Ejecutores y programación automática registrados; las colas se comprueban por separado.' );
+    }
+
+    /**
+     * Lectura acotada de agenda meta compartida entre Social y su predecesor.
+     * No reconstruye ni ejecuta ningún evento.
+     */
+    private static function schedule_rows( $provider = '', $future_only = false ) {
+        global $wpdb;
+        $prefix = '_seo_social_schedule_';
+        $like = $wpdb->esc_like( $prefix ) . '%';
+        if ( $future_only ) {
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Consulta de lectura acotada de agenda propia.
+            $rows = $wpdb->get_results( $wpdb->prepare(
+                "SELECT pm.post_id, pm.meta_key, pm.meta_value FROM %i pm
+                 INNER JOIN %i p ON p.ID = pm.post_id
+                 WHERE pm.meta_key LIKE %s AND p.post_status = 'publish'
+                   AND CAST(pm.meta_value AS UNSIGNED) > %d
+                 ORDER BY CAST(pm.meta_value AS UNSIGNED) ASC LIMIT %d",
+                $wpdb->postmeta, $wpdb->posts, $like, time(), 100
+            ) );
+        } else {
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Consulta de lectura acotada de agenda propia.
+            $rows = $wpdb->get_results( $wpdb->prepare(
+                "SELECT pm.post_id, pm.meta_key, pm.meta_value FROM %i pm
+                 INNER JOIN %i p ON p.ID = pm.post_id
+                 WHERE pm.meta_key LIKE %s AND p.post_status = 'publish'
+                 ORDER BY CAST(pm.meta_value AS UNSIGNED) ASC LIMIT %d",
+                $wpdb->postmeta, $wpdb->posts, $like, 100
+            ) );
+        }
+        return is_array( $rows ) ? $rows : array();
+    }
+
+    private static function test_schedule_health() {
+        $rows = self::schedule_rows();
+        if ( ! $rows ) return self::skip( 'Sin agenda editorial visible en la muestra de hasta 100 filas.' );
+        $overdue = 0;
+        $orphaned = 0;
+        $disconnected = 0;
+        $settings = tcsocial_network_get_settings();
+        $checked = 0;
+        foreach ( $rows as $row ) {
+            $id = absint( $row->post_id );
+            $provider = sanitize_key( substr( (string) $row->meta_key, strlen( '_seo_social_schedule_' ) ) );
+            $stamp = absint( $row->meta_value );
+            if ( ! $id || ! $stamp || ! tcsocial_network_get_provider( $provider ) ) continue;
+            ++$checked;
+            if ( empty( $settings['providers'][ $provider ]['enabled'] ) ) ++$disconnected;
+            if ( $stamp < time() - 600 ) {
+                ++$overdue;
+                continue;
+            }
+            $args = array( $id, $provider );
+            if (
+                ! wp_next_scheduled( 'tcsocial_network_publish_manual_scheduled', $args )
+                && ! wp_next_scheduled( 'seo_social_network_publish_manual_scheduled', $args )
+            ) ++$orphaned;
+        }
+        if ( $overdue || $orphaned || $disconnected ) {
+            return self::fail( sprintf(
+                'Agenda: %d vencidas sin confirmar, %d sin evento WP-Cron y %d para redes desconectadas, de %d comprobadas. No se reenviarán automáticamente; revisar y reprogramar tras descartar duplicados.',
+                $overdue, $orphaned, $disconnected, $checked
+            ) );
+        }
+        return self::pass( sprintf( '%d entradas de agenda con fecha futura y ejecutor WP-Cron (muestra hasta 100).', $checked ) );
+    }
+
+    private static function test_job_health() {
+        global $wpdb;
+        if ( ! self::table_exists( tcsocial_programador_table() ) ) {
+            return self::skip( 'No existe la tabla del programador.' );
+        }
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Consulta diagnóstica acotada a tabla propia.
+        $rows = $wpdb->get_results( $wpdb->prepare(
+            "SELECT id, status, scheduled_at, updated_at FROM %i
+             WHERE status IN ('scheduled','processing')
+             ORDER BY scheduled_at ASC LIMIT %d",
+            tcsocial_programador_table(), 100
+        ) );
+        if ( ! is_array( $rows ) ) return self::fail( 'No se puede leer la cola de publicaciones.' );
+        if ( ! $rows ) return self::skip( 'No hay tareas activas en la muestra del programador.' );
+        $missing = 0;
+        $overdue = 0;
+        $processing = 0;
+        $now = current_time( 'mysql' );
+        foreach ( $rows as $job ) {
+            $scheduled_at = (string) $job->scheduled_at;
+            if ( $job->status === 'scheduled' ) {
+                if ( $scheduled_at < $now ) {
+                    ++$overdue;
+                }
+                if ( ! wp_next_scheduled( 'tcsocial_programador_run_job', array( absint( $job->id ) ) ) ) {
+                    ++$missing;
+                }
+            } elseif ( $job->status === 'processing' && (string) $job->updated_at < wp_date( 'Y-m-d H:i:s', time() - 30 * MINUTE_IN_SECONDS, wp_timezone() ) ) {
+                ++$processing;
+            }
+        }
+        if ( $missing || $processing || $overdue ) {
+            return self::fail( sprintf(
+                'Cola: %d eventos ausentes, %d vencidos y %d bloqueados en ejecución (máximo 100). Comprobar procesos antes de reintentar.',
+                $missing, $overdue, $processing
+            ) );
+        }
+        return self::pass( sprintf( '%d trabajos activos contrastados con eventos WP-Cron.', count( $rows ) ) );
+    }
+
+    private static function test_connection_health() {
+        $settings = tcsocial_network_get_settings();
+        $enabled = 0;
+        $problems = array();
+        foreach ( tcsocial_network_get_providers() as $provider => $definition ) {
+            $config = $settings['providers'][ $provider ] ?? array();
+            if ( empty( $config['enabled'] ) ) continue;
+            ++$enabled;
+            if ( empty( $config['access_token_enc'] ) && ! ( 'instagram' === $provider && ! empty( $config['use_facebook_connection'] ) && ! empty( $settings['providers']['facebook']['access_token_enc'] ) ) ) {
+                $problems[] = $provider . ': sin token';
+            }
+            if ( in_array( $provider, array( 'facebook', 'pinterest', 'linkedin' ), true ) ) {
+                $id_key = 'facebook' === $provider ? 'page_id' : ( 'pinterest' === $provider ? 'board_id' : 'organization_id' );
+                if ( empty( $config[ $id_key ] ) ) $problems[] = $provider . ': sin destino';
+            }
+            if ( ! empty( $config['token_expires_at'] ) && absint( $config['token_expires_at'] ) <= time() ) {
+                $problems[] = $provider . ': token caducado';
+            }
+            if ( ! empty( $config['last_test_at'] ) && empty( $config['last_test_ok'] ) ) {
+                $problems[] = $provider . ': último test fallido';
+            }
+            if ( 'pinterest' === $provider && ! empty( $config['scope'] ) ) {
+                $scopes = preg_split( '/[\\s,]+/', strtolower( (string) $config['scope'] ), -1, PREG_SPLIT_NO_EMPTY );
+                if ( ! in_array( 'boards:write', $scopes, true ) ) {
+                    $problems[] = 'Pinterest: falta boards:write; reconectar mediante OAuth';
+                }
+            }
+        }
+        if ( $problems ) return self::fail( implode( '; ', $problems ) . '. Sin conexiones externas realizadas.' );
+        if ( ! $enabled ) return self::skip( 'No hay proveedores habilitados: la publicación automática no está operativa.' );
+        return self::pass( $enabled . ' redes configuradas sin errores detectables localmente. OAuth remoto no validado.' );
+    }
+
+    private static function test_pinterest_images() {
+        $settings = tcsocial_network_get_settings();
+        if ( empty( $settings['providers']['pinterest']['enabled'] ) ) {
+            return self::skip( 'Pinterest no está habilitado.' );
+        }
+        $missing = 0;
+        $checked = 0;
+        foreach ( self::schedule_rows( 'pinterest', true ) as $row ) {
+            if ( '_seo_social_schedule_pinterest' !== (string) $row->meta_key ) continue;
+            ++$checked;
+            if ( ! has_post_thumbnail( absint( $row->post_id ) ) ) ++$missing;
+        }
+        if ( $missing ) return self::fail( $missing . ' de ' . $checked . ' futuros Pins no tienen imagen destacada. Pinterest no puede publicarlos.' );
+        if ( ! $checked ) return self::skip( 'No hay futuros Pins en la muestra de agenda.' );
+        return self::pass( $checked . ' futuros Pins tienen imagen destacada.' );
+    }
+
+    private static function test_recent_outcomes() {
+        global $wpdb;
+        if ( ! self::table_exists( tcsocial_network_publications_table() ) ) {
+            return self::skip( 'No existe la tabla de historial social.' );
+        }
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Lectura de los últimos 150 resultados, sin publicar ni acceder a tokens.
+        $rows = $wpdb->get_results( $wpdb->prepare(
+            'SELECT provider, status, error_message FROM %i ORDER BY id DESC LIMIT %d',
+            tcsocial_network_publications_table(), 150
+        ) );
+        if ( ! is_array( $rows ) ) return self::fail( 'No se puede consultar el historial de envíos.' );
+        if ( ! $rows ) return self::skip( 'Sin intentos de publicación registrados.' );
+        $latest = array();
+        foreach ( $rows as $row ) {
+            $provider = sanitize_key( $row->provider );
+            if ( ! isset( $latest[ $provider ] ) ) {
+                $latest[ $provider ] = $row;
+            }
+        }
+        $errors = array();
+        foreach ( $latest as $provider => $row ) {
+            if ( 'failed' === $row->status || 'pending' === $row->status ) {
+                $reason = 'failed' === $row->status ? wp_strip_all_tags( (string) $row->error_message ) : 'intento pendiente sin confirmación';
+                $errors[] = $provider . ': ' . substr( $reason, 0, 180 );
+            }
+        }
+        if ( $errors ) return self::fail( 'Último intento sin éxito: ' . implode( '; ', $errors ) . '. Comprobar permisos antes de reintentar.' );
+        return self::pass( 'Último resultado por red con actividad sin errores en la muestra de 150; publicación externa no verificada.' );
     }
 
     private static function test_csv() {
@@ -291,7 +490,7 @@ final class TCSocial_Auto_Test {
         $previous = is_array( $history ) && isset( $history[1]['rows'] ) ? $history[1] : null;
 
         echo '<section class="seo-social-card">' . '<h2>' . esc_html__( 'Autocheck de TaxoCommerce Social', 'taxocommerce-social' ) . '</h2>';
-        echo '<p>' . esc_html__( 'Chequeo local de solo lectura de conexiones registradas, plantillas, tablas, calendario y programador. No conecta cuentas ni publica. Se guardan los dos últimos resultados por administrador durante 30 días.', 'taxocommerce-social' ) . '</p>';
+        echo '<p>' . esc_html__( 'Autocheck de solo lectura: contrasta agenda y WP-Cron, cola activa, permisos guardados, imágenes y resultados reales. No publica, no reintenta y no consulta las APIs externas. Se conservan dos informes durante 30 días.', 'taxocommerce-social' ) . '</p>';
         echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '"><input type="hidden" name="action" value="' . esc_attr( self::ACTION ) . '">';
         wp_nonce_field( self::NONCE, 'tcsocial_auto_nonce' );
         submit_button( esc_html__( 'Ejecutar Autocheck', 'taxocommerce-social' ), 'primary', 'submit', false );
@@ -326,7 +525,7 @@ final class TCSocial_Auto_Test {
         foreach ( $current['rows'] as $row ) {
             echo '<tr><td>' . esc_html( $row['group'] ) . '</td><td>' . esc_html( $row['label'] ) . '</td><td><strong>' . esc_html( $names[ $row['status'] ] ) . '</strong></td><td>' . esc_html( $row['message'] ) . '</td><td>' . esc_html( (string) $row['ms'] ) . ' ms</td></tr>';
         }
-        echo '</tbody>' . '</table>' . '</div>' . '<p class="description">' . esc_html__( 'Un Autocheck correcto confirma los componentes disponibles; no garantiza la autorización de las cuentas ni una publicación externa satisfactoria.', 'taxocommerce-social' ) . '</p>' . '</section>';
+        echo '</tbody>' . '</table>' . '</div>' . '<p class="description">' . esc_html__( 'El resultado comprueba las colas y registros locales. No confirma el estado remoto de OAuth ni que una publicación esté visible en una red social; esas operaciones requieren validación externa.', 'taxocommerce-social' ) . '</p>' . '</section>';
     }
 }
 TCSocial_Auto_Test::register();

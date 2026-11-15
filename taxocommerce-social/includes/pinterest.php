@@ -14,7 +14,7 @@ if (!defined('TCSOCIAL_PINTEREST_API_BASE')) {
 }
 
 if (!defined('TCSOCIAL_PINTEREST_SCOPES')) {
-    define('TCSOCIAL_PINTEREST_SCOPES', 'boards:read pins:read pins:write');
+    define('TCSOCIAL_PINTEREST_SCOPES', 'boards:read boards:write pins:read pins:write');
 }
 
 /**
@@ -462,6 +462,11 @@ function tcsocial_pinterest_publish($payload)
     }
     if ($target_url === '') {
         return new WP_Error('pinterest_link_missing', 'No se pudo generar la URL de destino del Pin.');
+    }
+
+    $known_scopes = isset($config['scope']) ? preg_split('/[\s,]+/', strtolower((string) $config['scope']), -1, PREG_SPLIT_NO_EMPTY) : array();
+    if (!empty($known_scopes) && !in_array('boards:write', $known_scopes, true)) {
+        return new WP_Error('pinterest_missing_board_scope', 'La autorización actual de Pinterest no incluye boards:write. Vuelve a autorizar la cuenta con los permisos nuevos.');
     }
 
     $token = tcsocial_pinterest_get_access_token($config);

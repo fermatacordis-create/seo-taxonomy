@@ -1,3 +1,23 @@
+## [0.4.32] — 2026-11-13 — Code Check equiparado a Core 0.4.82 (#2626)
+
+- Code Check equiparado a Core 0.4.82: reglas autónomas PHP/WordPress/seguridad, clasificación por gravedad, detalles de archivos y recomendaciones, resumen y JSON; sin modificar el Autotest funcional. Issue #2626.
+- Continúa siendo una revisión estática independiente del Plugin Check oficial, con ejecución por bloques y control de CPU.
+
+## [0.4.31] — 2026-11-13 — Traducciones del intercambio de medios y mensajes ZIP (#2062)
+
+- Traduce 47 cadenas adicionales por idioma ES/EN/FR/DE/NL (235 entradas gettext): Biblioteca de Medios, ZIP, permisos, errores, progreso de tareas, formularios y secciones del manual.
+- Regenera los cinco archivos MO con los textos traducidos y sin entradas vacías; mantiene el mecanismo nativo de fallback de gettext para las cadenas aún pendientes y preserva los plurales existentes.
+- Amplía el test de integridad MO para exigir textos de Media y mensajes de ZIP en todos los idiomas. No cambia las colas, la importación, la exportación, los ficheros ni los datos.
+- Permanecen 133/137/136/134/134 entradas gettext sin traducción (ES/EN/FR/DE/NL), más posibles textos PHP/JS fuera de gettext. La interfaz no se declara traducida al 100 %.
+
+## [0.4.30] — 2026-11-12 — Internacionalización de los controles de importación/exportación (#2062)
+
+- Traduce 132 cadenas de interfaz previamente vacías en ES/EN/FR/DE/NL (660 entradas; dos de ellas incluyen las formas singular y plural, 670 valores gettext). Conserva textos, marcadores de formato y traducciones existentes.
+- Incluye permisos, cola CSV, carga y borrado de archivos, estados, diagnósticos, controles de velocidad, gestión de bloques, filtros de catálogo y exportación.
+- Regenera los cinco archivos MO sin incluir traducciones vacías, con índices válidos para el lector GNU gettext de WordPress.
+- Amplía el test de regresión de catálogos con las acciones principales en los cinco idiomas. No modifica la importación, la exportación, los trabajos, los datos, la política de CPU ni los permisos.
+- La internacionalización total sigue pendiente: 180/184/183/181/181 cadenas vacías (ES/EN/FR/DE/NL), además de revisar los textos PHP y JavaScript no extraídos.
+
 ## [0.4.29] — 2026-11-10 — Sin tareas programadas propias de importación/exportación (#2530)
 
 - Eliminada la creación de acciones de Action Scheduler y WP-Cron para exportación CSV y cola de importación; conservados el procesamiento por bloques, autollamadas internas autenticadas, control adaptativo, pausas y cancelación.

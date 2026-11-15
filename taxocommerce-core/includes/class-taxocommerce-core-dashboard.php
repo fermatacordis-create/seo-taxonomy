@@ -17,6 +17,84 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class TaxoCommerce_Core_Dashboard {
 
 	/**
+	 * Render Core's single, persistent plugin header and primary navigation.
+	 *
+	 * @param string $active_tab Active Core dashboard tab.
+	 * @return void
+	 */
+	public static function render_header_nav( $active_tab = 'overview' ) {
+		$active_tab = 'autocheck' === $active_tab ? 'autocheck' : 'overview';
+        $tc_version_label = __( 'Version', 'taxocommerce-core' );
+        $tc_updated_label = __( 'Last updated', 'taxocommerce-core' );
+        $tc_translations = array(
+            'es' => array( 'Versión', 'Última actualización' ),
+            'en' => array( 'Version', 'Last updated' ),
+            'fr' => array( 'Version', 'Dernière mise à jour' ),
+            'de' => array( 'Version', 'Zuletzt aktualisiert' ),
+            'nl' => array( 'Versie', 'Laatst bijgewerkt' ),
+        );
+        $tc_locale = strtolower( substr( determine_locale(), 0, 2 ) );
+        if ( isset( $tc_translations[ $tc_locale ] ) ) {
+            if ( 'Version' === $tc_version_label ) {
+                $tc_version_label = $tc_translations[ $tc_locale ][0];
+            }
+            if ( 'Last updated' === $tc_updated_label ) {
+                $tc_updated_label = $tc_translations[ $tc_locale ][1];
+            }
+        }
+        $tc_official_info = require __DIR__ . '/official-excerpt.php';
+        $tc_plugin_headers = get_file_data( dirname( __DIR__ ) . '/taxocommerce-core.php', array( 'description' => 'Description' ), 'plugin' );
+        $tc_plugin_description = trim( wp_strip_all_tags( (string) ( $tc_plugin_headers['description'] ?? '' ) ) );
+        // The version history is bundled with this plugin, not fetched from GitHub.
+        $tc_history_file = dirname( __DIR__ ) . '/CHANGELOG.md';
+        $tc_history = is_readable( $tc_history_file ) ? file_get_contents( $tc_history_file ) : '';
+        $tc_history_names = array(
+            'es' => 'Historial de versiones y mejoras',
+            'en' => 'Version history and improvements',
+            'fr' => 'Historique des versions et améliorations',
+            'de' => 'Versionsverlauf und Verbesserungen',
+            'nl' => 'Versiegeschiedenis en verbeteringen',
+        );
+        $tc_history_label = __( 'Version history and improvements', 'taxocommerce-core' );
+        if ( 'Version history and improvements' === $tc_history_label && isset( $tc_history_names[ $tc_locale ] ) ) {
+            $tc_history_label = $tc_history_names[ $tc_locale ];
+        }
+		?>
+			<header class="tcc-hero" aria-labelledby="tcc-dashboard-title">
+				<div class="tcc-hero__identity">
+					<div class="tcc-hero__emblem" aria-hidden="true"><span class="dashicons dashicons-products"></span></div>
+					<div class="tcc-hero__copy">
+						<p class="tcc-eyebrow"><?php esc_html_e( 'TaxoCommerce Core', 'taxocommerce-core' ); ?></p>
+						<h1 id="tcc-dashboard-title"><?php esc_html_e( 'TaxoCommerce Core', 'taxocommerce-core' ); ?></h1>
+						<p><?php echo esc_html( $tc_plugin_description ); ?></p>
+                        <?php $tc_official_info->render( 'taxocommerce-core', $tc_locale ); ?>
+					</div>
+				</div>
+                        <div class="tcc-hero__history-zone">
+                        <?php if ( is_string( $tc_history ) && '' !== trim( $tc_history ) ) : ?>
+                            <details class="tcc-hero__history">
+                                <summary><?php echo esc_html( $tc_history_label ); ?></summary>
+                                <div class="tcc-hero__history-content"><?php echo esc_html( $tc_history ); ?></div>
+                            </details>
+                        <?php endif; ?>
+                        </div>
+				<div class="tcc-hero__metadata">
+                    <span><?php echo esc_html( $tc_version_label . ' ' . TAXOCOMMERCE_CORE_VERSION ); ?></span>
+                    <span><?php echo esc_html( $tc_updated_label . ': ' . TAXOCOMMERCE_CORE_RELEASE_DATE ); ?></span>
+                </div>
+				<div class="tcc-hero__art" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+			</header>
+
+			<nav class="nav-tab-wrapper" aria-label="<?php esc_attr_e( 'Navegación de TaxoCommerce Core', 'taxocommerce-core' ); ?>">
+				<a class="<?php echo esc_attr( 'nav-tab' . ( 'overview' === $active_tab ? ' nav-tab-active' : '' ) ); ?>"<?php if ( 'overview' === $active_tab ) : ?> aria-current="page"<?php endif; ?> href="<?php echo esc_url( admin_url( 'admin.php?page=taxocommerce-core' ) ); ?>"><?php esc_html_e( 'Overview', 'taxocommerce-core' ); ?></a>
+				<a class="nav-tab" href="<?php echo esc_url( admin_url( 'admin.php?page=' . TaxoCommerce_Core_User_Guide::PAGE_SLUG ) ); ?>"><?php esc_html_e( 'User Guide', 'taxocommerce-core' ); ?></a>
+				<a class="<?php echo esc_attr( 'nav-tab' . ( 'autocheck' === $active_tab ? ' nav-tab-active' : '' ) ); ?>"<?php if ( 'autocheck' === $active_tab ) : ?> aria-current="page"<?php endif; ?> href="<?php echo esc_url( admin_url( 'admin.php?page=taxocommerce-core&tab=autocheck' ) ); ?>"><?php esc_html_e( 'Autocheck', 'taxocommerce-core' ); ?></a>
+			</nav>
+
+		<?php
+	}
+
+	/**
 	 * Render the Core dashboard with live module/service counts.
 	 *
 	 * @param array $modules     Registered modules.

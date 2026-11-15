@@ -18,7 +18,7 @@ final class TCSUP_Autotest {
 		$woo = class_exists( 'WooCommerce', false ) && function_exists( 'wc_get_orders' ) && function_exists( 'wc_get_product' );
 		self::check( $rows, __( 'Sistema', 'taxocommerce-suppliers' ), 'WooCommerce', $woo ? 'ok' : 'error', $woo ? __( 'API de pedidos y productos disponible.', 'taxocommerce-suppliers' ) : __( 'WooCommerce no está disponible para productos o compras.', 'taxocommerce-suppliers' ) );
 
-		$classes = array( 'TCSUP_Schema', 'TCSUP_CSV', 'TCSUP_Products', 'TCSUP_Purchasing', 'TCSUP_Admin', 'TCSUP_Manual' );
+		$classes = array( 'TCSUP_Schema', 'TCSUP_Price_History', 'TCSUP_CSV', 'TCSUP_Products', 'TCSUP_Purchasing', 'TCSUP_Admin', 'TCSUP_Manual' );
 		$missing = array();
 		foreach ( $classes as $class ) {
 			if ( ! class_exists( $class, false ) ) {
@@ -65,6 +65,8 @@ final class TCSUP_Autotest {
 			$tables = array(
 				__( 'Catálogo intermedio', 'taxocommerce-suppliers' ) => array( TCSUP_Schema::catalog_table(), array( 'id', 'proveedor', 'proveedor_id_externo', 'pais_origen', 'source_row_key', 'estado_seleccion', 'object_id' ) ),
 				__( 'Imágenes externas', 'taxocommerce-suppliers' )   => array( TCSUP_Schema::images_table(), array( 'id', 'supplier', 'supplier_sku', 'product_id', 'image_url', 'status' ) ),
+				__( 'Historial de precios', 'taxocommerce-suppliers' ) => array( TCSUP_Schema::history_table(), array( 'id', 'catalog_id', 'product_id', 'fecha', 'precio_venta', 'origen' ) ),
+				__( 'Supplier management', 'taxocommerce-suppliers' ) => array( TCSUP_Schema::profiles_table(), array( 'id', 'proveedor', 'telefono', 'contacto_nombre', 'observaciones', 'actualizado' ) ),
 			);
 			foreach ( $tables as $label => $spec ) {
 				$table = $spec[0];

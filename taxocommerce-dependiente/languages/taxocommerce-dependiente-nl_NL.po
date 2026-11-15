@@ -431,7 +431,7 @@ msgstr "Assistent en integratie"
 
 #: includes/class-tcd-admin.php:587
 msgid "PHP para una plantilla:"
-msgstr ""
+msgstr "PHP voor een sjabloon:"
 
 #: includes/class-tcd-admin.php:589
 msgid ""
@@ -558,7 +558,7 @@ msgstr "Volledige back-up downloaden"
 #: includes/class-tcd-backup.php:170
 msgid ""
 "Formato streaming NDJSON; no necesita cargar todo el backup en memoria."
-msgstr ""
+msgstr "Streaming NDJSON-formaat; de volledige back-up hoeft niet in het geheugen geladen te worden."
 
 #: includes/class-tcd-backup.php:174
 msgid "Qué NO se incluye y por qué"
@@ -600,13 +600,13 @@ msgstr ""
 #: includes/class-tcd-backup.php:200
 msgid ""
 "Dependiente está aprendiendo. Detén el proceso antes de restaurar un backup."
-msgstr ""
+msgstr "Dependiente is aan het leren. Stop het proces voordat u een back-up terugzet."
 
 #: includes/class-tcd-backup.php:206
 msgid ""
 "Confirmo que quiero sustituir el estado actual de Dependiente por el "
 "contenido de esta copia."
-msgstr ""
+msgstr "Ik bevestig dat ik de huidige status van Dependiente door deze back-up wil vervangen."
 
 #: includes/class-tcd-backup.php:207
 msgid ""
@@ -638,48 +638,48 @@ msgstr "Gegenereerd:"
 
 #: includes/class-tcd-backup.php:225
 msgid "La copia no ha superado la validación completa. No debe restaurarse."
-msgstr ""
+msgstr "De back-up is niet volledig gevalideerd en mag niet worden teruggezet."
 
 #: includes/class-tcd-backup.php:227
 msgid ""
 "Copia válida: la estructura y los recuentos coinciden con el manifiesto."
-msgstr ""
+msgstr "Geldige back-up: de structuur en aantallen komen overeen met het manifest."
 
 #: includes/class-tcd-backup.php:230
 msgid "Actual"
-msgstr ""
+msgstr "Huidig"
 
 #: includes/class-tcd-backup.php:230
 msgid "En backup"
-msgstr ""
+msgstr "In de back-up"
 
 #: includes/class-tcd-backup.php:230
 msgid "Al restaurar"
-msgstr ""
+msgstr "Bij het terugzetten"
 
 #: includes/class-tcd-backup.php:237
 msgid "Sustituir tabla completa conservando IDs"
-msgstr ""
+msgstr "Volledige tabel vervangen met behoud van ID's"
 
 #: includes/class-tcd-backup.php:243 includes/class-tcd-backup.php:244
 msgid "Presente"
-msgstr ""
+msgstr "Aanwezig"
 
 #: includes/class-tcd-backup.php:245
 msgid "Sustituir valor"
-msgstr ""
+msgstr "Waarde vervangen"
 
 #: includes/class-tcd-backup.php:251
 msgid "Restauración completada:"
-msgstr ""
+msgstr "Terugzetten voltooid:"
 
 #: includes/class-tcd-backup.php:251
 msgid "filas restauradas."
-msgstr ""
+msgstr "rijen teruggezet."
 
 #: includes/class-tcd-knowledge-transfer.php:308
 msgid "Conocimiento portable · Exportar / Importar"
-msgstr ""
+msgstr "Overdraagbare kennis · Export / Import"
 
 #: includes/class-tcd-knowledge-transfer.php:309
 msgid ""
@@ -692,59 +692,59 @@ msgstr ""
 
 #: includes/class-tcd-knowledge-transfer.php:312
 msgid "Conocimiento moderno"
-msgstr ""
+msgstr "Moderne kennis"
 
 #: includes/class-tcd-knowledge-transfer.php:313
 msgid "Reglas semánticas portables"
-msgstr ""
+msgstr "Overdraagbare semantische regels"
 
 #: includes/class-tcd-knowledge-transfer.php:314
 msgid "Señales L9 importadas"
-msgstr ""
+msgstr "Geïmporteerde L9-signalen"
 
 #: includes/class-tcd-knowledge-transfer.php:315
 msgid "Lecciones antiguas conservadas"
-msgstr ""
+msgstr "Bestaande lessen behouden"
 
 #: includes/class-tcd-knowledge-transfer.php:319
 msgid "Descargar todo el conocimiento portable"
-msgstr ""
+msgstr "Alle overdraagbare kennis downloaden"
 
 #: includes/class-tcd-knowledge-transfer.php:323
 msgid "Correspondencia antiguo → moderno"
-msgstr ""
+msgstr "Toewijzing oud → modern"
 
 #: includes/class-tcd-knowledge-transfer.php:325
 msgid "Export antiguo"
-msgstr ""
+msgstr "Oude export"
 
 #: includes/class-tcd-knowledge-transfer.php:325
 msgid "Destino moderno"
-msgstr ""
+msgstr "Modern doel"
 
 #: includes/class-tcd-knowledge-transfer.php:325
 msgid "Tratamiento"
-msgstr ""
+msgstr "Verwerking"
 
 #: includes/class-tcd-knowledge-transfer.php:325
 msgid "Observación"
-msgstr ""
+msgstr "Opmerking"
 
 #: includes/class-tcd-knowledge-transfer.php:339
 msgid "Ver correspondencia campo por campo"
-msgstr ""
+msgstr "Toewijzing per veld bekijken"
 
 #: includes/class-tcd-knowledge-transfer.php:343
 msgid "Campo antiguo"
-msgstr ""
+msgstr "Oud veld"
 
 #: includes/class-tcd-knowledge-transfer.php:343
 msgid "Destino / transformación moderna"
-msgstr ""
+msgstr "Modern doel / omzetting"
 
 #: includes/class-tcd-knowledge-transfer.php:355
 msgid "1. Analizar un export antes de importarlo"
-msgstr ""
+msgstr "1. Export analyseren vóór import"
 
 #: includes/class-tcd-knowledge-transfer.php:356
 msgid ""
@@ -754,11 +754,11 @@ msgstr ""
 
 #: includes/class-tcd-knowledge-transfer.php:361
 msgid "Analizar compatibilidad"
-msgstr ""
+msgstr "Compatibiliteit controleren"
 
 #: includes/class-tcd-knowledge-transfer.php:365
 msgid "2. Importar y fusionar"
-msgstr ""
+msgstr "2. Importeren en samenvoegen"
 
 #: includes/class-tcd-knowledge-transfer.php:366
 msgid ""
@@ -774,15 +774,15 @@ msgstr ""
 
 #: includes/class-tcd-knowledge-transfer.php:374
 msgid "Confirmo que quiero fusionar este conocimiento con el existente."
-msgstr ""
+msgstr "Ik bevestig dat ik deze kennis met de bestaande kennis wil samenvoegen."
 
 #: includes/class-tcd-knowledge-transfer.php:375
 msgid "Importar y fusionar conocimiento"
-msgstr ""
+msgstr "Kennis importeren en samenvoegen"
 
 #: includes/class-tcd-knowledge-transfer.php:381
 msgid "Resultado de la última comprobación/importación"
-msgstr ""
+msgstr "Resultaat van laatste controle/import"
 
 #: includes/class-tcd-knowledge-transfer.php:388
 msgid "Filas"
@@ -790,127 +790,127 @@ msgstr "Rijen"
 
 #: includes/class-tcd-knowledge-transfer.php:388
 msgid "Compatibilidad"
-msgstr ""
+msgstr "Compatibiliteit"
 
 #: includes/class-tcd-knowledge-transfer.php:397
 msgid "Fusión realizada"
-msgstr ""
+msgstr "Samenvoegen voltooid"
 
 #: includes/class-tcd-knowledge-transfer.php:398
 msgid "Almacén"
-msgstr ""
+msgstr "Opslag"
 
 #: includes/class-tcd-knowledge-transfer.php:398
 msgid "Insertados"
-msgstr ""
+msgstr "Ingevoegd"
 
 #: includes/class-tcd-knowledge-transfer.php:398
 msgid "Idénticos"
-msgstr ""
+msgstr "Identiek"
 
 #: includes/class-tcd-knowledge-transfer.php:398
 msgid "Conflictos"
-msgstr ""
+msgstr "Conflicten"
 
 #: includes/class-tcd-knowledge-transfer.php:398
 msgid "Ignorados"
-msgstr ""
+msgstr "Genegeerd"
 
 #: includes/class-tcd-manual.php:59
 msgid "Requisitos y alcance"
-msgstr ""
+msgstr "Vereisten en reikwijdte"
 
 #: includes/class-tcd-manual.php:60
 msgid "Arquitectura y componentes"
-msgstr ""
+msgstr "Architectuur en onderdelen"
 
 #: includes/class-tcd-manual.php:61
 msgid "Tablas y persistencia"
-msgstr ""
+msgstr "Tabellen en gegevensopslag"
 
 #: includes/class-tcd-manual.php:62
 msgid "Pipeline L1-L10"
-msgstr ""
+msgstr "L1–L10-pijplijn"
 
 #: includes/class-tcd-manual.php:63
 msgid "Intérprete M11"
-msgstr ""
+msgstr "M11-interpreter"
 
 #: includes/class-tcd-manual.php:64
 msgid "Búsqueda y API"
-msgstr ""
+msgstr "Zoeken en API"
 
 #: includes/class-tcd-manual.php:65
 msgid "Feedback y M12"
-msgstr ""
+msgstr "Feedback en M12"
 
 #: includes/class-tcd-manual.php:66
 msgid "Lotes, CPU y cron"
-msgstr ""
+msgstr "Batches, CPU en cron"
 
 #: includes/class-tcd-manual.php:67
 msgid "Transferencia y backup"
-msgstr ""
+msgstr "Overdracht en back-up"
 
 #: includes/class-tcd-manual.php:68
 msgid "Seguridad y privacidad"
-msgstr ""
+msgstr "Beveiliging en privacy"
 
 #: includes/class-tcd-manual.php:69
 msgid "Pruebas y despliegues"
-msgstr ""
+msgstr "Tests en uitrol"
 
 #: includes/class-tcd-manual.php:73
 msgid "Qué es Dependiente"
-msgstr ""
+msgstr "Wat is Dependiente?"
 
 #: includes/class-tcd-manual.php:74
 msgid "Primeros pasos"
-msgstr ""
+msgstr "Aan de slag"
 
 #: includes/class-tcd-manual.php:75
 msgid "Aprendizaje y controles"
-msgstr ""
+msgstr "Leren en bediening"
 
 #: includes/class-tcd-manual.php:76
 msgid "Lecciones L1-L10"
-msgstr ""
+msgstr "Lessen L1–L10"
 
 #: includes/class-tcd-manual.php:77
 msgid "Intérprete y mantenimiento"
-msgstr ""
+msgstr "Interpreter en onderhoud"
 
 #: includes/class-tcd-manual.php:78
 msgid "Resultados y correcciones"
-msgstr ""
+msgstr "Resultaten en correcties"
 
 #: includes/class-tcd-manual.php:79
 msgid "Buscador en la tienda"
-msgstr ""
+msgstr "Winkelzoekfunctie"
 
 #: includes/class-tcd-manual.php:80
 msgid "Importar y exportar"
-msgstr ""
+msgstr "Importeren en exporteren"
 
 #: includes/class-tcd-manual.php:81
 msgid "Copias y restauración"
-msgstr ""
+msgstr "Back-up en herstel"
 
 #: includes/class-tcd-manual.php:82
 msgid "Log y Auto Test"
-msgstr ""
+msgstr "Log en zelftest"
 
 #: includes/class-tcd-manual.php:83
 msgid "Preguntas habituales"
-msgstr ""
+msgstr "Veelgestelde vragen"
 
 #: includes/class-tcd-manual.php:89
 msgid "Sin permiso para consultar el manual de Dependiente."
-msgstr ""
+msgstr "U hebt geen toestemming om de handleiding van Dependiente te bekijken."
 
 #: includes/class-tcd-manual.php:99
 msgid "User Guide"
-msgstr ""
+msgstr "Gebruikershandleiding"
 
 #: includes/class-tcd-manual.php:100
 msgid ""
@@ -920,27 +920,27 @@ msgstr ""
 
 #: includes/class-tcd-manual.php:102
 msgid "Tipo de manual"
-msgstr ""
+msgstr "Type handleiding"
 
 #: includes/class-tcd-manual.php:105
 msgid "User Manual"
-msgstr ""
+msgstr "Gebruikershandleiding"
 
 #: includes/class-tcd-manual.php:109
 msgid "Technical Manual"
-msgstr ""
+msgstr "Technische handleiding"
 
 #: includes/class-tcd-manual.php:113
 msgid "Índice del manual"
-msgstr ""
+msgstr "Inhoudsopgave"
 
 #: includes/class-tcd-manual.php:114
 msgid "En este manual"
-msgstr ""
+msgstr "In deze handleiding"
 
 #: includes/class-tcd-manual.php:136
 msgid "1. Qué es Dependiente"
-msgstr ""
+msgstr "1. Wat is Dependiente?"
 
 #: includes/class-tcd-manual.php:137
 msgid ""
@@ -959,37 +959,37 @@ msgstr ""
 
 #: includes/class-tcd-manual.php:142
 msgid "2. Primeros pasos"
-msgstr ""
+msgstr "2. Aan de slag"
 
 #: includes/class-tcd-manual.php:144
 msgid ""
 "Activa WooCommerce y TaxoCommerce Dependiente. Core es opcional; solo agrupa"
 " el acceso a los plugins."
-msgstr ""
+msgstr "Activeer WooCommerce en TaxoCommerce Dependiente. Core is optioneel en groepeert alleen de toegang tot de plugins."
 
 #: includes/class-tcd-manual.php:145
 msgid ""
 "Abre Sales Assistant (Dependiente) y comprueba el estado, la lección actual "
 "y los recuentos."
-msgstr ""
+msgstr "Open Sales Assistant (Dependiente) en controleer de status, huidige les en aantallen."
 
 #: includes/class-tcd-manual.php:146
 msgid ""
 "Selecciona una prioridad de trabajo entre 1 (suave) y 5 (máxima). El valor 3"
 " es el predeterminado."
-msgstr ""
+msgstr "Kies een werkprioriteit van 1 (laag) tot 5 (maximaal). Niveau 3 is standaard."
 
 #: includes/class-tcd-manual.php:147
 msgid ""
 "Pulsa Iniciar o reanudar; Dependiente prepara primero la foto fija de cada "
 "lección y después aprende y evalúa."
-msgstr ""
+msgstr "Klik op Starten of hervatten; Dependiente maakt eerst een momentopname van elke les en leert en beoordeelt daarna."
 
 #: includes/class-tcd-manual.php:148
 msgid ""
 "Cuando la búsqueda esté preparada, prueba el shortcode moderno en una página"
 " de pruebas antes de sustituir el buscador público."
-msgstr ""
+msgstr "Test de nieuwe shortcode op een testpagina zodra de zoekfunctie klaar is, voordat u de openbare zoekfunctie vervangt."
 
 #: includes/class-tcd-manual.php:150
 msgid ""
@@ -997,45 +997,45 @@ msgid ""
 "mantener abierta la pantalla. Si WP-Cron no se ejecuta o la web apenas "
 "recibe tráfico, la cola puede retrasarse: comprueba el Log de aprendizaje y "
 "la planificación del servidor."
-msgstr ""
+msgstr "Het proces gebruikt geplande WordPress-taken en kan doorgaan zonder dat dit scherm open blijft. Als WP-Cron niet draait of de site weinig verkeer heeft, kan de wachtrij vertragen: controleer het leerlog en de serverplanning."
 
 #: includes/class-tcd-manual.php:154
 msgid "3. Aprendizaje, prioridad y controles"
-msgstr ""
+msgstr "3. Leren, prioriteit en bediening"
 
 #: includes/class-tcd-manual.php:155
 msgid "Qué significan los botones"
-msgstr ""
+msgstr "Betekenis van de knoppen"
 
 #: includes/class-tcd-manual.php:157
 msgid "Iniciar o reanudar:"
-msgstr ""
+msgstr "Starten of hervatten:"
 
 #: includes/class-tcd-manual.php:157
 msgid "continúa la formación conservando el trabajo ya realizado."
-msgstr ""
+msgstr "zet de training voort en behoudt het afgeronde werk."
 
 #: includes/class-tcd-manual.php:158
 msgid "Detener aprendizaje:"
-msgstr ""
+msgstr "Leren stoppen:"
 
 #: includes/class-tcd-manual.php:158
 msgid "impide nuevos lotes sin borrar la foto fija ni el progreso guardado."
-msgstr ""
+msgstr "voorkomt nieuwe batches zonder momentopnamen of opgeslagen voortgang te verwijderen."
 
 #: includes/class-tcd-manual.php:159
 msgid "Revisar correcciones y reevaluar:"
-msgstr ""
+msgstr "Correcties controleren en opnieuw beoordelen:"
 
 #: includes/class-tcd-manual.php:159
 msgid ""
 "si una lección no supera la calidad, vuelve a comprobar los casos fallidos "
 "después de corregirlos."
-msgstr ""
+msgstr "als een les de kwaliteitsdrempel niet haalt, controleer dan de mislukte gevallen opnieuw na correcties."
 
 #: includes/class-tcd-manual.php:160
 msgid "Reiniciar aprendizaje completo:"
-msgstr ""
+msgstr "Alle leerprocessen opnieuw starten:"
 
 #: includes/class-tcd-manual.php:160
 msgid ""
@@ -1043,11 +1043,11 @@ msgid ""
 "Dependiente. No borra los productos originales, pero puede perder progreso y"
 " conocimiento generado. Utilízalo solo cuando corresponda y con copia de "
 "seguridad."
-msgstr ""
+msgstr "start een nieuwe cursus en verwijdert door Dependiente gemaakte leergegevens. Oorspronkelijke producten blijven behouden, maar voortgang en opgebouwde kennis kunnen verloren gaan. Gebruik dit alleen indien nodig en na een back-up."
 
 #: includes/class-tcd-manual.php:162
 msgid "Cómo leer el progreso"
-msgstr ""
+msgstr "Voortgang begrijpen"
 
 #: includes/class-tcd-manual.php:163
 msgid ""
@@ -1055,29 +1055,29 @@ msgid ""
 "aprendidos, los no aprendidos y el examen. Una foto fija sellada representa "
 "el catálogo estudiado en ese momento: no se modifica automáticamente cuando "
 "cambia el catálogo en mitad de una lección."
-msgstr ""
+msgstr "De lessentabel onderscheidt momentopname, geleerde en niet-geleerde items en toets. Een vastgelegde momentopname weerspiegelt de catalogus van dat moment en verandert niet automatisch tijdens de les."
 
 #: includes/class-tcd-manual.php:167
 msgid "4. Las diez lecciones (L1-L10)"
-msgstr ""
+msgstr "4. De tien lessen (L1–L10)"
 
 #: includes/class-tcd-manual.php:168
 msgid ""
 "Cada lección aprende una fuente diferente. Sus resultados son independientes"
 " y deben superar los controles de calidad definidos antes de continuar."
-msgstr ""
+msgstr "Elke les leert uit een andere bron. Resultaten zijn onafhankelijk en moeten de ingestelde kwaliteitscontroles halen voordat de volgende les start."
 
 #: includes/class-tcd-manual.php:171
 msgid "Fuente"
-msgstr ""
+msgstr "Bron"
 
 #: includes/class-tcd-manual.php:186
 msgid "5. Intérprete M11 y actualización M12"
-msgstr ""
+msgstr "5. M11-interpreter en M12-updates"
 
 #: includes/class-tcd-manual.php:187
 msgid "M11: comprensión del lenguaje"
-msgstr ""
+msgstr "M11: taalbegrip"
 
 #: includes/class-tcd-manual.php:188
 msgid ""
@@ -1086,11 +1086,11 @@ msgid ""
 "petición; es Dependiente quien se encarga de buscar los productos. En la "
 "pantalla principal puedes consultar el estado del curso lingüístico y "
 "desplegar sus fases."
-msgstr ""
+msgstr "Na het leren van de catalogus gebruikt de Interpreter grammatica, uitdrukkingen, werkwoorden, typefouten, synoniemen en context. Hij interpreteert de vraag; Dependiente zoekt de producten. Het hoofdscherm toont de status en fasen van de taaltraining."
 
 #: includes/class-tcd-manual.php:189
 msgid "M12: mantenimiento y feedback"
-msgstr ""
+msgstr "M12: onderhoud en feedback"
 
 #: includes/class-tcd-manual.php:190
 msgid ""
@@ -1098,11 +1098,11 @@ msgid ""
 "revisiones incrementales. Las consultas, clics y aclaraciones pueden aportar"
 " evidencia, pero un único clic no activa una regla nueva: se exige "
 "repetición y validación."
-msgstr ""
+msgstr "M12 werkt kennis bij wanneer producten of inhoud veranderen en voert incrementele controles uit. Zoekopdrachten, klikken en verduidelijkingen kunnen bewijs leveren, maar één klik activeert geen nieuwe regel: herhaling en validatie zijn vereist."
 
 #: includes/class-tcd-manual.php:194
 msgid "6. Calidad, auditoría y correcciones"
-msgstr ""
+msgstr "6. Kwaliteit, controle en correcties"
 
 #: includes/class-tcd-manual.php:195
 msgid ""
@@ -1110,34 +1110,34 @@ msgid ""
 "lección, junto con los aciertos Top 1, Top 3 y Top 8. Un resultado por "
 "debajo del umbral no equivale a que el proceso esté averiado; indica que la "
 "lección aún no ha superado el examen."
-msgstr ""
+msgstr "De kolom Kwaliteit toont de score, minimumdrempel en Top 1-, Top 3- en Top 8-hits. Een score onder de drempel betekent niet dat het systeem defect is; de les is nog niet geslaagd."
 
 #: includes/class-tcd-manual.php:196
 msgid "Qué hacer si una lección no aprueba"
-msgstr ""
+msgstr "Wat te doen als een les niet slaagt"
 
 #: includes/class-tcd-manual.php:198
 msgid ""
 "Abre JSON auditoría y CSV examen; identifica si el problema está en los "
 "datos fuente, una ambigüedad real o el propio motor de ranking."
-msgstr ""
+msgstr "Open Audit-JSON en Examen-CSV; bepaal of het probleem in brongegevens, echte dubbelzinnigheid of de ranking-engine zit."
 
 #: includes/class-tcd-manual.php:199
 msgid ""
 "Consulta CSV datos para revisar las anomalías detectadas en la lección."
-msgstr ""
+msgstr "Controleer de gegevens-CSV om de afwijkingen in de les te beoordelen."
 
 #: includes/class-tcd-manual.php:200
 msgid ""
 "Corrige los productos, categorías, contenidos o Vocabulary solo cuando el "
 "diagnóstico lo justifique."
-msgstr ""
+msgstr "Corrigeer producten, categorieën, inhoud of Vocabulary alleen wanneer de diagnose dit rechtvaardigt."
 
 #: includes/class-tcd-manual.php:201
 msgid ""
 "Pulsa Revisar correcciones y reevaluar. Evita reiniciar las diez lecciones "
 "para solucionar un examen fallido."
-msgstr ""
+msgstr "Klik op Correcties beoordelen en opnieuw evalueren. Herstart niet alle tien lessen om één mislukte toets te herstellen."
 
 #: includes/class-tcd-manual.php:202
 msgid ""
@@ -1145,17 +1145,17 @@ msgid ""
 "el mínimo de la lección en Dependiente. Después de guardar, si el resultado "
 "anterior ya alcanza ese mínimo, usa Aceptar la lección y continuar. Los "
 "fallos y la puntuación real se conservan."
-msgstr ""
+msgstr "Als u resterende catalogusfouten bewust accepteert, stel dan de minimumscore van de les in Dependiente in. Als de vorige score dit minimum haalt, kiest u na opslaan Les accepteren en doorgaan. De echte score en fouten blijven bewaard."
 
 #: includes/class-tcd-manual.php:207
 msgid "7. Utilizar el buscador en la tienda"
-msgstr ""
+msgstr "7. De zoekfunctie in de winkel gebruiken"
 
 #: includes/class-tcd-manual.php:208
 msgid ""
 "Inserta el shortcode siguiente en una página o bloque de shortcode de "
 "WordPress:"
-msgstr ""
+msgstr "Plaats de volgende shortcode op een WordPress-pagina of in een shortcodeblok:"
 
 #: includes/class-tcd-manual.php:210
 msgid ""
@@ -1163,62 +1163,62 @@ msgid ""
 "solicitar hasta dos aclaraciones cerradas cuando la intención es ambigua. Si"
 " no existe confianza suficiente, no debe presentar un producto concreto como"
 " si la recomendación fuera segura."
-msgstr ""
+msgstr "De zoekfunctie interpreteert een vraag, vindt gepubliceerde producten en kan bij onduidelijkheid maximaal twee gesloten vragen stellen. Zonder voldoende zekerheid mag geen specifiek product als zekere aanbeveling worden gepresenteerd."
 
 #: includes/class-tcd-manual.php:211
 msgid ""
 "El shortcode antiguo [taxocommerce_dependiente] puede seguir perteneciendo "
 "al plugin anterior en producción. El moderno no sustituye automáticamente al"
 " buscador anterior; comprueba primero el comportamiento en staging."
-msgstr ""
+msgstr "De oude shortcode [taxocommerce_dependiente] kan op productie nog bij de oude plugin horen. De nieuwe vervangt de vorige zoekfunctie niet automatisch; test eerst in staging."
 
 #: includes/class-tcd-manual.php:215
 msgid "8. Conocimiento: exportar, analizar e importar"
-msgstr ""
+msgstr "8. Kennis: exporteren, analyseren en importeren"
 
 #: includes/class-tcd-manual.php:216
 msgid ""
 "La pestaña Conocimiento / Importar–Exportar permite descargar conocimiento "
 "portable y fusionarlo con otra instalación. Transporta reglas y memoria "
 "reutilizable; no es una copia integral de todo el estado."
-msgstr ""
+msgstr "Op het tabblad Kennis / Import–Export kunt u overdraagbare kennis downloaden en samenvoegen met een andere installatie. Het omvat herbruikbare regels en geheugen, geen volledige back-up."
 
 #: includes/class-tcd-manual.php:218
 msgid ""
 "Descarga el JSON de conocimiento portable si necesitas conservar o trasladar"
 " aprendizaje."
-msgstr ""
+msgstr "Download de JSON met overdraagbare kennis om de leerresultaten te bewaren of over te zetten."
 
 #: includes/class-tcd-manual.php:219
 msgid ""
 "Antes de importar otro archivo, usa Analizar compatibilidad para revisar su "
 "contenido sin escribir datos."
-msgstr ""
+msgstr "Gebruik vóór het importeren van een ander bestand Compatibiliteit controleren om de inhoud te bekijken zonder gegevens te schrijven."
 
 #: includes/class-tcd-manual.php:220
 msgid ""
 "Detén el aprendizaje, revisa el informe y utiliza Importar y fusionar solo "
 "cuando quieras incorporar esas reglas y memoria."
-msgstr ""
+msgstr "Stop het leren, bekijk het rapport en gebruik Importeren en samenvoegen alleen als u de regels en het geheugen wilt toevoegen."
 
 #: includes/class-tcd-manual.php:222
 msgid "Abrir Conocimiento / Importar–Exportar"
-msgstr ""
+msgstr "Kennis / Import–Export openen"
 
 #: includes/class-tcd-manual.php:226
 msgid "9. Backup y restauración"
-msgstr ""
+msgstr "9. Back-ups en terugzetten"
 
 #: includes/class-tcd-manual.php:227
 msgid ""
 "Backup / Restaurar descarga una copia NDJSON de las tablas y estados propios"
 " incluidos en su manifiesto. A diferencia del conocimiento portable, "
 "restaurar sustituye las tablas y opciones cubiertas por el backup."
-msgstr ""
+msgstr "Back-up / Terugzetten downloadt een NDJSON-back-up van de eigen tabellen en instellingen uit het manifest. Anders dan overdraagbare kennis vervangt terugzetten de betrokken tabellen en opties."
 
 #: includes/class-tcd-manual.php:228
 msgid "Antes de restaurar:"
-msgstr ""
+msgstr "Vóór het terugzetten:"
 
 #: includes/class-tcd-manual.php:228
 msgid ""
@@ -1226,19 +1226,19 @@ msgid ""
 "verificada de la base de datos de WordPress. Analiza el archivo y revisa la "
 "cobertura indicada en la pestaña; no presupongas que incluye los productos "
 "originales ni todos los datos de otros módulos."
-msgstr ""
+msgstr "stop het leren, download een Dependiente-back-up en maak een gecontroleerde back-up van de WordPress-database. Analyseer het bestand en controleer de dekking; ga er niet van uit dat originele producten of gegevens van andere modules zijn inbegrepen."
 
 #: includes/class-tcd-manual.php:229
 msgid "Abrir Backup / Restaurar"
-msgstr ""
+msgstr "Back-up / Terugzetten openen"
 
 #: includes/class-tcd-manual.php:233
 msgid "10. Log de aprendizaje y Auto Test"
-msgstr ""
+msgstr "10. Leerlog en zelftest"
 
 #: includes/class-tcd-manual.php:234
 msgid "Log de aprendizaje"
-msgstr ""
+msgstr "Leerlog"
 
 #: includes/class-tcd-manual.php:235
 msgid ""
@@ -1246,7 +1246,7 @@ msgid ""
 "Puedes actualizarlo, activar la actualización periódica, descargarlo o "
 "vaciarlo sin borrar el aprendizaje. El archivo de diagnóstico rota "
 "automáticamente y está limitado a 1 MiB."
-msgstr ""
+msgstr "Volg batches, leesacties, voortgang, vergrendelingen, berichten en fouten. Vernieuw, activeer periodiek bijwerken, download of wis het log zonder leergegevens te verwijderen. Het diagnosebestand rouleert automatisch en is beperkt tot 1 MiB."
 
 #: includes/class-tcd-manual.php:237
 msgid ""
@@ -1254,33 +1254,33 @@ msgid ""
 " calidad, intérprete, búsqueda, mantenimiento y transferencias). Distingue "
 "correctamente entre pruebas aprobadas, fallidas, omitidas y no ejecutadas. "
 "No reentrena ni restaura copias."
-msgstr ""
+msgstr "Voer alleen-lezen controles per groep uit (opstart, gegevens, bronnen, kwaliteit, interpreter, zoeken, onderhoud en overdracht). Geslaagd, mislukt, overgeslagen en niet uitgevoerd worden onderscheiden. Er is geen nieuwe training of herstel."
 
 #: includes/class-tcd-manual.php:238
 msgid "Abrir Log de aprendizaje"
-msgstr ""
+msgstr "Leerlog openen"
 
 #: includes/class-tcd-manual.php:240
 msgid "Abrir Auto Test"
-msgstr ""
+msgstr "Zelftest openen"
 
 #: includes/class-tcd-manual.php:244
 msgid "11. Preguntas habituales"
-msgstr ""
+msgstr "11. Veelgestelde vragen"
 
 #: includes/class-tcd-manual.php:245
 msgid "¿Tengo que dejar abierta la pantalla?"
-msgstr ""
+msgstr "Moet ik dit scherm open laten?"
 
 #: includes/class-tcd-manual.php:246
 msgid ""
 "No. El trabajo se programa en segundo plano, siempre que WP-Cron o el "
 "programador del servidor lo ejecuten."
-msgstr ""
+msgstr "Nee. Het werk wordt op de achtergrond ingepland zolang WP-Cron of de serverplanner het uitvoert."
 
 #: includes/class-tcd-manual.php:247
 msgid "¿Qué ocurre si una lección obtiene menos del mínimo?"
-msgstr ""
+msgstr "Wat gebeurt er als een les onder de minimumscore blijft?"
 
 #: includes/class-tcd-manual.php:248
 msgid ""
@@ -1289,11 +1289,11 @@ msgid ""
 "esa lección entre 0 y 100 %. Debes confirmar expresamente la aceptación si "
 "el examen anterior ya alcanza ese mínimo. El resultado real y las "
 "incidencias continúan visibles."
-msgstr ""
+msgstr "Controleer de diagnose en beoordeel opnieuw na correcties. Als u fouten in de broncatalogus accepteert, kunt u het minimum van die les tussen 0 en 100% instellen. Bevestig de acceptatie expliciet als de vorige score de nieuwe drempel haalt. De echte score en problemen blijven zichtbaar."
 
 #: includes/class-tcd-manual.php:249
 msgid "¿Importar conocimiento es lo mismo que restaurar un backup?"
-msgstr ""
+msgstr "Is kennis importeren hetzelfde als een back-up terugzetten?"
 
 #: includes/class-tcd-manual.php:250
 msgid ""

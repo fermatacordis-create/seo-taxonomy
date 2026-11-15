@@ -231,7 +231,23 @@ function tcsocial_programador_create_job($content_id, $provider, $timestamp, $te
     $schedule_id = (int) $wpdb->insert_id;
     $args = array($schedule_id);
     if (!wp_next_scheduled('tcsocial_programador_run_job', $args)) {
-        wp_schedule_single_event($timestamp, 'tcsocial_programador_run_job', $args);
+        $scheduled = wp_schedule_single_event($timestamp, 'tcsocial_programador_run_job', $args, true);
+        if (is_wp_error($scheduled) || !$scheduled) {
+            // No indicar éxito si WordPress no ha creado el evento.
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Estado de fallo de una tarea propia: persistencia inmediata necesaria para no informar éxito falso.
+            $wpdb->update(
+                $table,
+                array(
+                    'status' => 'failed',
+                    'error_message' => 'No se ha podido registrar el evento WP-Cron.',
+                    'updated_at' => current_time('mysql'),
+                ),
+                array('id' => $schedule_id),
+                array('%s', '%s', '%s'),
+                array('%d')
+            );
+            return new WP_Error('cron_schedule_failed', 'La publicación no se ha programado: WP-Cron ha rechazado el evento.');
+        }
     }
 
     return $schedule_id;
@@ -442,7 +458,19 @@ function tcsocial_programador_handle_retry()
             array('%s', '%s', '%s', '%s', '%s'),
             array('%d')
         );
-        wp_schedule_single_event($run_at, 'tcsocial_programador_run_job', array($schedule_id));
+        $scheduled = wp_schedule_single_event($run_at, 'tcsocial_programador_run_job', array($schedule_id), true);
+        if (is_wp_error($scheduled) || !$scheduled) {
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Guardado inmediato de rechazo de reintento en tabla propia.
+            $wpdb->update(
+                tcsocial_programador_table(),
+                array('status' => 'failed', 'error_message' => 'WP-Cron ha rechazado el reintento.', 'updated_at' => current_time('mysql')),
+                array('id' => $schedule_id),
+                array('%s', '%s', '%s'),
+                array('%d')
+            );
+            wp_safe_redirect(tcsocial_programador_admin_url(array('programador_msg' => 'error')));
+            exit;
+        }
     }
 
     wp_safe_redirect(tcsocial_programador_admin_url(array('programador_msg' => 'retry')));

@@ -68,14 +68,15 @@ function taxocommerce_core_anomalies_full_json_capture_section( $html ) {
 function taxocommerce_core_anomalies_full_json_build_document() {
     // The caller already verified the canonical hierarchy is configured.
     $GLOBALS['taxocommerce_core_anomalies_full_json_sections'] = array();
+    // Capture output only for this report and always release our buffer.
     ob_start();
     try {
         taxocommerce_core_anomalies_render_report();
+        $sections = $GLOBALS['taxocommerce_core_anomalies_full_json_sections'];
     } finally {
-        ob_end_clean();
+        ob_get_clean();
+        unset( $GLOBALS['taxocommerce_core_anomalies_full_json_sections'] );
     }
-    $sections = $GLOBALS['taxocommerce_core_anomalies_full_json_sections'];
-    unset( $GLOBALS['taxocommerce_core_anomalies_full_json_sections'] );
 
     return array(
         'schema' => array(

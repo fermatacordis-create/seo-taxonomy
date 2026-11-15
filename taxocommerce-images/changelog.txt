@@ -1,3 +1,6 @@
+= 0.2.30 (2026-11-13) =
+* Unificar Code Check con Core 0.4.82: reglas nativas adicionales, resumen real de incidencias, grupos por gravedad y JSON clasificado. La pestaña de funcionalidades permanece intacta. Issue #2626.
+
 = 0.2.29 (2026-11-12) =
 * Fix complete unused/duplicate scan without WP-Cron, using signed read-only loopback batches and authenticated browser fallback. Cache expensive reference checks per bounded window and preserve Media cursor, exact SHA-256 duplicates, 1-5 load control and safe non-deletion. Issue #2580.
 

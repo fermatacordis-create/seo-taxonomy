@@ -111,6 +111,7 @@ function tcsocial_admin_render() {
         // CSV operations reuse the legacy calendar's canonical schedule records.
         // This restores bulk import/export without changing the manual scheduler.
         tcsocial_network_render_scheduler_csv_panel();
+        tcsocial_csv_cancel_panel();
         tcsocial_calendar_render_admin();
     }
 

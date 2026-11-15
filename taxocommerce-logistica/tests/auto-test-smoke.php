@@ -148,5 +148,28 @@ verify_log( null === TaxoCommerce_Logistica_Auto_Test::compare( $before, $after 
 $after['phase'] = 'after';
 $before['group'] = 'pricing';
 verify_log( null === TaxoCommerce_Logistica_Auto_Test::compare( $before, $after ), 'Partial baseline rejected' );
+
+$view_source = file_get_contents( dirname( __DIR__ ) . '/includes/class-auto-test.php' );
+verify_log( false !== strpos( $view_source, "self::run_button( 'all', 'check', __( 'Ejecutar Autocheck'" ), 'Run button' );
+verify_log( false !== strpos( $view_source, "self::download_button( 'latest', __( 'Descargar resultados (JSON)'" ), 'JSON download button' );
+verify_log( false === strpos( $view_source, "self::run_button( 'all', 'before'" ), 'No BEFORE control' );
+verify_log( false === strpos( $view_source, "self::run_button( 'all', 'after'" ), 'No AFTER control' );
+verify_log( false !== strpos( $view_source, 'TaxoCommerce_Logistica_Autotest_Code::render_subtabs' ), 'Code check subtab' );
+
 require __DIR__ . '/i18n-catalog-smoke.php';
 echo 'Logistics Auto Test smoke passed.' . PHP_EOL;
+
+/* Shared family report contract: new and previously saved check records. */
+$legacy_report = array(
+    'version' => '0', 'executed_at' => '2026-11-14T12:00:00+00:00',
+    'rows' => array( array(
+        'id' => 'test_case', 'group' => 'startup', 'name' => 'Legacy case',
+        'detail' => 'Legacy detail', 'status' => 'pass', 'ms' => 2,
+    ) ),
+);
+$canonical_report = TaxoCommerce_Logistica_Auto_Test::standardize_report( $legacy_report );
+verify_log( isset( $canonical_report['rows'][0]['group_id'], $canonical_report['rows'][0]['group_name'], $canonical_report['rows'][0]['label'], $canonical_report['rows'][0]['message'], $canonical_report['rows'][0]['ms'] ), 'Unified row fields' );
+verify_log( 'Legacy case' === $canonical_report['rows'][0]['label'] && 'Legacy detail' === $canonical_report['rows'][0]['message'], 'Historical text retained' );
+verify_log( 'Legacy case' === $canonical_report['rows'][0]['name'] && 'Legacy detail' === $canonical_report['rows'][0]['detail'], 'Legacy keys retained' );
+verify_log( isset( $canonical_report['wordpress'], $canonical_report['php'], $canonical_report['date'], $canonical_report['executed_at'], $canonical_report['timestamp'] ), 'Unified report metadata' );
+verify_log( false !== json_encode( $canonical_report ), 'Report JSON encodes' );

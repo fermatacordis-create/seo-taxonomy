@@ -144,11 +144,6 @@ final class Engine {
             return;
         }
 
-        $target = Store::absolute_target( $rule->target_url );
-        if ( is_wp_error( $target ) ) {
-            return;
-        }
-
         // Historical entries can contain chains/cycles even when new writes
         // validate them. Never issue a redirect into a detected cycle.
         $visited = array( $origin => true );
@@ -168,6 +163,13 @@ final class Engine {
             $cursor = (string) $next->target_url;
         }
         if ( ! $terminated ) {
+            return;
+        }
+
+        // Redirect directly to the terminal URL, not to the first intermediate
+        // rule. Existing database rows are left untouched on public requests.
+        $target = Store::absolute_target( $cursor );
+        if ( is_wp_error( $target ) ) {
             return;
         }
 

@@ -242,6 +242,58 @@ final class Store {
         );
     }
 
+    /**
+     * Obtain the final target of an existing chain without modifying any rule.
+     * Ambiguous historical duplicate origins are deliberately not consolidated.
+     *
+     * @param int $id Redirect rule ID.
+     * @return string|\WP_Error Terminal destination or an error.
+     */
+    public static function chain_destination( $id ) {
+        $rule = self::get( absint( $id ) );
+        if ( ! $rule ) {
+            return new \WP_Error( 'tc_redirects_missing', __( 'La redirección no existe.', 'taxocommerce-redirects' ) );
+        }
+
+        $by_origin = array();
+        foreach ( self::rows() as $row ) {
+            $source = self::effective_path( $row->origin_url );
+            if ( null === $source ) {
+                continue;
+            }
+            if ( isset( $by_origin[ $source ] ) ) {
+                $by_origin[ $source ] = false;
+            } elseif ( ! array_key_exists( $source, $by_origin ) ) {
+                $by_origin[ $source ] = $row;
+            }
+        }
+
+        $origin = self::effective_path( $rule->origin_url );
+        if ( null === $origin || ! isset( $by_origin[ $origin ] ) || false === $by_origin[ $origin ] ) {
+            return new \WP_Error( 'tc_redirects_ambiguous', __( 'El origen tiene reglas duplicadas o es inválido.', 'taxocommerce-redirects' ) );
+        }
+
+        $visited = array( $origin => true );
+        $cursor = (string) $rule->target_url;
+        for ( $hop = 0; $hop < 20; $hop++ ) {
+            $effective = self::effective_path( $cursor );
+            if ( null === $effective || isset( $visited[ $effective ] ) ) {
+                return new \WP_Error( 'tc_redirects_chain_cycle', __( 'La cadena contiene un destino inválido o un ciclo.', 'taxocommerce-redirects' ) );
+            }
+            $visited[ $effective ] = true;
+            if ( ! array_key_exists( $effective, $by_origin ) ) {
+                return 0 === $hop
+                    ? new \WP_Error( 'tc_redirects_not_chain', __( 'La regla no forma parte de una cadena.', 'taxocommerce-redirects' ) )
+                    : $cursor;
+            }
+            if ( false === $by_origin[ $effective ] ) {
+                return new \WP_Error( 'tc_redirects_ambiguous', __( 'La cadena contiene un origen duplicado.', 'taxocommerce-redirects' ) );
+            }
+            $cursor = (string) $by_origin[ $effective ]->target_url;
+        }
+        return new \WP_Error( 'tc_redirects_chain_too_long', __( 'La cadena supera el límite de seguridad.', 'taxocommerce-redirects' ) );
+    }
+
     private static function cycle( $rows, $origin, $target, $exclude_id = 0 ) {
         $map = array();
         foreach ( $rows as $row ) {

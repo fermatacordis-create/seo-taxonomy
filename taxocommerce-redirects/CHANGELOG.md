@@ -1,3 +1,28 @@
+## [0.1.24] — 2026-11-14 — Informes de Autocheck homogéneos (#2682)
+
+- Informes funcionales de Redirects, Insights y Logistics con estructura común a Import-Export: versión, fecha UTC, duración, WordPress, PHP, resúmenes, grupos, estado, etiqueta, mensaje y tiempo por prueba.
+- Los JSON nuevos normalizan metadatos y los informes ya guardados se normalizan únicamente al leerlos; se preservan sus campos originales para compatibilidad.
+- Vista funcional uniforme: resúmenes, colores, estados, grupos y tiempos. Se conservan las dos subpestañas, el Code Check autónomo, permisos y acciones de descarga.
+- Sin cambios en motores, reglas, pedidos, conexiones, información comercial ni tablas. Pruebas de regresión y WordPress Plugin Check.
+
+## [0.1.23] — 2026-11-14 — Autocheck funcional unificado (#2673)
+
+- Interfaz simplificada al patrón de la familia: «Ejecutar Autocheck» y «Descargar resultados (JSON)»; retirados los botones y paneles ANTES/DESPUÉS y los botones por grupo.
+- Se mantienen las 26 verificaciones funcionales, los resultados por administrador y sitio, los permisos, nonce y el chequeo de código autónomo en su subpestaña.
+- Los controladores históricos siguen compatibles para preservar datos y contratos anteriores. Sin cambios en reglas 301/302, importación, motor ni tablas SEO.
+
+## [0.1.22] — 2026-11-13 — Cadenas directas y sugerencia de categoría (#2647)
+
+- El motor resuelve redirecciones encadenadas hacia el destino terminal en una sola respuesta HTTP, conservando el código original y la protección frente a ciclos. No altera registros durante las visitas.
+- El gestor permite consolidar individualmente las reglas con cadenas, mostrando el destino final, validándolo de nuevo y requiriendo confirmación, nonce y permisos. No consolida de forma automática equivalencias semánticamente incorrectas.
+- Al borrar un producto publicado, se propone opcionalmente la categoría WooCommerce más específica que mantiene otros productos. Se conserva la edición manual y la opción de no redirigir.
+- No se generan reglas para 404 históricos sin origen/destino comprobables ni se modifica producción.
+
+## [0.1.21] — 2026-11-13 — Code Check equiparado a Core 0.4.82 (#2626)
+
+- Code Check equiparado a Core 0.4.82: reglas autónomas PHP/WordPress/seguridad, clasificación por gravedad, detalles de archivos y recomendaciones, resumen y JSON; sin modificar el Autotest funcional. Issue #2626.
+- Continúa siendo una revisión estática independiente del Plugin Check oficial, con ejecución por bloques y control de CPU.
+
 ## [0.1.20] - 2026-11-10 - Activación del motor y compatibilidad con otros gestores (#2485)
 
 - Casilla administrativa «TaxoCommerce gestiona las redirecciones», activada por defecto. Guardado protegido mediante nonce y permisos de WordPress.

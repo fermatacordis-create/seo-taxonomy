@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: TaxoCommerce System Check 0.2.13\n"
+"Project-Id-Version: TaxoCommerce System Check 0.2.40\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/taxocommerce-system-check\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-02T16:56:48+00:00\n"
+"POT-Creation-Date: 2026-11-13T00:00:00+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: taxocommerce-system-check\n"
@@ -1496,4 +1496,427 @@ msgstr ""
 
 #: includes/class-taxocommerce-system-check-code-check.php
 msgid "Run Functionality Check"
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-code-check.php
+msgid "This code may use features newer than the declared minimum PHP version."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-code-check.php
+msgid "Code references and declarations require review."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-code-check.php
+msgid "Potential security issues need a manual code-flow review."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-code-check.php
+msgid "Possible duplicate PHP symbols need review."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-code-check.php
+msgid "Native local checks: PHP, literal include paths, duplicate declarations, WordPress conventions and security patterns. Full data flow, runtime and official Plugin Check remain unverified."
+msgstr ""
+
+#: includes/admin-branding.php:70
+msgid "Version"
+msgstr ""
+
+#: includes/admin-branding.php:71
+msgid "Last updated"
+msgstr ""
+
+#: includes/admin-branding.php:104
+msgid "Version history and improvements"
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:33
+msgid "Último diagnóstico del servidor"
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:39
+msgid "Contrato JSON de Autocheck"
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:77
+msgid "El diagnóstico PHP independiente no está cargado."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:81
+msgid "El diagnóstico PHP no devuelve su inventario completo."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:92
+msgid "El inventario PHP contiene datos incompletos, duplicados o estados desconocidos."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:102
+msgid "%1$d comprobaciones PHP válidas; %2$d avisos del entorno (consultables en Sistema > PHP)."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:107
+msgid "La pantalla de diagnóstico del servidor tiene un motor ejecutable."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:108
+msgid "No hay un motor de diagnóstico del servidor ejecutable. Comprueba la carga del módulo independiente."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:113
+msgid "La lectura del histórico de servidor no está disponible; no se inicia ningún escaneo."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:117
+msgid "Aún no hay un diagnóstico del servidor guardado. Ejecuta su comprobación desde Sistema."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:123
+msgid "El último informe guardado del servidor tiene una estructura o fecha inválida."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:132
+msgid "El último diagnóstico contiene comprobaciones incompletas o duplicadas."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:145
+msgid "El informe de servidor supera las 24 horas: se conserva como histórico, no como prueba actual."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:150
+msgid "Informe guardado válido: %d comprobaciones; su estado de salud se consulta en Sistema."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:155
+msgid "Falta la lectura de módulos activos."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:159
+msgid "System Check no figura en sus módulos registrados."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:187
+msgid "Hay módulos registrados con contratos inválidos o comprobaciones fallidas."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:194
+msgid "%d módulos comprobados: versiones, estados y verificaciones coherentes."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:199
+msgid "No está cargado el auditor HTTP."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:205
+msgid "Falta el método HTTP ejecutable: %s."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:210
+msgid "Interfaz, inicio, proceso por lotes, controles y descarga HTTP disponibles; no se hace ninguna petición."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:215
+msgid "No se puede verificar el auditor HTTP: clase ausente."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:227
+msgid "Falta el callback HTTP del hook %s."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:233
+msgid "El intervalo del vigilante HTTP es inválido."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:237
+msgid "Callbacks HTTP y vigilancia de cinco minutos registrados y consistentes; no se activan procesos."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:243
+msgid "El exportador de módulos tiene función y acción de descarga registradas."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:244
+msgid "La exportación JSON de módulos no está correctamente registrada."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:248
+msgid "Exportación histórica JSON disponible (no certifica la vigencia del informe)."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:249
+msgid "Exportación del motor histórico no cargada; no es requisito del plugin independiente."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:253
+msgid "El endpoint del JSON de Autocheck no está registrado."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:263
+msgid "La serialización JSON pierde estados o estructura."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:265
+msgid "Endpoint disponible y serialización JSON validada, incluido el estado no ejecutado."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:327
+msgid "Descargar resultados (JSON)"
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:328
+msgid "Fecha de ejecución:"
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:382
+msgid "Resultados:"
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:387
+msgid "Cobertura del Autocheck: %1$d de %2$d pruebas (%3$d%%). Los chequeos omitidos no se consideran superados."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:413
+msgid "Sin permisos para descargar el Autocheck."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:418
+msgid "Ejecuta el Autocheck antes de descargar el JSON."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-auto-test.php:422
+msgid "No se pudo generar el informe JSON."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-processes.php:131
+msgid "Aprendizaje de Dependiente"
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-processes.php:141
+msgid "Cola de importación"
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-processes.php:179
+msgid "Exportación CSV"
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-processes.php:199
+msgid "Detenido desde System Check. No se iniciarán nuevos lotes."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-processes.php:214
+msgid "Detención solicitada desde System Check; se conserva el cursor."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-processes.php:326
+msgid "Mostrar confirmación de parada global"
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-processes.php:349
+msgid "Procesos de WordPress y WooCommerce"
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-processes.php:350
+msgid "Tareas de aplicación, no procesos Linux. Detener no interrumpe una petición PHP ya en marcha. Se preservan los trabajos críticos de WordPress y WooCommerce."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-processes.php:351
+msgid "Detener los trabajos cancelables mostrados"
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-processes.php:356
+msgid "Operaciones de detención solicitadas o completadas: %d."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-processes.php:358
+msgid "Procesos de larga duración"
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-processes.php:359
+msgid "Trabajo"
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-processes.php:363
+msgid "Detener"
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-processes.php:368
+msgid "No hay procesos registrados."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-processes.php:375
+msgid "Cancelar pendiente"
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-processes.php:380
+msgid "Sin acciones pendientes o en curso."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-processes.php:387
+msgid "Cancelar programación"
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-processes.php:392
+msgid "No hay eventos de WP-Cron."
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-url-audit.php:675
+msgid "Auditoría HTTP: %s"
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-url-audit.php:677
+msgid "Trabajo local por lotes"
+msgstr ""
+
+#: includes/class-taxocommerce-system-check-url-audit.php:710
+msgid "Cancelado desde System Check."
+msgstr ""
+
+#: includes/official-excerpt.php:20
+msgid "Official plugin page"
+msgstr ""
+
+#: taxocommerce-system-check.php:180
+msgid "Procesos"
+msgstr ""
+
+#: taxocommerce-system-check.php:180
+msgid "Autocheck"
+msgstr ""
+
+msgid "Oldest overdue WP-Cron event"
+msgstr ""
+
+msgid "Unavailable"
+msgstr ""
+
+msgid "The scheduled-event list is unavailable; no status is inferred."
+msgstr ""
+
+msgid "None"
+msgstr ""
+
+msgid "No event is more than 15 minutes overdue."
+msgstr ""
+
+msgid "WP-Cron execution mechanism"
+msgstr ""
+
+msgid "External scheduler required"
+msgstr ""
+
+msgid "WordPress visitor-triggered cron enabled"
+msgstr ""
+
+msgid "Overdue events alone do not prove that the runner is stopped. Check the hosting cron when WP-Cron is disabled."
+msgstr ""
+
+msgid "Action Scheduler activity"
+msgstr ""
+
+msgid "Action Scheduler has no accessible action table."
+msgstr ""
+
+msgid "Oldest pending Action Scheduler job"
+msgstr ""
+
+msgid "No pending job found."
+msgstr ""
+
+msgid "Most recent failed Action Scheduler attempt"
+msgstr ""
+
+msgid "No failed attempt is available."
+msgstr ""
+
+msgid "Action Scheduler attempts in the last hour"
+msgstr ""
+
+msgid "Completed / failed, according to the last-attempt timestamp; not callback execution time."
+msgstr ""
+
+msgid "No overdue backlog was detected in the sampled queue."
+msgstr ""
+
+msgid "Recent failures exist; inspect the failing hooks. This does not prove the runner is stopped."
+msgstr ""
+
+msgid "Recent completions exist, but an older task remains pending. Check the affected hook."
+msgstr ""
+
+msgid "Old pending tasks with no recent completions or failures: a runner issue is possible, but cannot be confirmed from one snapshot."
+msgstr ""
+
+msgid "Action Scheduler diagnostic"
+msgstr ""
+
+msgid "Read-only snapshot. Actual PHP process duration and runner heartbeat are not exposed by this check."
+msgstr ""
+
+msgid "Queue health diagnostics (read-only)"
+msgstr ""
+
+msgid "WP-Cron and Action Scheduler signals are measured when this page opens. These measurements do not start, cancel or resume jobs, and cannot prove a PHP runner is stopped."
+msgstr ""
+
+msgid "Metric"
+msgstr ""
+
+msgid "Value"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Details"
+msgstr ""
+
+#. translators: 1: maximum URLs per batch; 2: completed; 3: total; 4: approximate next pending position.
+msgid "Batch limit: %1$d URLs · progress: %2$d/%3$d · resume: next pending URL (approx. position %4$d)."
+msgstr ""
+
+msgid "Diagnóstico de tarea"
+msgstr ""
+
+msgid "La tarea ya no existe o no está disponible."
+msgstr ""
+
+msgid "Grupo:"
+msgstr ""
+
+msgid "Posible tarea huérfana: no hay un callback registrado en esta petición. Confirma si el plugin está activo antes de cancelar."
+msgstr ""
+
+msgid "Callback registrado. Esto no demuestra una ejecución correcta."
+msgstr ""
+
+msgid "Ejecutor no verificable desde este estado."
+msgstr ""
+
+msgid "Programado (UTC):"
+msgstr ""
+
+msgid "WP-Cron no conserva un historial individual de errores. Consulta los registros del plugin responsable si existen."
+msgstr ""
+
+msgid "Este estado no prueba que una petición PHP siga ejecutándose."
+msgstr ""
+
+msgid "Registro de Action Scheduler (últimas 20 entradas)"
+msgstr ""
+
+msgid "No hay entradas de registro disponibles para esta tarea."
+msgstr ""
+
+msgid "El prefijo histórico seo_ no demuestra una dependencia del antiguo monolítico. No se muestran argumentos ni credenciales."
+msgstr ""
+
+msgid "Ver log del último fallo"
+msgstr ""
+
+msgid "Ver detalles"
+msgstr ""
+
+msgid "Ver log / diagnóstico"
+msgstr ""
+
+msgid "Process diagnostics are unavailable until the plugin update completes."
 msgstr ""

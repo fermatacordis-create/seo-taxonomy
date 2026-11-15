@@ -1,3 +1,6 @@
+= 0.1.15 (2026-11-13) =
+* Code Check ampliado con las mismas reglas, clasificación por gravedad, información por archivo/línea y JSON que Core 0.4.82; sin cambiar el Autotest funcional ni la ejecución por lotes. Issue #2626.
+
 = 0.1.14 (2026-11-10) =
 * Three-zone admin header: unique local Description and static link on left, wider collapsed CHANGELOG.md in center, version/date on right; no duplicate panel. Issue #2521.
 

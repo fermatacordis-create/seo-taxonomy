@@ -94,7 +94,7 @@ $slugs = array(
     'auditor', 'redirects', 'faqs', 'images', 'social', 'database',
     'campaigns', 'suppliers', 'scrappers', 'logistica', 'vocabulary',
     'facturacion', 'dependiente', 'google-bing', 'distribution',
-    'import-export', 'system-check', 'templates', 'tasks',
+    'import-export', 'system-check', 'templates', 'tasks', 'customers',
 );
 $root = dirname( __DIR__, 2 );
 foreach ( $slugs as $slug ) {

@@ -102,17 +102,19 @@ def selected_delta(base: str, head: str, installed: list[str], allowed: list[str
         raise ValueError("SHA de origen o destino no valido")
     if git("merge-base", "--is-ancestor", base, head) != b"":
         raise ValueError("Unexpected ancestor result")
-    accepted = set(installed) & set(allowed)
+    accepted = set(installed) & set(allowed) if installed is not None and allowed is not None else None
     if target_plugin:
-        if not SLUG.fullmatch(target_plugin) or target_plugin not in accepted:
+        if not SLUG.fullmatch(target_plugin) or (accepted is not None and target_plugin not in accepted):
             raise ValueError("Plugin seleccionado ausente o no autorizado en PRO")
-        accepted &= {target_plugin}
-    # Never allow deletions (or renamed-away files) to silently leave drift on PRO.
-    deleted = git("diff", "--no-renames", "--name-only", "-z", "--diff-filter=D",
-                  base, head, "--", "taxocommerce-*").decode().split("\0")
-    for path in deleted:
-        if path and installable(path) and path.split("/", 1)[0] in accepted:
-            raise ValueError("Archivo eliminado sin migracion segura: " + path)
+        accepted = {target_plugin}
+    # The simple copy operation handles added/modified files only.
+    # Deleted source files have no bytes to copy; leave remote deletions alone.
+    if accepted is not None:
+        deleted = git("diff", "--no-renames", "--name-only", "-z", "--diff-filter=D",
+                      base, head, "--", "taxocommerce-*").decode().split("\0")
+        for path in deleted:
+            if path and installable(path) and path.split("/", 1)[0] in accepted:
+                raise ValueError("Archivo eliminado sin migracion segura: " + path)
     changed = git("diff", "--no-renames", "--name-only", "-z", "--diff-filter=ACMT",
                   base, head, "--", "taxocommerce-*").decode().split("\0")
     result = {}
@@ -120,7 +122,7 @@ def selected_delta(base: str, head: str, installed: list[str], allowed: list[str
         if not path or not installable(path):
             continue
         slug, relative = path.split("/", 1)
-        if slug not in accepted:
+        if accepted is not None and slug not in accepted:
             continue
         source = root / slug / relative
         if source.is_symlink() or not source.is_file():
@@ -136,24 +138,31 @@ def selected_delta(base: str, head: str, installed: list[str], allowed: list[str
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", required=True)
-    parser.add_argument("--installed-json", required=True)
-    parser.add_argument("--allowed-json", required=True)
+    parser.add_argument("--installed-json", default="")
+    parser.add_argument("--allowed-json", default="")
+    parser.add_argument("--all-changed", action="store_true")
     parser.add_argument("--target-plugin", default="")
     parser.add_argument("--base-sha", default="")
     args = parser.parse_args()
-    installed = json.loads(args.installed_json)
-    allowed = json.loads(args.allowed_json)
-    if not isinstance(installed, list) or not isinstance(allowed, list):
-        raise ValueError("Inventario incorrecto")
-    if len(installed) != len(set(installed)) or any(not SLUG.fullmatch(x) for x in installed):
-        raise ValueError("Inventario PRO inseguro")
+    if args.all_changed:
+        # GitHub is the source of truth. Never query or filter PRO plugin inventory.
+        installed = None
+        allowed = None
+    else:
+        installed = json.loads(args.installed_json)
+        allowed = json.loads(args.allowed_json)
+        if not isinstance(installed, list) or not isinstance(allowed, list):
+            raise ValueError("Inventario incorrecto")
+        if len(installed) != len(set(installed)) or any(not SLUG.fullmatch(x) for x in installed):
+            raise ValueError("Inventario PRO inseguro")
     head = git("rev-parse", "HEAD").decode().strip()
     base = args.base_sha or last_successful_source(
         os.environ["GITHUB_REPOSITORY"], os.environ["GH_TOKEN"]
     )
     # Ensure baseline exists in checkout history, not merely a string from logs.
     git("cat-file", "-e", base + "^{commit}")
-    result = selected_delta(base, head, installed, allowed, args.target_plugin)
+    result = selected_delta(base, head, installed, allowed,
+                            "" if args.all_changed else args.target_plugin)
     Path(args.output).write_text(json.dumps(result, sort_keys=True), encoding="utf-8")
     print(f"Release PRO desde {base} hasta {head}. "
           f"Plugins modificados: {len(result)}; "

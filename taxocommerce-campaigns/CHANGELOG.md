@@ -1,3 +1,8 @@
+## [0.1.15] — 2026-11-13 — Code Check unificado con Core 0.4.82 (#2626)
+
+- Code Check ampliado con las mismas reglas, clasificación por gravedad, información por archivo/línea y JSON que Core 0.4.82; sin cambiar el Autotest funcional ni la ejecución por lotes. Issue #2626.
+- Los resultados son comprobaciones estáticas locales, no equivalentes al Plugin Check oficial de WordPress.org ni a una auditoría de seguridad ejecutada.
+
 ## [0.1.14] — 2026-11-10 — Cabecera en tres zonas sin contenido duplicado (#2521)
 
 - Izquierda: nombre, descripción local del plugin y un único enlace estático `Plugin URI` bajo el texto.

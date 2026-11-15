@@ -41,15 +41,25 @@ function wp_unslash( $s ) { return $s; }
 function wp_remote_get() { ++$GLOBALS['social_remote_calls']; throw new RuntimeException( 'Network forbidden' ); }
 function wp_remote_post() { ++$GLOBALS['social_remote_calls']; throw new RuntimeException( 'Network forbidden' ); }
 function wp_schedule_single_event() { throw new RuntimeException( 'Scheduling forbidden' ); }
+function wp_next_scheduled( $hook, $args = array() ) { return $GLOBALS['social_cron_events'][ $hook . ':' . implode( ':', $args ) ] ?? false; }
+function has_post_thumbnail( $id ) { return ! isset( $GLOBALS['social_missing_images'][ $id ] ); }
+function wp_strip_all_tags( $s ) { return strip_tags( $s ); }
+function absint( $value ) { return abs( (int) $value ); }
 
 class Social_Test_DB {
     public $prefix = 'wp_';
+    public $postmeta = 'wp_postmeta';
+    public $posts = 'wp_posts';
+    public $schedule_rows = array();
+    public $job_rows = array();
+    public $history_rows = array();
     public $last_error = '';
     public $missing = '';
     public $queries = array();
     public function esc_like( $s ) { return $s; }
     public function prepare( $sql ) {
         $args = array_slice( func_get_args(), 1 );
+        if ( count( $args ) === 1 && is_array( $args[0] ) ) $args = $args[0];
         return vsprintf( str_replace( '%i', '%s', $sql ), $args );
     }
     public function get_var( $sql ) {
@@ -57,6 +67,13 @@ class Social_Test_DB {
         if ( 'SELECT 1' === $sql ) return '1';
         if ( preg_match( '/^SHOW TABLES LIKE (wp_[A-Za-z_]+)$/', $sql, $m ) ) return $m[1] === $this->missing ? null : $m[1];
         return null;
+    }
+    public function get_results( $sql ) {
+        $this->queries[] = $sql;
+        if ( strpos( $sql, 'JOIN wp_posts' ) !== false ) return $this->schedule_rows;
+        if ( strpos( $sql, 'FROM wp_seo_social_schedule' ) !== false ) return $this->job_rows;
+        if ( strpos( $sql, 'FROM wp_seo_social_publications' ) !== false ) return $this->history_rows;
+        return array();
     }
     public function get_col( $sql ) {
         $this->queries[] = $sql;
@@ -83,19 +100,47 @@ foreach ( array( 'Descargar plantilla CSV', 'Exportar contenidos', 'Exportar age
     social_assert( strpos( $csv_panel, $control ) !== false, 'CSV action displayed: ' . $control );
 }
 
-social_assert( count( TCSocial_Auto_Test::cases() ) === 16, 'Exactly sixteen checks' );
+// init callback is invoked by WordPress after all plugins load; emulate it here
+// without calling other init actions that install tables.
+tcsocial_network_register_auto_publish_hook();
+social_assert( has_action( 'transition_post_status' ), 'New-post auto publisher registered without monolith' );
+social_assert( count( TCSocial_Auto_Test::cases() ) === 21, 'Twenty-one functionality checks' );
 
 $report = TCSocial_Auto_Test::run_suite();
 if ( $report['totals']['fail'] ) {
     foreach ( $report['rows'] as $row ) if ( 'fail' === $row['status'] ) fwrite( STDERR, "CASE FAILED " . $row['id'] . ': ' . $row['message'] . "\n" );
 }
-social_assert( $report['totals'] === array( 'pass'=>15, 'fail'=>0, 'skip'=>1 ), '15 successful read-only checks, 1 deliberate skip' );
+social_assert( $report['totals'] === array( 'pass'=>15, 'fail'=>0, 'skip'=>6 ), '15 successful checks and 6 explicit local/remote skips without live fixtures' );
 social_assert( $report['version'] === TAXOCOMMERCE_SOCIAL_VERSION, 'report version' );
-social_assert( count( $report['rows'] ) === 16, 'all checks represented' );
+social_assert( count( $report['rows'] ) === 21, 'all checks represented' );
 social_assert( $GLOBALS['social_remote_calls'] === 0 && $GLOBALS['social_writes'] === 0, 'no outgoing requests or writes' );
+// A missed WP-Cron event must no longer return a false green Autocheck.
+$wpdb->schedule_rows = array( (object) array(
+    'post_id' => 123, 'meta_key' => '_seo_social_schedule_linkedin', 'meta_value' => time() - 3600,
+) );
+$wpdb->job_rows = array( (object) array(
+    'id' => 44, 'status' => 'scheduled', 'scheduled_at' => '2026-10-30 12:00:00', 'updated_at' => '2026-10-30 11:55:00',
+) );
+$wpdb->history_rows = array( (object) array(
+    'provider' => 'pinterest', 'status' => 'failed',
+    'error_message' => 'Missing: boards:write',
+) );
+$failure_report = TCSocial_Auto_Test::run_suite();
+$failed_ids = array();
+foreach ( $failure_report['rows'] as $row ) {
+    if ( 'fail' === $row['status'] ) $failed_ids[] = $row['id'];
+}
+foreach ( array( 'schedule_health', 'job_health', 'recent_outcomes' ) as $id ) {
+    social_assert( in_array( $id, $failed_ids, true ), 'Functional Autocheck flags ' . $id );
+}
+$wpdb->schedule_rows = array();
+$wpdb->job_rows = array();
+$wpdb->history_rows = array();
 foreach ( $wpdb->queries as $sql ) {
     social_assert( preg_match( '/^(SELECT|SHOW) /', $sql ) === 1, 'read-only query: ' . $sql );
-    if ( strpos( $sql, ' FROM wp_' ) !== false ) social_assert( substr( $sql, -7 ) === 'LIMIT 1', 'query bounded: ' . $sql );
+    if ( strpos( $sql, ' FROM wp_' ) !== false ) {
+        social_assert( preg_match( '/LIMIT (1|100|150)$/', trim( $sql ) ) === 1, 'query bounded: ' . $sql );
+    }
 }
 
 $wpdb->missing = 'wp_seo_social_schedule';

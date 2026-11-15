@@ -5,13 +5,16 @@ Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 0.3.41
+Stable tag: 0.3.44
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 An auditable catalog assistant for WooCommerce, with independent learning, semantic interpretation and customer-facing product search.
 
 == Description ==
+
+Version 0.3.43 expands the user guide and learning instructions in Spanish, English, French, German and Dutch. The 0.3.42 backup and portable-knowledge translations remain. Longer manuals and code strings outside gettext still require work under #2062.
+
 
 * Admin header: plugin title, a single local `Description` with the static `Plugin URI` link below it (left); a wider collapsed `CHANGELOG.md` history (center); local version and release date (right). No duplicated information panel or external requests.
 

@@ -1,0 +1,17 @@
+/*
+ * TaxoCommerce Accounting administration tabs.
+ * Scoped to this plugin so other WordPress admin screens are unaffected.
+ */
+.tca-accounting-admin .nav-tab-wrapper .nav-tab.nav-tab-active {
+    background: #135e96;
+    border-color: #135e96;
+    color: #fff;
+    font-weight: 600;
+}
+
+.tca-accounting-admin .nav-tab-wrapper .nav-tab.nav-tab-active:hover,
+.tca-accounting-admin .nav-tab-wrapper .nav-tab.nav-tab-active:focus {
+    background: #0a4b78;
+    border-color: #0a4b78;
+    color: #fff;
+}

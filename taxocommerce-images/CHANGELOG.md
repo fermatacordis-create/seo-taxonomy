@@ -1,3 +1,8 @@
+## [0.2.30] — 2026-11-13 — Code Check equiparado al Core 0.4.82 (#2626)
+
+- Unificar Code Check con Core 0.4.82: reglas nativas adicionales, resumen real de incidencias, grupos por gravedad y JSON clasificado. La pestaña de funcionalidades permanece intacta. Issue #2626.
+- Se conservan ejecución independiente, control de CPU, acciones existentes, permisos y descarga de resultados; no se ejecuta WordPress Plugin Check ni se modifica el código funcional del plugin.
+
 ## [0.2.29] — 2026-11-12 — Escaneo completo de imágenes sin WP-Cron (#2580)
 
 - «Sin uso y duplicadas» encadena lotes desde peticiones internas firmadas, sin dependencia de WP-Cron. Se limita a trabajo de lectura y marcado de resultados; ningún archivo se elimina ni sustituye durante el análisis.

@@ -169,7 +169,7 @@ function tcsocial_network_default_settings()
                 'refresh_token_enc'        => '',
                 'token_expires_at'         => 0,
                 'refresh_token_expires_at' => 0,
-                'scope'                    => 'boards:read pins:read pins:write',
+                'scope'                    => 'boards:read boards:write pins:read pins:write',
                 'board_id'                 => '',
                 'board_name'               => '',
                 'boards'                   => array(),
@@ -880,6 +880,22 @@ function tcsocial_network_schedule_on_publish($new_status, $old_status, $post)
 
 
 /**
+ * Registra la programación automática solo cuando el motor heredado no la gestiona.
+ * La comprobación se realiza tras cargar los plugins para evitar dos productores
+ * sobre las mismas claves de agenda.
+ */
+function tcsocial_network_register_auto_publish_hook()
+{
+    if (has_action('transition_post_status', 'seo_social_network_schedule_on_publish')) {
+        return;
+    }
+    if (!has_action('transition_post_status', 'tcsocial_network_schedule_on_publish')) {
+        add_action('transition_post_status', 'tcsocial_network_schedule_on_publish', 20, 3);
+    }
+}
+add_action('init', 'tcsocial_network_register_auto_publish_hook', 40);
+
+/**
  * @param int    $content_id
  * @param string $provider
  */
@@ -900,6 +916,84 @@ function tcsocial_network_publish_scheduled($content_id, $provider)
 add_action('tcsocial_network_publish_scheduled', 'tcsocial_network_publish_scheduled', 10, 2);
 
 /**
+ * Adopta eventos FUTUROS de las tablas compartidas cuando el monolítico ya no
+ * carga su ejecutor. No cambia fechas, no reenvía vencidos ni crea duplicados.
+ * Mantiene los eventos heredados mientras su ejecutor siga activo.
+ */
+function tcsocial_network_reconcile_future_events()
+{
+    global $wpdb;
+    $prefix = '_seo_social_schedule_';
+    $like = $wpdb->esc_like($prefix) . '%';
+    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Reconciliación acotada de eventos futuros; lectura de agenda propia sin caché.
+    $jobs = $wpdb->get_results(
+        $wpdb->prepare(
+            "SELECT pm.post_id, pm.meta_key, pm.meta_value FROM %i pm
+             INNER JOIN %i p ON p.ID = pm.post_id
+             WHERE pm.meta_key LIKE %s AND CAST(pm.meta_value AS UNSIGNED) > %d
+               AND p.post_status = 'publish'
+             ORDER BY CAST(pm.meta_value AS UNSIGNED) ASC LIMIT %d",
+            $wpdb->postmeta, $wpdb->posts, $like, time() + 30, 150
+        )
+    );
+    if (!is_array($jobs)) {
+        return;
+    }
+    $repaired = 0;
+    foreach ($jobs as $job) {
+        $content_id = absint($job->post_id);
+        $provider = sanitize_key(substr((string) $job->meta_key, strlen($prefix)));
+        $timestamp = absint($job->meta_value);
+        if (!$content_id || !$timestamp || !tcsocial_network_get_provider($provider)) {
+            continue;
+        }
+        // A paused record remains visible in the agenda, but must not be
+        // recreated as a WP-Cron job by the automatic reconciliation.
+        if ('pausada' === tcsocial_network_get_schedule_state($content_id, $provider)) {
+            continue;
+        }
+        $args = array($content_id, $provider);
+        $own_hook = 'tcsocial_network_publish_manual_scheduled';
+        $old_hook = 'seo_social_network_publish_manual_scheduled';
+        $old_event = wp_next_scheduled($old_hook, $args);
+        $old_handler = has_action($old_hook);
+
+        if (wp_next_scheduled($own_hook, $args)) {
+            // The current module already owns an executor. Discard only an
+            // orphan legacy event, never another module's live executor.
+            if ($old_event && !$old_handler) {
+                wp_clear_scheduled_hook($old_hook, $args);
+            }
+            continue;
+        }
+        if ($old_event && $old_handler) {
+            // Temporary coexistence: do not create a second publisher.
+            continue;
+        }
+
+        // An earlier remote request might already have succeeded. Never
+        // retry pending/published attempts automatically.
+        $latest = tcsocial_network_get_latest_publication($content_id, $provider);
+        if ($latest && in_array($latest->status, array('pending', 'published'), true)) {
+            continue;
+        }
+
+        $scheduled = wp_schedule_single_event($timestamp, $own_hook, $args, true);
+        if (is_wp_error($scheduled) || !$scheduled) {
+            // Do not remove the existing event if takeover fails.
+            continue;
+        }
+        if ($old_event && !$old_handler) {
+            wp_clear_scheduled_hook($old_hook, $args);
+        }
+        if (++$repaired >= 20) {
+            break;
+        }
+    }
+}
+add_action('init', 'tcsocial_network_reconcile_future_events', 50);
+
+/**
  * Clave meta de una programacion manual.
  *
  * @param string $provider
@@ -918,6 +1012,69 @@ function tcsocial_network_schedule_meta_key($provider)
 function tcsocial_network_get_scheduled_timestamp($content_id, $provider)
 {
     return absint(get_post_meta(absint($content_id), tcsocial_network_schedule_meta_key($provider), true));
+}
+
+/**
+ * Pause state is stored separately from the timestamp. It intentionally does
+ * not use _seo_social_schedule_ so agenda queries never treat it as an event.
+ *
+ * @param string $provider Network key.
+ * @return string
+ */
+function tcsocial_network_schedule_state_meta_key($provider)
+{
+    return '_tcsocial_schedule_state_' . sanitize_key($provider);
+}
+
+/**
+ * Return a persisted state for a still-recorded publication schedule.
+ *
+ * @param int    $content_id Content ID.
+ * @param string $provider Network key.
+ * @return string programada, pausada, or empty if absent.
+ */
+function tcsocial_network_get_schedule_state($content_id, $provider)
+{
+    $content_id = absint($content_id);
+    if (!tcsocial_network_get_scheduled_timestamp($content_id, $provider)) {
+        return '';
+    }
+    $state = get_post_meta($content_id, tcsocial_network_schedule_state_meta_key($provider), true);
+    return 'pausada' === $state ? 'pausada' : 'programada';
+}
+
+/**
+ * Pause one social schedule while keeping its date visible/editable.
+ * Cancels current and legacy WP-Cron events. No content is published.
+ *
+ * @param int    $content_id Content ID.
+ * @param string $provider Network key.
+ * @param int    $timestamp Exact desired schedule timestamp.
+ * @return true|WP_Error
+ */
+function tcsocial_network_pause_scheduled_publication($content_id, $provider, $timestamp)
+{
+    $content_id = absint($content_id);
+    $provider = sanitize_key($provider);
+    $timestamp = absint($timestamp);
+    if (!$timestamp || !tcsocial_network_get_provider($provider) || !tcsocial_network_get_scheduled_timestamp($content_id, $provider)) {
+        return new WP_Error('invalid_schedule', __('La programación ya no existe.', 'taxocommerce-social'));
+    }
+
+    // Record pause BEFORE clearing the hook: a concurrent callback must not publish.
+    update_post_meta($content_id, tcsocial_network_schedule_state_meta_key($provider), 'pausada');
+    if ($timestamp !== tcsocial_network_get_scheduled_timestamp($content_id, $provider)) {
+        update_post_meta($content_id, tcsocial_network_schedule_meta_key($provider), $timestamp);
+    }
+    $args = array($content_id, $provider);
+    wp_clear_scheduled_hook('tcsocial_network_publish_manual_scheduled', $args);
+    wp_clear_scheduled_hook('seo_social_network_publish_manual_scheduled', $args);
+
+    if ('pausada' !== tcsocial_network_get_schedule_state($content_id, $provider)
+        || $timestamp !== tcsocial_network_get_scheduled_timestamp($content_id, $provider)) {
+        return new WP_Error('pause_failed', __('No se ha podido guardar la pausa.', 'taxocommerce-social'));
+    }
+    return true;
 }
 
 /**
@@ -946,13 +1103,22 @@ function tcsocial_network_set_scheduled_publication($content_id, $provider, $tim
     }
 
     $args = array($content_id, $provider);
-    wp_clear_scheduled_hook('tcsocial_network_publish_manual_scheduled', $args);
-    update_post_meta($content_id, tcsocial_network_schedule_meta_key($provider), $timestamp);
+    $old_timestamp = tcsocial_network_get_scheduled_timestamp($content_id, $provider);
+    $legacy_timestamp = wp_next_scheduled('seo_social_network_publish_manual_scheduled', $args);
 
-    if (!wp_schedule_single_event($timestamp, 'tcsocial_network_publish_manual_scheduled', $args)) {
-        delete_post_meta($content_id, tcsocial_network_schedule_meta_key($provider));
-        return new WP_Error('schedule_failed', 'WordPress no pudo crear la tarea programada.');
+    // Una reprogramación explícita sustituye ambos eventos para evitar dobles envíos.
+    wp_clear_scheduled_hook('tcsocial_network_publish_manual_scheduled', $args);
+    $scheduled = wp_schedule_single_event($timestamp, 'tcsocial_network_publish_manual_scheduled', $args, true);
+    if (is_wp_error($scheduled) || !$scheduled) {
+        if ($old_timestamp > time() + 30) {
+            wp_schedule_single_event($old_timestamp, 'tcsocial_network_publish_manual_scheduled', $args);
+        }
+        return new WP_Error('schedule_failed', 'WordPress no pudo crear la tarea programada. La agenda anterior se ha conservado.');
     }
+
+    wp_clear_scheduled_hook('seo_social_network_publish_manual_scheduled', $args);
+    update_post_meta($content_id, tcsocial_network_schedule_meta_key($provider), $timestamp);
+    delete_post_meta($content_id, tcsocial_network_schedule_state_meta_key($provider));
 
     return true;
 }
@@ -966,7 +1132,9 @@ function tcsocial_network_clear_scheduled_publication($content_id, $provider)
     $content_id = absint($content_id);
     $provider = sanitize_key($provider);
     wp_clear_scheduled_hook('tcsocial_network_publish_manual_scheduled', array($content_id, $provider));
+    wp_clear_scheduled_hook('seo_social_network_publish_manual_scheduled', array($content_id, $provider));
     delete_post_meta($content_id, tcsocial_network_schedule_meta_key($provider));
+    delete_post_meta($content_id, tcsocial_network_schedule_state_meta_key($provider));
 }
 
 /**
@@ -1435,13 +1603,29 @@ function tcsocial_network_schedule_news_publication($content_id, $provider, $req
  */
 function tcsocial_network_publish_manual_scheduled($content_id, $provider)
 {
-    tcsocial_network_clear_scheduled_publication($content_id, $provider);
+    $content_id = absint($content_id);
+    $provider = sanitize_key($provider);
+    $scheduled_at = tcsocial_network_get_scheduled_timestamp($content_id, $provider);
+
+    // Never send an orphaned, cancelled, rescheduled or paused event. A
+    // past-due job can still execute normally when its schedule is intact.
+    if (!$scheduled_at || $scheduled_at > time() + 30) {
+        return;
+    }
+    if ('pausada' === tcsocial_network_get_schedule_state($content_id, $provider)) {
+        return;
+    }
+
     $result = tcsocial_network_publish_content($content_id, $provider);
     if (is_wp_error($result)) {
+        // Conservar la fecha vencida para que Autocheck pueda denunciar el
+        // fallo; no reintentar automáticamente por posible envío remoto incierto.
         if (function_exists('seo_system_private_log')) {
             seo_system_private_log('error', '[SEO Social] Publicacion programada fallida: ' . $result->get_error_message());
         }
+        return;
     }
+    tcsocial_network_clear_scheduled_publication($content_id, $provider);
 }
 add_action('tcsocial_network_publish_manual_scheduled', 'tcsocial_network_publish_manual_scheduled', 10, 2);
 
@@ -1819,7 +2003,7 @@ function tcsocial_network_scheduler_exportable_agenda_rows()
             $provider,
             wp_date('Y-m-d H:i', $timestamp, wp_timezone()),
             wp_timezone_string(),
-            'programada',
+            tcsocial_network_get_schedule_state((int) $row->post_id, $provider),
             ('post' === (string) $row->post_type && function_exists('tcsocial_network_news_is_priority') && tcsocial_network_news_is_priority((int) $row->post_id)) ? 'si' : '',
         );
     }
@@ -2195,6 +2379,17 @@ function tcsocial_network_handle_scheduler_import_preview()
     $ext = strtolower(pathinfo($name, PATHINFO_EXTENSION));
     if (!in_array($ext, array('csv', 'txt', 'tsv'), true)) {
         wp_safe_redirect(tcsocial_network_admin_url('scheduler', array('social_msg' => 'scheduler_import_bad_type')));
+        exit;
+    }
+
+    // Cancellation CSVs use the same import button, but must never reach the
+    // scheduling path (which would reject past dates or create new events).
+    if (
+        is_uploaded_file( (string) $file['tmp_name'] )
+        && function_exists( 'tcsocial_csv_cancel_has_action_column' )
+        && tcsocial_csv_cancel_has_action_column( (string) $file['tmp_name'] )
+    ) {
+        tcsocial_csv_cancel_start_preview( (string) $file['tmp_name'] );
         exit;
     }
 
@@ -2772,10 +2967,27 @@ function tcsocial_network_render_styles()
         .seo-social-subnav{display:flex;gap:8px;margin:0 0 18px;border-bottom:1px solid #c3c4c7;overflow:auto}.seo-social-subnav-link{display:inline-block;margin-bottom:-1px;padding:10px 14px;text-decoration:none;border:1px solid transparent;border-radius:6px 6px 0 0;font-weight:600;white-space:nowrap}.seo-social-subnav-link.is-active{background:#fff;border-color:#c3c4c7 #c3c4c7 #fff;color:#1d2327}
         .seo-social-card{background:#fff;border:1px solid #dcdcde;border-radius:8px;padding:20px;margin:0 0 18px}.seo-social-card h2,.seo-social-card h3{margin-top:0}.seo-social-intro{display:flex;justify-content:space-between;gap:18px;align-items:flex-start}.seo-social-intro p{max-width:760px;margin-top:4px;color:#646970}.seo-social-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}.seo-social-field label{display:block;font-weight:600;margin:0 0 6px}.seo-social-field input[type=text],.seo-social-field input[type=password],.seo-social-field select,.seo-social-field textarea{width:100%}.seo-social-field textarea{min-height:120px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}.seo-social-help{color:#646970;font-size:12px;line-height:1.45}.seo-social-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:16px}.seo-social-state{display:inline-flex;padding:3px 7px;border-radius:999px;font-size:11px;font-weight:700;background:#f0f0f1;color:#50575e}.seo-social-state.is-published,.seo-social-state.is-ok{background:#edfaef;color:#176b2c}.seo-social-state.is-failed{background:#fcf0f1;color:#b32d2e}.seo-social-state.is-pending,.seo-social-state.is-scheduled{background:#fff8e5;color:#8a5500}
         .seo-social-vars{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0}.seo-social-vars code{font-size:11px;padding:3px 6px;background:#f6f7f7}.seo-social-table-wrap{overflow:auto}.seo-social-table{width:100%;border-collapse:collapse}.seo-social-table th,.seo-social-table td{padding:12px 10px;border-bottom:1px solid #e2e4e7;text-align:left;vertical-align:top}.seo-social-table th{font-size:12px;text-transform:uppercase;letter-spacing:.03em;color:#50575e}.seo-social-content-title{min-width:250px}.seo-social-preview{white-space:pre-wrap;background:#f6f7f7;border:1px solid #dcdcde;border-radius:6px;padding:10px;max-height:170px;overflow:auto;font-size:12px;line-height:1.45}.seo-social-row-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}.seo-social-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}.seo-social-metric{background:#fff;border:1px solid #dcdcde;border-radius:8px;padding:16px}.seo-social-metric strong{display:block;font-size:24px;line-height:1.1}.seo-social-metric span{display:block;color:#646970;margin-top:5px;font-size:12px}.seo-social-provider-card{position:relative}.seo-social-provider-card .dashicons{font-size:32px;width:32px;height:32px;margin-bottom:8px}.seo-social-code-note{padding:10px 12px;background:#f6f7f7;border-left:4px solid #2271b1}.seo-social-filterbar{display:flex;gap:8px;flex-wrap:wrap;align-items:end}.seo-social-filterbar .seo-social-field{min-width:180px;flex:1}.seo-social-filterbar .seo-social-field.is-search{min-width:280px;flex:2}
-        .seo-social-calendar-toolbar{display:flex;justify-content:space-between;gap:14px;align-items:flex-end;flex-wrap:wrap;margin-top:18px}.seo-social-calendar-nav{display:flex;gap:7px;flex-wrap:wrap}.seo-social-calendar-filter{display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap}.seo-social-calendar-filter label{display:flex;flex-direction:column;gap:5px;font-weight:600}.seo-social-calendar-filter select{min-width:180px}.seo-social-calendar-title-row{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-top:20px;flex-wrap:wrap}.seo-social-calendar-title-row h3{margin:0;font-size:20px}.seo-social-calendar-legend{display:flex;gap:7px;flex-wrap:wrap}.seo-social-calendar-legend-item{display:inline-flex;align-items:center;padding:4px 8px;border-radius:999px;font-size:11px;font-weight:700;border:1px solid transparent}.seo-social-calendar-legend-item.is-post{background:#e9f3ff;color:#135e96;border-color:#b9d7f3}.seo-social-calendar-legend-item.is-page{background:#f1e9fb;color:#65409a;border-color:#d7c2ed}.seo-social-calendar-legend-item.is-campaign{background:#fff1d6;color:#8a4b00;border-color:#f2cd8c}.seo-social-calendar-legend-item.is-collision{background:#fcf0f1;color:#b32d2e;border-color:#e7a8ae}.seo-social-calendar-metrics{display:grid;grid-template-columns:repeat(4,minmax(130px,1fr));gap:10px;margin-top:14px}.seo-social-calendar-metrics>div{border:1px solid #dcdcde;border-radius:8px;padding:12px;background:#fff}.seo-social-calendar-metrics>div.has-warning{border-color:#d63638;background:#fff8f8}.seo-social-calendar-metrics strong{display:block;font-size:22px;line-height:1.1}.seo-social-calendar-metrics span{display:block;margin-top:4px;color:#646970;font-size:11px}.seo-social-calendar-scroll{overflow:auto}.seo-social-calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(135px,1fr));min-width:945px;border-top:1px solid #dcdcde;border-left:1px solid #dcdcde}.seo-social-calendar-weekday{padding:9px 10px;background:#f6f7f7;border-right:1px solid #dcdcde;border-bottom:1px solid #dcdcde;font-size:11px;font-weight:800;text-transform:uppercase;color:#50575e}.seo-social-calendar-day{min-height:150px;padding:8px;border-right:1px solid #dcdcde;border-bottom:1px solid #dcdcde;background:#fff}.seo-social-calendar-day.is-outside{background:#f6f7f7;color:#a7aaad}.seo-social-calendar-day.is-past{background:#fbfbfc}.seo-social-calendar-day.is-today{box-shadow:inset 0 0 0 2px #2271b1}.seo-social-calendar-day.is-empty-future{background:#fafafa}.seo-social-calendar-day.has-collision{box-shadow:inset 0 0 0 2px #d63638}.seo-social-calendar-day-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}.seo-social-calendar-day-number{font-size:13px;font-weight:800}.seo-social-calendar-day-count{display:inline-flex;min-width:21px;height:21px;align-items:center;justify-content:center;border-radius:999px;background:#1d2327;color:#fff;font-size:10px;font-weight:800}.seo-social-calendar-empty-label{display:block;margin-top:26px;text-align:center;color:#a7aaad;font-size:11px}.seo-social-calendar-event{padding:7px 8px;margin-top:6px;border-radius:6px;border-left:4px solid #8c8f94;font-size:11px;line-height:1.25}.seo-social-calendar-event.is-post{background:#e9f3ff;border-left-color:#2271b1}.seo-social-calendar-event.is-page{background:#f1e9fb;border-left-color:#7e57c2}.seo-social-calendar-event.is-campaign{background:#fff1d6;border-left-color:#d98500}.seo-social-calendar-event-meta{display:flex;justify-content:space-between;gap:6px;margin-bottom:3px;font-size:10px;font-weight:700;color:#50575e}.seo-social-calendar-event a,.seo-social-calendar-event-title{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:#1d2327;text-decoration:none;font-weight:700}.seo-social-calendar-event a:hover{text-decoration:underline}.seo-social-calendar-event small{display:block;margin-top:3px;color:#646970}.seo-social-calendar-list{display:grid;gap:8px}.seo-social-calendar-list-day{display:grid;grid-template-columns:150px 1fr;border:1px solid #dcdcde;border-radius:8px;overflow:hidden;background:#fff}.seo-social-calendar-list-day.has-collision{border-color:#d63638}.seo-social-calendar-list-date{padding:12px;background:#f6f7f7}.seo-social-calendar-list-date strong,.seo-social-calendar-list-date span{display:block}.seo-social-calendar-list-date span{margin-top:3px;color:#646970;font-size:11px}.seo-social-calendar-list-events{padding:8px}.seo-social-calendar-list-event{display:grid;grid-template-columns:52px 90px minmax(180px,1fr) 70px;gap:8px;align-items:center;padding:7px 8px;border-radius:6px;margin:3px 0;border-left:4px solid #8c8f94}.seo-social-calendar-list-event.is-post{background:#e9f3ff;border-left-color:#2271b1}.seo-social-calendar-list-event.is-page{background:#f1e9fb;border-left-color:#7e57c2}.seo-social-calendar-list-event.is-campaign{background:#fff1d6;border-left-color:#d98500}.seo-social-calendar-list-event a{text-decoration:none;font-weight:600}.seo-social-calendar-list-provider{font-size:11px;font-weight:700}.seo-social-calendar-list-event small{color:#646970;text-align:right}
+        .seo-social-calendar-toolbar{display:flex;justify-content:space-between;gap:14px;align-items:flex-end;flex-wrap:wrap;margin-top:18px}.seo-social-calendar-nav{display:flex;gap:7px;flex-wrap:wrap}.seo-social-calendar-filter{display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap}.seo-social-calendar-filter label{display:flex;flex-direction:column;gap:5px;font-weight:600}.seo-social-calendar-filter select{min-width:180px}.seo-social-calendar-title-row{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-top:20px;flex-wrap:wrap}.seo-social-calendar-title-row h3{margin:0;font-size:20px}.seo-social-calendar-legend{display:flex;gap:7px;flex-wrap:wrap}.seo-social-calendar-legend-item{display:inline-flex;align-items:center;padding:4px 8px;border-radius:999px;font-size:11px;font-weight:700;border:1px solid transparent}.seo-social-calendar-legend-item.is-post{background:#e9f3ff;color:#135e96;border-color:#b9d7f3}.seo-social-calendar-legend-item.is-page{background:#f1e9fb;color:#65409a;border-color:#d7c2ed}.seo-social-calendar-legend-item.is-campaign{background:#fff1d6;color:#8a4b00;border-color:#f2cd8c}.seo-social-calendar-legend-item.is-collision{background:#fcf0f1;color:#b32d2e;border-color:#e7a8ae}.seo-social-calendar-metrics{display:grid;grid-template-columns:repeat(4,minmax(130px,1fr));gap:10px;margin-top:14px}.seo-social-calendar-metrics>div{border:1px solid #dcdcde;border-radius:8px;padding:12px;background:#fff}.seo-social-calendar-metrics>div.has-warning{border-color:#d63638;background:#fff8f8}.seo-social-calendar-metrics strong{display:block;font-size:22px;line-height:1.1}.seo-social-calendar-metrics span{display:block;margin-top:4px;color:#646970;font-size:11px}.seo-social-calendar-scroll{overflow:auto}.seo-social-calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(135px,1fr));min-width:945px;border-top:1px solid #dcdcde;border-left:1px solid #dcdcde}.seo-social-calendar-weekday{padding:9px 10px;background:#f6f7f7;border-right:1px solid #dcdcde;border-bottom:1px solid #dcdcde;font-size:11px;font-weight:800;text-transform:uppercase;color:#50575e}.seo-social-calendar-day{min-height:150px;padding:8px;border-right:1px solid #dcdcde;border-bottom:1px solid #dcdcde;background:#fff}.seo-social-calendar-day.is-outside{background:#f6f7f7;color:#a7aaad}.seo-social-calendar-day.is-past{background:#fbfbfc}.seo-social-calendar-day.is-today{box-shadow:inset 0 0 0 2px #2271b1}.seo-social-calendar-day.is-empty-future{background:#fafafa}.seo-social-calendar-day.has-collision{box-shadow:inset 0 0 0 2px #d63638}.seo-social-calendar-day-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}.seo-social-calendar-day-number{font-size:13px;font-weight:800}.seo-social-calendar-day-count{display:inline-flex;min-width:21px;height:21px;align-items:center;justify-content:center;border-radius:999px;background:#1d2327;color:#fff;font-size:10px;font-weight:800}.seo-social-calendar-empty-label{display:block;margin-top:26px;text-align:center;color:#a7aaad;font-size:11px}.seo-social-calendar-event{padding:7px 8px;margin-top:6px;border-radius:6px;border-left:4px solid #8c8f94;font-size:11px;line-height:1.25}.seo-social-calendar-event.is-post{background:#e9f3ff;border-left-color:#2271b1}.seo-social-calendar-event.is-page{background:#f1e9fb;border-left-color:#7e57c2}.seo-social-calendar-event.is-campaign{background:#fff1d6;border-left-color:#d98500}.seo-social-calendar-event-meta{display:flex;justify-content:space-between;gap:6px;margin-bottom:3px;font-size:10px;font-weight:700;color:#50575e}.seo-social-calendar-event a,.seo-social-calendar-event-title{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:#1d2327;text-decoration:none;font-weight:700}.seo-social-calendar-event a:hover{text-decoration:underline}.seo-social-calendar-event small{display:block;margin-top:3px;color:#646970}.seo-social-calendar-list{display:grid;gap:8px}.seo-social-calendar-list-day{display:grid;grid-template-columns:150px 1fr;border:1px solid #dcdcde;border-radius:8px;overflow:hidden;background:#fff}.seo-social-calendar-list-day.has-collision{border-color:#d63638}.seo-social-calendar-list-date{padding:12px;background:#f6f7f7}.seo-social-calendar-list-date strong,.seo-social-calendar-list-date span{display:block}.seo-social-calendar-list-date span{margin-top:3px;color:#646970;font-size:11px}.seo-social-calendar-list-events{padding:8px}.seo-social-calendar-list-event{display:grid;grid-template-columns:52px 90px minmax(180px,1fr) 115px minmax(230px,auto);gap:8px;align-items:center;position:relative;padding:7px 8px;border-radius:6px;margin:3px 0;border-left:4px solid #8c8f94}.seo-social-calendar-list-event.is-post{background:#e9f3ff;border-left-color:#2271b1}.seo-social-calendar-list-event.is-page{background:#f1e9fb;border-left-color:#7e57c2}.seo-social-calendar-list-event.is-campaign{background:#fff1d6;border-left-color:#d98500}.seo-social-calendar-list-event a{text-decoration:none;font-weight:600}.seo-social-calendar-list-provider{font-size:11px;font-weight:700}.seo-social-calendar-list-event small{color:#646970;text-align:right}
         @media(max-width:900px){.seo-social-calendar-metrics{grid-template-columns:repeat(2,minmax(130px,1fr))}.seo-social-calendar-list-day{grid-template-columns:1fr}.seo-social-calendar-list-event{grid-template-columns:50px 78px minmax(150px,1fr)}.seo-social-calendar-list-event small{display:none}}
         @media(max-width:560px){.seo-social-calendar-metrics{grid-template-columns:1fr 1fr}.seo-social-calendar-toolbar{align-items:stretch}.seo-social-calendar-filter{width:100%}.seo-social-calendar-filter label{flex:1}.seo-social-calendar-filter select{width:100%;min-width:0}.seo-social-calendar-list-event{grid-template-columns:46px 1fr}.seo-social-calendar-list-provider{grid-column:2}.seo-social-calendar-list-event a,.seo-social-calendar-list-event>span:not(.seo-social-calendar-list-provider){grid-column:1/-1}}
         .seo-social-template-card{border:1px solid #e2e4e7;border-radius:8px;padding:16px;background:#fcfcfc}.seo-social-template-card__head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:14px}.seo-social-template-card__head h3{margin:0}.seo-social-automation-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}.seo-social-option{display:block;padding:14px;border:1px solid #dcdcde;border-radius:8px;background:#fff}.seo-social-option strong{display:block;margin-bottom:4px}.seo-social-option small{display:block;color:#646970;margin-left:24px}.seo-social-network-checks{display:flex;flex-wrap:wrap;gap:8px}.seo-social-network-check{display:inline-flex;align-items:center;gap:6px;padding:8px 10px;border:1px solid #dcdcde;border-radius:7px;background:#fff}.seo-social-scheduler-networks{display:flex;flex-wrap:wrap;gap:8px;min-width:220px}.seo-social-scheduler-networks label{white-space:nowrap}.seo-social-date{min-width:190px}.seo-social-date input{width:100%}.seo-social-scheduled-list{margin-top:7px}.seo-social-scheduled-item{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:5px}.seo-social-scheduled-item button{padding:0;border:0;background:none;color:#b32d2e;cursor:pointer;text-decoration:underline;font-size:11px}.seo-social-thumb{width:64px;height:48px;object-fit:cover;border-radius:5px;vertical-align:middle;margin-top:8px}.seo-social-template-preview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:8px;margin-top:8px}.seo-social-template-preview-grid strong{display:block;margin-bottom:4px}.seo-social-scheduler-io{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin:18px 0}.seo-social-scheduler-io__block{padding:15px;border:1px solid #dcdcde;border-radius:8px;background:#fcfcfc}.seo-social-scheduler-io__block h3{margin:0 0 6px}.seo-social-import-form,.seo-social-export-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px}.seo-social-import-form input[type=file]{max-width:100%}.seo-social-import-preview{margin:16px 0;padding:16px;border:1px solid #dcdcde;border-radius:8px;background:#fff}.seo-social-import-preview .seo-social-table{margin-top:10px}
+        .seo-social-calendar-actions{display:flex;gap:5px;flex-wrap:wrap;grid-column:1 / -1;margin-top:6px;align-items:flex-start}
+        .seo-social-calendar-actions details{position:relative;min-width:0}
+        .seo-social-calendar-actions details[open]{flex-basis:100%}
+        .seo-social-calendar-actions summary.button{display:inline-block;cursor:pointer;font-size:11px;line-height:22px;min-height:24px}
+        .seo-social-calendar-actions form{display:flex;flex-direction:column;align-items:flex-start;gap:7px;padding:9px 0 5px}
+        .seo-social-calendar-actions form label{display:flex;flex-direction:column;gap:4px;font-size:11px}
+        .seo-social-calendar-actions form input[type="datetime-local"]{width:100%;max-width:245px;min-width:0;font-size:12px}
+        .seo-social-calendar-actions form p{margin:0;font-size:11px;line-height:1.4;color:#50575e}
+        
+        .seo-social-calendar-list-day{overflow:visible}
+        .seo-social-calendar-list-event .seo-social-calendar-actions.is-compact{grid-column:5;grid-row:1;margin:0;justify-content:flex-end;flex-wrap:nowrap}
+        .seo-social-calendar-list-event .seo-social-calendar-actions.is-compact details[open]{flex-basis:auto}
+        .seo-social-calendar-list-event .seo-social-calendar-actions.is-compact details form{position:absolute;right:0;top:calc(100% - 1px);z-index:30;width:280px;max-width:calc(100vw - 80px);padding:12px;background:#fff;border:1px solid #c3c4c7;border-radius:6px;box-shadow:0 4px 15px rgba(0,0,0,.12)}
+        .seo-social-calendar-actions form select{min-width:160px}
+        .seo-social-calendar-list-event .seo-social-calendar-actions.is-compact summary{white-space:nowrap}
+        @media(max-width:1150px){.seo-social-calendar-list-event{grid-template-columns:52px 90px minmax(140px,1fr) 115px}.seo-social-calendar-list-event .seo-social-calendar-actions.is-compact{grid-row:2;grid-column:1 / -1;justify-content:flex-start;flex-wrap:wrap}}
+
         @media(max-width:900px){.seo-social-header,.seo-social-intro{flex-direction:column}.seo-social-provider-strip{justify-content:flex-start}.seo-social-table th,.seo-social-table td{padding:10px 7px}.seo-social-scheduler-networks{min-width:180px}.seo-social-scheduler-io{grid-template-columns:1fr}}
     </style>';
 }
@@ -2929,6 +3141,7 @@ function tcsocial_network_render_scheduler_csv_panel()
     echo '<input type="hidden" name="action" value="tcsocial_network_scheduler_import_preview">';
     wp_nonce_field('tcsocial_network_scheduler_import');
     echo '<input type="file" name="schedule_csv" accept=".csv,.txt,.tsv,text/csv,text/plain" required>';
+    echo '<p class="seo-social-help">' . esc_html__( 'Si el CSV incluye la columna accion=cancelar, se mostrará una previsualización de cancelaciones. No se crearán nuevas publicaciones.', 'taxocommerce-social' ) . '</p>';
     echo '<button type="submit" class="button button-primary">' . esc_html__( 'Validar CSV antes de importar', 'taxocommerce-social' ) . '</button>' . '</form>' . '</div>';
 
     echo '<div class="seo-social-scheduler-io__block">' . '<h3>' . esc_html__( 'Exportar', 'taxocommerce-social' ) . '</h3>' . '<p class="seo-social-help">' . esc_html__( 'Todos los archivos usan UTF-8 y punto y coma para abrirlos directamente con Excel en configuraciones regionales españolas.', 'taxocommerce-social' ) . '</p>';

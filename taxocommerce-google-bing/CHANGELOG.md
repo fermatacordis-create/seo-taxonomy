@@ -1,3 +1,79 @@
+## [1.1.64] — 2026-11-15 — Un solo informe completo por bloques y descarga JSON válida
+
+- «Ejecutar informe completo» es la única ejecución integral: 21 bloques AJAX secuenciales con selector de control de CPU 1–5, avance y un único botón Detener. Se elimina la segunda acción «Preparar JSON completo por bloques» y su control de detención duplicado.
+- «Descargar JSON completo» se habilita al validar el último bloque, sin volver a generar datos. Corrige el nonce de la URL AJAX (ampersands HTML escapados) que provocaba «el archivo ha caducado» inmediatamente después de prepararlo.
+- La exportación terminada se conserva durante 24 horas desde su finalización y se recupera tras recargar la página; el plazo de ejecución en curso se renueva después de cada bloque. Siguen disponibles los informes especializados individuales y sus descargas.
+- No se alteran las fuentes, las conexiones, el catálogo ni las credenciales. Se mantienen las protecciones WordPress por usuario, permisos, nonce y bloqueo de pasos concurrentes.
+
+## [1.1.63] — 2026-11-14 — Informes de Autocheck homogéneos (#2682)
+
+- Informes funcionales de Redirects, Insights y Logistics con estructura común a Import-Export: versión, fecha UTC, duración, WordPress, PHP, resúmenes, grupos, estado, etiqueta, mensaje y tiempo por prueba.
+- Los JSON nuevos normalizan metadatos y los informes ya guardados se normalizan únicamente al leerlos; se preservan sus campos originales para compatibilidad.
+- Vista funcional uniforme: resúmenes, colores, estados, grupos y tiempos. Se conservan las dos subpestañas, el Code Check autónomo, permisos y acciones de descarga.
+- Sin cambios en motores, reglas, pedidos, conexiones, información comercial ni tablas. Pruebas de regresión y WordPress Plugin Check.
+
+## [1.1.62] — 2026-11-14 — Autocheck uniforme con Code Check (#2676)
+
+- Chequeo funcional con los dos controles estándar de la familia: «Ejecutar Autocheck» y «Descargar resultados (JSON)», sin ANTES/DESPUÉS ni controles por grupo.
+- Conservados todos los casos funcionales, las dos subpestañas Functionality Check / Code Check, el motor de chequeo estático de código, las protecciones nonce/capability y el último JSON por administrador y sitio.
+- Se conservan las rutas históricas de los controladores sin mostrarlas en la interfaz. Ninguna modificación en conexiones, informes, credenciales, analista, reglas, productos ni proveedores.
+
+## [1.1.61] — 2026-11-13 — Competidores: visibilidad independiente de la casilla Productos populares (#2643)
+
+- La consulta de visibilidad Merchant utiliza las categorías oficiales verificadas del snapshot independientemente de que se muestre el indicador de productos populares.
+- Si el administrador selecciona solo visibilidad, los productos populares no aparecen como resultados seleccionados; se identifica correctamente el estado del indicador.
+- Amplía las pruebas de regresión para selección independiente de indicadores, sin cambiar credenciales ni llamadas de red.
+
+## [1.1.60] — 2026-11-13 — Competidores: adquisición de fuentes verificable por bloques (#2643)
+
+- Al generar Competidores, actualiza por AJAX las fuentes elegidas: una página de Merchant Best Sellers, el conector Trends con sus límites y hasta tres categorías oficiales de visibilidad Merchant, cada una en una petición separada. No hay llamadas remotas al cargar la pantalla ni acceso a sitios de terceros.
+- Reutiliza credenciales y conectores existentes; no fuerza Google Trends ni elimina cachés anteriores. Guarda diagnósticos de ausencia de configuración, errores, información incompleta y disponibilidad de fuente en el JSON y la pantalla.
+- La vista final utiliza resultados ya obtenidos; mantiene filtros, competidores libres, exportación, histórico y el resto de informes. La elegibilidad Merchant y disponibilidad real de Trends dependen de Google.
+
+## [1.1.59] — 2026-11-13 — Competidores: conservar panel tras generar y guardar (#2639)
+
+- Corrige la redirección de formularios admin-post de Competidores para conservar `analysis_days` y reabrir el informe seleccionado directamente desde el snapshot guardado.
+- Muestra confirmación de generación o guardado y mantiene visibles las opciones y el resultado sin repetir llamadas Merchant/Trends.
+- Se conservan otros informes, exportación JSON y fuentes sin datos como N/D; no cambia la autenticación ni se modifican datos de otros plugins.
+
+## [1.1.58] — 2026-11-13 — Competidores: configuración comercial por tienda (#2633)
+
+- Añade configuración propia para mercado actual, nichos o ambos, categorías WooCommerce, señales seleccionadas y listas libres de competidores/proveedores; sin dominios predefinidos en el nuevo informe.
+- Separa resultados verificables de Merchant de empresas elegidas sin evidencia y de proveedores sin datos comerciales disponibles; mantiene historiales, exportación JSON, permisos y nonces.
+- Filtra tendencias y productos solo por coincidencia textual de categoría, sin declarar una correspondencia oficial con categorías Google; ninguna consulta remota al abrir el panel.
+
+## [1.1.57] — 2026-11-13 — Code Check equiparado a Core 0.4.82 (#2626)
+
+- Code Check equiparado a Core 0.4.82: reglas autónomas PHP/WordPress/seguridad, clasificación por gravedad, detalles de archivos y recomendaciones, resumen y JSON; sin modificar el Autotest funcional. Issue #2626.
+- Continúa siendo una revisión estática independiente del Plugin Check oficial, con ejecución por bloques y control de CPU.
+
+## [1.1.56] — 2026-11-13 — Conexiones y errores OAuth en cinco idiomas (#2062)
+
+- Traduce 56 cadenas de controles administrativos por idioma ES/EN/FR/DE/NL (280 entradas): botones para guardar y probar proveedores, Google Merchant, Pinterest, Bing, Amazon, errores OAuth, permisos, revisión de conexiones y Autotest.
+- Conserva exactamente el enlace HTML de ayuda de Merchant Center, los formatos %s y %d, nombres de proveedores y los contratos técnicos. Cinco PO/MO recompilados sin entradas vacías para mantener el fallback de WordPress.
+- Amplía la prueba de integridad MO de los cinco idiomas para exigir los controles de configuración y errores principales; no modifica tokens, URLs, flujos OAuth, nonces ni llamadas de red.
+- Quedan pendientes 602/600/600/599/599 cadenas gettext (ES/EN/FR/DE/NL), así como textos PHP/JS no incluidos en catálogos. No se considera finalizada la interfaz internacionalizada.
+
+## [1.1.55] — 2026-11-12 — Descargas JSON: nonce válido tras generar informe por AJAX (#2608)
+
+- Corrige «El enlace que has seguido ha caducado» en «Descargar JSON» de las tarjetas de Analysis después de «Crear informe». WordPress devuelve wp_nonce_url() escapada para HTML; JavaScript la asignaba literalmente al atributo href y el servidor recibía amp;_wpnonce en lugar de _wpnonce.
+- Las URL de descarga de informes especializados y Plan de Acción se generan sin entidades HTML para los datos JSON. Se mantiene esc_url() al imprimirlas en atributos HTML, así como los nonces, permisos y verificaciones originales del servidor.
+- Añade pruebas de regresión de ambos enlaces tras AJAX y de su parsing real como URL. No cambia el motor de Competencia, Merchant, datos guardados ni otros informes.
+
+## [1.1.54] — 2026-11-12 — Traducción de controles y panel de Analista (#2062)
+
+- Completa 124 cadenas nuevas en español y 30 en cada uno de los otros cuatro idiomas (244 traducciones adicionales), conservando las 94 traducciones equivalentes ya presentes en EN/FR/DE/NL.
+- Cinco PO/MO recompilados sin traducciones vacías: el contenido pendiente utiliza el fallback nativo de gettext. Incluye comparativas, SEO, tendencias, fuentes, palabras clave, conversiones, filtros, exportación y plan de acción.
+- Actualiza la prueba de IndexNow para comprobar las traducciones visibles y aceptar MO sin entradas vacías cuando un PO todavía está incompleto.
+- No modifica el contenido ni la lógica de los informes, las fuentes, conexiones o datos. Siguen pendientes 658/656/656/655/655 cadenas en ES/EN/FR/DE/NL y el barrido de textos PHP/JS no internacionalizados.
+
+## [1.1.53] — 2026-11-12 — Competencia: aislar Analista heredado y enlaces seguros (#2594)
+
+- Corrige la convivencia con el antiguo TaxoCommerce SEO: el AJAX de Insights ejecuta el renderizador competitivo propio, no la función global heredada que seguía mostrando SerpApi/ScraperAPI y puntuaciones sin evidencia.
+- Los informes Merchant/Trends se guardan en una opción independiente de Insights; se conserva intacto el informe histórico del monolítico y se advierte de su antigüedad.
+- Generar y exportar usan acciones y nonces propios, así como redirección directa a Insights > Analysis, sin depender de rutas o formularios del Analista anterior.
+- Pruebas de coexistencia, aislamiento de opciones y contratos de autenticación; no se modifican otros informes, Scrappers ni datos del catálogo.
+
 ## [1.1.52] — 2026-11-12 — Competencia sin scrapers, mercado y Merchant (#2576)
 
 - Sustituye el informe competitivo profundo que utilizaba SerpApi/ScraperAPI y rastreo HTML de otros dominios por un informe manual sobre Merchant Center, Google Trends, aceleraciones de Search Console, Bing y GA4 propios.

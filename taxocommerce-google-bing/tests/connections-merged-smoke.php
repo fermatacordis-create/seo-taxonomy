@@ -8,7 +8,6 @@ $amazon = file_get_contents( $root . '/includes/class-taxocommerce-connections-a
 $pinterest = file_get_contents( $root . '/includes/class-taxocommerce-connections-pinterest.php' );
 $google_bing = file_get_contents( $root . '/includes/class-taxocommerce-connections-google-bing.php' );
 $oauth = file_get_contents( $root . '/includes/class-taxocommerce-google-bing-oauth.php' );
-$bridge = file_get_contents( $repo . '/taxocommerce-connections/taxocommerce-connections.php' );
 $core = file_get_contents( $repo . '/taxocommerce-core/includes/class-taxocommerce-core.php' );
 $readme = file_get_contents( $root . '/readme.txt' );
 
@@ -46,10 +45,7 @@ $checks = array(
     strpos( $google_bing, "const BING_OPTION             = 'taxocommerce_google_bing_bing_settings'" ) !== false,
     strpos( $google_bing, "const MERCHANT_ACCOUNT_OPTION = 'taxocommerce_google_bing_merchant_account'" ) !== false,
     strpos( $oauth, "'tgb_tab'        => 'connections'" ) !== false,
-    strpos( $bridge, 'Compatibility Bridge' ) !== false,
-    strpos( $bridge, 'taxocommerce_connections_insights_url' ) !== false,
-    strpos( $bridge, "defined( 'TAXOCOMMERCE_GOOGLE_BING_VERSION' )" ) !== false,
-    strpos( $bridge, 'taxocommerce_core_family_extensions' ) === false,
+    ! is_dir( $repo . '/taxocommerce-connections' ), // Obsolete bridge must stay retired.
     strpos( $core, "'connections' => array(" ) === false,
     strpos( $core, "'taxocommerce-connections'   => 'Connections'" ) === false,
 );

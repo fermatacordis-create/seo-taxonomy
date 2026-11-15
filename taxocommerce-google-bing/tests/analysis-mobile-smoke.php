@@ -36,11 +36,11 @@ tgb_assert_mobile( false !== strpos( $bridge, "get_option( 'taxocommerce_insight
 tgb_assert_mobile( false !== strpos( $main, "'planDownloadLabel' =>" ), 'Download label passed to client.' );
 tgb_assert_mobile( false !== strpos( $main, 'id="tgb-analysis-run-all"' ), 'Complete Analysis button present.' );
 tgb_assert_mobile( false !== strpos( $main, 'id="tgb-analysis-cancel"' ), 'Cancel button present.' );
-tgb_assert_mobile( false !== strpos( $client, 'finished === total' ), 'Complete report verifies every block.' );
+tgb_assert_mobile( false === strpos( $client, 'run(items(), true)' ), 'Full report no longer runs a second independent AJAX sequence.' );
 tgb_assert_mobile( false !== strpos( $client, 'next();' ), 'Reports execute sequentially.' );
 tgb_assert_mobile( false !== strpos( $client, "el informe NO está completo." ), 'Partial runs are not presented as complete.' );
 tgb_assert_mobile( false !== strpos( $export, 'function seo_analista_build_json_export($days = 28, $requested_section = \'\', $requested_part = \'\')' ), 'Builder accepts bounded sections while retaining the complete legacy mode.' );
-tgb_assert_mobile( false !== strpos( $main, 'id="tgb-chunked-json-start"' ), 'Complete JSON uses chunked export control.' );
+tgb_assert_mobile( false === strpos( $main, 'id="tgb-chunked-json-start"' ), 'Duplicate export preparation button removed.' );
 tgb_assert_mobile( false !== strpos( $main, 'id="tgb-chunked-json-download"' ), 'JSON download appears after server-side assembly.' );
 tgb_assert_mobile( false !== strpos( $client, "exportAjax('step')" ), 'Complete JSON requests independent blocks.' );
 tgb_assert_mobile( false !== strpos( $client, 'exportTimer = setTimeout(exportNext' ), 'Client respects server workload backoff.' );
@@ -61,6 +61,7 @@ tgb_assert_mobile( false !== strpos( $client, 'showSavedReport(item, response.da
 $styles = file_get_contents( $root . '/includes/analysis/assets/analista-informe.css' );
 tgb_assert_mobile( false !== strpos( $styles, 'grid-template-columns:repeat(5,minmax(0,1fr))' ), 'Desktop displays five report columns.' );
 tgb_assert_mobile( false !== strpos( $main, 'seo-analista-toolbar-actions' ), 'Full run and stop controls use compact action layout.' );
+tgb_assert_mobile( false !== strpos( $client, 'var exportStart = fullButton;' ), 'Single full-report button controls CPU-paced worker.' );
 tgb_assert_mobile( false !== strpos( $styles, '.seo-analista-wrap .seo-analista-report-actions .button.button-primary{background:#2271b1;border-color:#2271b1;color:#fff}' ), 'Create report text is readable against a visible primary background.' );
 tgb_assert_mobile( false !== strpos( $styles, '.seo-analista-wrap .seo-analista-toolbar-actions .button.button-primary' ), 'Full-report button also overrides the white-on-white legacy style.' );
 tgb_assert_mobile( false !== strpos( $styles, '.seo-analista-wrap .seo-analista-report-actions .button.disabled{color:#646970;background:#f6f7f7;border-color:#c3c4c7;opacity:1}' ), 'Disabled JSON downloads remain readable.' );

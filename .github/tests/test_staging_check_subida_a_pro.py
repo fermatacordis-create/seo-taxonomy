@@ -96,8 +96,9 @@ class GatedPipelineContract(unittest.TestCase):
         # PRO's reusable workflow requires actions:read to find the last safe SHA.
         production = self.pipeline.split("  production:", 1)[1].split("  report-failure:", 1)[0]
         self.assertIn("      actions: read", production)
-        self.assertIn("manifest_sha256", self.pro)
-        self.assertIn("verified_files", self.pro)
+        uploader = (ROOT / ".github/scripts/deploy_pro_ftps_native.py").read_text(encoding="utf-8")
+        self.assertIn("hashlib.sha256", uploader)
+        self.assertIn("Destination checksum mismatch", uploader)
 
     def test_failure_opens_issue_and_never_proceeds_to_pro(self):
         self.assertIn("report-failure:", self.pipeline)

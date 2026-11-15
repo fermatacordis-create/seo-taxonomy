@@ -131,3 +131,38 @@ body.tcc-family-admin .wrap .tcc-family-panel .form-table td,body.tcc-family-adm
 body.tcc-family-admin .wrap .tcc-family-panel table.widefat{width:100%}
 body.tcc-family-admin .wrap .tcc-family-grid>.tcc-family-panel:focus-within{border-color:#b4d3fa}
 @media(max-width:782px){body.tcc-family-admin .wrap .tcc-family-grid>.tcc-family-panel{padding:17px}}
+
+
+/* System Check code review status groups: accessible status groups, not a WordPress.org certification. */
+.tcs-code-check .tc-cc-report{margin:18px 0;display:grid;gap:14px}
+.tcs-code-check .tc-cc-section{padding:14px 16px;border:1px solid #dcdcde;border-left:5px solid #64748b;border-radius:6px;background:#fff}
+.tcs-code-check .tc-cc-section--error{border-left-color:#b42318}
+.tcs-code-check .tc-cc-section--warning{border-left-color:#b76e00}
+.tcs-code-check .tc-cc-section--pass{border-left-color:#188038}
+.tcs-code-check .tc-cc-section--unchecked{border-left-color:#64748b}
+.tcs-code-check .tc-cc-section h3{margin:0 0 10px;font-size:15px}
+.tcs-code-check .tc-cc-indicator{display:inline-flex;align-items:center;gap:8px;font-weight:650;color:#475569}
+.tcs-code-check .tc-cc-indicator--error{color:#b42318}
+.tcs-code-check .tc-cc-indicator--warning{color:#965c00}
+.tcs-code-check .tc-cc-indicator--pass{color:#196e3a}
+.tcs-code-check .tc-cc-dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:currentColor;flex:none}
+.tcs-code-check .tc-cc-count{font-weight:400;color:#50575e}
+.tcs-code-check .tc-cc-entries{display:grid;gap:7px;max-height:580px;overflow:auto}
+.tcs-code-check .tc-cc-entry{padding:9px 12px;border:1px solid #e3e5e8;border-radius:5px;background:#fafafa;overflow-wrap:anywhere}
+.tcs-code-check .tc-cc-entry strong{margin-right:8px}
+.tcs-code-check .tc-cc-entry code{margin-left:8px;white-space:normal;overflow-wrap:anywhere}
+.tcs-code-check .tc-cc-entry p{margin:5px 0 0}
+.tcs-code-check .tc-cc-legacy{margin:18px 0}
+.tcs-code-check .tc-cc-legacy summary{cursor:pointer;font-weight:600}
+
+
+/* Replace dynamic inline submenu CSS with fixed, local selectors. WordPress keeps all menu routes registered. */
+#toplevel_page_taxocommerce-core .wp-submenu li:has(>a[href*="page=taxocommerce-core-content"]),
+#toplevel_page_taxocommerce-core .wp-submenu li:has(>a[href*="page=taxocommerce-core-hierarchy"]),
+#toplevel_page_taxocommerce-core .wp-submenu li:has(>a[href*="page=taxocommerce-core-menu"]),
+#toplevel_page_taxocommerce-core .wp-submenu li:has(>a[href*="page=taxocommerce-core-user-guide"]){display:none!important}
+#toplevel_page_taxocommerce-core .wp-submenu a[href*="page=taxocommerce-core-content"],
+#toplevel_page_taxocommerce-core .wp-submenu a[href*="page=taxocommerce-core-hierarchy"],
+#toplevel_page_taxocommerce-core .wp-submenu a[href*="page=taxocommerce-core-menu"],
+#toplevel_page_taxocommerce-core .wp-submenu a[href*="page=taxocommerce-core-user-guide"]{display:none!important}
+body.tcc-family-no-extension-menu #toplevel_page_taxocommerce-core > ul.wp-submenu{display:none!important}

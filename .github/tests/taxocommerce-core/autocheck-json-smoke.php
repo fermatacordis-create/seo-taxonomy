@@ -8,6 +8,14 @@ class TaxoCommerce_Core_User_Guide {
     const PAGE_SLUG = 'taxocommerce-core-user-guide';
 }
 
+/** The standalone JSON test does not load Core's full dashboard dependencies. */
+class TaxoCommerce_Core_Dashboard {
+    public static function render_header_nav( $active_tab = 'overview' ) {
+        echo '<header class="tcc-hero">TaxoCommerce Core</header>';
+        echo '<nav class="nav-tab-wrapper">Core navigation: ' . esc_html( $active_tab ) . '</nav>';
+    }
+}
+
 $GLOBALS['allowed'] = true;
 $GLOBALS['nonce_ok'] = true;
 $GLOBALS['transient_reads'] = 0;
@@ -34,7 +42,9 @@ function add_action( $name, $callback ) { $GLOBALS['registered_hooks'][ $name ] 
 function current_user_can( $cap ) { return (bool) $GLOBALS['allowed']; }
 function apply_filters( $tag, $value ) { return $value; }
 function get_current_user_id() { return 7; }
+function get_current_blog_id() { return 1; }
 function get_transient( $key ) {
+    if ( 'tc_core_code_1_7' === $key ) { return false; }
     check( 'taxocommerce_core_autotest_7' === $key, 'Reports are strictly scoped to authenticated user' );
     $GLOBALS['transient_reads']++;
     return $GLOBALS['saved_report'];
@@ -59,7 +69,8 @@ function esc_attr( $value ) { return esc_html( $value ); }
 function esc_url( $value ) { return esc_html( $value ); }
 function esc_html_e( $value, $domain = '' ) { echo esc_html( $value ); }
 function esc_attr_e( $value, $domain = '' ) { echo esc_attr( $value ); }
-function wp_nonce_field( $nonce, $field ) { echo '<input name="' . esc_attr( $field ) . '" value="valid">'; }
+function wp_nonce_field( $nonce, $field = '_wpnonce' ) { echo '<input name="' . esc_attr( $field ) . '" value="valid">'; }
+function selected( $value, $current, $echo = true ) { return (string) $value === (string) $current ? ' selected="selected"' : ''; }
 function submit_button( $label, $style = '', $name = '', $wrap = false ) { echo '<button type="submit">' . esc_html( $label ) . '</button>'; }
 function admin_url( $path = '' ) { return 'https://asociacionfocazul.example/wp-admin/' . $path; }
 function add_query_arg( $query, $value, $url = '' ) { return is_array( $query ) ? $value . '?' . http_build_query( $query ) : ( $url ?: admin_url( 'admin.php?page=taxocommerce-core' ) ) . '&' . rawurlencode( $query ) . '=' . rawurlencode( (string) $value ); }
@@ -127,10 +138,26 @@ ob_start();
 TaxoCommerce_Core_Auto_Test::render();
 $html = ob_get_clean();
 check( strpos( $html, 'Descargar resultados (JSON)' ) !== false, 'Download button visible when suite has run' );
+check( strpos( $html, 'tcc-hero' ) !== false, 'Functional report reuses the shared Core header' );
+check( strpos( $html, 'Core navigation: autocheck' ) !== false, 'Core Autocheck remains the selected main tab' );
+check( strpos( $html, 'Functionality Check' ) !== false && strpos( $html, 'Code Check' ) !== false, 'Both check tabs rendered after shared hero' );
 check( strpos( $html, 'taxocommerce_core_export_auto_test_json' ) !== false, 'Download button submits to authenticated handler' );
 check( strpos( $html, 'tc_autotest_export_nonce' ) !== false, 'Download button has its own nonce' );
 check( strpos( $html, 'No se pudieron cargar las páginas' ) !== false, 'Failure displayed in UI' );
 check( strpos( $html, 'No ejecutada; requiere UAT' ) !== false, 'Skipped test displayed in UI' );
+
+// Switching to Code Check keeps the same Core hero, and never runs the functional suite.
+$_GET['tc_autotest_section'] = 'code';
+ob_start();
+TaxoCommerce_Core_Auto_Test::render();
+$code_html = ob_get_clean();
+check( strpos( $code_html, 'tcc-hero' ) !== false, 'Code Check retains Core header' );
+check( strpos( $code_html, 'Core navigation: autocheck' ) !== false, 'Code Check stays in Core Autocheck' );
+check( strpos( $code_html, 'Run Code Check' ) !== false, 'Code Check form is available' );
+check( strpos( $code_html, 'tc_autotest_manual_run' ) === false, 'Functional form is hidden on Code Check' );
+check( strpos( $code_html, 'No se pudieron cargar las páginas' ) === false, 'Functional results are hidden on Code Check' );
+unset( $_GET['tc_autotest_section'] );
+
 
 $GLOBALS['saved_report'] = false;
 ob_start();
@@ -160,4 +187,72 @@ try {
 } catch ( RuntimeException $e ) {
     check( strpos( $e->getMessage(), 'No hay un informe' ) !== false, 'Expired report requires a fresh run' );
 }
+require __DIR__ . '/core-native-code-rules-smoke.php';
+
+$tc_sections = TaxoCommerce_Core_Autotest_Code::classified_findings( array(
+    'status' => 'completed',
+    'files' => array( 'bad.php', 'review.php', 'clean.php', 'skip.php' ),
+    'results' => array(
+        'bad.php' => array(
+            'php' => array( 'status' => 'fail', 'evidence' => array( array( 'rule' => 'php_parse_error', 'line' => 4 ) ) ),
+            'wordpress' => array( 'status' => 'pass', 'evidence' => array() ),
+            'security' => array( 'status' => 'pass', 'evidence' => array() ),
+        ),
+        'review.php' => array(
+            'php' => array( 'status' => 'pass', 'evidence' => array() ),
+            'wordpress' => array( 'status' => 'warning', 'evidence' => array( array( 'rule' => 'review_plugin_installation', 'line' => 89, 'severity' => 'review' ) ) ),
+            'security' => array( 'status' => 'pass', 'evidence' => array() ),
+        ),
+        'clean.php' => array(
+            'php' => array( 'status' => 'pass', 'evidence' => array() ),
+            'wordpress' => array( 'status' => 'pass', 'evidence' => array() ),
+            'security' => array( 'status' => 'pass', 'evidence' => array() ),
+        ),
+        'skip.php' => array(
+            'php' => array( 'status' => 'skip', 'evidence' => array() ),
+            'wordpress' => array( 'status' => 'skip', 'evidence' => array() ),
+            'security' => array( 'status' => 'skip', 'evidence' => array() ),
+        ),
+    ),
+) );
+check( 1 === $tc_sections['counts']['errors'], 'One confirmed syntax error is red' );
+check( 1 === $tc_sections['counts']['warnings'], 'One WordPress review warning is orange' );
+check( 1 === $tc_sections['counts']['clean'], 'One fully checked file is green' );
+check( 3 === $tc_sections['counts']['unchecked'], 'Skipped checks remain grey, not green' );
+check( 4 === $tc_sections['errors'][0]['line'], 'Error source line is retained' );
+check( 89 === $tc_sections['warnings'][0]['line'], 'Warning source line is retained' );
+check( '' !== $tc_sections['warnings'][0]['recommendation'], 'Warnings include a concrete review action' );
+check( '' !== $tc_sections['errors'][0]['description'], 'Errors include a user-facing description' );
+check( 'review_plugin_installation' === $tc_sections['warnings'][0]['rule'], 'Original rule name is retained' );
+$tc_missing = TaxoCommerce_Core_Autotest_Code::classified_findings( array( 'files' => array( 'missing.php' ), 'results' => array() ) );
+check( 1 === $tc_missing['counts']['unchecked'] && 0 === $tc_missing['counts']['clean'], 'Not-scanned files never appear green' );
+
+
+$code_overview = TaxoCommerce_Core_Autotest_Code::summary( array(
+    'status' => 'completed',
+    'files' => array( 'foo.php' ),
+    'results' => array(
+        'foo.php' => array(
+            'php' => array( 'status' => 'pass', 'evidence' => array() ),
+            'wordpress' => array( 'status' => 'warning', 'evidence' => array( array( 'rule' => 'review_plugin_installation', 'line' => 33 ) ) ),
+            'security' => array( 'status' => 'warning', 'evidence' => array( array( 'rule' => 'review_request_nonce', 'line' => 44 ) ) ),
+        ),
+    ),
+) );
+check( 'review' === $code_overview['status'], 'PHP pass cannot conceal native WordPress and security findings' );
+check( 2 === $code_overview['findings'] && 2 === $code_overview['distinct_rules'], 'Summary counts actual evidence, not checked files' );
+check( 1 === $code_overview['by_group']['wordpress'] && 1 === $code_overview['by_group']['security'], 'Summary retains independent categories' );
+check( 'incomplete' === TaxoCommerce_Core_Autotest_Code::summary( array( 'status' => 'running', 'files' => array( 'a.php' ) ) )['status'], 'Partial scan can never pass' );
+check( 'incomplete' === TaxoCommerce_Core_Autotest_Code::summary( array(
+    'status' => 'completed',
+    'files' => array( 'a.php' ),
+    'inventory_truncated' => true,
+    'results' => array( 'a.php' => array( 'php' => array( 'status' => 'pass' ), 'wordpress' => array( 'status' => 'pass' ), 'security' => array( 'status' => 'pass' ) ) ),
+) )['status'], 'Truncated inventory cannot pass' );
+check( 'pass' === TaxoCommerce_Core_Autotest_Code::summary( array(
+    'status' => 'completed',
+    'files' => array( 'a.php' ),
+    'results' => array( 'a.php' => array( 'php' => array( 'status' => 'pass' ), 'wordpress' => array( 'status' => 'pass' ), 'security' => array( 'status' => 'pass' ) ) ),
+) )['status'], 'No findings in all completed files passes implemented checks only' );
+
 echo 'PASS: ' . $GLOBALS['count'] . " Core Autocheck export/permission/UI assertions.\n";

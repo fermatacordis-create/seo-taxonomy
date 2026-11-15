@@ -3,8 +3,8 @@
  * Plugin Name: TaxoCommerce Templates
  * Plugin URI: https://asociacionfocazul.com/taxocommerce-templates/
  * Description: Standalone WordPress/WooCommerce request-template routing, SEO role assignments and migration audit.
- * Version: 0.4.32
- * Release Date: 2026-11-10
+ * Version: 0.4.33
+ * Release Date: 2026-11-13
  * Requires at least: 6.5
  * Requires PHP: 7.4
  * Author: David Perez
@@ -18,7 +18,7 @@ defined('ABSPATH') || exit;
 require_once __DIR__ . '/includes/admin-branding.php';
 require_once __DIR__ . '/includes/class-taxocommerce-autotest-code.php';
 \TaxoCommerce_Templates_Autotest_Code::boot();
-define('TCT_VERSION','0.4.32');
+define('TCT_VERSION','0.4.33');
 define('TCT_FILE',__FILE__);
 define('TCT_DIR',plugin_dir_path(__FILE__));
 define('TCT_URL',plugin_dir_url(__FILE__));
