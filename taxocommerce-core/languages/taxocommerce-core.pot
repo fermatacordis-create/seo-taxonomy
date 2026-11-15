@@ -3158,6 +3158,14 @@ msgstr ""
 msgid "Independent editorial and content quality auditing."
 msgstr ""
 
+#: includes/class-taxocommerce-core.php:590
+msgid "Private customer directory and CRM for WooCommerce buyers, guests and manually added contacts, with batch CSV import/export."
+msgstr ""
+
+#: includes/class-taxocommerce-core.php:601
+msgid "Independent WooCommerce fiscal register, purchase expenses, monthly VAT summaries and safe data exports."
+msgstr ""
+
 #: includes/class-taxocommerce-core.php:618
 #: includes/class-taxocommerce-core.php:683
 msgid "No tienes permisos para instalar plugins."

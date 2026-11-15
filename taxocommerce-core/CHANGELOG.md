@@ -1,3 +1,9 @@
+## [0.4.86] — 2026-11-15 — Catálogo familiar con Accounting y Customers
+
+- El catálogo fijo de Core incluye **TaxoCommerce Customers** y **TaxoCommerce Accounting**, alineado con el estado actual de la familia (22 standalone; Connections retirado).
+- Las tarjetas aparecen en `admin.php?page=taxocommerce-core` aunque los plugins aún no estén instalados; el descubrimiento dinámico sigue evitando duplicados.
+- No reintroduce Connections. No cambia instalación/activación nativa de WordPress.
+
 ## [0.4.85] — 2026-11-14 — Descubrimiento automático de plugins de la familia (#2669)
 
 - El catálogo de Core integra automáticamente los plugins TaxoCommerce realmente instalados según `get_plugins()`, tanto activos como inactivos; no es necesario actualizar Core para nuevos plugins.

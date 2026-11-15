@@ -1,3 +1,6 @@
+= 0.4.86 (2026-11-15) =
+* Register Customers and Accounting in the built-in family catalog so both cards appear on the Core extensions screen without waiting for install/discovery. Connections remains retired. Suite alignment with current TaxoCommerce family (21 extension cards + Core).
+
 = 0.4.85 (2026-11-14) =
 * Auto-discover active and inactive TaxoCommerce plugins using WordPress get_plugins and local ZIP filenames, deduplicate built-in suppliers and register new Accounting/Customers cards without Core updates. Keep native WordPress install and activation screens (WordPress.org-compatible). Issue #2669.
 

@@ -578,6 +578,26 @@ final class TaxoCommerce_Core {
 				'wordpress_org' => true,
 				'description'   => __( 'Independent editorial and content quality auditing.', 'taxocommerce-core' ),
 			),
+			'customers' => array(
+				'id'            => 'customers',
+				'name'          => 'TaxoCommerce Customers',
+				'plugin_file'   => 'taxocommerce-customers/taxocommerce-customers.php',
+				'org_slug'      => 'taxocommerce-customers',
+				'search_term'   => 'TaxoCommerce Customers',
+				'wordpress_org' => false,
+				'admin_url'     => admin_url( 'admin.php?page=taxocommerce-customers' ),
+				'description'   => __( 'Private customer directory and CRM for WooCommerce buyers, guests and manually added contacts, with batch CSV import/export.', 'taxocommerce-core' ),
+			),
+			'accounting' => array(
+				'id'            => 'accounting',
+				'name'          => 'TaxoCommerce Accounting',
+				'plugin_file'   => 'taxocommerce-accounting/taxocommerce-accounting.php',
+				'org_slug'      => 'taxocommerce-accounting',
+				'search_term'   => 'TaxoCommerce Accounting',
+				'wordpress_org' => false,
+				'admin_url'     => admin_url( 'admin.php?page=taxocommerce-accounting' ),
+				'description'   => __( 'Independent WooCommerce fiscal register, purchase expenses, monthly VAT summaries and safe data exports.', 'taxocommerce-core' ),
+			),
 		);
 
 		/**
