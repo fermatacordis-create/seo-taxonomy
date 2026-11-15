@@ -1,8 +1,10 @@
 <?php
 /**
  * Plugin Name: TaxoCommerce Accounting
+ * Plugin URI: https://github.com/distribuidordeherramientases-wq/seo-taxonomy/tree/staging/taxocommerce-accounting
  * Description: Independent WooCommerce fiscal register, purchase expenses, monthly VAT summaries and safe data exports.
  * Version: 0.1.5
+ * Release Date: 2026-11-15
  * Requires at least: 6.5
  * Requires PHP: 7.4
  * Requires Plugins: woocommerce
@@ -33,6 +35,7 @@ add_action( 'init', static function () {
 
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-tca-provider-invoices.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-tca-hacienda.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin-branding.php';
 
 /** Own data; no dependency on any TaxoCommerce module. */
 function tca_table() {

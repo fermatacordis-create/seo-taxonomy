@@ -54,7 +54,8 @@ body.tc-family-screen .wrap .nav-tab-wrapper{display:flex;flex-wrap:wrap;gap:7px
 body.tc-family-screen .wrap .nav-tab{margin:0;background:#fff;border:1px solid #dfe6ef;border-radius:7px;padding:9px 14px;font-weight:650;color:#455572}
 body.tc-family-screen .wrap .nav-tab-active{background:#e9f2ff;border-color:#b5d0f5;color:#115bc7}
 @media(max-width:1180px){.tc-family-hero{grid-template-columns:74px minmax(0,1fr) max-content}.tc-family-hero__copy{grid-column:2;grid-row:1}.tc-family-hero__meta{grid-column:3;grid-row:1}.tc-family-hero__history-zone{grid-column:2/4;grid-row:2}}
-@media(max-width:700px){.tc-family-hero{grid-template-columns:48px minmax(0,1fr);padding:20px 15px;gap:12px;margin-right:10px}.tc-family-hero__emblem{width:48px;height:48px;grid-column:1;grid-row:1}.tc-family-hero__emblem .dashicons{width:28px;height:28px;font-size:28px}.tc-family-hero h1{font-size:23px}.tc-family-hero__copy{grid-column:2;grid-row:1}.tc-family-hero__meta{grid-column:2;grid-row:2;justify-self:start;align-items:flex-start;white-space:normal}.tc-family-hero__history-zone{grid-column:1/-1;grid-row:3}.tc-family-hero__art{display:none}.tc-family-hero__updated{white-space:normal}}' );
+@media(max-width:700px){.tc-family-hero{grid-template-columns:48px minmax(0,1fr);padding:20px 15px;gap:12px;margin-right:10px}.tc-family-hero__emblem{width:48px;height:48px;grid-column:1;grid-row:1}.tc-family-hero__emblem .dashicons{width:28px;height:28px;font-size:28px}.tc-family-hero h1{font-size:23px}.tc-family-hero__copy{grid-column:2;grid-row:1}.tc-family-hero__meta{grid-column:2;grid-row:2;justify-self:start;align-items:flex-start;white-space:normal}.tc-family-hero__history-zone{grid-column:1/-1;grid-row:3}.tc-family-hero__art{display:none}.tc-family-hero__updated{white-space:normal}}
+.tc-family-hero{grid-template-columns:74px minmax(0,1fr) max-content}.tc-family-hero__info{margin-top:10px;max-width:900px}.tc-family-hero__excerpt{margin:0 0 6px!important;font-size:13px;line-height:1.6;color:#47576f}.tc-family-hero__link{font-size:13px;font-weight:600;text-decoration:none}.tc-family-hero__link:hover{text-decoration:underline}.tc-family-history-panel{margin:0 20px 17px 0;padding:18px 22px;border:1px solid #dfe6ef;border-radius:13px;background:#fff;box-shadow:0 3px 14px rgba(20,45,85,.04);color:#26354c}.tc-family-history-panel__title{margin:0 0 10px!important;padding:0!important;font-size:15px!important;font-weight:700;color:#122038}.tc-family-history-panel__body{max-height:320px;overflow:auto;padding-right:8px;font-size:13px;line-height:1.6}.tc-family-history-panel__body h3{margin:16px 0 6px;font-size:13px;font-weight:700;color:#122038}.tc-family-history-panel__body h3:first-child{margin-top:0}.tc-family-history-panel__body ul{margin:0 0 8px 18px;list-style:disc}.tc-family-history-panel__body li{margin:0 0 4px}.tc-family-history-panel__body p{margin:0 0 8px}.tc-family-history-panel__body code{font-size:12px}@media(max-width:600px){.tc-family-history-panel{margin-right:10px;padding:14px}}.tc-family-history-panel{padding:0;overflow:hidden;border-radius:16px;background:#fff}.tc-family-history-panel>summary{list-style:none}.tc-family-history-panel>summary::-webkit-details-marker{display:none}.tc-family-history-panel__header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 22px;cursor:pointer;border-bottom:1px solid #e4e9f0}.tc-family-history-panel:not([open]) .tc-family-history-panel__header{border-bottom:0}.tc-family-history-panel__header:focus-visible{outline:2px solid #1769de;outline-offset:-2px}.tc-family-history-panel__title{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#122038}.tc-family-history-panel__title .dashicons{width:18px;height:18px;font-size:18px;color:#1769de}.tc-family-history-panel__chevron{width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid #1769de;transition:transform .15s}.tc-family-history-panel:not([open]) .tc-family-history-panel__chevron{transform:rotate(-90deg)}.tc-family-history-panel__body{max-height:360px;overflow:auto;padding:18px 28px;background:#fbfcfe}.tc-family-history-panel{margin-top:0;padding:0;overflow:hidden;border:1px solid #dbeafe;border-radius:24px;background:linear-gradient(145deg,#fff 0%,#eff6ff 100%);box-shadow:0 1px 3px rgba(37,99,235,.06)}.tc-family-history-panel__header{padding:14px 18px;background:rgba(255,255,255,.72);border-bottom:1px solid #dbeafe}.tc-family-history-panel__title{font-size:13px;font-weight:700;letter-spacing:.03em;color:#1e1e1e}.tc-family-history-panel__title .dashicons{color:#2563eb}.tc-family-history-panel__body{max-height:none;overflow:visible;padding:24px;background:transparent}.tc-family-history-panel__content{max-height:380px;overflow:auto;padding:20px 24px;border:1px solid #dbeafe;border-radius:12px;background:#fff;font-size:14px;line-height:1.6;color:#616161}.tc-family-history-panel__content h3{margin:14px 0 8px;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:#1e1e1e}.tc-family-history-panel__content h3:first-child{margin-top:0}.tc-family-history-panel__content ul{margin:0 0 8px 18px;list-style:disc}.tc-family-history-panel__content li{margin:0 0 4px}@media(max-width:600px){.tc-family-history-panel__body{padding:12px}.tc-family-history-panel__content{padding:14px}}@media(min-width:701px){.tc-family-hero{grid-template-columns:74px minmax(0,1fr) max-content}}' );
 } );
 
 add_action( 'admin_notices', static function () use ( $tc_brand_on_screen, $tc_brand_main, $tc_brand_info, $tc_brand_slug ) {
@@ -62,6 +63,10 @@ add_action( 'admin_notices', static function () use ( $tc_brand_on_screen, $tc_b
         return;
     }
     $plugin = get_file_data( $tc_brand_main, array( 'name' => 'Plugin Name', 'version' => 'Version', 'released' => 'Release Date', 'description' => 'Description' ) );
+    if ( ! empty( $plugin['description'] ) ) {
+        // Description header in the admin language, from this plugin's own catalog (as on the Plugins screen).
+        $plugin['description'] = translate( $plugin['description'], $tc_brand_slug ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText,WordPress.WP.I18n.NonSingularStringLiteralDomain,WordPress.WP.I18n.LowLevelTranslationFunction
+    }
     $title = preg_replace( '/\\s+-\\s+.*$/', '', (string) ( $plugin['name'] ?? '' ) );
     $version = (string) ( $plugin['version'] ?? '' );
     $released = (string) ( $plugin['released'] ?? '' );
@@ -105,6 +110,38 @@ add_action( 'admin_notices', static function () use ( $tc_brand_on_screen, $tc_b
     if ( 'Version history and improvements' === $tc_history_label && isset( $tc_history_labels[ $tc_language ] ) ) {
         $tc_history_label = $tc_history_labels[ $tc_language ];
     }
+    // CHANGELOG.md as headings and lists. Every piece of text is escaped first.
+    $tc_md = static function ( $md ) {
+        $html = '';
+        $list = false;
+        $inline = static function ( $text ) {
+            $text = esc_html( $text );
+            $text = preg_replace( '/`([^`]+)`/', '<code>$1</code>', $text );
+            return preg_replace( '/\*\*([^*]+)\*\*/', '<strong>$1</strong>', $text );
+        };
+        foreach ( preg_split( '/\r\n|\r|\n/', (string) $md ) as $line ) {
+            $line = rtrim( $line );
+            if ( preg_match( '/^\s*[-*]\s+(.*)$/', $line, $m ) ) {
+                $html .= ( $list ? '' : '<ul>' ) . '<li>' . $inline( $m[1] ) . '</li>';
+                $list = true;
+                continue;
+            }
+            if ( $list ) {
+                $html .= '</ul>';
+                $list = false;
+            }
+            if ( '' === trim( $line ) || preg_match( '/^#\s/', $line ) ) {
+                continue;
+            }
+            if ( preg_match( '/^#{2,3}\s+(.*)$/', $line, $m ) ) {
+                $html .= '<h3>' . $inline( $m[1] ) . '</h3>';
+            } else {
+                $html .= '<p>' . $inline( $line ) . '</p>';
+            }
+        }
+        return $list ? $html . '</ul>' : $html;
+    };
+
     ?>
     <header class="tc-family-hero">
         <span class="tc-family-hero__emblem" aria-hidden="true"><span class="dashicons dashicons-groups"></span></span>
@@ -114,20 +151,15 @@ add_action( 'admin_notices', static function () use ( $tc_brand_on_screen, $tc_b
             <p class="tc-family-hero__desc"><?php echo esc_html( trim( wp_strip_all_tags( (string) ( $plugin['description'] ?? '' ) ) ) ); ?></p>
             <?php $tc_brand_info->render( $tc_brand_slug, $tc_language ); ?>
         </div>
-        <div class="tc-family-hero__history-zone">
-            <?php if ( is_string( $tc_history ) && '' !== trim( $tc_history ) ) : ?>
-                <details class="tc-family-history">
-                    <summary><?php echo esc_html( $tc_history_label ); ?></summary>
-                    <div class="tc-family-history__content"><?php echo esc_html( $tc_history ); ?></div>
-                </details>
-            <?php endif; ?>
-        </div>
         <div class="tc-family-hero__meta">
             <span class="tc-family-hero__version"><?php echo esc_html( $tc_version_label . ' ' . $version ); ?></span>
             <span class="tc-family-hero__updated"><?php echo esc_html( $tc_updated_label . ': ' . $released ); ?></span>
         </div>
         <span class="tc-family-hero__art" aria-hidden="true"><i></i><i></i><i></i></span>
     </header>
+    <?php if ( is_string( $tc_history ) && '' !== trim( $tc_history ) ) : ?>
+    <details class="tc-family-history-panel" open><summary class="tc-family-history-panel__header"><span class="tc-family-history-panel__title"><span class="dashicons dashicons-backup" aria-hidden="true"></span><?php echo esc_html( $tc_history_label ); ?></span><span class="tc-family-history-panel__chevron" aria-hidden="true"></span></summary><div class="tc-family-history-panel__body"><div class="tc-family-history-panel__content"><?php echo $tc_md( $tc_history ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Built from esc_html() text in $tc_md. ?></div></div></details>
+    <?php endif; ?>
     <?php
 }, 5 );
 } )();
