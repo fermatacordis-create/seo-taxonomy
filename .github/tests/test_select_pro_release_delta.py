@@ -92,6 +92,14 @@ class ProChangedFilesTests(unittest.TestCase):
             result = MODULE.selected_delta(self.base, head, None, None, "", self.root)
         self.assertEqual(result, {"taxocommerce-auditor": ["includes/helper.php"]})
 
+    def test_false_success_ftp_copy_does_not_erase_unshipped_delta(self):
+        self.assertEqual(
+            MODULE.LAST_REAL_RELEASE_SHA,
+            MODULE.validated_release_base(MODULE.FALSE_SUCCESS_SHA),
+        )
+        genuine = "f" * 40
+        self.assertEqual(genuine, MODULE.validated_release_base(genuine))
+
     def test_no_changed_files_does_not_deploy_any_plugin(self):
         self.assertEqual(self.select(self.base), {})
 

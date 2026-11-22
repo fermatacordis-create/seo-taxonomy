@@ -1,3 +1,16 @@
+## [0.3.24] — 2026-11-20 — Títulos de productos en las propuestas del Clasificador (#2891)
+
+- «Propuestas recientes» muestra el título completo del producto junto a su ID y enlace de edición para facilitar la revisión.
+- Lectura agrupada y limitada a los productos de las 100 propuestas visibles; sin afectar al trabajo en curso, a las asignaciones ni a las aprobaciones.
+
+## [0.3.23] — 2026-11-20 — Resumable classifier, CPU budgets and reviewed assignments (#2886)
+
+- Added autonomous full-catalogue traversal using WordPress WP-Cron, keyset pagination and persisted progress; pause, resume, cancel, JSON progress export and five bounded work levels.
+- Default mode only records reviewable proposals; an explicit option applies only existing canonical labels with a strong current-text match (confidence >= 0.90). It never invents terms, overwrites existing classifications or writes prices, stock or descriptions.
+- Added native WooCommerce product attribute names/values as semantic and numeric evidence, plus a conservative category pattern learned from existing non-automatic canonical assignments. Old review results and masters are retained.
+- Added per-proposal approval of existing semantic labels and validated controlled/numeric attributes, preserving existing product values. Legacy empty unresolved rows remain stored but no longer crowd the visible list.
+- Added standalone CPU budget and extraction regression tests to the STAGING preflight. WP-Cron requires a site runner; site-specific performance and real classification results must be validated on STAGING/Focazul before enabling automatic assignment.
+
 ## [0.3.22] — 2026-11-13 — Code Check equiparado a Core 0.4.82 (#2626)
 
 - Code Check equiparado a Core 0.4.82: reglas autónomas PHP/WordPress/seguridad, clasificación por gravedad, detalles de archivos y recomendaciones, resumen y JSON; sin modificar el Autotest funcional. Issue #2626.

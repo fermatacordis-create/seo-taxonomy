@@ -3,8 +3,8 @@
  * Plugin Name: TaxoCommerce Import-Export - Import & Export for WooCommerce
  * Plugin URI: https://asociacionfocazul.com/taxocommerce-import-export/
  * Description: Importa y exporta productos, categorías de producto, categorías WordPress, entradas, páginas y Media, con integración opcional con TaxoCommerce Core.
- * Version: 0.4.32
- * Release Date: 2026-11-13
+ * Version: 0.4.37
+ * Release Date: 2026-11-18
  * Requires at least: 6.5
  * Requires PHP: 7.4
  * Requires Plugins: woocommerce
@@ -23,7 +23,7 @@ require_once __DIR__ . '/includes/admin-branding.php';
 require_once __DIR__ . '/includes/class-taxocommerce-autotest-code.php';
 \TaxoCommerce_Import_Export_Autotest_Code::boot();
 
-define( 'TAXOCOMMERCE_IMPORT_EXPORT_VERSION', '0.4.32' );
+define( 'TAXOCOMMERCE_IMPORT_EXPORT_VERSION', '0.4.37' );
 define( 'TAXOCOMMERCE_IMPORT_EXPORT_FILE', __FILE__ );
 define( 'TAXOCOMMERCE_IMPORT_EXPORT_PATH', plugin_dir_path( __FILE__ ) );
 define( 'TAXOCOMMERCE_IMPORT_EXPORT_BASENAME', plugin_basename( __FILE__ ) );
@@ -38,6 +38,7 @@ require_once TAXOCOMMERCE_IMPORT_EXPORT_PATH . 'includes/class-taxocommerce-impo
 require_once TAXOCOMMERCE_IMPORT_EXPORT_PATH . 'includes/class-taxocommerce-import-export-exporter.php';
 require_once TAXOCOMMERCE_IMPORT_EXPORT_PATH . 'includes/class-taxocommerce-import-export-media.php';
 require_once TAXOCOMMERCE_IMPORT_EXPORT_PATH . 'includes/class-taxocommerce-import-export-batch.php';
+require_once TAXOCOMMERCE_IMPORT_EXPORT_PATH . 'includes/class-taxocommerce-import-export-basic.php';
 require_once TAXOCOMMERCE_IMPORT_EXPORT_PATH . 'includes/class-taxocommerce-import-export-auto-test.php';
 require_once TAXOCOMMERCE_IMPORT_EXPORT_PATH . 'includes/class-taxocommerce-import-export-manual.php';
 

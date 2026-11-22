@@ -125,6 +125,35 @@ $required_modern_knowledge = array(
     'de_DE' => 'Modernes Wissen',
     'nl_NL' => 'Moderne kennis',
 );
+$pot_source = file_get_contents( $root . '/languages/taxocommerce-dependiente.pot' );
+if ( false === $pot_source ) {
+	tcd_i18n_fail( 'Cannot read gettext template for administration coverage.' );
+}
+$required_admin_ids = array();
+foreach ( preg_split( '/\R[ \t]*\R/u', $pot_source ) as $block ) {
+	if ( ! preg_match( '/^#: /m', $block ) || false !== strpos( $block, 'class-tcd-manual.php' ) ) {
+		continue;
+	}
+	$message_id = null;
+	$reading_id = false;
+	foreach ( preg_split( '/\R/u', $block ) as $line ) {
+		if ( 0 === strpos( $line, 'msgid "' ) ) {
+			$message_id = json_decode( substr( $line, 6 ), true );
+			$reading_id = true;
+		} elseif ( $reading_id && 0 === strpos( $line, '"' ) ) {
+			$message_id .= json_decode( $line, true );
+		} elseif ( $reading_id ) {
+			break;
+		}
+	}
+	if ( is_string( $message_id ) && '' !== $message_id ) {
+		$required_admin_ids[ $message_id ] = true;
+	}
+}
+if ( count( $required_admin_ids ) < 170 ) {
+	tcd_i18n_fail( 'Administration source inventory unexpectedly incomplete.' );
+}
+
 foreach ( $examples as $locale => $expected_label ) {
 	$base = $root . '/languages/taxocommerce-dependiente-' . $locale;
 	$po   = tcd_i18n_parse_po( $base . '.po' );
@@ -155,6 +184,11 @@ foreach ( $examples as $locale => $expected_label ) {
 	if ( ( $mo['7. Utilizar el buscador en la tienda'] ?? '' ) !== $required_user_guide[ $locale ] ) {
         tcd_i18n_fail( 'Search guide translation missing: ' . $locale );
     }
+	foreach ( array_keys( $required_admin_ids ) as $admin_id ) {
+		if ( ! isset( $po[ $admin_id ] ) || '' === $po[ $admin_id ] || ! isset( $mo[ $admin_id ] ) || $mo[ $admin_id ] !== $po[ $admin_id ] ) {
+			tcd_i18n_fail( 'Missing or mismatched administration message in ' . $locale . ': ' . $admin_id );
+		}
+	}
 	if ( ( $mo['Conocimiento moderno'] ?? '' ) !== $required_modern_knowledge[ $locale ] ) {
         tcd_i18n_fail( 'Portable knowledge translation missing: ' . $locale );
     }

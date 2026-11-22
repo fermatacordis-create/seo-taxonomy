@@ -73,6 +73,20 @@ $unknown = TCV_Extractor::numeric(
 tcv_extract_assert( null === $unknown, 'never infer a load limit without evidence' );
 tcv_extract_assert( 0.0 === TCV_Extractor::score( 'taladro', TCV_Extractor::context( array() ) )['score'], 'no false positives on an empty site' );
 
+$native = TCV_Extractor::context( array( 'attributes' => 'Tensión: 36 V; Motor: brushless' ) );
+$native_voltage = TCV_Extractor::numeric(
+    array( 'id' => 5, 'nombre' => 'Tensión', 'slug' => 'tension', 'unidad_base' => 'V' ),
+    $native
+);
+tcv_extract_assert( '36' === $native_voltage['value'] && 'attributes' === $native_voltage['source'], 'WooCommerce native attributes provide explicit numeric evidence' );
+$native_term = TCV_Extractor::controlled(
+    array( 'id' => 4, 'nombre' => 'Tecnología del motor' ),
+    array( array( 'id' => 12, 'label' => 'Sin escobillas' ) ),
+    array( 12 => array( 'brushless' ) ),
+    $native
+);
+tcv_extract_assert( 12 === $native_term['term_id'] && 'attributes' === $native_term['source'], 'native controlled attribute aliases are considered' );
+
 $new_type = TCV_Extractor::discover( 'tipo', TCV_Extractor::context( array(
     'title' => 'Bosch Taladro percutor 18 V con broca', 'brands' => 'Bosch',
 ) ) );

@@ -53,7 +53,7 @@ msgstr "Secciones de Distribution"
 
 #: includes/admin.php:94
 msgid "Overview"
-msgstr "Overview"
+msgstr "Resumen"
 
 #: includes/admin.php:95 includes/admin.php:148
 msgid "Commercial Feeds"

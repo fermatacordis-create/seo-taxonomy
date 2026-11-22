@@ -34,6 +34,14 @@ function esc_html($text) { return htmlspecialchars((string) $text, ENT_QUOTES); 
 function esc_url($text) { return htmlspecialchars((string) $text, ENT_QUOTES); }
 function selected($selected, $current = true, $echo = true) { $attr = ($selected == $current) ? ' selected="selected"' : ''; if ($echo) { echo $attr; } return $attr; }
 function get_current_user_id() { return 1; }
+function esc_sql($value) { return $value; }
+function tcsocial_network_publications_table() { return 'wp_seo_social_publications'; }
+class SocialCalendarTestDB {
+    public function prepare($sql, ...$arguments) { return $sql; }
+    public function get_results($sql) { return array(); }
+}
+$wpdb = new SocialCalendarTestDB();
+
 
 $GLOBALS['test_social'] = array(
     '101|facebook'  => strtotime('2030-01-01 22:00:00 UTC'),
@@ -131,6 +139,11 @@ function check($condition, $label) {
 
 $events = tcsocial_calendar_events();
 check(5 === count($events), 'Every agenda event is still listed.');
+check(strpos(tcsocial_calendar_delivery_badge(array('status' => 'programada', 'timestamp' => strtotime('2030-01-01 UTC'))), 'Pendiente de publicar') !== false, 'Future schedule uses pending badge.');
+check(strpos(tcsocial_calendar_delivery_badge(array('status' => 'published', 'timestamp' => strtotime('2025-01-01 UTC'))), 'Publicado') !== false, 'Confirmed history uses published badge.');
+check(strpos(tcsocial_calendar_delivery_badge(array('status' => 'failed', 'timestamp' => strtotime('2025-01-01 UTC'))), 'No publicado') !== false, 'Failed history uses red badge.');
+check(strpos(tcsocial_calendar_delivery_badge(array('status' => 'pending', 'timestamp' => strtotime('2025-01-01 UTC'))), 'Sin confirmar') !== false, 'Uncertain provider response is not a failure.');
+
 $byid = array();
 foreach ($events as $e) {
     $byid[$e['content_id'] . '|' . $e['provider']] = $e;

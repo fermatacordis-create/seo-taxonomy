@@ -39,7 +39,7 @@ msgid ""
 "foto fija, validación, escrituras en conocimiento, llamadas al motor "
 "semántico, locks, reprogramaciones, métricas y errores. El fichero activo "
 "rota automáticamente y nunca debe superar 1 MiB."
-msgstr ""
+msgstr "Gedetailleerd leerlogboek. Registreert het lezen van bronnen, aanmaken van momentopnamen, validatie, schrijven naar kennis, aanroepen van de semantische engine, vergrendelingen, opnieuw plannen, statistieken en fouten. Het actieve logbestand wordt automatisch geroteerd en mag nooit groter zijn dan 1 MiB."
 
 #: includes/class-tcd-admin.php:86
 msgid "Último lote:"
@@ -74,7 +74,7 @@ msgid ""
 "Resumen estructurado de los últimos eventos de Academia. Se mantiene aquí, "
 "junto al log bruto, para que toda la trazabilidad técnica de Dependiente "
 "esté centralizada en una sola pestaña."
-msgstr ""
+msgstr "Gestructureerde samenvatting van recente Academie-gebeurtenissen. Staat hier bij het ruwe logboek zodat alle technische registraties van Dependiente op één tabblad staan."
 
 #: includes/class-tcd-admin.php:125
 msgid "Fecha (UTC)"
@@ -101,13 +101,13 @@ msgid ""
 "Traza completa orientada a diagnóstico técnico y análisis por IA. Incluye "
 "más detalle que el resumen anterior: lecturas, escrituras, locks, "
 "reprogramaciones, consumo y errores."
-msgstr ""
+msgstr "Volledig logboek voor technische diagnostiek en AI-analyse. Bevat meer details dan de vorige samenvatting: lees- en schrijfacties, vergrendelingen, opnieuw plannen, verbruik en fouten."
 
 #: includes/class-tcd-admin.php:148
 msgid ""
 "El log es diagnóstico, no una copia del conocimiento. Los materiales "
 "completos y las fotos fijas siguen estando en los exports JSON de auditoría."
-msgstr ""
+msgstr "Het logboek is bedoeld voor diagnose, niet als kopie van kennis. Het volledige materiaal en de momentopnamen blijven in de JSON-auditexports staan."
 
 #: includes/class-tcd-admin.php:175
 msgid "La fuente sí se aprendió."
@@ -129,7 +129,7 @@ msgstr "dit resultaat bevestigt de huidige rangschikking niet."
 msgid ""
 "Actualiza el plugin en STAGING si procede y utiliza «Revisar correcciones y "
 "reevaluar»."
-msgstr ""
+msgstr "Werk de plugin zo nodig op STAGING bij en kies 'Correcties beoordelen en opnieuw evalueren'."
 
 #: includes/class-tcd-admin.php:187
 msgid "No reinicies las diez lecciones."
@@ -144,7 +144,7 @@ msgid ""
 "Se mantienen los datos aprendidos y el umbral del 88 %. Una pregunta "
 "genérica evalúa la familia; las necesidades con medidas o modelo evalúan la "
 "referencia concreta."
-msgstr ""
+msgstr "Eerder geleerde gegevens en de drempel van 88% blijven behouden. Een algemene vraag beoordeelt de productfamilie; vragen met afmetingen of model beoordelen de specifieke artikelreferentie."
 
 #: includes/class-tcd-admin.php:220
 msgid ""
@@ -152,7 +152,7 @@ msgid ""
 "fallos internos de Dependiente, e incluye la deuda de datos detectada en "
 "toda la lección. Los CSV son vistas tabulares para revisión o corrección "
 "masiva."
-msgstr ""
+msgstr "De JSON maakt onderscheid tussen correcties in WordPress, dubbelzinnigheden en interne fouten van Dependiente en bevat de gegevensachterstand die in de hele les is vastgesteld. CSV-bestanden zijn tabeloverzichten voor controle of bulkcorrectie."
 
 #: includes/class-tcd-admin.php:223 includes/class-tcd-admin.php:230
 msgid "Qué hacer"
@@ -191,20 +191,20 @@ msgid ""
 "Motor original: gramática, verbos, erratas, variantes, sinónimos, contexto, "
 "ambigüedad y evidencia validada. El Intérprete no busca productos ni "
 "pregunta: entrega una petición clara al Dependiente."
-msgstr ""
+msgstr "Oorspronkelijke engine: grammatica, werkwoorden, typefouten, varianten, synoniemen, context, dubbelzinnigheid en gevalideerd bewijs. De Interpreter zoekt geen producten en stelt geen vragen: hij geeft een duidelijke opdracht aan Dependiente."
 
 #: includes/class-tcd-admin.php:262
 msgid ""
 "Formación única con las fases internas y las reglas reales del Lingüista "
 "original. Trabajo por lotes en segundo plano, con avance y memoria "
 "persistente."
-msgstr ""
+msgstr "Gecombineerde training met de interne fasen en daadwerkelijke regels van de oorspronkelijke Linguist. Achtergrondverwerking in batches met blijvende voortgang en geheugen."
 
 #: includes/class-tcd-admin.php:271
 msgid ""
 "forma y comprueba comprensión lingüística; no suspende por no encontrar un "
 "ID de producto que el comprador nunca especificó."
-msgstr ""
+msgstr "traint en controleert taalbegrip; een ontbrekend product-ID dat de koper nooit heeft opgegeven, is geen reden om te zakken."
 
 #: includes/class-tcd-admin.php:281
 msgid "TaxoCommerce Dependiente"
@@ -224,7 +224,7 @@ msgstr "om de Interpreter op te bouwen en te valideren en"
 
 #: includes/class-tcd-admin.php:330
 msgid "para mantener el conocimiento actualizado. Cada L1-L10 conserva una"
-msgstr ""
+msgstr "om de kennis actueel te houden. Elke L1-L10 behoudt een"
 
 #: includes/class-tcd-admin.php:330
 msgid "foto fija auditable"
@@ -234,14 +234,14 @@ msgstr "controleerbare momentopname"
 msgid ""
 "; toda la formación queda integrada en Dependiente, sin servicios auxiliares"
 " separados."
-msgstr ""
+msgstr "; alle training vindt plaats binnen Dependiente, zonder afzonderlijke ondersteunende diensten."
 
 #: includes/class-tcd-admin.php:335
 msgid ""
 "Este JSON sirve para auditar el aprendizaje de las diez lecciones. El "
 "conocimiento portable y el backup se gestionan únicamente desde sus pestañas"
 " específicas para evitar accesos duplicados."
-msgstr ""
+msgstr "Deze JSON dient om het leerproces van de tien lessen te controleren. Overdraagbare kennis en back-ups worden uitsluitend via hun eigen tabbladen beheerd om dubbele toegang te voorkomen."
 
 #: includes/class-tcd-admin.php:342 includes/class-tcd-manual.php:323
 msgid "Umbrales de calidad por lección"
@@ -251,7 +251,7 @@ msgstr "Kwaliteitsdrempels per les"
 msgid ""
 "El responsable del catálogo decide el porcentaje mínimo de aciertos Top-8 de"
 " cada lección (0–100 %). Se mantienen los valores actuales si no se cambian."
-msgstr ""
+msgstr "De catalogusbeheerder bepaalt het minimale Top-8-succespercentage voor elke les (0–100%). De huidige waarden blijven behouden als ze niet worden gewijzigd."
 
 #: includes/class-tcd-admin.php:350
 msgid "Guardar umbrales"
@@ -262,7 +262,7 @@ msgid ""
 "Guardar no aprueba automáticamente las lecciones suspendidas ni altera los "
 "exámenes. Para continuar una lección ya suspendida, revisa sus fallos y "
 "acepta expresamente el resultado cuando alcance el nuevo mínimo."
-msgstr ""
+msgstr "Opslaan keurt afgewezen lessen niet automatisch goed en wijzigt de examens niet. Controleer de fouten van een eerder afgewezen les en accepteer het resultaat uitdrukkelijk zodra het nieuwe minimum is bereikt."
 
 #: includes/class-tcd-admin.php:359
 msgid "Prioridad de Dependiente"
@@ -281,7 +281,7 @@ msgid ""
 "1 trabaja suavemente a largo plazo; 3 es el equilibrio recomendado; 5 "
 "prioriza terminar cuanto antes. Dependiente ajusta automáticamente el tamaño"
 " del lote según el coste real de sus peticiones."
-msgstr ""
+msgstr "Niveau 1 werkt langdurig met weinig belasting; 3 is de aanbevolen balans; 5 geeft prioriteit aan zo snel mogelijk afronden. Dependiente past de batchgrootte automatisch aan de werkelijke verzoekkosten aan."
 
 #: includes/class-tcd-admin.php:367
 msgid "Guardar prioridad"
@@ -293,7 +293,7 @@ msgstr "Stoppen"
 
 #: includes/class-tcd-admin.php:425
 msgid "conserva la foto fija y el progreso. Si una lección falla calidad,"
-msgstr ""
+msgstr "bewaart de momentopname en de voortgang. Als een les de kwaliteitscontrole niet haalt,"
 
 #: includes/class-tcd-admin.php:425
 msgid "Revisar correcciones y reevaluar"
@@ -303,7 +303,7 @@ msgstr "Correcties controleren en opnieuw beoordelen"
 msgid ""
 "vuelve a leer únicamente los casos fallidos y repite el examen, sin "
 "reiniciar L1-L10."
-msgstr ""
+msgstr "leest alleen de mislukte gevallen opnieuw en herhaalt het examen, zonder L1-L10 opnieuw te starten."
 
 #: includes/class-tcd-admin.php:425
 msgid "Reiniciar"
@@ -313,7 +313,7 @@ msgstr "Opnieuw starten"
 msgid ""
 "borra únicamente las tablas de aprendizaje propias de Dependiente y crea un "
 "run nuevo; nunca modifica productos, categorías, FAQs o Vocabulary."
-msgstr ""
+msgstr "verwijdert uitsluitend de eigen leertabellen van Dependiente en start een nieuwe uitvoering; producten, categorieën, FAQs en Vocabulary blijven ongewijzigd."
 
 #: includes/class-tcd-admin.php:428
 msgid "Las diez lecciones"
@@ -351,17 +351,17 @@ msgstr "Audit"
 msgid ""
 "Completando la memoria de identidad de la foto fija antes de repetir el "
 "examen."
-msgstr ""
+msgstr "Het identiteitsgeheugen van de momentopname wordt voltooid voordat het examen opnieuw wordt afgenomen."
 
 #: includes/class-tcd-admin.php:485
 msgid "Resultado anterior debajo; se sustituirá al completar 180/180."
-msgstr ""
+msgstr "Vorig resultaat hieronder; dit wordt vervangen zodra 180/180 is bereikt."
 
 #: includes/class-tcd-admin.php:520
 msgid ""
 "Aceptación manual: conserva la nota y los fallos; activa el aprendizaje y "
 "avanza a la siguiente lección."
-msgstr ""
+msgstr "Handmatige acceptatie: behoudt de score en fouten, activeert het leerproces en gaat naar de volgende les."
 
 #: includes/class-tcd-admin.php:548
 msgid "M11 · Intérprete original y M12 · Actualización"
@@ -387,7 +387,7 @@ msgstr "M11 · Oorspronkelijke taalkundige v1.2.0"
 msgid ""
 "El examen antiguo de 180 IDs era una prueba de búsqueda, no de "
 "interpretación lingüística, y ya no bloquea el curso."
-msgstr ""
+msgstr "Het oude examen met 180 ID's testte het zoeken naar producten, niet de taalkundige interpretatie, en blokkeert de cursus niet meer."
 
 #: includes/class-tcd-admin.php:556
 msgid "L11 · Fases de comprensión lingüística y evolución"
@@ -397,7 +397,7 @@ msgstr "L11 · Fasen van taalbegrip en ontwikkeling"
 msgid ""
 "Formación lingüística dentro de Dependiente. Prioridad de CPU compartida con"
 " L1–L10."
-msgstr ""
+msgstr "Taalkundige training binnen Dependiente. CPU-prioriteit wordt gedeeld met L1–L10."
 
 #: includes/class-tcd-admin.php:558
 msgid "Fase"
@@ -423,7 +423,7 @@ msgstr "M12 · Klantfeedback"
 msgid ""
 "Un clic aislado no enseña una regla. Las aclaraciones pesan más, pero "
 "también necesitan repetición antes de activarse."
-msgstr ""
+msgstr "Eén losse klik leert geen regel. Verduidelijkingen wegen zwaarder, maar moeten ook worden herhaald voordat ze actief worden."
 
 #: includes/class-tcd-admin.php:585
 msgid "Asistente e integración"
@@ -439,7 +439,7 @@ msgid ""
 "ponderada, feedback validado de clics y aclaraciones, y catálogo publicado. "
 "Cuando la confianza es insuficiente puede hacer hasta dos preguntas cerradas"
 " antes de recomendar."
-msgstr ""
+msgstr "De moderne Interpreter gebruikt semantische regels, Vocabulary, gewogen L9-geheugen, gevalideerde feedback uit klikken en verduidelijkingen en de gepubliceerde catalogus. Bij onvoldoende zekerheid kan hij maximaal twee gesloten vragen stellen voordat hij een aanbeveling doet."
 
 #: includes/class-tcd-auto-test.php:84
 msgid "No tienes permisos para ejecutar Auto Test."
@@ -457,7 +457,7 @@ msgstr "Auto Test"
 msgid ""
 "Comprueba los principales contratos de Dependiente tras cada actualización, "
 "por grupos o en una sola pasada. No modifica el aprendizaje en curso."
-msgstr ""
+msgstr "Controleert na elke update de belangrijkste contracten van Dependiente, per groep of in één keer. Het lopende leerproces wordt niet gewijzigd."
 
 #: includes/class-tcd-auto-test.php:647
 msgid "Ejecutar Auto Test completo"
@@ -501,7 +501,7 @@ msgid ""
 "Gris: sin ejecutar o no aplicable. Las pruebas de lectura y las muestras no "
 "garantizan por sí solas el correcto funcionamiento de todas las operaciones "
 "de escritura ni la relevancia de todas las búsquedas."
-msgstr ""
+msgstr "Groen: controle geslaagd. Rood: technische regressie of inconsistente gegevens. Grijs: niet uitgevoerd of niet van toepassing. Alleen-lezen controles en steekproeven garanderen op zichzelf niet dat alle schrijfbewerkingen correct werken of dat alle zoekresultaten relevant zijn."
 
 #: includes/class-tcd-backup.php:141
 msgid "Backup / Restaurar Dependiente"
@@ -513,7 +513,7 @@ msgid ""
 " Sirve como backup, traslado WordPress → WordPress o sustituto del antiguo "
 "clonador PRO → STAGING. La restauración conserva los IDs internos para no "
 "romper la relación entre snapshots, material estudiado y quality gates."
-msgstr ""
+msgstr "Volledige functionele back-up van de permanente status van Dependiente. Geschikt voor back-ups, overdracht van WordPress naar WordPress of als vervanging van de oude PRO-naar-STAGING-kloonfunctie. Bij herstel blijven interne ID's behouden zodat koppelingen tussen momentopnamen, leermateriaal en kwaliteitscontroles intact blijven."
 
 #: includes/class-tcd-backup.php:143
 msgid "Diferencia con Conocimiento / Importar–Exportar:"
@@ -524,7 +524,7 @@ msgid ""
 "el conocimiento portable fusiona reglas y memoria reutilizable; este backup "
 "restaura el estado completo de Dependiente y sustituye sus tablas propias "
 "por las de la copia."
-msgstr ""
+msgstr "overdraagbare kennis voegt herbruikbare regels en geheugen samen; deze back-up herstelt de volledige status van Dependiente en vervangt de eigen tabellen door die uit de back-up."
 
 #: includes/class-tcd-backup.php:145
 msgid "Qué queda protegido por el backup"
@@ -580,7 +580,7 @@ msgstr "1. Back-up analyseren"
 msgid ""
 "Lee toda la copia sin escribir nada y muestra exactamente las tablas, "
 "opciones y número de filas que se restaurarían."
-msgstr ""
+msgstr "Leest de hele back-up zonder gegevens te schrijven en toont precies welke tabellen, opties en aantallen rijen zouden worden hersteld."
 
 #: includes/class-tcd-backup.php:193
 msgid "Analizar backup sin modificar datos"
@@ -595,7 +595,7 @@ msgid ""
 "Sustituye únicamente las tablas y estados propios de Dependiente. No "
 "fusiona: para fusionar conocimiento utiliza la pestaña de conocimiento "
 "portable."
-msgstr ""
+msgstr "Vervangt alleen de eigen tabellen en status van Dependiente. Er wordt niets samengevoegd: gebruik daarvoor het tabblad met overdraagbare kennis."
 
 #: includes/class-tcd-backup.php:200
 msgid ""
@@ -613,7 +613,7 @@ msgid ""
 "La restauración borra primero las 9 tablas propias incluidas en el backup y "
 "las repuebla conservando sus IDs. No toca datos fuente de "
 "WooCommerce/WordPress."
-msgstr ""
+msgstr "Bij herstel worden eerst de negen eigen tabellen van Dependiente uit de back-up verwijderd en vervolgens gevuld met behoud van hun ID's. WooCommerce- en WordPress-brongegevens blijven onaangetast."
 
 #: includes/class-tcd-backup.php:208
 msgid "Restaurar backup completo"
@@ -688,7 +688,7 @@ msgid ""
 "feedback de clientes que ya haya superado los umbrales se transporta "
 "únicamente como regla semántica o señal L9 consolidada. Acepta tanto el "
 "export antiguo como el formato del plugin moderno."
-msgstr ""
+msgstr "Dit hulpmiddel draagt de geconsolideerde kennis van Dependiente over zonder de catalogusindex, sessies, zoekopdrachten of afzonderlijke klikken te kopiëren. Klantfeedback die de drempels heeft gehaald, wordt uitsluitend als semantische regel of geconsolideerd L9-signaal overgezet. Zowel het oude exportformaat als het huidige pluginformaat wordt ondersteund."
 
 #: includes/class-tcd-knowledge-transfer.php:312
 msgid "Conocimiento moderno"
@@ -750,7 +750,7 @@ msgstr "1. Export analyseren vóór import"
 msgid ""
 "No escribe datos. Identifica el formato, cuenta reglas/lecciones/memoria y "
 "muestra cómo se transformaría."
-msgstr ""
+msgstr "Schrijft geen gegevens. Herkent het formaat, telt regels, lessen en geheugenelementen en laat zien hoe deze zouden worden omgezet."
 
 #: includes/class-tcd-knowledge-transfer.php:361
 msgid "Analizar compatibilidad"
@@ -764,13 +764,13 @@ msgstr "2. Importeren en samenvoegen"
 msgid ""
 "Añade lo que falta y conserva la versión local cuando detecta un conflicto. "
 "No elimina conocimiento existente."
-msgstr ""
+msgstr "Voegt ontbrekende kennis toe en behoudt bij conflicten de lokale versie. Bestaande kennis wordt niet verwijderd."
 
 #: includes/class-tcd-knowledge-transfer.php:368
 msgid ""
 "Dependiente está aprendiendo. Detén el proceso antes de importar para "
 "mantener una foto coherente."
-msgstr ""
+msgstr "Dependiente is aan het leren. Stop het proces vóór het importeren om een consistente momentopname te behouden."
 
 #: includes/class-tcd-knowledge-transfer.php:374
 msgid "Confirmo que quiero fusionar este conocimiento con el existente."
@@ -1800,19 +1800,19 @@ msgstr ""
 
 #: includes/interpreter/class-tcd-interpreter-legacy.php:138
 msgid "No tienes permisos para acceder al Intérprete."
-msgstr ""
+msgstr "Je hebt geen toestemming om de Interpreter te openen."
 
 #: includes/interpreter/class-tcd-linguist.php:568
 msgid "No tienes permisos para exportar la formación Lingüista."
-msgstr ""
+msgstr "Je hebt geen toestemming om de training van de Linguist te exporteren."
 
 #: includes/interpreter/class-tcd-linguist.php:586
 msgid "Exportación Lingüista"
-msgstr ""
+msgstr "Linguist exporteren"
 
 #: includes/interpreter/class-tcd-linguist.php:598
 msgid "No tienes permisos para controlar Lingüista."
-msgstr ""
+msgstr "Je hebt geen toestemming om de Linguist te bedienen."
 
 #. Dependiente Academy empty lesson status
 msgid "Sin material"

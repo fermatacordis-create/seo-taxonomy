@@ -161,6 +161,55 @@ function tcsocial_calendar_events()
         );
     }
 
+    // The schedule deliberately drops completed entries. Include bounded,
+    // read-only delivery history so the monthly calendar can actually display
+    // green confirmed items and red failed responses beside scheduled blue.
+    global $wpdb;
+    $history_table = esc_sql(tcsocial_network_publications_table());
+    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,PluginCheck.Security.DirectDB.UnescapedDBParameter -- Bounded, read-only own-history query for the calendar.
+    $deliveries = $wpdb->get_results(
+        $wpdb->prepare(
+            "SELECT id, content_id, provider, status, created_at, published_at, error_message
+             FROM %i WHERE status IN ('published', 'failed', 'pending')
+             ORDER BY id DESC LIMIT %d",
+            $history_table, 250
+        )
+    );
+    foreach ((array) $deliveries as $delivery) {
+        $content_id = absint($delivery->content_id);
+        $provider = sanitize_key((string) $delivery->provider);
+        $status = sanitize_key((string) $delivery->status);
+        $raw_time = 'published' === $status && !empty($delivery->published_at)
+            ? (string) $delivery->published_at
+            : (string) $delivery->created_at;
+        $timestamp = $raw_time ? strtotime(get_gmt_from_date($raw_time) . ' UTC') : false;
+        if (!$content_id || !isset($providers[$provider]) || !$timestamp) {
+            continue;
+        }
+        $post = get_post($content_id);
+        $title = $post ? get_the_title($post) : sprintf(
+            /* translators: %d: WordPress content ID. */
+            __('Contenido #%d', 'taxocommerce-social'), $content_id
+        );
+        $events[] = array(
+            'content_id' => $content_id,
+            'title' => $title,
+            'type_key' => 'history',
+            'type_label' => __('Resultado de publicación', 'taxocommerce-social'),
+            'provider' => $provider,
+            'provider_label' => (string) ($providers[$provider]['label'] ?? ucfirst($provider)),
+            'timestamp' => $timestamp,
+            'source' => 'history',
+            'campaign_id' => 0,
+            'can_manage' => false,
+            'date_key' => wp_date('Y-m-d', $timestamp, $timezone),
+            'time' => wp_date('H:i', $timestamp, $timezone),
+            'status' => $status,
+            'error_message' => (string) $delivery->error_message,
+            'edit_url' => $content_id ? get_edit_post_link($content_id) : '',
+        );
+    }
+
     usort(
         $events,
         static function ($a, $b) {
@@ -450,6 +499,39 @@ function tcsocial_calendar_render_event_actions($event, $view = 'calendar')
 }
 
 /**
+ * Display a schedule status; a due schedule without an API confirmation is
+ * an overdue/unconfirmed item, not proof of remote failure.
+ *
+ * @param array $event Calendar schedule.
+ * @return string Escaped HTML.
+ */
+function tcsocial_calendar_delivery_badge($event)
+{
+    $status = sanitize_key((string) ($event['status'] ?? ''));
+    $timestamp = absint($event['timestamp'] ?? 0);
+    if ('published' === $status) {
+        $type = 'published';
+        $label = __('Publicado', 'taxocommerce-social');
+    } elseif ('failed' === $status) {
+        $type = 'failed';
+        $label = __('No publicado', 'taxocommerce-social');
+    } elseif ('pending' === $status) {
+        $type = 'unconfirmed';
+        $label = __('Sin confirmar', 'taxocommerce-social');
+    } elseif ('pausada' === $status) {
+        $type = 'paused';
+        $label = __('Pausada', 'taxocommerce-social');
+    } elseif ($timestamp && $timestamp < time()) {
+        $type = 'failed';
+        $label = __('Vencida sin confirmar', 'taxocommerce-social');
+    } else {
+        $type = 'scheduled';
+        $label = __('Pendiente de publicar', 'taxocommerce-social');
+    }
+    return '<span class="seo-social-state is-' . esc_attr($type) . '">' . esc_html($label) . '</span>';
+}
+
+/**
  * Render de la subpestaña Calendario.
  */
 function tcsocial_calendar_render_admin()
@@ -621,6 +703,13 @@ function tcsocial_calendar_render_admin()
                     echo '<span class="seo-social-calendar-event-title">' . esc_html($title) . '</span>';
                 }
                 echo '<small>' . esc_html((string) $event['type_label']) . '</small>';
+                echo tcsocial_calendar_delivery_badge($event); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped HTML badge.
+            if (!empty($event['error_message'])) {
+                echo '<small title="' . esc_attr((string) $event['error_message']) . '">' . esc_html(wp_trim_words((string) $event['error_message'], 12)) . '</small>';
+            }
+                if (!empty($event['error_message'])) {
+                    echo '<small title="' . esc_attr((string) $event['error_message']) . '">' . esc_html(wp_trim_words((string) $event['error_message'], 12)) . '</small>';
+                }
                 tcsocial_calendar_render_event_actions($event);
                 echo '</div>';
             }
@@ -661,7 +750,8 @@ function tcsocial_calendar_render_admin()
             } else {
                 echo '<span>' . esc_html((string) $event['title']) . '</span>';
             }
-            echo '<small>' . esc_html((string) $event['type_label']) . ' · ' . esc_html(('pausada' === $event['status']) ? __('Pausada', 'taxocommerce-social') : __('Programada', 'taxocommerce-social')) . '</small>';
+            echo '<small>' . esc_html((string) $event['type_label']) . '</small> ';
+            echo tcsocial_calendar_delivery_badge($event); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped HTML badge.
             tcsocial_calendar_render_event_actions($event, 'compact');
             echo '</div>';
         }

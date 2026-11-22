@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: TaxoCommerce Suppliers 0.2.27\n"
+"Project-Id-Version: TaxoCommerce Suppliers 0.2.28\n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2028,3 +2028,51 @@ msgstr "Ein Lieferantenimport wird bereits verarbeitet."
 
 msgid "Para editar muchas fichas, descarga el CSV desde Gestión de proveedores. El archivo incluye también proveedores sin ficha. Rellena las columnas conservando los nombres de proveedor y vuelve a importarlo. Se validan las identidades existentes; los nombres desconocidos se omiten. Los campos vacíos sobrescriben los valores anteriores. La importación se procesa por bloques y permite detenerse sin revertir los bloques ya completados."
 msgstr "Für viele Profile exportieren Sie die CSV aus der Lieferantenverwaltung, einschließlich Lieferanten ohne Profil. Füllen Sie die Spalten aus und lassen Sie die Lieferantennamen unverändert. Unbekannte Namen werden übersprungen. Leere Zellen überschreiben alte Werte. Der Import läuft in Stapeln und kann ohne Rücknahme abgeschlossener Stapel gestoppt werden."
+
+msgid "Supplier contact record deleted. Catalogue products were not changed."
+msgstr "Kontaktdatensatz gelöscht. Die Katalogprodukte wurden nicht verändert."
+
+msgid "This supplier is no longer in the directory."
+msgstr "Dieser Lieferant ist nicht mehr im Verzeichnis vorhanden."
+
+msgid "This supplier already exists. Edit its record instead."
+msgstr "Dieser Lieferant existiert bereits. Bearbeiten Sie stattdessen seinen Datensatz."
+
+msgid "Enter a supplier name with 190 characters or fewer."
+msgstr "Geben Sie einen Lieferantennamen mit höchstens 190 Zeichen ein."
+
+msgid "Add a supplier manually before importing any products. Imported suppliers also appear automatically."
+msgstr "Fügen Sie Lieferanten manuell hinzu, bevor Sie Produkte importieren. Importierte Lieferanten erscheinen ebenfalls automatisch."
+
+msgid "Add supplier manually"
+msgstr "Lieferanten manuell hinzufügen"
+
+msgid "This supplier is not in the directory."
+msgstr "Dieser Lieferant ist nicht im Verzeichnis vorhanden."
+
+msgid "%d suppliers in the directory"
+msgstr "%d Lieferanten im Verzeichnis"
+
+msgid "No suppliers found in the directory."
+msgstr "Keine Lieferanten im Verzeichnis gefunden."
+
+msgid "Supplier names cannot be changed after saving. These records are private to store administrators."
+msgstr "Lieferantennamen können nach dem Speichern nicht geändert werden. Diese Datensätze sind nur für Administratoren sichtbar."
+
+msgid "Export imported and manually created suppliers as an editable CSV. Import it to update private contact details; products, prices and orders never change."
+msgstr "Exportieren Sie importierte und manuell angelegte Lieferanten als bearbeitbare CSV. Beim Import werden nur private Kontaktdaten aktualisiert, niemals Produkte, Preise oder Bestellungen."
+
+msgid "CSV imports update only known suppliers (from Inventory or manual records). Unknown names are skipped. Blank cells replace existing values. Export a backup first."
+msgstr "Der CSV-Import aktualisiert nur bekannte Lieferanten (aus Inventar oder manuell angelegt). Unbekannte Namen werden übersprungen. Leere Zellen überschreiben bestehende Werte. Exportieren Sie zuerst eine Sicherung."
+
+msgid "Crear proveedores manualmente o desde el catálogo importado, y editar sus fichas privadas, contactos, direcciones y observaciones."
+msgstr "Lieferanten manuell oder über den importierten Katalog anlegen und ihre privaten Daten, Kontakte, Adressen und Notizen bearbeiten."
+
+msgid "La lista reúne los proveedores del inventario importado y los creados manualmente, aunque todavía no tengan productos. Para dar de alta uno nuevo, pulsa Añadir proveedor manualmente, introduce su nombre y completa los datos de su ficha. Cuando se importen productos con ese nombre, aparecerán vinculados al mismo proveedor."
+msgstr "Die Liste enthält importierte und manuell angelegte Lieferanten, auch ohne Produkte. Wählen Sie „Lieferanten manuell hinzufügen“, geben Sie den Namen ein und vervollständigen Sie die Daten. Später unter diesem Namen importierte Produkte erscheinen beim selben Lieferanten."
+
+msgid "Eliminar ficha borra únicamente los datos privados de contacto. Un proveedor con productos seguirá visible desde el inventario; uno creado solo manualmente desaparecerá del listado. Nunca se borran productos, precios ni pedidos."
+msgstr "Beim Löschen eines Datensatzes werden nur private Kontaktdaten entfernt. Lieferanten mit Produkten bleiben im Inventar sichtbar; rein manuell angelegte verschwinden aus der Liste. Produkte, Preise und Bestellungen werden nie gelöscht."
+
+msgid "Para editar muchas fichas, descarga el CSV desde Gestión de proveedores. Incluye los proveedores importados y los creados manualmente, incluso con cero productos. Rellena las columnas y vuelve a importarlo: los nombres deben existir ya en el listado; el CSV no da de alta proveedores nuevos. Los campos vacíos sobrescriben los valores anteriores. La importación se procesa por bloques y puede detenerse."
+msgstr "Um viele Datensätze zu bearbeiten, laden Sie die CSV aus der Lieferantenverwaltung herunter. Sie enthält importierte und manuell angelegte Lieferanten, auch ohne Produkte. Füllen Sie die Spalten aus und importieren Sie sie erneut: Namen müssen bereits vorhanden sein; die CSV legt keine neuen Lieferanten an. Leere Zellen überschreiben alte Werte. Der Import erfolgt in abbrechbaren Blöcken."

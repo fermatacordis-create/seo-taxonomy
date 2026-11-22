@@ -2103,3 +2103,289 @@ msgstr "Voir le journal / diagnostic"
 
 msgid "Process diagnostics are unavailable until the plugin update completes."
 msgstr "Les diagnostics des processus sont indisponibles jusqu'à la fin de la mise à jour de l’extension."
+
+msgid "Select an active plugin from the table."
+msgstr "Sélectionnez une extension active dans le tableau."
+
+msgid "The active plugin directory could not be verified."
+msgstr "Impossible de vérifier le dossier de l’extension active."
+
+msgid "Real operations are not executed by this check."
+msgstr "Ce contrôle n’exécute aucune opération réelle."
+
+msgid "Only basic availability checks are supported by this plugin."
+msgstr "Cette extension ne prend en charge que les vérifications élémentaires de disponibilité."
+
+msgid "The native test returned an invalid report."
+msgstr "Le contrôle natif a renvoyé un rapport non valide."
+
+msgid "File unavailable or over the size limit."
+msgstr "Fichier indisponible ou trop volumineux."
+
+msgid "Basic availability check; not a functional integration test."
+msgstr "Vérification élémentaire de disponibilité, et non test fonctionnel d’intégration."
+
+msgid "Insufficient permissions."
+msgstr "Autorisations insuffisantes."
+
+msgid "The selected plugin is not registered as active."
+msgstr "L’extension sélectionnée n’est pas enregistrée comme active."
+
+msgid "The check was paused after an execution error."
+msgstr "Le contrôle a été suspendu à la suite d’une erreur d’exécution."
+
+msgid "Unknown plugin."
+msgstr "Extension inconnue."
+
+msgid "Complete the selected plugin check before downloading the report."
+msgstr "Terminez la vérification de l’extension sélectionnée avant de télécharger le rapport."
+
+msgid "failures"
+msgstr "échecs"
+
+msgid "warnings to review"
+msgstr "avertissements à examiner"
+
+msgid "Check plugin"
+msgstr "Vérifier l’extension"
+
+msgid "View results"
+msgstr "Afficher les résultats"
+
+msgid "Individual plugin validation"
+msgstr "Validation individuelle par extension"
+
+msgid "Select Check plugin in a row. Only that registered plugin is tested; detailed results and JSON are available without rerunning it."
+msgstr "Cliquez sur « Vérifier l’extension » sur sa ligne. Seule cette extension est analysée ; les résultats détaillés et le JSON sont accessibles sans relancer les tests."
+
+msgid "CPU usage"
+msgstr "Utilisation du processeur"
+
+msgid "Plugin validation results"
+msgstr "Résultats de validation des extensions"
+
+msgid "Unable to execute the check."
+msgstr "Impossible d’exécuter le contrôle."
+
+msgid "skipped"
+msgstr "ignorés"
+
+msgid "errors"
+msgstr "erreurs"
+
+msgid "warnings"
+msgstr "avertissements"
+
+msgid "Basic only: "
+msgstr "Contrôle élémentaire : "
+
+msgid "No details available."
+msgstr "Aucun détail disponible."
+
+msgid "Review required."
+msgstr "Examen nécessaire."
+
+msgid "Recommendation: "
+msgstr "Recommandation : "
+
+msgid "No results in this category."
+msgstr "Aucun résultat dans cette catégorie."
+
+msgid "No report exists for this plugin yet."
+msgstr "Aucun rapport n’existe encore pour cette extension."
+
+msgid "Results for "
+msgstr "Résultats de "
+
+msgid "Status: "
+msgstr "État : "
+
+msgid " · Date: "
+msgstr " · Date : "
+
+msgid "Download complete JSON for this plugin"
+msgstr "Télécharger le JSON complet de cette extension"
+
+msgid "Functional failures"
+msgstr "Échecs fonctionnels"
+
+msgid "Skipped checks"
+msgstr "Tests ignorés"
+
+msgid "Passed checks"
+msgstr "Tests réussis"
+
+msgid "Code errors"
+msgstr "Erreurs de code"
+
+msgid "Code warnings (manual review)"
+msgstr "Avertissements de code (examen manuel)"
+
+msgid "Unchecked files"
+msgstr "Fichiers non vérifiés"
+
+msgid "Local code review is not the official WordPress Plugin Check."
+msgstr "L’analyse locale du code ne remplace pas le Plugin Check officiel de WordPress."
+
+msgid " · You can resume this check."
+msgstr " · Vous pouvez reprendre ce contrôle."
+
+msgid "Preparing check for "
+msgstr "Préparation du contrôle de "
+
+msgid "Functions"
+msgstr "Fonctionnalités"
+
+msgid "Code"
+msgstr "Code"
+
+msgid "Core pilot (previous validation mode)"
+msgstr "Pilote Core (ancien mode de validation)"
+
+msgid "Funcionalidades"
+msgstr "Fonctionnalités"
+
+msgid "Código"
+msgstr "Code"
+
+msgid "Acciones"
+msgstr "Actions"
+
+msgid "Native functional checks are used when available. Basic checks never imply a full integration check; local source reviews are not official WordPress Plugin Check."
+msgstr "Les contrôles fonctionnels natifs sont utilisés lorsqu’ils sont disponibles. Les contrôles élémentaires ne prouvent pas une intégration complète ; les examens locaux du code ne sont pas le Plugin Check officiel de WordPress."
+
+msgid "Plugin check: %s"
+msgstr "Vérification de l’extension : %s"
+
+msgid "Browser-driven check, not PHP background execution; function tests: %1$d, code files: %2$d/%3$d."
+msgstr "Vérification exécutée depuis le navigateur, pas un processus PHP en arrière-plan ; tests fonctionnels : %1$d, fichiers de code : %2$d/%3$d."
+
+msgid "Paused from Processes."
+msgstr "Suspendu depuis Processus."
+
+msgid "Plugin validation started."
+msgstr "Validation de l’extension démarrée."
+
+msgid "Stopped by administrator; active PHP requests cannot be interrupted."
+msgstr "Arrêté par l’administrateur ; une requête PHP active ne peut pas être interrompue."
+
+msgid "Validation resumed in browser."
+msgstr "Validation reprise dans le navigateur."
+
+msgid "Execution log"
+msgstr "Journal d’exécution"
+
+msgid "The server returned an invalid JSON response. Check PHP notices or the server error log."
+msgstr "Le serveur a renvoyé une réponse JSON invalide. Vérifiez les avertissements PHP ou le journal des erreurs."
+
+msgid "The browser is not processing batches; press Resume to continue."
+msgstr "Le navigateur ne traite aucun lot ; cliquez sur Reprendre pour continuer."
+
+msgid "Check all plugins"
+msgstr "Vérifier tous les plugins"
+
+msgid "Plugins checked"
+msgstr "Plugins vérifiés"
+
+msgid "Checks with findings"
+msgstr "Contrôles avec anomalies"
+
+msgid "Execution errors"
+msgstr "Erreurs d’exécution"
+
+msgid "Paused"
+msgstr "En pause"
+
+msgid "All plugin checks finished"
+msgstr "Contrôles de tous les plugins terminés"
+
+msgid "Check plugins individually or run all active TaxoCommerce modules sequentially. Each plugin keeps its own results, log and JSON report."
+msgstr "Vérifiez chaque plugin séparément ou exécutez tous les modules TaxoCommerce actifs dans l’ordre. Chaque plugin conserve ses résultats, son journal et son rapport JSON."
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "System diagnostics, plugin checks and reports."
+msgstr "Diagnostics système, vérifications des extensions et rapports."
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "System Check tabs"
+msgstr "Onglets System Check"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "System"
+msgstr "Système"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Manual"
+msgstr "Manuel"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Download system JSON"
+msgstr "Télécharger le JSON du système"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Download basic checks JSON"
+msgstr "Télécharger le JSON des vérifications de base"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Download HTTP JSON"
+msgstr "Télécharger le JSON HTTP"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Loaded and registered"
+msgstr "Chargé et enregistré"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Version declared"
+msgstr "Version déclarée"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "System diagnostics engine available"
+msgstr "Moteur de diagnostic système disponible"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "HTTP auditor available"
+msgstr "Auditeur HTTP disponible"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Basic availability checks; not a full functional validation."
+msgstr "Vérifications de disponibilité de base ; pas une validation fonctionnelle complète."
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Download previous checks JSON (history)"
+msgstr "Télécharger le JSON des contrôles précédents (historique)"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Download complete JSON"
+msgstr "Télécharger le JSON complet"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Open independent PHP diagnostics"
+msgstr "Ouvrir le diagnostic PHP indépendant"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Independent implementation."
+msgstr "Implémentation indépendante."
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Warning: "
+msgstr "Avertissement : "
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Running"
+msgstr "En cours"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Completed"
+msgstr "Terminé"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Pending"
+msgstr "En attente"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Waiting"
+msgstr "En attente"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Findings"
+msgstr "Constats"

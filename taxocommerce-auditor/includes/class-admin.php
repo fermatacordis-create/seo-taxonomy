@@ -353,6 +353,9 @@ final class Admin {
             'context'  => __( 'Contexto de decisión', 'taxocommerce-auditor' ),
             'history'  => __( 'Historial', 'taxocommerce-auditor' ),
         );
+        if ( 'products' === $scope ) {
+            $views['ai'] = __( 'Recomendaciones IA', 'taxocommerce-auditor' );
+        }
         if ( 'categories' === $scope ) {
             $views['balance'] = __( 'Reequilibrio', 'taxocommerce-auditor' );
         }
@@ -372,6 +375,8 @@ final class Admin {
             self::render_plan( $report );
         } elseif ( 'findings' === $view ) {
             self::render_findings( $report );
+        } elseif ( 'ai' === $view && 'products' === $scope ) {
+            AI_Recommendations::render( $report );
         } elseif ( 'balance' === $view ) {
             self::render_balance( $report );
         } elseif ( 'context' === $view ) {

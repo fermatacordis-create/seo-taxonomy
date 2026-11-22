@@ -1,3 +1,9 @@
+= 0.4.35 (2026-11-18) =
+* Accept an append-only page CSV with record_type,id,slug,content_append; validate existing page identity and add sanitized HTML without replacing other fields. Reimports avoid duplicate ZIP links. Issue #2804.
+
+= 0.4.34 (2026-11-18) =
+* Translate 66 administration strings covering CSV validation, batch processing, progress and exports into five WordPress locales; rebuild PO/MO with plurals and placeholders preserved. Add locale regression checks. No import/export behavior changes. Issue #2783.
+
 = 0.4.32 (2026-11-13) =
 * Code Check equiparado a Core 0.4.82: reglas autónomas PHP/WordPress/seguridad, clasificación por gravedad, detalles de archivos y recomendaciones, resumen y JSON; sin modificar el Autotest funcional. Issue #2626.
 

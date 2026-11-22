@@ -12,13 +12,9 @@ WooCommerce product offer campaigns, banners and an independent commercial calen
 
 == Description ==
 
-* Admin header: plugin title, a single local `Description` with the static `Plugin URI` link below it (left); a wider collapsed `CHANGELOG.md` history (center); local version and release date (right). No duplicated information panel or external requests.
-
-* The admin header shows the plugin's bundled `Description` and links to its `Plugin URI`, without network requests or caching. Version history uses the bundled `CHANGELOG.md`.
-
-
-
 TaxoCommerce Campaigns manages product promotions and scheduled price campaigns with conflict checks. It includes campaign creation/editing, product assignment, price application and restoration, CSV imports/exports, promotional creatives and a commercial calendar.
+
+= Key Features =
 
 * Reuses the existing seo_marketing_campaigns and seo_marketing_campaign_products tables where available.
 * Supports public [taxocommerce_campaign] and [oferta] shortcodes.

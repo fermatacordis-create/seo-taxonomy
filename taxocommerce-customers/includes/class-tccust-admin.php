@@ -26,13 +26,25 @@ final class TCCUST_Admin {
 		add_action( 'admin_post_tccust_delete', array( __CLASS__, 'delete' ) );
 	}
 
+	/**
+	 * The Core registration hook runs on plugins_loaded, before init.
+	 * Avoid loading translations until WordPress has reached init.
+	 *
+	 * @return string Human-readable plugin description.
+	 */
+	public static function description() {
+		return did_action( 'init' )
+			? __( 'Private customer and purchaser management.', 'taxocommerce-customers' )
+			: 'Private customer and purchaser management.';
+	}
+
 	public static function register_module( $core ) {
 		if ( is_object( $core ) && method_exists( $core, 'register_module' ) ) {
 			$core->register_module( 'customers', array(
 				'name' => 'TaxoCommerce Customers',
 				'version' => TCCUST_VERSION,
 				'status' => 'active',
-				'description' => __( 'Private customer and purchaser management.', 'taxocommerce-customers' ),
+				'description' => self::description(),
 				'admin_url' => admin_url( 'admin.php?page=taxocommerce-customers' ),
 			) );
 		}

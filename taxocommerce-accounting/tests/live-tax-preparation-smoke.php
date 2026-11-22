@@ -62,4 +62,16 @@ tca_schedule_sales_sync();
 tca_sync_assert( false === $GLOBALS['tca_scheduled'], 'Disabling clears cron' );
 tca_background_sales_sync();
 tca_sync_assert( count( $GLOBALS['tca_wc_calls'] ) === 5, 'Disabling stops further imports' );
+
+$domestic_zero = (object) array( 'source' => 'woocommerce', 'kind' => 'sale', 'amount_base' => '621.60', 'amount_tax' => '0.00' );
+tca_sync_assert( tca_needs_zero_vat_confirmation( $domestic_zero ), 'WooCommerce sale with zero VAT requests explicit review' );
+$domestic_zero->amount_tax = '107.88';
+tca_sync_assert( ! tca_needs_zero_vat_confirmation( $domestic_zero ), 'Properly taxed WooCommerce sale needs no zero-VAT warning' );
+$domestic_zero->amount_tax = '0.00';
+$domestic_zero->kind = 'refund';
+tca_sync_assert( ! tca_needs_zero_vat_confirmation( $domestic_zero ), 'Refunds have their own review flow' );
+$domestic_zero->kind = 'sale';
+$domestic_zero->source = 'manual';
+tca_sync_assert( ! tca_needs_zero_vat_confirmation( $domestic_zero ), 'Manual entries do not trigger WooCommerce-only warning' );
 echo "Accounting opt-in background import: PASS\n";
+

@@ -1,0 +1,63 @@
+<!-- wp:html -->
+<section class="tc-ticketing-page" aria-label="TaxoCommerce Ticketing">
+<style>
+.tc-ticketing-page{--tc-accent:#2362b3;--tc-pale:#edf5ff;--tc-ink:#1d2938;max-width:1080px;margin:0 auto;color:var(--tc-ink);font-family:inherit}
+.tc-ticketing-page *{box-sizing:border-box}
+.tc-ticketing-page .tc-hero{padding:46px 36px;border-radius:18px;background:linear-gradient(130deg,#eaf3ff 0%,#f9fbff 80%);border:1px solid #cfdef2}
+.tc-ticketing-page .tc-eyebrow{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#275f9e}
+.tc-ticketing-page h2{font-size:clamp(26px,4vw,42px);line-height:1.14;margin:14px 0;color:#173658}
+.tc-ticketing-page h3{font-size:23px;color:#173658;margin:0 0 12px}
+.tc-ticketing-page p{line-height:1.72}
+.tc-ticketing-page .tc-lead{font-size:18px;max-width:780px}
+.tc-ticketing-page .tc-pill{display:inline-block;background:#fff;border:1px solid #c8dbee;border-radius:50px;padding:6px 12px;font-size:12px;font-weight:600;margin:6px 6px 0 0}
+.tc-ticketing-page .tc-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.tc-ticketing-page a.tc-btn{background:#2362b3;color:#fff!important;padding:13px 20px;border-radius:8px;text-decoration:none;font-weight:700;display:inline-block}
+.tc-ticketing-page a.tc-btn.tc-secondary{background:white;color:#2362b3!important;border:1px solid #a8c5e4}
+.tc-ticketing-page a.tc-btn:focus-visible{outline:3px solid #d18325;outline-offset:3px}
+.tc-ticketing-page .tc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px;margin:28px 0}
+.tc-ticketing-page .tc-card{border:1px solid #e0e6ed;background:#fff;border-radius:13px;padding:23px;box-shadow:0 2px 9px rgba(18,52,81,.04)}
+.tc-ticketing-page .tc-card strong{display:block;font-size:16px;margin-bottom:8px;color:#174e89}
+.tc-ticketing-page .tc-section{margin:48px 0}
+.tc-ticketing-page .tc-steps{counter-reset:tcsteps;list-style:none;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.tc-ticketing-page .tc-steps li{counter-increment:tcsteps;border:1px solid #d7e4f0;border-radius:12px;padding:20px;background:#f8fbff}
+.tc-ticketing-page .tc-steps li:before{content:counter(tcsteps);display:block;background:#2362b3;color:#fff;border-radius:50%;width:30px;height:30px;line-height:30px;text-align:center;font-weight:700;margin-bottom:12px}
+.tc-ticketing-page .tc-note{padding:22px;border-left:4px solid #2362b3;background:#f3f7fc;border-radius:0 12px 12px 0}
+.tc-ticketing-page code{overflow-wrap:anywhere}
+@media(max-width:760px){.tc-ticketing-page .tc-grid,.tc-ticketing-page .tc-steps{grid-template-columns:1fr}.tc-ticketing-page .tc-hero{padding:28px 22px}}
+</style>
+<div class="tc-hero">
+<p class="tc-eyebrow">TaxoCommerce · Plugin independiente</p>
+<h2>Atención al cliente y gestión de solicitudes, sin complicaciones</h2>
+<p class="tc-lead">TaxoCommerce Ticketing organiza las consultas sobre productos, incidencias con envíos y solicitudes de asistencia en un único lugar. También permite registrar asuntos internos de tu equipo.</p>
+<span class="tc-pill">WordPress y WooCommerce</span><span class="tc-pill">Formularios personalizables</span><span class="tc-pill">Adjuntos privados</span><span class="tc-pill">Sin dependencia obligatoria de Core</span>
+<div class="tc-actions">
+<a class="tc-btn" href="https://asociacionfocazul.com/wp-content/uploads/taxocommerce-core/plugins/taxocommerce-ticketing.zip">Descargar plugin ZIP</a>
+<a class="tc-btn tc-secondary" href="https://github.com/distribuidordeherramientases-wq/seo-taxonomy/tree/staging/taxocommerce-ticketing">Consultar documentación y código</a>
+</div>
+</div>
+<div class="tc-section">
+<h3>Un sistema de tickets adaptable a cada negocio</h3>
+<div class="tc-grid">
+<div class="tc-card"><strong>Consultas de productos</strong><p>Recibe dudas de disponibilidad, compatibilidad, características o referencias de artículos.</p></div>
+<div class="tc-card"><strong>Incidencias de envíos</strong><p>Centraliza comunicaciones de entregas, transportistas y solicitudes de seguimiento.</p></div>
+<div class="tc-card"><strong>Asistencia y soporte</strong><p>Gestiona consultas técnicas de productos, servicios o plugins sin imponer la etiqueta «soporte informático».</p></div>
+<div class="tc-card"><strong>Solicitudes internas</strong><p>Abre tickets privados para el equipo, con responsable asignado, prioridad y evolución.</p></div>
+<div class="tc-card"><strong>Respuestas y seguimiento</strong><p>Envía notificaciones por correo y facilita un enlace privado para consultar el historial y responder desde la web.</p></div>
+<div class="tc-card"><strong>Presentación a tu medida</strong><p>Cambia el título, textos, categorías, logotipo y elige entre tres estilos de color: azul, verde o marrón.</p></div>
+</div>
+</div>
+<div class="tc-section">
+<h3>Cómo se utiliza</h3>
+<ol class="tc-steps">
+<li><strong>Instala y activa</strong><p>Sube el ZIP desde WordPress. Si utilizas TaxoCommerce Core, el plugin puede gestionarse desde su catálogo de extensiones.</p></li>
+<li><strong>Personaliza el formulario</strong><p>Configura el correo receptor, los tipos de solicitud, los textos y la apariencia del formulario público.</p></li>
+<li><strong>Publica el formulario</strong><p>Añade <code>&#91;taxocommerce_ticket_form&#93;</code> a cualquier página y gestiona los mensajes desde la bandeja de tickets.</p></li>
+</ol>
+</div>
+<div class="tc-section tc-note">
+<h3>Independiente, pero preparado para crecer</h3>
+<p>Ticketing funciona por sí solo y no necesita otros módulos TaxoCommerce. Se ha reservado un punto de integración opcional para enlazar tickets con tareas internas en futuras versiones, sin unir ambas aplicaciones.</p>
+<p><strong>Información técnica:</strong> la primera versión utiliza correos salientes de WordPress y enlaces privados para responder; no importa automáticamente las respuestas recibidas por correo. Los documentos adjuntos tienen un límite inicial de 2 MB y se almacenan fuera del acceso público directo. El correo requiere que la tienda tenga configurado un servicio de envío fiable.</p>
+</div>
+</section>
+<!-- /wp:html -->

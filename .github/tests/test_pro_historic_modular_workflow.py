@@ -1,47 +1,59 @@
-"""Offline contract: staging Git diff then production FTP copy without inventory."""
+"""Offline regression checks for GitHub STAGING -> PRO direct FTPS copy.
+
+No FTP or WordPress access is used here.
+"""
 from pathlib import Path
 import unittest
+
 ROOT = Path(__file__).resolve().parents[2]
+MAIN = ROOT / ".github/workflows/despliege_de_main_a_pro.yml"
+ALTERNATE = ROOT / ".github/workflows/staging-a-pro-manual.yml"
+COPIER = ROOT / ".github/scripts/deploy_pro_ftps_native.py"
+SELECTOR = ROOT / ".github/scripts/select_pro_release_delta.py"
 
-class PRODeployTests(unittest.TestCase):
-    def setUp(self):
-        self.workflow = (ROOT / ".github/workflows/despliege_de_main_a_pro.yml").read_text()
-        self.copier = (ROOT / ".github/scripts/deploy_pro_ftps_native.py").read_text()
-        self.selector = (ROOT / ".github/scripts/select_pro_release_delta.py").read_text()
 
-    def test_github_to_pro_without_inventory(self):
-        self.assertIn("select_pro_release_delta.py --all-changed", self.workflow)
-        self.assertIn("deploy_pro_ftps_native.py", self.workflow)
-        for forbidden in ("fetch_pro_installed_modules.py", "INSTALLED_MODULES_JSON",
-                          "PRO_CORE_EXPECTED_VERSION", "PRO_WOO_EXPECTED_VERSION",
-                          "deploy-active-modules", "pro_ftps_root_probe.py", "PRO_FTPS_HOST"):
-            self.assertNotIn(forbidden, self.workflow)
-        self.assertIn("installed = None", self.selector)
-        self.assertIn("allowed = None", self.selector)
-        self.assertNotIn("installed_modules(", self.copier)
-        self.assertNotIn("find_verified_root(", self.copier)
+class ProDirectFTPWorkflowTests(unittest.TestCase):
+    def test_both_workflows_are_manual_and_only_copy_directly(self):
+        for workflow in (MAIN, ALTERNATE):
+            yaml = workflow.read_text(encoding="utf-8")
+            self.assertIn("workflow_dispatch:", yaml)
+            self.assertNotIn("\n  push:", yaml)
+            self.assertIn("ref: staging", yaml)
+            self.assertIn("select_pro_release_delta.py --all-changed", yaml)
+            self.assertIn("deploy_pro_ftps_native.py pro-delta.json", yaml)
+            for key in ("FTP_SERVER", "FTP_USERNAME", "FTP_PASSWORD"):
+                self.assertIn("secrets." + key, yaml)
+            for indirect in (
+                "deploy_pro_simple.py", "fetch_pro_installed_modules.py",
+                "INSTALLED_MODULES_JSON", "deploy-active-modules", "seo-taxonomy/",
+                ".taxocommerce-deploy/", "wpcom_plugin_upload", "zip -",
+            ):
+                self.assertNotIn(indirect, yaml)
 
-    def test_existing_ftp_secrets_and_fixed_plugin_directory(self):
-        for name in ("FTP_SERVER", "FTP_USERNAME", "FTP_PASSWORD"):
-            self.assertIn("secrets." + name, self.workflow)
-        self.assertNotIn("secrets.STAGING_FTP_", self.workflow)
-        self.assertIn("PLUGINS_DIR = \"wp-content/plugins\"", self.copier)
-        self.assertIn("ftp.cwd(PLUGINS_DIR)", self.copier)
+    def test_main_remains_callable_with_exact_staging_revision(self):
+        yaml = MAIN.read_text(encoding="utf-8")
+        self.assertIn("name: STAGING a PRODUCCION", yaml)
+        self.assertIn("workflow_call:", yaml)
+        self.assertIn('test "$GITHUB_REF_NAME" = "staging"', yaml)
+        self.assertIn('ACTUAL_SHA="$(git rev-parse HEAD)"', yaml)
+        self.assertIn('if [ "$ACTUAL_SHA" != "$EXPECTED_SHA" ]; then', yaml)
 
-    def test_changed_files_only_and_copy_sha(self):
-        self.assertIn("changed_count != '0'", self.workflow)
-        self.assertIn("changed_count == '0'", self.workflow)
-        self.assertIn("read_hash(ftp, filename) == digest", self.copier)
-        self.assertIn("ftp.rename(filename, backup)", self.copier)
-        self.assertIn("ftp.rename(temporary, filename)", self.copier)
+    def test_copy_only_changed_files_and_refuse_wrong_ftp_location(self):
+        copier = COPIER.read_text(encoding="utf-8")
+        selector = SELECTOR.read_text(encoding="utf-8")
+        self.assertIn("find_live_plugin_root(ftp)", copier)
+        self.assertIn("Wrong production FTPS root:", copier)
+        self.assertIn("previous_exists = exists(ftp, filename)", copier)
+        self.assertIn("ftp.size(temporary) != source.stat().st_size", copier)
+        self.assertNotIn("retrbinary(", copier)
+        self.assertIn('ftp.storbinary("STOR " + temporary', copier)
+        self.assertIn('ftp.rename(temporary, filename)', copier)
+        self.assertIn("Uploaded file size mismatch", copier)
+        self.assertIn('SLUG = re.compile(r"taxocommerce-', selector)
+        self.assertIn('git("diff",', selector)
+        self.assertIn("--diff-filter=ACMT", selector)
+        self.assertIn("if args.all_changed:", selector)
 
-    def test_staging_only_and_no_manual_plugin_input(self):
-        self.assertIn("ref: staging", self.workflow)
-        self.assertIn('test "$GITHUB_REF_NAME" = "staging"', self.workflow)
-        self.assertIn("EXPECTED_SHA: " + "$" + "{{ inputs.source_sha }}", self.workflow)
-        manual = self.workflow.split("  workflow_dispatch:", 1)[1].split("\npermissions:", 1)[0]
-        self.assertNotIn("inputs:", manual)
-        self.assertNotIn("target_plugin", manual)
 
 if __name__ == "__main__":
     unittest.main()

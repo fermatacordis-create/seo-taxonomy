@@ -28,6 +28,9 @@
 		var processing = false;
 		var polling = false;
 		var pollTimer = null;
+		var browserAssist = false;
+		var progressSignature = '';
+		var lastProgressAt = Date.now();
 
 		function selectedMeta() {
 			return config.types && config.types[type.value] ? config.types[type.value] : {};
@@ -136,6 +139,18 @@
 			});
 		}
 
+		function observeProgress(data, serverOnly) {
+			var signature = String(data.job || '') + ':' + Number(data.examined || 0) + ':' + Number(data.blocks || 0) + ':' + String(!!data.complete);
+			if (signature !== progressSignature) {
+				if (serverOnly && progressSignature && browserAssist) {
+					// Background processing recovered; stop browser assistance.
+					browserAssist = false;
+				}
+				progressSignature = signature;
+				lastProgressAt = Date.now();
+			}
+		}
+
 		function showPanel() {
 			panel.style.display = '';
 		}
@@ -179,11 +194,13 @@
 			download.style.display = data.downloadUrl ? '' : 'none';
 			setProgress(data);
 			activeJob = '';
+			browserAssist = false;
+			progressSignature = '';
 			start.disabled = false;
 		}
 
-		// The browser only observes persisted server progress. It never executes
-		// CSV blocks: Server-side workers continue them after the tab is closed.
+		// Background workers remain primary; if they stall, the open browser
+		// resumes the same lock-protected, bounded server-side CSV worker via AJAX.
 		async function pollStatus() {
 			if (polling) {
 				return;
@@ -197,23 +214,39 @@
 						bar.value = 0;
 					}
 					activeJob = '';
+					browserAssist = false;
+					progressSignature = '';
 					setBusy(false);
 					cancel.style.display = 'none';
 					retry.style.display = 'none';
 					return;
 				}
 				activeJob = data.job || '';
+				observeProgress(data, true);
 				showPanel();
 				setProgress(data);
 				if (data.complete) {
 					showComplete(data);
 					return;
 				}
+				if ((data.status === 'queued' || data.status === 'running') &&
+					(browserAssist || Date.now() - lastProgressAt >= 15000)) {
+					browserAssist = true;
+					var fields = new URLSearchParams();
+					fields.append('job', activeJob);
+					data = await request('taxocommerce_ie_export_step', fields);
+					observeProgress(data, false);
+					setProgress(data);
+					if (data.complete) {
+						showComplete(data);
+						return;
+					}
+				}
 				setBusy(false);
 				cancel.style.display = '';
 				retry.style.display = data.status === 'failed' ? '' : 'none';
 				if (data.status !== 'failed') {
-					pollTimer = window.setTimeout(pollStatus, 5000);
+					pollTimer = window.setTimeout(pollStatus, browserAssist ? Math.max(2000, Number(data.delay) || 0) : 5000);
 				}
 			} catch (error) {
 				showError(error);
@@ -252,6 +285,9 @@
 				});
 				var data = await request('taxocommerce_ie_export_start', params);
 				activeJob = data.job || '';
+				progressSignature = '';
+				browserAssist = false;
+				observeProgress(data, false);
 				setProgress(data);
 				setBusy(false);
 				if (!activeJob) {
@@ -287,6 +323,8 @@
 				var result = await request('taxocommerce_ie_export_cancel');
 				if (result.cancelled) {
 					activeJob = '';
+					browserAssist = false;
+					progressSignature = '';
 					processing = false;
 					message.textContent = 'Exportación cancelada. El archivo parcial se ha eliminado.';
 					bar.value = 0;

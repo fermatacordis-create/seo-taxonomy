@@ -1,18 +1,6 @@
-name: STAGING -> Plugin Check -> PRO (gated)
+name: PRO - SOLO MANUAL Y CON AUTORIZACION
 
 on:
-  push:
-    branches:
-      - staging
-    paths:
-      - 'taxocommerce-*/**'
-      - '.github/scripts/deploy_staging_delta.py'
-      - '.github/scripts/fetch_pro_installed_modules.py'
-      - '.github/scripts/audit_core_dual_sites.py'
-      - '.github/workflows/deploy-staging.yml'
-      - '.github/workflows/taxocommerce-plugin-check.yml'
-      - '.github/workflows/despliege_de_main_a_pro.yml'
-      - '.github/workflows/staging_check_subida_a_pro.yml'
   workflow_dispatch:
     inputs:
       full_sync:
@@ -34,8 +22,8 @@ on:
 permissions:
   contents: read
 
-# Pushes to staging may deploy only to STAGING/Focazul.
-# PRO requires a manual workflow_dispatch with deploy_pro=true.
+# NEVER auto-run. Only a user-approved manual workflow_dispatch with deploy_pro=true may reach PRO.
+# Normal staging merges use deploy-staging.yml, never this three-stage workflow.
 # The shared FTPS delivery is serialized by the called deploy-staging.yml
 # workflow, NOT by this entire pipeline. Holding the global concurrency
 # lock during 20 Plugin Check jobs starved later STAGING/Focazul releases,
@@ -43,7 +31,8 @@ permissions:
 # Keep the strict Plugin Check and manual PRO gates per release.
 jobs:
   preflight:
-    name: Require current staging revision
+    name: Require explicit manual production approval
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.deploy_pro == true }}
     runs-on: ubuntu-latest
     outputs:
       current: ${{ steps.version.outputs.current }}
@@ -151,7 +140,7 @@ jobs:
             echo '1. Inspect the failed job logs and identify the actual root cause.'
             echo '2. Correct the source or deployment configuration in a dedicated branch.'
             echo '3. Open a PR to staging, validate it, then merge.'
-            echo '4. Merge the fix into staging: the 3-phase pipeline reruns automatically on push.'
+            echo '4. Merge the fix into staging: the separate STAGING/Focazul-only workflow runs; PRO needs fresh explicit manual approval.'
             echo
             echo '**Never force a production deployment past a failed gate.**'
           } > pipeline-failure.md

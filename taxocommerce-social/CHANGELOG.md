@@ -1,3 +1,22 @@
+## Unreleased — WP-Cron schedule diagnostics (#2851)
+
+- The social scheduler now distinguishes overdue jobs and missing WordPress Cron events in its existing per-network queue, without triggering publication or automatic retries.
+- Existing remote API failures remain visible separately; no tokens or credentials are added to diagnostics.
+- Live verification of actual publication and site Cron execution remains required.
+
+## [0.1.25] — 2026-11-20 — Estado visible de publicaciones y porcentaje de fallos (#2840)
+
+- El calendario muestra publicaciones ya confirmadas (verde), fallos explícitos (rojo), futuras (azul) y respuestas sin confirmar (advertencia) usando únicamente agenda e historial propios, sin reenviar ni modificar publicaciones.
+- Informes y Autocheck reflejan el número de publicaciones publicadas, fallidas y sin confirmar por red, con porcentaje de error basado exclusivamente en respuestas concluyentes (publicadas + fallidas).
+- Mantiene el historial existente, los errores completos y la prevención de duplicados; pendiente de verificar publicaciones reales con las API y WP-Cron de cada instalación.
+
+## [0.1.24] — 2026-11-19 — Per-network publishing and WP-Cron delivery diagnostics (#2829)
+
+- Exposes a read-only Facebook/LinkedIn/Pinterest and other provider delivery audit: last attempt, latest confirmed publication, overdue schedules, overdue WP-Cron events, missing Cron events and stale pending requests. Connected status is no longer presented as proof of successful publishing.
+- Detects unexpected provider exceptions and missing remote IDs, keeping uncertain remote results pending instead of silently declaring success or automatically retrying them.
+- Displays full provider errors and failed-attempt timestamps in Reports and the existing history CSV. Autotest now flags non-delivery by provider, not merely the presence of registered hooks.
+- Does not replay historical overdue schedules or contact external networks during tests. Actual WP-Cron runner and real network credentials still require live validation on the affected site.
+
 ## [0.1.23] — 2026-11-14 — Propiedad autónoma de tareas WP-Cron heredadas (#2688)
 
 - Social adopta programaciones futuras almacenadas en las tablas compartidas cuando el antiguo ejecutor `seo_social_network_publish_manual_scheduled` ya no está registrado: primero registra y confirma el ejecutor propio; después retira exclusivamente el evento huérfano.

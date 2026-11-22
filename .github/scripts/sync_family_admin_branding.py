@@ -31,6 +31,8 @@ PLUGINS = {
     "templates": ("dashicons-layout", "Gestiona plantillas, enrutado de páginas y reglas de presentación."),
     "tasks": ("dashicons-clipboard", "Private task management, calendar and indicators."),
     "customers": ("dashicons-groups", "Private customer directory and contact management."),
+    "ticketing": ("dashicons-tickets-alt", "Customer and internal support ticket management."),
+    "mail": ("dashicons-email-alt", "Private multi-account email client for secure hosting inboxes and SMTP."),
 }
 
 def main():

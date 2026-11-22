@@ -1,3 +1,51 @@
+= 0.1.34 (2026-11-21) =
+* Complete extraction and translations of 156 missing Accounting administration gettext strings in five languages; rebuild MO catalogs. Replace two installation-specific account examples with generic wording. Issue #2917.
+
+= 0.1.32 (2026-11-21) =
+* Centralize depreciable fixed-asset entry, useful life and depreciation reporting in Assets; preserve legacy fixed-expense records and their corrections without migration or duplicated payments. Issue #2922. No PRO deployment.
+
+= 0.1.31 (2026-11-21) =
+* Show existing opening-balance loan funding as a dated bank receipt in monthly reporting and separate financial summary/JSON, without a second bank movement or changes to fiscal VAT and actual balances. Include regression and translations. Issue #2919. No production deployment.
+
+= 0.1.30 (2026-11-21) =
+* Localize 49 review, correction and payment/receipt UI strings in five languages and rebuild gettext catalogs. Issue #2917.
+
+= 0.1.29 (2026-11-21) =
+* Fix false amber status and «Payment not linked» on fully paid validated invoices with imported [scope=review] notes. Preserve formal tax review, original notes, all fiscal amounts and Treasury movements. Issue #2913. No PRO deployment.
+
+= 0.1.23 (2026-11-20) =
+* Fix reverting validated entries to draft without changing amounts or documents. Audit the required reason and allow editing the record notes in the correction form. Existing drafts with no changes remain no-ops. Issue #2894. No production deployment.
+
+= 0.1.22 (2026-11-20) =
+* Link monthly pending-review and incident counts directly to existing record validation/correction forms or a filtered month queue. Add contextual links in ledger and Autocheck; distinguish routine drafts, real invoice discrepancies and warnings. Avoid false pending non-domestic treatments or already linked issued invoices. Issue #2888.
+
+= 0.1.21 (2026-11-20) =
+* Translate expense classification and depreciation interface fields in five languages; rebuild compiled gettext catalogs. Issue #2884.
+
+= 0.1.20 (2026-11-20) =
+* Classify Expenses as current or depreciable fixed assets, with validated in-service date, useful life and automatic read-only annual depreciation. Existing entries default to current; VAT, purchases, invoices, and treasury unchanged. Issue #2881.
+
+= 0.1.19 (2026-11-20) =
+* Translate the Treasury menu tab in ES/EN/FR/DE/NL and rebuild gettext catalogs. No behavioral changes. Issue #2878.
+
+= 0.1.18 (2026-11-20) =
+* Localize 91 Treasury interface strings in ES/EN/FR/DE/NL and regenerate compiled gettext catalogs; preserve all bookkeeping operations. Issue #2876.
+
+= 0.1.17 (2026-11-20) =
+* Reconcile VAT against an independently verified, issued rectification via optional WordPress filter while preserving original invoice, WooCommerce order and payments. No hard plugin dependency. Issue #2860.
+
+= 0.1.16 (2026-11-20) =
+* Add nominal fixed-rate loan forecasts with term, down payment, final extra principal, accurate principal/interest breakdown and final-cent adjustment. Optional confirmed funding bank receipt and manual, transaction-safe instalment payments; preserve historical manual loans. Loans and interest do not modify VAT calculations. Issue #2857.
+
+= 0.1.15 (2026-11-20) =
+* Add optional paid WooCommerce bank receipts with account/date cut-off; reconcile historic sales and refunds alongside supplier payments; convert verified opening balances into dated receipts without double-counting. No invoice is presumed paid from fiscal validation alone. Issue #2845.
+
+= 0.1.14 (2026-11-20) =
+* Optional confirmed paid flag, bank/cash account and real date when entering or validating an invoice. Treasury can reconcile historical already-paid invoices in one reviewed batch without duplicating linked or manually matched payments. Explicit user confirmation is required, and CSV imports still create drafts without assumed payments. Issue #2843.
+
+= 0.1.13 (2026-11-18) =
+* Link confirmed invoice payments and receipts (including partial payments) to real cash/bank movements; dedicated ledger links, idempotency keys, exact balance reconciliation, no automatic movements from fiscal validation alone. Issue #2817.
+
 = 0.1.2 (2026-11-14) =
 * Add Hacienda workspace with VAT books, models 303/390/347/349/200 preparatory authenticated CSV/JSON reports, official blank AEAT XLSX template links for books/303, current-quarter default, 303 quarterly and 390 yearly domestic VAT aggregation across all rows, AEAT links, and non-fileable status. No electronic filing; issue #2687.
 

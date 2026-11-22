@@ -29,7 +29,7 @@ $checks = array(
     strpos( $batch, "handle_delete_pending" ) !== false,
     strpos( $batch, "INDIVIDUAL_STATE" ) !== false,
     strpos( $batch, "individual_status" ) !== false,
-    strpos( $core, "tc-ie-individual-monitor" ) !== false,
+    strpos( $core, '$this->basic->render()' ) !== false,
     strpos( $core, "taxocommerce_ie_individual_status" ) !== false,
     strpos( $csv, 'queue_individual( $file )' ) !== false,
     strpos( $main, "class-taxocommerce-import-export-exporter.php" ) !== false,

@@ -39,6 +39,7 @@ final class TCSocial_Auto_Test {
             'scheduler'          => array( 'Programador', 'Gestión de tareas y estados' ),
             'cron'               => array( 'Programador', 'Registro real de hooks y WP-Cron' ),
             'schedule_health'    => array( 'Calendario', 'Agenda contrastada con WP-Cron' ),
+            'delivery_health'    => array( 'Publicaciones', 'Entregas confirmadas y WP-Cron por red' ),
             'job_health'         => array( 'Programador', 'Cola de trabajos y eventos pendientes' ),
             'connection_health'  => array( 'Conexiones', 'Autorizaciones y permisos guardados' ),
             'pinterest_images'   => array( 'Publicaciones', 'Imágenes de futuros Pins' ),
@@ -283,6 +284,66 @@ final class TCSocial_Auto_Test {
         return self::pass( sprintf( '%d entradas de agenda con fecha futura y ejecutor WP-Cron (muestra hasta 100).', $checked ) );
     }
 
+
+    /**
+     * Verify real local delivery evidence, rather than just registered hooks.
+     * No HTTP request, schedule mutation or retry is performed here.
+     */
+    private static function test_delivery_health() {
+        if ( ! function_exists( 'tcsocial_network_delivery_health_snapshot' ) ) {
+            return self::fail( 'No existe la auditoría de entregas por red social.' );
+        }
+        $snapshot = tcsocial_network_delivery_health_snapshot();
+        $issues = array();
+        $enabled = 0;
+        $confirmed = 0;
+        foreach ( $snapshot['networks'] as $provider => $data ) {
+            if ( $data['enabled'] ) {
+                ++$enabled;
+                if ( $data['last_success_at'] ) {
+                    ++$confirmed;
+                }
+            }
+            if ( ! $data['overdue'] && ! $data['stale_pending'] ) {
+                continue;
+            }
+            $info = array();
+            if ( $data['overdue'] ) {
+                $info[] = $data['overdue'] . ' programadas vencidas sin confirmar';
+            }
+            if ( $data['due_cron'] ) {
+                $info[] = $data['due_cron'] . ' eventos WP-Cron vencidos sin ejecutar';
+            }
+            if ( $data['missing_cron'] ) {
+                $info[] = $data['missing_cron'] . ' sin evento WP-Cron';
+            }
+            if ( $data['stale_pending'] ) {
+                $info[] = $data['stale_pending'] . ' intentos pendientes sin confirmar';
+            }
+            $info[] = $data['last_success_at']
+                ? 'última confirmación ' . $data['last_success_at']
+                : 'sin confirmación registrada en la muestra';
+            $issues[] = ucfirst( $provider ) . ': ' . implode( ', ', $info );
+        }
+        if ( $issues ) {
+            $hint = $snapshot['cron_web_disabled']
+                ? ' WP-Cron web desactivado: confirmar ejecución externa de wp-cron.php.'
+                : ' Comprobar que wp-cron.php se ejecuta y revisar el historial por red.';
+            return self::fail(
+                'No se está confirmando la entrega de parte de la agenda: ' .
+                implode( '; ', $issues ) . '.' . $hint .
+                ' No se reenvía nada automáticamente para evitar duplicados.'
+            );
+        }
+        if ( ! $enabled ) {
+            return self::skip( 'No hay redes habilitadas para verificar entregas.' );
+        }
+        if ( ! $confirmed ) {
+            return self::skip( 'No hay confirmaciones de publicación en los últimos 250 intentos consultados. Sin atrasos registrados; no se puede acreditar una entrega remota.' );
+        }
+        return self::pass( $confirmed . ' redes con al menos una entrega confirmada en los últimos 250 intentos; no se han realizado publicaciones de prueba.' );
+    }
+
     private static function test_job_health() {
         global $wpdb;
         if ( ! self::table_exists( tcsocial_programador_table() ) ) {
@@ -385,6 +446,27 @@ final class TCSocial_Auto_Test {
         ) );
         if ( ! is_array( $rows ) ) return self::fail( 'No se puede consultar el historial de envíos.' );
         if ( ! $rows ) return self::skip( 'Sin intentos de publicación registrados.' );
+        $totals = array();
+        foreach ( $rows as $row ) {
+            $provider = sanitize_key( (string) $row->provider );
+            $status = sanitize_key( (string) $row->status );
+            if ( '' === $provider || !in_array( $status, array( 'published', 'failed', 'pending' ), true ) ) {
+                continue;
+            }
+            if ( !isset( $totals[ $provider ] ) ) {
+                $totals[ $provider ] = array( 'published' => 0, 'failed' => 0, 'pending' => 0 );
+            }
+            ++$totals[ $provider ][ $status ];
+        }
+        $summary = array();
+        foreach ( $totals as $provider => $counts ) {
+            $conclusive = $counts['published'] + $counts['failed'];
+            $rate = $conclusive ? number_format_i18n( 100 * $counts['failed'] / $conclusive, 1 ) . '%' : __( 'sin datos', 'taxocommerce-social' );
+            $summary[] = ucfirst( $provider ) . ': ' .
+                $counts['published'] . ' publicadas, ' . $counts['failed'] . ' no publicadas, ' .
+                $counts['pending'] . ' sin confirmar, errores ' . $rate;
+        }
+        $sample = implode( '; ', $summary );
         $latest = array();
         foreach ( $rows as $row ) {
             $provider = sanitize_key( $row->provider );
@@ -399,8 +481,8 @@ final class TCSocial_Auto_Test {
                 $errors[] = $provider . ': ' . substr( $reason, 0, 180 );
             }
         }
-        if ( $errors ) return self::fail( 'Último intento sin éxito: ' . implode( '; ', $errors ) . '. Comprobar permisos antes de reintentar.' );
-        return self::pass( 'Último resultado por red con actividad sin errores en la muestra de 150; publicación externa no verificada.' );
+        if ( $errors ) return self::fail( 'Último intento sin éxito: ' . implode( '; ', $errors ) . '. ' . $sample . '. Comprobar permisos antes de reintentar.' );
+        return self::pass( 'Últimos 150 intentos: ' . $sample . '. No se han ejecutado publicaciones de prueba.' );
     }
 
     private static function test_csv() {

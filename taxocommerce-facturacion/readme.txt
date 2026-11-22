@@ -4,27 +4,23 @@ Tags: woocommerce, invoices, proforma, quotes, pdf
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.1.15
+Stable tag: 0.1.22
 License: MIT
 
 WooCommerce invoices, proformas and quotations migrated from TaxoCommerce SEO.
 
 == Description ==
 
-* Admin header: plugin title, a single local `Description` with the static `Plugin URI` link below it (left); a wider collapsed `CHANGELOG.md` history (center); local version and release date (right). No duplicated information panel or external requests.
-
-* The admin header shows the plugin's bundled `Description` and links to its `Plugin URI`, without network requests or caching. Version history uses the bundled `CHANGELOG.md`.
-
-
-
 TaxoCommerce Billing keeps the existing document workflow while moving it into an independent plugin.
 
-Features:
+= Key Features =
 
 * Company and tax settings.
 * Invoices and proforma invoices.
 * Cart quotations for classic Cart and Cart Block.
-* Order document registry and snapshots.
+* Order document registry and immutable snapshots.
+* Rectifying invoices by substitution for VAT-only changes or corrected product-line taxable bases, with a separate numbered RECT series, mandatory reason, preserved original invoice, linked PDF and explicit customer email. Corrected VAT and gross are calculated from each line; existing WooCommerce orders and payments are NEVER modified. One rectification per original; mixed VAT classes/rates, charged shipping, fees, discounts, refunds and cross-quarter corrections require another workflow. A higher corrected total creates no automatic receipt; a lower corrected total may require a separate refund.
+* Emits an optional WordPress action after successful invoice issuance for independent accounting consumers; no mandatory Accounting dependency.
 * Document numbering and series.
 * PDF generation using the same Dompdf 3.1.6 engine as the historical module.
 * Email attachments and resending.
@@ -44,6 +40,17 @@ It does not create a parallel document database and does not include a destructi
 5. Confirm PDF generation and permitted customer downloads in a staging environment before live billing.
 
 == Changelog ==
+
+= 0.1.18 =
+* Full IGIC and IPSI rate catalogs with WooCommerce tax classes. Issue #2762.
+
+
+= 0.1.17 =
+* Optional EU B2B VIES reverse charge and IGIC/IPSI tax labels for Canarias/Ceuta/Melilla. Issues #2761 #2762.
+
+= 0.1.16 =
+* Inclusive VAT restored for new invoices, proformas and cart quotes: one-time tax-rate repair when needed, form destination used for cart tax, and block emission when standard taxable lines have zero tax. Does not alter issued PDFs. Issue #2757.
+* Align Stable tag with plugin Version 0.1.16 so Plugin Check packaging can pass.
 
 = 0.1.12 =
 * Local Description and Plugin URI replace REST excerpt requests and caches in the header. Issue #2494.

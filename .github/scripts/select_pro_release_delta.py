@@ -18,6 +18,15 @@ import urllib.request
 
 SLUG = re.compile(r"taxocommerce-[a-z0-9-]+\Z")
 SHA = re.compile(r"[0-9a-f]{40}\Z")
+# The two 2026-11-15 'successful' runs wrote into a wrong FTPS chroot.
+# Reuse the last real baseline once, until a repaired release succeeds.
+FALSE_SUCCESS_SHA = "9227066fea768b1cedf91ea67c33e664a7dbd27b"
+LAST_REAL_RELEASE_SHA = "24521e602b69d6c2f25e8439c26854507216b5f4"
+
+
+def validated_release_base(sha: str) -> str:
+    return LAST_REAL_RELEASE_SHA if sha == FALSE_SUCCESS_SHA else sha
+
 
 
 def api_json(repo: str, path: str, token: str):
@@ -156,9 +165,9 @@ def main() -> int:
         if len(installed) != len(set(installed)) or any(not SLUG.fullmatch(x) for x in installed):
             raise ValueError("Inventario PRO inseguro")
     head = git("rev-parse", "HEAD").decode().strip()
-    base = args.base_sha or last_successful_source(
+    base = validated_release_base(args.base_sha or last_successful_source(
         os.environ["GITHUB_REPOSITORY"], os.environ["GH_TOKEN"]
-    )
+    ))
     # Ensure baseline exists in checkout history, not merely a string from logs.
     git("cat-file", "-e", base + "^{commit}")
     result = selected_delta(base, head, installed, allowed,

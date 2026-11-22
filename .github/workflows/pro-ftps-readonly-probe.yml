@@ -29,12 +29,49 @@ jobs:
         run: |
           python3 -m py_compile .github/scripts/pro_ftps_root_probe.py
           python3 -m unittest discover -s .github/tests -p test_pro_ftps_root_probe.py -v
-      - name: Verify existing STAGING FTPS account against PRO plugin versions (read-only)
+      - name: Verify actual PRO FTPS credentials against public WordPress plugin versions (read-only)
+        if: github.event_name == 'push'
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          PRO_CORE_EXPECTED_VERSION: '0.4.84'
+          PRO_WOO_EXPECTED_VERSION: '11.2.2'
+        run: python3 .github/scripts/pro_ftps_root_probe.py --diagnose-known-roots
+      - name: Compare same candidate paths via existing shared hosting FTPS credentials (read-only)
         if: github.event_name == 'push'
         env:
           FTP_SERVER: ${{ secrets.STAGING_FTP_SERVER }}
           FTP_USERNAME: ${{ secrets.STAGING_FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.STAGING_FTP_PASSWORD }}
           PRO_CORE_EXPECTED_VERSION: '0.4.84'
-          PRO_WOO_EXPECTED_VERSION: '11.3.0'
-        run: python3 .github/scripts/pro_ftps_root_probe.py --shared-account-pro-root
+          PRO_WOO_EXPECTED_VERSION: '11.2.2'
+        run: python3 .github/scripts/pro_ftps_root_probe.py --diagnose-known-roots
+
+      - name: Check legacy WordPress ZIP bridge is loaded from FTP root (read-only)
+        if: github.event_name == 'push'
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          PRO_CORE_EXPECTED_VERSION: '0.4.84'
+          PRO_WOO_EXPECTED_VERSION: '11.2.2'
+        run: python3 .github/scripts/pro_ftps_root_probe.py --legacy-route-check
+
+      - name: Verify old WordPress ZIP receiver with invalid empty token (no write)
+        if: github.event_name == 'push'
+        shell: bash
+        run: |
+          set -euo pipefail
+          http_code="$(curl --silent --show-error --location --max-time 20 \
+            --output /dev/null --write-out '%{http_code}' \
+            --request POST --data-urlencode 'run_id=0' \
+            'https://www.distribuidordeherramientas.es/wp-json/taxocommerce/v1/deploy-active-modules')"
+          echo "Public ZIP receiver POST status: $http_code"
+          if [ "$http_code" = "403" ]; then
+            echo "Registered receiver rejected invalid credentials as expected."
+          elif [ "$http_code" = "404" ]; then
+            echo "::warning::Old ZIP receiver is not registered on the public WordPress installation."
+          else
+            echo "::warning::Old ZIP receiver returned unexpected status $http_code."
+          fi

@@ -646,6 +646,19 @@ function tcsocial_programador_render_admin()
             'cancelled'  => 'Cancelada',
         );
         $status_text = isset($status_label[$status]) ? $status_label[$status] : ucfirst($status);
+        // Distinguish a missed WordPress event from a remote API failure.
+        $scheduled_time = strtotime(get_gmt_from_date((string) $job->scheduled_at) . ' UTC');
+        $cron_time = 'scheduled' === $status
+            ? wp_next_scheduled('tcsocial_programador_run_job', array((int) $job->id))
+            : false;
+        $overdue = 'scheduled' === $status && $scheduled_time && $scheduled_time < time() - 5 * MINUTE_IN_SECONDS;
+        $missing_event = 'scheduled' === $status && false === $cron_time;
+        if ($overdue) {
+            $status_text = __('Vencida sin ejecutar', 'taxocommerce-social');
+        } elseif ($missing_event) {
+            $status_text = __('Sin evento WP-Cron', 'taxocommerce-social');
+        }
+
 
         echo '<tr>';
         echo '<td><strong>' . esc_html(mysql2date(get_option('date_format') . ' ' . get_option('time_format'), (string) $job->scheduled_at)) . '</strong>';
@@ -664,6 +677,11 @@ function tcsocial_programador_render_admin()
 
         echo '<td>' . esc_html($provider_label) . '</td>';
         echo '<td><span class="seo-social-state is-' . esc_attr($status) . '">' . esc_html($status_text) . '</span>';
+        if ($overdue || $missing_event) {
+            echo '<br><small>' . esc_html($missing_event
+                ? __('El evento de WordPress no existe. No se ha enviado a la red.', 'taxocommerce-social')
+                : __('La fecha ha pasado y WP-Cron no ha ejecutado esta tarea.', 'taxocommerce-social')) . '</small>';
+        }
         if ('failed' === $status && !empty($job->error_message)) {
             echo '<br><small style="color:#b32d2e">' . esc_html(wp_trim_words((string) $job->error_message, 18, '...')) . '</small>';
         }

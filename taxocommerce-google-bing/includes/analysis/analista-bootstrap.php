@@ -10,7 +10,7 @@
 defined('ABSPATH') || exit;
 
 if (!defined('SEO_ANALISTA_VERSION')) {
-    define('SEO_ANALISTA_VERSION', '3.9.0');
+    define('SEO_ANALISTA_VERSION', '3.9.3');
 }
 
 // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Existing global name is retained for module compatibility.

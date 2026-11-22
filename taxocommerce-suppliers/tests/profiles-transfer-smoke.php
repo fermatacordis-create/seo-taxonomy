@@ -17,10 +17,10 @@ tcsup_assert( 'proveedor' === $fields[0], 'supplier identity is first CSV column
 tcsup_assert( in_array( 'observaciones', $fields, true ), 'CSV includes long private observations' );
 tcsup_assert( count( $fields ) === count( array_unique( $fields ) ), 'CSV field names are unique' );
 tcsup_assert( array_keys( TCSUP_Profiles_Transfer::MAX_LENGTHS ) === array_slice( $fields, 1 ), 'all fields have matching length validation' );
-tcsup_assert( false !== strpos( $transfer, 'TCSUP_Profiles::supplier_in_catalogue( $supplier )' ), 'catalogue provider is verified before any profile change' );
+tcsup_assert( false !== strpos( $transfer, 'TCSUP_Profiles::supplier_in_directory( $supplier )' ), 'import only names known from catalogue or manual profile' );
 tcsup_assert( false !== strpos( $transfer, "'unchanged'; // Do not create empty records" ), 'an untouched exported CSV does not create empty records' );
-tcsup_assert( false !== strpos( $transfer, 'COUNT(DISTINCT proveedor)' ), 'export counts suppliers from the actual inventory' );
-tcsup_assert( false !== strpos( $transfer, 'SELECT DISTINCT proveedor FROM %i' ), 'export pages distinct suppliers from inventory' );
+tcsup_assert( false !== strpos( $transfer, 'SELECT COUNT(*) FROM (SELECT proveedor FROM %i' ), 'export counts imported and manual suppliers' );
+tcsup_assert( false !== strpos( $transfer, 'UNION SELECT proveedor FROM %i' ), 'export pages all distinct imported and manual suppliers' );
 tcsup_assert( false !== strpos( $transfer, 'LOCK_EX | LOCK_NB' ), 'only one upload batch may write at a time' );
 tcsup_assert( false !== strpos( $transfer, 'microtime( true ) - $started' ), 'CPU work is bounded by elapsed request time' );
 tcsup_assert( false !== strpos( $transfer, 'check_ajax_referer( self::ACTION_NONCE )' ), 'AJAX requests need nonce' );

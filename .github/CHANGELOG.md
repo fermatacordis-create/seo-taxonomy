@@ -1,3 +1,18 @@
+## 2026-11-19 — WordPress.org SVN: instalar cliente Subversion antes de publicar (#2827)
+
+- La primera ejecución manual de WordPress.org (Actions run 44609697722) validó correctamente Core 0.4.85 y superó Plugin Check, pero falló antes del checkout SVN por `svn: command not found` (exit 127).
+- El job de publicación instala `subversion` mediante APT solo cuando no está presente en `ubuntu-latest` y verifica `svn --version --quiet` antes de tocar el repositorio remoto.
+- Regresión que exige instalar/verificar el cliente SVN antes de ejecutar la publicación. Se mantiene publicación exclusivamente manual, un único plugin aprobado, verificación de versiones, etiquetas inmutables y credenciales en secretos de Actions.
+- Ningún archivo del plugin ni tienda de producción cambia. La publicación efectiva en SVN requiere una nueva ejecución manual desde `staging`.
+
+## 2026-11-19 — Publicación manual de TaxoCommerce en WordPress.org vía SVN (#2824)
+
+- Nuevo workflow `publicar-taxocommerce-wordpress-org.yml` con `workflow_dispatch`, selector de plugins aprobados (solo Core inicialmente) y confirmación manual obligatoria. Rechaza ramas distintas de `staging` o revisiones superadas.
+- Reutiliza el WordPress.org Plugin Check oficial y estricto ya disponible; valida paquete Core, versión del PHP principal frente al `Stable tag`, catálogos, sintaxis PHP y documentación.
+- Publica exclusivamente los archivos distribuibles del plugin seleccionado en SVN `trunk/` y crea una etiqueta inmutable en `tags/<versión>` en una única confirmación SVN. Conserva `assets/` y no interactúa con ninguna instalación WordPress ni con producción.
+- Credenciales exclusivas de GitHub Actions Secrets `SVN_USERNAME` y `SVN_PASSWORD`; sin secretos ni contraseñas en el repositorio. Pruebas estáticas añadidas para verificar el alcance y las garantías.
+- La creación del workflow **no ejecuta una publicación SVN**: esa operación requiere la ejecución manual posterior por el responsable.
+
 ## 2026-11-15 — Despliegue simple GitHub STAGING → PRODUCCIÓN (#2719)
 
 - Se elimina del workflow de producción cualquier inventario o filtrado de plugins instalados, activo/inactivo, comprobación de cabeceras Core/WooCommerce y llamadas REST heredadas del monolítico.

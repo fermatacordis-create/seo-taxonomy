@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: TaxoCommerce Suppliers 0.2.27\n"
+"Project-Id-Version: TaxoCommerce Suppliers 0.2.28\n"
 "Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2027,3 +2027,51 @@ msgstr "Er wordt al een leveranciersimport verwerkt."
 
 msgid "Para editar muchas fichas, descarga el CSV desde Gestión de proveedores. El archivo incluye también proveedores sin ficha. Rellena las columnas conservando los nombres de proveedor y vuelve a importarlo. Se validan las identidades existentes; los nombres desconocidos se omiten. Los campos vacíos sobrescriben los valores anteriores. La importación se procesa por bloques y permite detenerse sin revertir los bloques ya completados."
 msgstr "Om veel fiches te bewerken exporteert u de CSV vanuit Leveranciersbeheer, inclusief leveranciers zonder fiche. Vul de kolommen in zonder leveranciersnamen te wijzigen en importeer het bestand opnieuw. Onbekende namen worden overgeslagen. Lege cellen overschrijven oude waarden. De import loopt in batches en kan worden gestopt zonder afgeronde batches terug te draaien."
+
+msgid "Supplier contact record deleted. Catalogue products were not changed."
+msgstr "Contactgegevens verwijderd. De catalogusproducten zijn niet gewijzigd."
+
+msgid "This supplier is no longer in the directory."
+msgstr "Deze leverancier staat niet meer in het overzicht."
+
+msgid "This supplier already exists. Edit its record instead."
+msgstr "Deze leverancier bestaat al. Bewerk de bestaande fiche."
+
+msgid "Enter a supplier name with 190 characters or fewer."
+msgstr "Voer een leveranciersnaam in van maximaal 190 tekens."
+
+msgid "Add a supplier manually before importing any products. Imported suppliers also appear automatically."
+msgstr "Voeg handmatig een leverancier toe voordat u producten importeert. Geïmporteerde leveranciers verschijnen ook automatisch."
+
+msgid "Add supplier manually"
+msgstr "Leverancier handmatig toevoegen"
+
+msgid "This supplier is not in the directory."
+msgstr "Deze leverancier staat niet in het overzicht."
+
+msgid "%d suppliers in the directory"
+msgstr "%d leveranciers in het overzicht"
+
+msgid "No suppliers found in the directory."
+msgstr "Geen leveranciers gevonden in het overzicht."
+
+msgid "Supplier names cannot be changed after saving. These records are private to store administrators."
+msgstr "Leveranciersnamen kunnen na het opslaan niet worden gewijzigd. Deze fiches zijn alleen zichtbaar voor beheerders."
+
+msgid "Export imported and manually created suppliers as an editable CSV. Import it to update private contact details; products, prices and orders never change."
+msgstr "Exporteer geïmporteerde en handmatig toegevoegde leveranciers als bewerkbare CSV. Importeer deze om privécontactgegevens bij te werken; producten, prijzen en bestellingen blijven ongewijzigd."
+
+msgid "CSV imports update only known suppliers (from Inventory or manual records). Unknown names are skipped. Blank cells replace existing values. Export a backup first."
+msgstr "CSV-import werkt alleen bekende leveranciers bij (uit de voorraad of handmatig aangemaakt). Onbekende namen worden overgeslagen. Lege cellen vervangen bestaande waarden. Exporteer eerst een back-up."
+
+msgid "Crear proveedores manualmente o desde el catálogo importado, y editar sus fichas privadas, contactos, direcciones y observaciones."
+msgstr "Leveranciers handmatig of via de geïmporteerde catalogus aanmaken en hun privéfiches, contacten, adressen en notities bewerken."
+
+msgid "La lista reúne los proveedores del inventario importado y los creados manualmente, aunque todavía no tengan productos. Para dar de alta uno nuevo, pulsa Añadir proveedor manualmente, introduce su nombre y completa los datos de su ficha. Cuando se importen productos con ese nombre, aparecerán vinculados al mismo proveedor."
+msgstr "De lijst bevat leveranciers uit de geïmporteerde voorraad en handmatig aangemaakte leveranciers, ook zonder producten. Kies Leverancier handmatig toevoegen, voer een naam in en vul de fiche in. Later onder dezelfde naam geïmporteerde producten worden aan die leverancier gekoppeld."
+
+msgid "Eliminar ficha borra únicamente los datos privados de contacto. Un proveedor con productos seguirá visible desde el inventario; uno creado solo manualmente desaparecerá del listado. Nunca se borran productos, precios ni pedidos."
+msgstr "Het verwijderen van een fiche verwijdert alleen privécontactgegevens. Leveranciers met producten blijven zichtbaar via de voorraad; uitsluitend handmatig aangemaakte verdwijnen uit de lijst. Producten, prijzen en bestellingen worden nooit verwijderd."
+
+msgid "Para editar muchas fichas, descarga el CSV desde Gestión de proveedores. Incluye los proveedores importados y los creados manualmente, incluso con cero productos. Rellena las columnas y vuelve a importarlo: los nombres deben existir ya en el listado; el CSV no da de alta proveedores nuevos. Los campos vacíos sobrescriben los valores anteriores. La importación se procesa por bloques y puede detenerse."
+msgstr "Download de CSV via Leveranciersbeheer om veel fiches te wijzigen. Deze bevat geïmporteerde en handmatig aangemaakte leveranciers, ook zonder producten. Vul de kolommen in en importeer opnieuw: namen moeten al bestaan; deze CSV maakt geen nieuwe leveranciers. Lege cellen overschrijven eerdere waarden. Import gebeurt in stopbare blokken."

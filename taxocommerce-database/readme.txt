@@ -12,14 +12,9 @@ Standalone migration of the original Clean Database and SEO Data Table tools fro
 
 == Description ==
 
-* Admin header: plugin title, a single local `Description` with the static `Plugin URI` link below it (left); a wider collapsed `CHANGELOG.md` history (center); local version and release date (right). No duplicated information panel or external requests.
+TaxoCommerce Database provides database inspection, cleanup and export tools:
 
-* The admin header shows the plugin's bundled `Description` and links to its `Plugin URI`, without network requests or caching. Version history uses the bundled `CHANGELOG.md`.
-
-* One collapsible version-history control, without a duplicate plugin-information box.
-
-
-Version 0.4.5 preserves the two original database tools:
+= Key Features =
 
 * Clean Database: Data Errors, Database Cleanup and a unified Export tab that combines complete WordPress SQL backups with SEO-table CSV/SQL/ZIP exports.
 * Validation and repair of SEO nodes, relationships, scopes, categories and bulk supplier acceptance locks.

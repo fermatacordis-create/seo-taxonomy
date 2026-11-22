@@ -12,13 +12,9 @@ A private task agenda with categories, priorities, assignments, calendar and ind
 
 == Description ==
 
-* Admin header: plugin title, a single local `Description` with the static `Plugin URI` link below it (left); a wider collapsed `CHANGELOG.md` history (center); local version and release date (right). No duplicated information panel or external requests.
+TaxoCommerce Tasks provides a standalone task management area in the WordPress administrator.
 
-* The admin header shows the plugin's bundled `Description` and links to its `Plugin URI`, without network requests or caching. Version history uses the bundled `CHANGELOG.md`.
-
-
-
-TaxoCommerce Tasks provides a standalone task management area in the WordPress administrator. Its administration uses the same self-contained header as the TaxoCommerce family, displaying the plugin title, installed version and publication date without requiring Core. A collapsed version history is available directly beneath the header title.
+= Key Features =
 
 * Create, edit and delete tasks and private task categories.
 * Prioritize tasks as Low, Normal, High or Urgent.

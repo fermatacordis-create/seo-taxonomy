@@ -26,6 +26,23 @@ final class SEO_Facturas_Snapshot {
             )
             : array();
 
+        if (
+            class_exists('SEO_Facturas_Eu_Vat')
+            && SEO_Facturas_Eu_Vat::order_is_reverse_charge($order)
+        ) {
+            $fiscal['regime'] = 'intra_eu_reverse_charge';
+            $fiscal['zone'] = 'intra_eu';
+            $fiscal['zone_label'] = 'UE B2B (ISP)';
+            $fiscal['tax_name'] = 'IVA';
+            $fiscal['rate'] = 0.0;
+            $fiscal['label'] = 'IVA 0% (ISP)';
+            $fiscal['note'] = SEO_Facturas_Eu_Vat::legal_note();
+            $fiscal['enabled'] = true;
+            if (empty($billing['tax_id'])) {
+                $billing['tax_id'] = (string) $order->get_meta(SEO_Facturas_Eu_Vat::META_VAT);
+            }
+        }
+
         $include_commercial = SEO_Facturas_Documents::TYPE_PROFORMA === sanitize_key((string) $document_type);
 
         $items = array();

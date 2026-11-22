@@ -266,4 +266,26 @@ foreach ( $tcs_expected_locales as $tcs_locale ) {
         tcs_smoke_expect( $tcs_pairs[ $tcs_key ] === $tcs_value, 'MO value differs from PO in ' . $tcs_locale . ': ' . $tcs_key );
     }
 }
+// Checkout must never receive early gettext notices from System Check's
+// optional Core metadata. The registry must be deferred beyond plugins_loaded.
+$tcs_system_entry = file_get_contents( dirname( __DIR__ ) . '/taxocommerce-system-check.php' );
+$tcs_registry_start = strpos( $tcs_system_entry, 'function taxocommerce_system_check_register_with_core( $core ) {' );
+$tcs_registry_end = strpos( $tcs_system_entry, 'function taxocommerce_system_check_register_menu()', $tcs_registry_start );
+tcs_smoke_expect( false !== $tcs_registry_start && false !== $tcs_registry_end, 'System Check Core registry missing.' );
+$tcs_registry = substr( $tcs_system_entry, $tcs_registry_start, $tcs_registry_end - $tcs_registry_start );
+$tcs_defer = strpos( $tcs_registry, "if ( ! did_action( 'init' ) ) {" );
+$tcs_init_hook = strpos( $tcs_registry, 'static function () use ( $core ) {' );
+$tcs_early_return = strpos( $tcs_registry, 'return;', $tcs_init_hook );
+$tcs_gettext = strpos( $tcs_registry, "__( 'System diagnostics, plugin checks and reports.', 'taxocommerce-system-check' )" );
+tcs_smoke_expect(
+    false !== $tcs_defer && false !== $tcs_init_hook && false !== $tcs_early_return && false !== $tcs_gettext
+        && $tcs_defer < $tcs_init_hook && $tcs_init_hook < $tcs_early_return && $tcs_early_return < $tcs_gettext,
+    'Core metadata must wait for init before using gettext (WooCommerce AJAX JSON must remain clean).'
+);
+tcs_smoke_expect(
+    false !== strpos( $tcs_registry, 'taxocommerce_system_check_register_with_core( $core );' )
+        && false !== strpos( $tcs_registry, '$core->register_module(' ),
+    'Deferring gettext must keep the Core registry functional.'
+);
+
 echo "System Check Auto Test and User/Technical Guide: OK\n";

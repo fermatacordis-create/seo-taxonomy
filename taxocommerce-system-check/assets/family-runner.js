@@ -8,23 +8,34 @@
     var running = false;
     var pending = null;
     var token = 0;
+    var i18n = config.i18n || {};
+    function t(key, fallback) { return i18n[key] || fallback; }
+    function statusLabel(value) {
+        var key = String(value || 'not_run');
+        if (key === 'paused') { return t('paused_status', 'Paused'); }
+        if (key === 'not_run') { return t('not_run_status', 'Not run'); }
+        if (key === 'error') { return t('error_status', 'Error'); }
+        return i18n[key] || key;
+    }
     function describe(s) {
         var f = s.functional || {};
         var c = s.code || {};
         var totals = f.totals || {};
-        output.textContent = 'Estado: ' + (s.status || 'pendiente') +
-            ' | Funcionalidades: ' + (f.done || 0) + '/' + (f.total || 0) +
-            ' (correctas ' + (totals.pass || 0) + ', fallidas ' + (totals.fail || 0) + ', omitidas ' + (totals.skip || 0) + ')' +
-            ' | Código: ' + (c.done || 0) + '/' + (c.total || 0) +
-            ' (incidencias ' + (c.findings || 0) + ')' +
-            (s.error ? ' | Error: ' + s.error : '');
+        output.textContent = t('status', 'Status: ') + statusLabel(s.status || 'pending') +
+            ' | ' + t('functions', 'Functions') + ': ' + (f.done || 0) + '/' + (f.total || 0) +
+            ' (' + t('passed', 'Passed') + ': ' + (totals.pass || 0) +
+            ', ' + t('failures', 'failures') + ': ' + (totals.fail || 0) +
+            ', ' + t('skipped', 'skipped') + ': ' + (totals.skip || 0) + ')' +
+            ' | ' + t('code', 'Code') + ': ' + (c.done || 0) + '/' + (c.total || 0) +
+            ' (' + t('findings', 'Findings') + ': ' + (c.findings || 0) + ')' +
+            (s.error ? ' | ' + t('error', 'Error') + ': ' + s.error : '');
         var cells = document.querySelectorAll('[data-tcs-kpi]');
         cells.forEach(function (cell) {
             var section = cell.getAttribute('data-tcs-kpi');
             var data = section === 'functional' ? f : c;
-            cell.textContent = (data.status || 'pendiente') + ' · ' +
+            cell.textContent = statusLabel(data.status || 'pending') + ' · ' +
                 (data.done || 0) + '/' + (data.total || 0) +
-                (section === 'code' ? ' · ' + (data.findings || 0) + ' incidencias' : '');
+                (section === 'code' ? ' · ' + t('findings', 'Findings') + ': ' + (data.findings || 0) : '');
         });
     }
     function request(op) {
@@ -36,7 +47,7 @@
         return fetch(config.url, { method: 'POST', credentials: 'same-origin', body: body })
             .then(function (response) { return response.json(); })
             .then(function (data) {
-                if (!data.success) { throw new Error((data.data && data.data.message) || 'No se pudo ejecutar el chequeo.'); }
+                if (!data.success) { throw new Error((data.data && data.data.message) || t('request_failed', 'Unable to execute the check.')); }
                 describe(data.data);
                 return data.data;
             });
@@ -50,7 +61,7 @@
             if (!running || myToken !== token) { return; }
             request('step').then(function (updated) { next(updated, myToken); }).catch(function (error) {
                 running = false;
-                output.textContent = error.message + ' Puedes reanudar cuando esté disponible.';
+                output.textContent = error.message + t('resume_hint', ' · You can resume this check.');
             });
         }, delay);
     }

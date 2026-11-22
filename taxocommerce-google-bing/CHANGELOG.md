@@ -1,3 +1,77 @@
+## [1.1.74] — 2026-11-21 — Preflight and automatic GSC freshness before complete Analysis (#2909)
+
+- Before generating the complete report, verify the last SQL date against the finalized day and latest saved snapshot for the selected property. Automatically run the EXISTING authenticated GSC day-by-day synchronization only when SQL data are outdated; reuse its property verification, resume behavior, error handling and built-in writes.
+- Execute synchronization sequentially in the administrator's browser, observing the existing CPU speed control. Failure to refresh a connected source prevents starting a complete JSON based on outdated data; surface the provider error instead of claiming that all data are up to date.
+- Keep independent installations without a configured GSC connection functional: report the source as unavailable or outdated rather than silently asserting freshness. Do not update an unrelated provider or install another plugin.
+- Add real report-period freshness checks to Autocheck and expose GSC source freshness metadata in JSON; validate no-data, stale, current, wrong-period and missing-credential scenarios by deterministic smoke tests.
+- Run the new smoke and JavaScript syntax checks in the selective STAGING workflow. PRODUCTION remains excluded.
+
+## [1.1.73] — 2026-11-21 — GSC history freshness and snapshot-backed Analysis charts (#2900)
+
+- Show saved Search Console daily figures in the Analysis trend only when the property identifier exactly matches; preserve SQL historical rows as authoritative and fill missing daily points without calling APIs or writing to the database.
+- Display last graphed date, SQL history date and last compatible Search Console snapshot date in Analysis.
+- Add a read-only GSC freshness/coherence Autocheck: report specifically when stored daily SQL data is behind downloaded snapshots, when no matching property exists or when the most recent GSC date is old. Preserve installations with no GSC setup as skipped.
+- Cover current and previous report windows, property mismatch, historic/overlap precedence and no-data behavior in a PHP smoke test executed by the selective STAGING workflow.
+- STAGING/Focazul only; do not deploy to production.
+
+## [1.1.72] — 2026-11-20 — Google Trends interface translations (#2852)
+
+- Localize ten Google Trends administration labels, navigation links and evidence notices in es_ES, en_US, fr_FR, de_DE and nl_NL.
+- Recompile five gettext MO catalogs without changing reporting logic, queries, data or external integrations. No production deployment.
+
+## [1.1.71] — 2026-11-20 — Merchant and Trends administration translations (#2849)
+
+- Translate 12 Merchant and Google Trends interface labels, permissions notices and export states to es_ES, en_US, fr_FR, de_DE and nl_NL.
+- Rebuild all five MO gettext catalogs from PO. Keep reporting, APIs, product data and behavior unchanged. Do not deploy to production.
+
+## [1.1.70] — 2026-11-20 — Google Trends administration translations (#2783)
+
+- Translate 16 remaining Google Trends interface labels, controls and status messages across es_ES, en_US, fr_FR, de_DE and nl_NL.
+- Regenerate compiled gettext catalogs from updated PO files. No behavioral, network or business data changes. No production deployment.
+
+## [1.1.69] — 2026-11-20 — Administrative gettext follow-up (#2783)
+
+- Translate eight operational UI labels and messages for Autotest, Connections and Merchant in ES/EN/FR/DE/NL.
+- Rebuild the five MO catalogs from the updated PO entries without changing execution, external connectors or report data.
+- Keep remaining documentation and non-interface strings for subsequent scoped reviews. No production deployment.
+
+## [1.1.69] — 2026-11-20 — Administrative gettext follow-up (#2783)
+
+- Translate eight operational UI labels and messages for Autotest, Connections and Merchant in ES/EN/FR/DE/NL.
+- Rebuild the five MO catalogs from the updated PO entries without changing execution, external connectors or report data.
+- Keep the remaining untranslated documentation and non-interface strings for subsequent scoped reviews. No production deployment.
+
+## [1.1.68] — 2026-11-18 — Administration translations (Issue #2783)
+
+- Localize 73 previously untranslated interface strings in es_ES, en_US, fr_FR, de_DE and nl_NL: 25 connection outcomes/errors, 20 Google OAuth field labels and instructions, and 28 GSC/GA4/Bing reporting labels and warnings.
+- Recompile five gettext MO catalogs from PO. Keep identifiers, API contracts, credentials, reporting data and execution unchanged; untranslated manual/documentation entries continue to use gettext fallbacks.
+- Add a read-only, five-locale compiled-catalog regression in CI. No production deployment.
+
+## [1.1.67] — 2026-11-18 — Informe ejecutivo comercial completo (#2801)
+
+- Recupera de forma verificable los apartados que el Plan de acción tenía como fuentes y que no se migraron a las versiones 1.1.65/1.1.66. El informe principal comienza por un resumen para dirección en lenguaje natural y cifras comparadas de sesiones GA4, clics e impresiones GSC, páginas vistas y compras medidas (sin equiparar compras GA4 a pedidos WooCommerce).
+- Rankings separados y legibles: categorías, productos, noticias/entradas y páginas con visibilidad GSC; páginas vistas de GA4, artículos consultados, artículos añadidos al carrito, origen de sesiones y variaciones contrastadas; no inventa actividad de una entidad ausente en un ranking parcial.
+- Recupera instantáneas independientes de tendencias, proveedores, posiciones competitivas y búsqueda interna (últimos 28 días) usando adaptadores existentes. Fuente ausente = «no disponible»; no confunde periodos con la ventana conjunta GSC/GA4.
+- Asuntos de comprobación para IT o marketing con observación y causa verificable, sin crear planes de contenidos, precios o campañas. Se corrige la comparación con cero clics de PHP que omitía la consulta «venta de bolardos» y la categoría «Bolardos de seguridad».
+- JSON de indicadores v3 compatible (claves originales intactas) con nuevo objeto `executive`, datos GSC anteriores para trazabilidad, rankings por GA4 y fuentes de mercado; mismo download autenticado sin regeneración.
+- Función de recopilación acotada a 100 filas GA4 por ranking y caché de 15 minutos, sin tablas nuevas, sin dependencias obligatorias entre plugins ni modificaciones de contenido. Regresión PHP extendida y WordPress Plugin Check oficial obligatorio.
+
+## [1.1.66] — 2026-11-17 — Hallazgos ejecutivos con evidencia (#2780)
+
+- Evolución de «Indicadores para la acción»: detección de señales GSC de bajo tráfico (10 impresiones en adelante), sin descartar automáticamente consultas con posiciones visibles y pocos clics. Las muestras reducidas son preliminares; no significan que exista un problema o una oportunidad comercial segura.
+- JSON compatible `taxocommerce-insights-indicadores` v2: incorpora `findings` con entidad, periodo, valores originales, fuente, observación, tamaño de muestra, fiabilidad, límites y sugerencia opcional.
+- La única sugerencia automática permitida es una comprobación acotada en Search Console cuando una URL o consulta acumule al menos 50 impresiones, no reciba clics orgánicos, tenga posición media hasta 10 y disponga de una observación anterior comparable. No decide crear contenido, modificar productos ni ejecutar campañas.
+- Presentación administrativa con observaciones y nivel de evidencia legibles en lugar de códigos internos, manteniendo semanas y meses completos y la exportación JSON existente. Sin nuevas tablas, conectores ni dependencias de IA.
+- Regresión para consultas «venta de bolardos» con 30 impresiones, categorías con 35 y ausencia de recomendaciones prematuras; datos de GA4 y periodos sin cambios.
+
+## [1.1.65] — 2026-11-17 — Indicadores para la acción por semanas y meses naturales (#2764)
+
+- Sustituye el informe principal «Plan de acción» por «Indicadores para la acción»: evidencias medibles, evolución del tráfico y consultas/categorías con patrones objetivos, sin generar órdenes estratégicas ni propuestas de publicación.
+- Selector independiente para semanas completas (lunes-domingo, cuatro periodos) y meses naturales completos (tres periodos), alineados por la última fecha común GSC/GA4. No altera el selector histórico 28/60/90 de los otros informes.
+- Solo declara totales de Search Console comparables si existen los días completos de propiedad; si falta cobertura o GA4 no responde se indica «parcial/no disponible», nunca se inventan ceros. GA4 se consulta para los mismos días naturales y puede seguir ajustando atribuciones históricas.
+- JSON de indicadores descargable con serie histórica, fechas exactas, origen, cobertura, cambios interperiodo, consultas, páginas y categorías validadas. Mantiene los antiguos contratos internos, descargas protegidas y demás informes sin cambios.
+- Regresión PHP para semanas/meses reales, febrero bisiesto, periodos parciales, fuente ausente, categorías con clics y no ejecutar el antiguo generador de acciones.
+
 ## [1.1.64] — 2026-11-15 — Un solo informe completo por bloques y descarga JSON válida
 
 - «Ejecutar informe completo» es la única ejecución integral: 21 bloques AJAX secuenciales con selector de control de CPU 1–5, avance y un único botón Detener. Se elimina la segunda acción «Preparar JSON completo por bloques» y su control de detención duplicado.

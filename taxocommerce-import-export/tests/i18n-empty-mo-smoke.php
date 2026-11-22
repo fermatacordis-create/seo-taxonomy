@@ -23,6 +23,14 @@ foreach ( array( 'es_ES', 'en_US', 'fr_FR', 'de_DE', 'nl_NL' ) as $locale ) {
     $count = $header['count'];
     $required_translations = array( 'Páginas', 'Crear CSV por bloques', 'Detener importación actual', 'Descargar CSV terminado', 'No se pudo crear el CSV temporal.', 'Importar ZIP de Media', 'El ZIP no contiene media.csv.', 'Media · imágenes', 'Qué se transporta' );
     $seen_translations = array();
+    $expected_localizations = array(
+        'es_ES' => 'El nombre del producto no puede quedar vacío.',
+        'en_US' => 'The product name cannot be empty.',
+        'fr_FR' => 'Le nom du produit ne peut pas être vide.',
+        'de_DE' => 'Der Produktname darf nicht leer sein.',
+        'nl_NL' => 'De productnaam mag niet leeg zijn.',
+    );
+    $localized_product_error_seen = false;
     if ( $count > ( strlen( $data ) - 28 ) / 16 ) {
         throw new RuntimeException( 'Invalid MO table size in ' . $locale );
     }
@@ -35,12 +43,21 @@ foreach ( array( 'es_ES', 'en_US', 'fr_FR', 'de_DE', 'nl_NL' ) as $locale ) {
         }
         $original = substr( $data, $o['offset'], $o['length'] );
         $translated = substr( $data, $t['offset'], $t['length'] );
+        if ( 'El nombre del producto no puede quedar vacío.' === $original ) {
+            if ( $translated !== $expected_localizations[ $locale ] ) {
+                throw new RuntimeException( 'Incorrect locale-specific product error in ' . $locale );
+            }
+            $localized_product_error_seen = true;
+        }
         if ( in_array( $original, $required_translations, true ) && '' !== $translated ) {
             $seen_translations[ $original ] = true;
         }
         if ( '' !== $original && '' === str_replace( chr( 0 ), '', $translated ) ) {
             throw new RuntimeException( 'Empty translation hides UI label in ' . $locale . ': ' . $original );
         }
+    }
+    if ( ! $localized_product_error_seen ) {
+        throw new RuntimeException( 'Missing translated product error in ' . $locale );
     }
     foreach ( $required_translations as $required ) {
         if ( empty( $seen_translations[ $required ] ) ) {

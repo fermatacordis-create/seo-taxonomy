@@ -10,6 +10,7 @@ final class SEO_Facturas_Documents {
     const TYPE_INVOICE = 'invoice';
     const TYPE_PROFORMA = 'proforma';
     const TYPE_QUOTE = 'quote';
+    const TYPE_RECTIFICATION = 'rectification';
 
     public static function table_name() {
         return SEO_Facturas_Install::table_name();
@@ -65,6 +66,16 @@ final class SEO_Facturas_Documents {
             $allowed = (bool) apply_filters('seo_facturas_allow_proforma_for_paid_order', false, $order);
             if (!$allowed) {
                 return new WP_Error('seo_facturas_order_paid', 'No se genera proforma para un pedido que WooCommerce ya considera pagado.');
+            }
+        }
+
+        // No registrar ni numerar documentos nuevos si el pedido contiene
+        // lineas ordinarias sujetas a IVA pero WooCommerce calculo cuota cero.
+        // Las facturas existentes se conservan sin alterar sus snapshots.
+        if (class_exists('SEO_Facturas_Tax')) {
+            $tax_validation = SEO_Facturas_Tax::validate_order_tax($order);
+            if (is_wp_error($tax_validation)) {
+                return $tax_validation;
             }
         }
 
@@ -187,7 +198,19 @@ final class SEO_Facturas_Documents {
             array('%d')
         );
 
-        return self::get(absint($document->id));
+        $issued = self::get(absint($document->id));
+        if ($issued && 'issued' === (string) $issued->status &&
+            self::TYPE_INVOICE === (string) $issued->document_type) {
+            /**
+             * Fires after a sales invoice PDF and its immutable snapshot are issued.
+             * Optional accounting plugins may import it via read-only lookups.
+             *
+             * @param int    $order_id WooCommerce order ID.
+             * @param object $issued   Issued invoice document.
+             */
+            do_action('taxocommerce_billing_invoice_issued', absint($issued->order_id), $issued);
+        }
+        return $issued;
     }
 
     public static function get($document_id) {
@@ -270,12 +293,12 @@ final class SEO_Facturas_Documents {
 
     public static function reserve_number($type) {
         $type = sanitize_key((string) $type);
-        if (!in_array($type, array(self::TYPE_INVOICE, self::TYPE_PROFORMA, self::TYPE_QUOTE), true)) {
+        if (!in_array($type, array(self::TYPE_INVOICE, self::TYPE_PROFORMA, self::TYPE_QUOTE, self::TYPE_RECTIFICATION), true)) {
             return new WP_Error('seo_facturas_number_type', 'Tipo de documento no valido para numeracion.');
         }
 
         $series = SEO_Facturas_Settings::series_for_type($type);
-        foreach (array(self::TYPE_INVOICE, self::TYPE_PROFORMA, self::TYPE_QUOTE) as $other_type) {
+        foreach (array(self::TYPE_INVOICE, self::TYPE_PROFORMA, self::TYPE_QUOTE, self::TYPE_RECTIFICATION) as $other_type) {
             if ($other_type === $type) {
                 continue;
             }

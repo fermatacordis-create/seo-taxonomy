@@ -1,3 +1,12 @@
+## [0.2.28] — 2026-11-16 — Alta manual de proveedores sin catálogo (#2743)
+
+- «Gestión de proveedores» permite añadir una ficha privada manual por nombre y completar los datos comerciales, de contacto y logística sin importar ningún producto; el proveedor aparece en el listado con cero productos.
+- La lista fusiona sin duplicados los nombres del inventario y los registrados manualmente. Cuando llegan productos por CSV bajo el mismo nombre, el contador refleja sus referencias sin perder la ficha.
+- El CSV de fichas incluye ambos tipos y solo actualiza nombres ya existentes; no crea proveedores desconocidos desde el CSV. Se mantiene la paginación y el procesamiento por bloques con control de carga.
+- Eliminar una ficha manual la retira del directorio; si el proveedor tiene productos importados, permanece en el listado. No se alteran productos, pedidos, márgenes ni precios.
+- Formularios protegidos por nonce, permisos WordPress, saneamiento y límite de nombre. Manual y traducciones ES/EN/FR/DE/NL actualizados, con regresiones PHP y comprobaciones WordPress.org.
+- Producción no se modifica sin autorización expresa.
+
 ## [0.2.27] — 2026-11-13 — Importación/exportación masiva de fichas de proveedores
 
 - CSV de la pestaña Gestión de proveedores con los 18 campos canónicos, incluyendo observaciones privadas; exporta también los proveedores sin ficha para facilitar su cumplimentación masiva.

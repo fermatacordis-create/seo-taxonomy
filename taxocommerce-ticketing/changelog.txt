@@ -1,0 +1,9 @@
+= 0.1.2 =
+* Correct spam rejection confirmation and inserted message ID capture.
+* Add bounded ticket event log, database persistence functionality checks, independent code checks, and two in-plugin manuals.
+
+= 0.1.1 =
+* Publish the product page on Focazul and prepare dual-site test distribution with Core activation.
+
+= 0.1.0 =
+* Initial independent helpdesk plugin with configurable form, private tickets, reply history and email notifications.

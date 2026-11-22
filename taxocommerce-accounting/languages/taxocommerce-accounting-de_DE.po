@@ -396,3 +396,1009 @@ msgstr "AEAT-XLSX-Vorlage herunterladen — juristische Personen"
 
 msgid "Download AEAT XLSX template — general"
 msgstr "AEAT-XLSX-Vorlage herunterladen — allgemein"
+
+msgid "Expense CSV processed. Verify the new drafts in Expenses."
+msgstr "Ausgaben-CSV verarbeitet. Prüfen Sie die neuen Entwürfe unter Ausgaben."
+
+msgid "Select a valid CSV file smaller than 2 MB."
+msgstr "Wählen Sie eine gültige CSV-Datei unter 2 MB."
+
+msgid "Invalid CSV headers. Download and use the exact template."
+msgstr "Ungültige CSV-Spaltenüberschriften. Laden Sie die Vorlage herunter und verwenden Sie sie unverändert."
+
+msgid "CSV contains too many rows; maximum 500."
+msgstr "Die CSV-Datei überschreitet das Limit von 500 Zeilen."
+
+msgid "CSV contains invalid expense data; nothing was imported."
+msgstr "Die CSV-Datei enthält ungültige Ausgabendaten; es wurde nichts importiert."
+
+msgid "CSV contains no expense documents."
+msgstr "Die CSV-Datei enthält keine Ausgabenbelege."
+
+msgid "Could not save the CSV batch; please retry."
+msgstr "Der CSV-Stapel konnte nicht gespeichert werden. Bitte erneut versuchen."
+
+msgid "Export limit exceeded; use a narrower reporting period."
+msgstr "Exportlimit überschritten; wählen Sie einen kürzeren Zeitraum."
+
+msgid "Expense documents: CSV import and export"
+msgstr "Ausgabenbelege: CSV-Import und -Export"
+
+msgid "For domains, hosting, digital certificates, administrative fees, postal services, software and other association or business expenses. Imports go to Accounting > Expenses as unapproved drafts. They do not change bank/cash balances or automatically create a tax deduction."
+msgstr "Für Domains, Hosting, digitale Zertifikate, Gebühren, Postdienste, Software und andere Ausgaben des Vereins oder Betriebs. Der Import erstellt nur Entwürfe unter Buchhaltung > Ausgaben. Bank- und Kassenbestände bleiben unverändert; Steuerabzüge werden nicht automatisch vorgenommen."
+
+msgid "Download blank CSV template"
+msgstr "Leere CSV-Vorlage herunterladen"
+
+msgid "Export expense CSV for %d"
+msgstr "Ausgaben-CSV für %d exportieren"
+
+msgid "Use UTF-8 CSV with semicolon or comma separators. Keep the template column names unchanged. Dates: YYYY-MM-DD; values: base and VAT in EUR; deductible_vat_pct is the percentage of VAT deductible, not the VAT rate (0 until verified). vat_treatment: review, domestic, intra, reverse, exempt. scope: review, association, commercial, shared."
+msgstr "Verwenden Sie UTF-8-CSV mit Semikolon oder Komma und unveränderten Spaltennamen. Datum: JJJJ-MM-TT; Netto und MwSt. in EUR. deductible_vat_pct ist der Anteil der abzugsfähigen MwSt., nicht der Steuersatz (bis zur Prüfung 0). vat_treatment: review, domestic, intra, reverse, exempt. scope: review, association, commercial, shared."
+
+msgid "Expense CSV file"
+msgstr "Ausgaben-CSV-Datei"
+
+msgid "Import expense drafts"
+msgstr "Ausgabenentwürfe importieren"
+
+msgid "Maximum 500 rows / 2 MB per import. Repeated documents are skipped. Attach original PDF receipts individually in Expenses, verify the legal tax treatment, then validate each entry."
+msgstr "Maximal 500 Zeilen und 2 MB je Import. Doppelte Belege werden übersprungen. Fügen Sie die Original-PDFs einzeln unter Ausgaben hinzu, prüfen Sie die steuerliche Behandlung und bestätigen Sie jeden Eintrag."
+
+msgid "Imported: %1$d drafts. Existing/duplicate documents skipped: %2$d."
+msgstr "Importiert: %1$d Entwürfe. Vorhandene oder doppelte Belege übersprungen: %2$d."
+
+msgid "Cash"
+msgstr "Bargeld"
+
+msgid "Bank"
+msgstr "Bank"
+
+msgid "Treasury: cash, bank and loans"
+msgstr "Liquidität: Bargeld, Bank und Darlehen"
+
+msgid "Historical reconciliation: %1$d payments posted, %2$d skipped, %3$d errors. Review the bank balance before posting anything again."
+msgstr "Historischer Abgleich: %1$d Zahlungen gebucht, %2$d übersprungen, %3$d Fehler. Prüfen Sie den Banksaldo vor einer erneuten Buchung."
+
+msgid "Balances use opening funds and confirmed payments/receipts (including invoice-linked settlements). An opening balance is not a monthly Cash in / Bank in. If it actually represents a contribution received this year, you can convert it to a dated receipt below without changing the balance. Unpaid invoices and future loan instalments never move money."
+msgstr "Salden umfassen Anfangsbestände und bestätigte Zahlungen/Eingänge (einschließlich Rechnungszahlungen). Ein Anfangssaldo ist kein monatlicher Zahlungseingang. Handelt es sich um eine in diesem Jahr erhaltene Einlage, kann sie ohne Saldoänderung als datierter Eingang erfasst werden. Unbezahlte Rechnungen und künftige Darlehensraten bewegen kein Geld."
+
+msgid "Cash on hand"
+msgstr "Bargeldbestand"
+
+msgid "Bank accounts"
+msgstr "Bankkonten"
+
+msgid "Total available funds"
+msgstr "Verfügbare Mittel insgesamt"
+
+msgid "Loans outstanding (reported)"
+msgstr "Ausstehende Darlehen (gemeldet)"
+
+msgid "Scheduled monthly loan instalments"
+msgstr "Geplante monatliche Darlehensraten"
+
+msgid "Cash and bank accounts"
+msgstr "Kassen- und Bankkonten"
+
+msgid "Account"
+msgstr "Konto"
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "Opening balance"
+msgstr "Anfangssaldo"
+
+msgid "Current balance"
+msgstr "Aktueller Saldo"
+
+msgid "Funding entry"
+msgstr "Einlagenbuchung"
+
+msgid "Actual contribution date"
+msgstr "Tatsächliches Einlagedatum"
+
+msgid "Funding reference"
+msgstr "Einlagenreferenz"
+
+msgid "Initial loan / contribution"
+msgstr "Anfangsdarlehen / Einlage"
+
+msgid "Convert the opening balance, without adding funds twice"
+msgstr "Anfangssaldo umwandeln, ohne Mittel doppelt zu zählen"
+
+msgid "Convert to receipt"
+msgstr "Als Geldeingang erfassen"
+
+msgid "Add your cash register or first bank account to start tracking funds."
+msgstr "Fügen Sie eine Kasse oder Ihr erstes Bankkonto hinzu, um die Mittel zu verfolgen."
+
+msgid "Add cash register / bank account"
+msgstr "Kasse / Bankkonto hinzufügen"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Opening date"
+msgstr "Eröffnungsdatum"
+
+msgid "Opening balance (€)"
+msgstr "Anfangssaldo (€)"
+
+msgid "Add account"
+msgstr "Konto hinzufügen"
+
+msgid "Record a payment or receipt"
+msgstr "Zahlung oder Eingang erfassen"
+
+msgid "Movement"
+msgstr "Buchung"
+
+msgid "Money in"
+msgstr "Geldeingang"
+
+msgid "Money out"
+msgstr "Geldausgang"
+
+msgid "Amount (€)"
+msgstr "Betrag (€)"
+
+msgid "Reference / concept"
+msgstr "Referenz / Verwendungszweck"
+
+msgid "Save movement"
+msgstr "Buchung speichern"
+
+msgid "Transfer between accounts"
+msgstr "Zwischen Konten umbuchen"
+
+msgid "From"
+msgstr "Von"
+
+msgid "To"
+msgstr "Nach"
+
+msgid "Transfer funds"
+msgstr "Geld überweisen"
+
+msgid "Monthly cash flow"
+msgstr "Monatlicher Geldfluss"
+
+msgid "Cash in"
+msgstr "Bargeldeingänge"
+
+msgid "Cash out"
+msgstr "Bargeldausgänge"
+
+msgid "Bank in"
+msgstr "Bankeingänge"
+
+msgid "Bank out"
+msgstr "Bankausgänge"
+
+msgid "Cash balance"
+msgstr "Kassenbestand"
+
+msgid "Bank balance"
+msgstr "Banksaldo"
+
+msgid "Recent cash and bank movements"
+msgstr "Letzte Kassen- und Bankbewegungen"
+
+msgid "Amount"
+msgstr "Betrag"
+
+msgid "Reference"
+msgstr "Referenz"
+
+msgid "No movements recorded yet."
+msgstr "Noch keine Buchungen erfasst."
+
+msgid "Loans"
+msgstr "Darlehen"
+
+msgid "New fixed-rate loans show monthly capital/interest forecasts. Interest on ordinary money loans is generally VAT-exempt; the schedule never changes model 303. Neither a future instalment nor an unconfirmed loan disbursement changes bank balances. Older manual loans retain their original update controls."
+msgstr "Neue Festzinsdarlehen zeigen monatliche Tilgungs- und Zinsprognosen. Zinsen aus gewöhnlichen Gelddarlehen sind im Allgemeinen von der Mehrwertsteuer befreit; der Plan ändert das Formular 303 nicht. Zukünftige Raten und unbestätigte Auszahlungen ändern Banksalden nicht. Ältere manuelle Darlehen behalten ihre bisherigen Bedienelemente."
+
+msgid "Loan"
+msgstr "Darlehen"
+
+msgid "Lender"
+msgstr "Darlehensgeber"
+
+msgid "Original loan"
+msgstr "Ursprüngliches Darlehen"
+
+msgid "Monthly payment"
+msgstr "Monatliche Rate"
+
+msgid "Outstanding"
+msgstr "Ausstehend"
+
+msgid "Next payment date"
+msgstr "Nächster Zahlungstermin"
+
+msgid "Payment / updates"
+msgstr "Zahlungen / Änderungen"
+
+msgid "months; annual nominal rate"
+msgstr "Monate; nominaler Jahreszins"
+
+msgid "Down payment"
+msgstr "Anzahlung"
+
+msgid "Interest already paid"
+msgstr "Bereits gezahlte Zinsen"
+
+msgid "Next instalment"
+msgstr "Nächste Rate"
+
+msgid "Capital"
+msgstr "Tilgung"
+
+msgid "Interest"
+msgstr "Zinsen"
+
+msgid "Pay from"
+msgstr "Zahlen von"
+
+msgid "Actual payment date"
+msgstr "Tatsächliches Zahlungsdatum"
+
+msgid "I confirm this instalment was actually paid from this account."
+msgstr "Ich bestätige, dass diese Rate tatsächlich von diesem Konto bezahlt wurde."
+
+msgid "Confirm instalment paid"
+msgstr "Ratenzahlung bestätigen"
+
+msgid "Amortisation schedule"
+msgstr "Tilgungsplan"
+
+msgid "Due date"
+msgstr "Fälligkeitsdatum"
+
+msgid "Instalment"
+msgstr "Rate"
+
+msgid "Paid"
+msgstr "Bezahlt"
+
+msgid "Forecast"
+msgstr "Prognose"
+
+msgid "Update loan"
+msgstr "Darlehen aktualisieren"
+
+msgid "No loans entered."
+msgstr "Keine Darlehen erfasst."
+
+msgid "Add a loan"
+msgstr "Darlehen hinzufügen"
+
+msgid "Enter the amount actually borrowed, excluding any down payment. Set TIN and term to calculate instalments; leave term zero and enter a manual monthly amount for an old-style loan. The optional final balloon is extra principal due with the last instalment."
+msgstr "Geben Sie den tatsächlich geliehenen Betrag ohne Anzahlung ein. Tragen Sie nominalen Jahreszins und Laufzeit zur Ratenberechnung ein; für ältere Darlehen die Laufzeit auf null setzen und eine manuelle Monatsrate angeben. Die zusätzliche Schlusszahlung ist weiteres Kapital, das mit der letzten Rate fällig wird."
+
+msgid "Loan name"
+msgstr "Darlehensname"
+
+msgid "Annual nominal interest (TIN %)"
+msgstr "Nominaler Jahreszins (TIN %)"
+
+msgid "Financed principal (€)"
+msgstr "Finanzierter Darlehensbetrag (€)"
+
+msgid "Term in months (0 = manual)"
+msgstr "Laufzeit in Monaten (0 = manuell)"
+
+msgid "Down payment from own funds (€)"
+msgstr "Anzahlung aus Eigenmitteln (€)"
+
+msgid "Extra principal on final instalment (€)"
+msgstr "Zusätzliche Tilgung in der letzten Rate (€)"
+
+msgid "Manual monthly payment (€; only term 0)"
+msgstr "Manuelle Monatsrate (€; nur bei Laufzeit 0)"
+
+msgid "Loan date"
+msgstr "Darlehensdatum"
+
+msgid "First instalment date"
+msgstr "Datum der ersten Rate"
+
+msgid "Loan funds actually received in bank (confirmed)"
+msgstr "Darlehensbetrag tatsächlich auf Bankkonto erhalten (bestätigt)"
+
+msgid "Bank receiving loan"
+msgstr "Empfangendes Bankkonto"
+
+msgid "Select bank"
+msgstr "Bank auswählen"
+
+msgid "Confirm funds received only if a real transfer into this bank account occurred. Saving the loan does not repeat the supplier payment; the down payment is informational and never moves cash automatically. Loan instalments are forecast until manually confirmed."
+msgstr "Bestätigen Sie den Geldeingang nur bei einer tatsächlichen Überweisung auf dieses Bankkonto. Das Speichern des Darlehens wiederholt keine Lieferantenzahlung; die Anzahlung dient nur zur Information und löst keine automatische Geldbewegung aus. Raten bleiben Prognosen bis zur manuellen Bestätigung."
+
+msgid "Save loan"
+msgstr "Darlehen speichern"
+
+msgid "Treasury"
+msgstr "Liquidität"
+
+msgid "Expense type"
+msgstr "Ausgabenart"
+
+msgid "Current expense"
+msgstr "Laufender Aufwand"
+
+msgid "Fixed asset (depreciable)"
+msgstr "Anlagevermögen (abschreibungsfähig)"
+
+msgid "Fixed asset"
+msgstr "Anlagevermögen"
+
+msgid "Date put into service"
+msgstr "Datum der Inbetriebnahme"
+
+msgid "Useful life (years)"
+msgstr "Nutzungsdauer (Jahre)"
+
+msgid "Annual straight-line allocation starts when the asset is ready for use. The first and last years are prorated by days. Confirm the applicable accounting and tax rules separately."
+msgstr "Die jährliche lineare Abschreibung beginnt, sobald das Wirtschaftsgut einsatzbereit ist. Das erste und das letzte Jahr werden tagegenau anteilig berechnet. Prüfen Sie die geltenden handels- und steuerrechtlichen Regeln gesondert."
+
+msgid "Error detected"
+msgstr "Fehler festgestellt"
+
+msgid "Pending"
+msgstr "Ausstehend"
+
+msgid "Validated and linked to payment"
+msgstr "Bestätigt und Zahlung zugeordnet"
+
+msgid "No records"
+msgstr "Keine Einträge"
+
+msgid "Payment not linked. Check Treasury before recording another payment."
+msgstr "Zahlung nicht zugeordnet. Prüfen Sie die Kasse, bevor Sie eine weitere Zahlung erfassen."
+
+msgid "Linked payments exceed the recorded amount. Review the settlement."
+msgstr "Zugeordnete Zahlungen übersteigen den erfassten Betrag. Prüfen Sie die Abstimmung."
+
+msgid "Green: validated and payment linked"
+msgstr "Grün: bestätigt und Zahlung zugeordnet"
+
+msgid "Amber: pending validation, payment link or repayment"
+msgstr "Gelb: Prüfung, Zahlungszuordnung oder Rückzahlung ausstehend"
+
+msgid "Red: detected inconsistency"
+msgstr "Rot: Unstimmigkeit festgestellt"
+
+msgid "Recorded movement without an invoice or loan link. Check before adding another payment."
+msgstr "Buchung ohne Zuordnung zu Rechnung oder Darlehen. Vor einer weiteren Zahlung prüfen."
+
+
+msgid "Incidents"
+msgstr "Vorfälle"
+
+msgid "Showing the selected accounting record."
+msgstr "Ausgewählter Buchungssatz wird angezeigt."
+
+msgid "Show all records"
+msgstr "Alle Einträge anzeigen"
+
+msgid "Review"
+msgstr "Prüfen"
+
+msgid "Issued invoice and accounting totals disagree."
+msgstr "Ausgestellte Rechnung und Buchungsbeträge stimmen nicht überein."
+
+msgid "Check the domestic sale with zero VAT."
+msgstr "Inlandsverkauf mit 0 % MwSt. prüfen."
+
+msgid "Check the missing invoice reference."
+msgstr "Fehlende Rechnungsreferenz prüfen."
+
+msgid "Tax treatment requires review."
+msgstr "Steuerliche Behandlung muss geprüft werden."
+
+msgid "Pending validation."
+msgstr "Validierung ausstehend."
+
+msgid "Incidents requiring review"
+msgstr "Zu prüfende Vorfälle"
+
+msgid "No matching records remain for this month."
+msgstr "Für diesen Monat sind keine passenden Einträge mehr vorhanden."
+
+msgid "Correct entry"
+msgstr "Buchung korrigieren"
+
+msgid "History"
+msgstr "Verlauf"
+
+msgid "Correct accounting entry"
+msgstr "Buchungssatz korrigieren"
+
+msgid "This accounting record cannot be corrected."
+msgstr "Dieser Buchungssatz kann nicht korrigiert werden."
+
+msgid "Check the amounts, date, VAT deduction and correction reason."
+msgstr "Beträge, Datum, Vorsteuerabzug und Korrekturgrund prüfen."
+
+msgid "Amounts must match the sign of the sale or refund."
+msgstr "Beträge müssen dem Vorzeichen von Verkauf oder Erstattung entsprechen."
+
+msgid "A valid invoice or credit note reference is required."
+msgstr "Eine gültige Rechnungs- oder Gutschriftreferenz ist erforderlich."
+
+msgid "Check the supplier or customer and tax identification."
+msgstr "Lieferant bzw. Kunde und Steueridentifikation prüfen."
+
+msgid "Check the asset category, in-service date and useful life."
+msgstr "Anlagekategorie, Inbetriebnahmedatum und Nutzungsdauer prüfen."
+
+msgid "Fiscal date"
+msgstr "Steuerdatum"
+
+msgid "Invoice reference"
+msgstr "Rechnungsreferenz"
+
+msgid "Customer or supplier"
+msgstr "Kunde oder Lieferant"
+
+msgid "VAT amount"
+msgstr "Mehrwertsteuerbetrag"
+
+msgid "Deductible VAT percentage"
+msgstr "Abziehbarer Vorsteueranteil"
+
+msgid "Notes"
+msgstr "Notizen"
+
+msgid "Correction reason"
+msgstr "Korrekturgrund"
+
+msgid "Save correction as draft"
+msgstr "Korrektur als Entwurf speichern"
+
+msgid "Cancel"
+msgstr "Abbrechen"
+
+msgid "Accounting correction history (latest 50)"
+msgstr "Verlauf der Buchungskorrekturen (letzte 50)"
+
+msgid "No corrections recorded."
+msgstr "Keine Korrekturen erfasst."
+
+msgid "Administrator ID"
+msgstr "Administrator-ID"
+
+msgid "Reason"
+msgstr "Grund"
+
+msgid "Before: date / invoice / base / VAT / total"
+msgstr "Vorher: Datum / Rechnung / Netto / MwSt. / Gesamt"
+
+msgid "After: date / invoice / base / VAT / total"
+msgstr "Nachher: Datum / Rechnung / Netto / MwSt. / Gesamt"
+
+msgid "Check payment date, account and amount."
+msgstr "Zahlungsdatum, Konto und Betrag prüfen."
+
+msgid "Payment exceeds the outstanding amount or has invalid dates/account."
+msgstr "Die Zahlung übersteigt den offenen Betrag oder Datum/Konto ist ungültig."
+
+msgid "Payment could not be recorded."
+msgstr "Zahlung konnte nicht erfasst werden."
+
+msgid "Paid/received:"
+msgstr "Gezahlt/erhalten:"
+
+msgid "Add a bank or cash account in Treasury to record an actual payment."
+msgstr "Bank- oder Kassenkonto in Liquidität hinzufügen, um eine tatsächliche Zahlung zu erfassen."
+
+msgid "Paid from / received into"
+msgstr "Gezahlt von / erhalten auf"
+
+msgid "Payment date"
+msgstr "Zahlungsdatum"
+
+msgid "Record receipt"
+msgstr "Geldeingang erfassen"
+
+msgid "Record payment"
+msgstr "Zahlung erfassen"
+
+msgid "Record only actual bank/cash payments. Importing or validating an invoice never assumes it was paid."
+msgstr "Nur tatsächliche Bank- oder Barzahlungen erfassen. Import und Bestätigung einer Rechnung bedeuten nicht, dass sie bezahlt wurde."
+
+msgid "Bank or cash account"
+msgstr "Bank- oder Kassenkonto"
+
+msgid "Select an account"
+msgstr "Konto auswählen"
+
+msgid "Paid amount"
+msgstr "Gezahlter Betrag"
+
+msgid "Invoice total including VAT"
+msgstr "Rechnungsbetrag einschließlich MwSt."
+
+msgid "Financial overview (not sales or VAT)"
+msgstr "Finanzübersicht (keine Umsätze oder Umsatzsteuer)"
+
+msgid "Initial loan funding (already in opening balance)"
+msgstr "Anfangsfinanzierung durch Darlehen (bereits im Anfangssaldo enthalten)"
+
+msgid "Current bank balance"
+msgstr "Aktueller Banksaldo"
+
+msgid "The opening loan is shown as a bank inflow in its start month for reporting. It is already included in the opening bank balance: no second bank movement, sale or VAT is created."
+msgstr "Das anfängliche Darlehen wird im Startmonat nur für die Berichterstattung als Bankeingang angezeigt. Es ist bereits im Bankanfangssaldo enthalten: Es werden weder eine zweite Bankbuchung noch ein Umsatz oder Umsatzsteuer erzeugt."
+
+msgid "Issued invoice totals differ from the WooCommerce order. Review the original invoice and order before approving this draft."
+msgstr "Die Summen der ausgestellten Rechnung weichen von der WooCommerce-Bestellung ab. Prüfen Sie beide vor der Freigabe des Entwurfs."
+
+msgid "Totals updated from rectifying invoice %s; review the VAT classification and approve the draft again."
+msgstr "Summen aus der Berichtigungsrechnung %s aktualisiert; prüfen Sie die MwSt.-Einordnung und geben Sie den Entwurf erneut frei."
+
+msgid "Issued invoice and accounting totals disagree. Check the original invoice and the order; validation is blocked until reconciled."
+msgstr "Ausgestellte Rechnung und Buchung stimmen nicht überein. Prüfen Sie Rechnung und Bestellung; die Freigabe ist gesperrt."
+
+msgid "Validated sale has zero VAT. Check its original invoice and applicable tax regime."
+msgstr "Der bestätigte Verkauf enthält keine MwSt. Prüfen Sie die ursprüngliche Rechnung und die Steuerregelung."
+
+msgid "(automatically linked to this WooCommerce order)"
+msgstr "(automatisch mit dieser WooCommerce-Bestellung verknüpft)"
+
+msgid "WooCommerce imported this sale with zero VAT. Check its invoice and the correct fiscal treatment before approving."
+msgstr "WooCommerce hat diesen Verkauf ohne MwSt. importiert. Prüfen Sie Rechnung und Steuerbehandlung vor der Freigabe."
+
+msgid "I have checked the zero VAT amount and confirm its domestic tax treatment."
+msgstr "Ich habe den Null-MwSt.-Betrag geprüft und bestätige seine inländische Steuerbehandlung."
+
+msgid "Deductible percentage of the VAT amount, NOT the invoice VAT rate. 0% means no deduction; 100% only when fully deductible."
+msgstr "Abziehbarer Anteil der MwSt., NICHT der Steuersatz der Rechnung. 0 %: kein Abzug; 100 %: vollständig abzugsfähig."
+
+msgid "Enter the percentage of VAT legally deductible, NOT the VAT rate: 0% if not deductible, 100% only if fully deductible, or another applicable percentage. You must choose a value."
+msgstr "Geben Sie den gesetzlich abziehbaren Vorsteueranteil an, NICHT den MwSt.-Satz: 0 % ohne Abzug, 100 % bei vollem Abzug oder den geltenden Anteil. Ein Wert ist erforderlich."
+
+msgid "Invoice amount checks"
+msgstr "Prüfung der Rechnungsbeträge"
+
+msgid "Total of supplier invoice (base + VAT):"
+msgstr "Gesamtbetrag der Lieferantenrechnung (Netto + MwSt.):"
+
+msgid "Potential deductible VAT (VAT × deductible percentage):"
+msgstr "Potenziell abziehbare Vorsteuer (MwSt. × Abzugsanteil):"
+
+msgid "Compare these amounts with the supplier invoice. This preview is not a tax deduction decision."
+msgstr "Vergleichen Sie diese Beträge mit der Lieferantenrechnung. Diese Vorschau entscheidet nicht über den Steuerabzug."
+
+msgid "Original PDF or image securely archived with this accounting entry."
+msgstr "Original-PDF oder -Bild sicher mit diesem Buchungssatz archiviert."
+
+msgid "Select a valid original PDF, JPG, PNG or WEBP document smaller than 10 MB."
+msgstr "Wählen Sie ein gültiges Originaldokument (PDF, JPG, PNG oder WEBP) unter 10 MB."
+
+msgid "Correction saved. This entry is now a draft and must be validated again."
+msgstr "Korrektur gespeichert. Der Eintrag ist wieder ein Entwurf und muss erneut freigegeben werden."
+
+msgid "Could not correct the entry. Check all fields and the mandatory reason."
+msgstr "Eintrag konnte nicht korrigiert werden. Prüfen Sie alle Felder und den Pflichtgrund."
+
+msgid "No data changed; nothing was recorded."
+msgstr "Keine Daten geändert und keine Buchung erfasst."
+
+msgid "The correction failed. The previous ledger entry was retained."
+msgstr "Korrektur fehlgeschlagen. Der vorherige Buchungssatz bleibt erhalten."
+
+msgid "This WooCommerce sale has zero VAT. Check its issued invoice and confirm the domestic VAT treatment before validating it."
+msgstr "Dieser WooCommerce-Verkauf hat keine MwSt. Prüfen Sie die ausgestellte Rechnung und bestätigen Sie die inländische Steuerbehandlung vor der Freigabe."
+
+msgid "Accounting totals do not match the immutable issued invoice. Validation was blocked; reconcile the original document and WooCommerce order."
+msgstr "Die Buchungssummen stimmen nicht mit der unveränderlichen Rechnung überein. Freigabe gesperrt; gleichen Sie Rechnung und WooCommerce-Bestellung ab."
+
+msgid "Actual payment/receipt recorded in Treasury."
+msgstr "Tatsächliche Zahlung/Einzahlung in der Liquidität erfasst."
+
+msgid "Historical payment reconciliation processed; review the posted, skipped and error counts shown."
+msgstr "Historischer Zahlungsabgleich abgeschlossen; prüfen Sie gebuchte, übersprungene und fehlerhafte Vorgänge."
+
+msgid "Invoice draft saved, but the selected payment could not be recorded. Register it from the invoice row after checking account, date and amount."
+msgstr "Rechnungsentwurf gespeichert, aber die Zahlung konnte nicht erfasst werden. Erfassen Sie sie in der Rechnungszeile nach Prüfung von Konto, Datum und Betrag."
+
+msgid "Invoice validated, but the selected payment could not be recorded. Register it from the invoice row."
+msgstr "Rechnung freigegeben, aber die Zahlung konnte nicht erfasst werden. Erfassen Sie sie in der Rechnungszeile."
+
+msgid "Payment amount, date or account is invalid or exceeds the outstanding balance."
+msgstr "Zahlungsbetrag, -datum oder -konto ist ungültig oder übersteigt den offenen Betrag."
+
+msgid "Payment could not be recorded; no money was moved."
+msgstr "Zahlung konnte nicht erfasst werden; es wurde kein Geld bewegt."
+
+msgid "Treasury record saved."
+msgstr "Liquiditätseintrag gespeichert."
+
+msgid "Could not save the treasury record."
+msgstr "Liquiditätseintrag konnte nicht gespeichert werden."
+
+msgid "Check the treasury values and dates."
+msgstr "Prüfen Sie Liquiditätswerte und -daten."
+
+msgid "Supplier purchase CSV processed. Check the drafts in Received invoices."
+msgstr "Lieferanteneinkaufs-CSV verarbeitet. Prüfen Sie die Entwürfe unter Eingangsrechnungen."
+
+msgid "Select a valid supplier purchase CSV smaller than 2 MB."
+msgstr "Wählen Sie eine gültige Lieferanteneinkaufs-CSV unter 2 MB."
+
+msgid "Invalid purchase CSV headers; use the downloaded template."
+msgstr "Ungültige CSV-Kopfzeilen; verwenden Sie die heruntergeladene Vorlage."
+
+msgid "Purchase CSV contains more than 500 rows."
+msgstr "Die Einkaufs-CSV enthält mehr als 500 Zeilen."
+
+msgid "Invalid supplier purchase data; no rows imported."
+msgstr "Ungültige Lieferanteneinkaufsdaten; keine Zeilen importiert."
+
+msgid "Supplier purchase CSV contains no documents."
+msgstr "Die Lieferanteneinkaufs-CSV enthält keine Dokumente."
+
+msgid "Could not save the supplier purchase batch; please retry."
+msgstr "Lieferanteneinkaufs-Stapel konnte nicht gespeichert werden; erneut versuchen."
+
+msgid "%d validated domestic WooCommerce sales have positive values but zero VAT. Review the original invoice and the tax treatment; these entries still contribute zero output VAT to this summary."
+msgstr "%d bestätigte inländische WooCommerce-Verkäufe haben positive Beträge, aber 0 MwSt. Prüfen Sie Originalrechnung und Steuerbehandlung; sie tragen weiterhin 0 Ausgangssteuer zur Übersicht bei."
+
+msgid "Review sales"
+msgstr "Verkäufe prüfen"
+
+msgid "Import new paid WooCommerce orders automatically in small background batches"
+msgstr "Neue bezahlte WooCommerce-Bestellungen automatisch in kleinen Hintergrundblöcken importieren"
+
+msgid "Uses WordPress WP-Cron while the website receives visits. Imported sales and refunds remain drafts until invoice numbers, dates and tax treatment are verified. Does not import supplier bills or mark taxes as ready."
+msgstr "Verwendet WordPress WP-Cron bei Websitebesuchen. Importierte Verkäufe und Erstattungen bleiben Entwürfe bis Rechnungsnummern, Daten und Steuerbehandlung geprüft sind. Lieferantenrechnungen werden nicht importiert; Steuern gelten nicht als fertig."
+
+msgid "Bank receipts from paid WooCommerce orders"
+msgstr "Bankeingänge aus bezahlten WooCommerce-Bestellungen"
+
+msgid "Optional. Only WooCommerce orders with an actual payment date, an issued invoice number and matching totals are recorded. No tax validation or payment is inferred from an unpaid order. Existing unrelated bank movements must be reconciled first."
+msgstr "Optional. Nur WooCommerce-Bestellungen mit tatsächlichem Zahlungsdatum, Rechnungsnummer und übereinstimmenden Summen werden erfasst. Für unbezahlte Bestellungen wird weder Zahlung noch Steuerfreigabe angenommen. Bestehende Bankbewegungen zuerst abgleichen."
+
+msgid "Bank for confirmed WooCommerce payments"
+msgstr "Bankkonto für bestätigte WooCommerce-Zahlungen"
+
+msgid "Do not record payments automatically"
+msgstr "Zahlungen nicht automatisch erfassen"
+
+msgid "Only payments received since"
+msgstr "Nur Zahlungen eingegangen seit"
+
+msgid "When an eligible WooCommerce order is synchronised, post its confirmed receipt once to this bank. Earlier payments remain available for manual reconciliation in Treasury. Fees and bank net deposits may need separate entries."
+msgstr "Bei Synchronisierung einer berechtigten WooCommerce-Bestellung den bestätigten Zahlungseingang einmal auf diesem Bankkonto erfassen. Frühere Zahlungen können in der Liquidität manuell abgeglichen werden. Gebühren und Nettoeingänge benötigen möglicherweise separate Buchungen."
+
+msgid "Fixed asset depreciation"
+msgstr "Abschreibung des Anlagevermögens"
+
+msgid "Straight-line accounting allocation by actual days from the in-service date. Does not change VAT, supplier invoices, bank payments, or determine a statutory tax deduction."
+msgstr "Lineare buchhalterische Abschreibung nach tatsächlichen Tagen ab Inbetriebnahme. Ändert weder MwSt., Lieferantenrechnungen noch Bankzahlungen und bestimmt keinen gesetzlichen Steuerabzug."
+
+msgid "Asset"
+msgstr "Anlagegut"
+
+msgid "In service"
+msgstr "In Betrieb"
+
+msgid "Amortizable cost"
+msgstr "Abschreibungsfähige Kosten"
+
+msgid "Annual depreciation"
+msgstr "Jährliche Abschreibung"
+
+msgid "Remaining book value"
+msgstr "Verbleibender Buchwert"
+
+msgid "No validated fixed assets for this year."
+msgstr "Für dieses Jahr sind keine freigegebenen Anlagegüter vorhanden."
+
+msgid "Total annual depreciation:"
+msgstr "Gesamte jährliche Abschreibung:"
+
+msgid "Supplier purchases: CSV import and export"
+msgstr "Lieferanteneinkäufe: CSV-Import und -Export"
+
+msgid "Import supplier invoices for merchandise bought for resale. All entries are draft purchases and require review. Upload the original PDF or image to each row after importing."
+msgstr "Importieren Sie Lieferantenrechnungen für zum Wiederverkauf erworbene Waren. Alle Einträge bleiben prüfpflichtige Einkaufsentwürfe. Original-PDF oder -Bild nach dem Import jeder Zeile beifügen."
+
+msgid "Export supplier purchases CSV for %d"
+msgstr "Lieferanteneinkäufe als CSV für %d exportieren"
+
+msgid "Supplier purchases CSV file"
+msgstr "CSV-Datei für Lieferanteneinkäufe"
+
+msgid "Import supplier purchase drafts"
+msgstr "Lieferanteneinkaufs-Entwürfe importieren"
+
+msgid "Maximum 500 rows / 2 MB per import. Repeated documents are skipped. Attach PDF, JPG, PNG or WEBP originals to each imported row, then verify VAT and approve. CSV imports never attach the original document or register a payment."
+msgstr "Maximal 500 Zeilen bzw. 2 MB je Import. Doppelte Belege werden übersprungen. Originale (PDF, JPG, PNG oder WEBP) jeder importierten Zeile beifügen, MwSt. prüfen und freigeben. CSV-Importe fügen keine Originale an und buchen keine Zahlungen."
+
+msgid "This changes only the accounting record, not the WooCommerce order, issued invoice, or supplier PDF. If an issued invoice is wrong, follow the required rectifying-invoice procedure before fiscal approval."
+msgstr "Nur die Buchung wird geändert, nicht WooCommerce-Bestellung, ausgestellte Rechnung oder Lieferanten-PDF. Ist eine ausgestellte Rechnung falsch, vor steuerlicher Freigabe das vorgeschriebene Berichtigungsverfahren befolgen."
+
+msgid "Saving a correction moves this record back to draft and removes it from validated tax totals until it is reviewed and approved again."
+msgstr "Beim Speichern einer Korrektur wird der Eintrag zum Entwurf und bis zur erneuten Prüfung und Freigabe aus den bestätigten Steuersummen entfernt."
+
+msgid "Configure a bank or cash account in Treasury before linking a payment."
+msgstr "Richten Sie vor der Verknüpfung einer Zahlung ein Bank- oder Kassenkonto unter Liquidität ein."
+
+msgid "Payment received and verified"
+msgstr "Zahlung eingegangen und geprüft"
+
+msgid "Invoice already paid (confirmed)"
+msgstr "Rechnung bereits bezahlt (bestätigt)"
+
+msgid "Select this only if the payment actually occurred. It immediately creates a linked cash/bank movement when this form is saved; leave unchecked for unpaid invoices."
+msgstr "Nur auswählen, wenn die Zahlung tatsächlich erfolgt ist. Beim Speichern wird sofort eine verknüpfte Bank- oder Kassenbuchung erstellt. Bei unbezahlten Rechnungen nicht markieren."
+
+msgid "Reconcile confirmed payments and receipts"
+msgstr "Bestätigte Zahlungen und Einnahmen abgleichen"
+
+msgid "Only for invoices paid or customer sales actually collected and not yet linked to Treasury. Review each item and its actual payment date. Purchases are bank/cash out; sales are bank/cash in. No movements are generated until confirmed."
+msgstr "Nur für tatsächlich bezahlte Rechnungen oder vereinnahmte Verkäufe ohne bestehende Liquiditätsverknüpfung. Prüfen Sie jeden Posten und das tatsächliche Zahlungsdatum. Einkäufe sind Ausgänge, Verkäufe Eingänge. Keine Buchung vor Bestätigung."
+
+msgid "Account used for the confirmed payments or receipts"
+msgstr "Konto für bestätigte Zahlungen oder Einnahmen"
+
+msgid "Select bank or cash account"
+msgstr "Bank- oder Kassenkonto auswählen"
+
+msgid "Confirmed?"
+msgstr "Bestätigt?"
+
+msgid "Invoice"
+msgstr "Rechnung"
+
+msgid "Actual bank payment date"
+msgstr "Tatsächliches Bankzahlungsdatum"
+
+msgid "Sale"
+msgstr "Verkauf"
+
+msgid "Refund"
+msgstr "Erstattung"
+
+msgid "Purchase / expense"
+msgstr "Einkauf / Ausgabe"
+
+msgid "I confirm each selected purchase was paid or sale was received using this account on the dates shown, with no matching Treasury movement already recorded."
+msgstr "Ich bestätige, dass jeder ausgewählte Einkauf bezahlt bzw. Verkauf über dieses Konto zum angegebenen Datum vereinnahmt wurde und kein entsprechender Liquiditätseintrag besteht."
+
+msgid "Post confirmed historical payments"
+msgstr "Bestätigte historische Zahlungen buchen"
+
+msgid "At most 100 invoices are shown at once. Refresh to reconcile more. This does not change invoices, VAT deductions or financing/loan balances."
+msgstr "Es werden höchstens 100 Rechnungen gleichzeitig angezeigt. Für weitere Abgleiche aktualisieren. Rechnungen, Vorsteuerabzüge und Darlehenssalden bleiben unverändert."
+
+msgid "Select a PDF, JPG, PNG or WEBP document smaller than 10 MB."
+msgstr "Wählen Sie ein Dokument als PDF, JPG, PNG oder WEBP unter 10 MB."
+
+msgid "Select a valid original PDF or image."
+msgstr "Wählen Sie ein gültiges Original-PDF oder -Bild."
+
+msgid "Original invoice documents"
+msgstr "Original-Rechnungsbelege"
+
+msgid "Attach original PDF or image (up to 10 MB)"
+msgstr "Original-PDF oder -Bild anhängen (bis 10 MB)"
+
+msgid "Archive document"
+msgstr "Dokument archivieren"
+
+msgid "Preparation checklist"
+msgstr "Checkliste zur Vorbereitung"
+
+msgid "WooCommerce background sales import:"
+msgstr "WooCommerce-Verkaufsimport im Hintergrund:"
+
+msgid "Not enabled. Enable it under Accounting Settings to keep new paid orders available for review."
+msgstr "Nicht aktiviert. Aktivieren Sie den Import in den Buchhaltungseinstellungen, damit neue bezahlte Bestellungen geprüft werden können."
+
+msgid "Enabled but not executed yet. WP-Cron requires site traffic or an external scheduler."
+msgstr "Aktiviert, aber noch nicht ausgeführt. WP-Cron benötigt Websitebesuche oder einen externen Zeitplaner."
+
+msgid "Last check:"
+msgstr "Letzte Prüfung:"
+
+msgid "Last full cycle:"
+msgstr "Letzter vollständiger Durchlauf:"
+
+msgid "Not completed yet"
+msgstr "Noch nicht abgeschlossen"
+
+msgid "Error:"
+msgstr "Fehler:"
+
+msgid "Accounting entries in selected period:"
+msgstr "Buchungen im ausgewählten Zeitraum:"
+
+msgid "Pending validation:"
+msgstr "Freigabe ausstehend:"
+
+msgid "Operations outside standard domestic VAT:"
+msgstr "Umsätze außerhalb der regulären inländischen MwSt.:"
+
+msgid "Entries without a document number:"
+msgstr "Einträge ohne Belegnummer:"
+
+msgid "There are no recorded operations in this period. This does not establish that the tax return is zero: first check the WooCommerce import and supplier invoices."
+msgstr "In diesem Zeitraum sind keine Vorgänge erfasst. Das bedeutet nicht, dass die Steuererklärung null beträgt: Prüfen Sie zuerst den WooCommerce-Import und die Lieferantenrechnungen."
+
+msgid "Review the outstanding records before using these figures. Non-domestic transactions and missing references need individual tax treatment."
+msgstr "Prüfen Sie offene Einträge vor Verwendung der Zahlen. Ausländische Vorgänge und fehlende Referenzen erfordern eine individuelle steuerliche Behandlung."
+
+msgid "No pending status or missing document numbers were detected. This does NOT mean a tax return is complete, accurate or ready for filing."
+msgstr "Keine offenen Status oder fehlenden Belegnummern gefunden. Dies bedeutet NICHT, dass eine Steuererklärung vollständig, korrekt oder einreichungsbereit ist."
+
+msgid "Entries without tax identification (check only where legally required):"
+msgstr "Einträge ohne Steueridentifikation (nur prüfen, wenn rechtlich vorgeschrieben):"
+
+msgid "Review purchases and expenses"
+msgstr "Einkäufe und Ausgaben prüfen"
+
+msgid "Verify that the fiscal start date includes the entire applicable reporting period. Imported WooCommerce orders are drafts until reviewed, and the ledger may omit transactions not entered manually."
+msgstr "Stellen Sie sicher, dass das steuerliche Anfangsdatum den gesamten Berichtszeitraum umfasst. Importierte WooCommerce-Bestellungen bleiben Entwürfe bis zur Prüfung; nicht manuell erfasste Vorgänge können fehlen."
+
+msgid "Reporting period:"
+msgstr "Berichtszeitraum:"
+
+msgid "Figures recalculate from the current register whenever you open this screen; you do not have to wait for the tax deadline."
+msgstr "Die Beträge werden bei jedem Öffnen aus dem aktuellen Register neu berechnet; Sie müssen nicht bis zur Steuerfrist warten."
+
+msgid "The tax models shown are references, not a list of mandatory returns for this merchant. Applicability depends on tax registration and legal form; for example, Model 130 may apply to certain self-employed taxpayers under direct estimation, while Model 200 concerns corporate income tax. Check tax registration with the AEAT or your adviser before preparing a return."
+msgstr "Die aufgeführten Steuermodelle dienen nur als Referenz, nicht als Pflichtliste. Die Anwendbarkeit hängt von Steuerregistrierung und Rechtsform ab; Modell 130 kann für bestimmte Selbstständige gelten, Modell 200 für Körperschaftsteuer. Vor Vorbereitung die AEAT oder Steuerberatung konsultieren."
+
+msgid "Official AEAT Model 130 information"
+msgstr "Offizielle AEAT-Informationen zu Modell 130"
+
+msgid "Accumulated figures for the selected period"
+msgstr "Kumulierte Beträge im ausgewählten Zeitraum"
+
+msgid "Domestic sales taxable base (validated)"
+msgstr "Steuerbemessungsgrundlage inländischer Verkäufe (bestätigt)"
+
+msgid "Domestic sales with VAT"
+msgstr "Inländische Verkäufe mit MwSt."
+
+msgid "Domestic purchases / expenses taxable base (validated)"
+msgstr "Steuerbemessungsgrundlage inländischer Einkäufe/Ausgaben (bestätigt)"
+
+msgid "Domestic purchases / expenses with VAT"
+msgstr "Inländische Einkäufe/Ausgaben mit MwSt."
+
+msgid "Accrued output VAT"
+msgstr "Entstandene Umsatzsteuer"
+
+msgid "Indicative domestic VAT balance (not final tax due)"
+msgstr "Indikativer inländischer MwSt.-Saldo (keine endgültige Steuerschuld)"
+
+msgid "Operations pending review or special tax treatment"
+msgstr "Vorgänge mit Prüfbedarf oder besonderer steuerlicher Behandlung"
+
+msgid "These are live accounting totals, not official AEAT boxes. The current register does not retain an invoice-by-invoice split of VAT rates, prior period offsets, all tax adjustments or filing options. Do not copy the indicative balance directly as the amount to pay."
+msgstr "Dies sind aktuelle Buchungssummen, keine offiziellen AEAT-Felder. Das Register speichert keine vollständige Aufteilung der MwSt.-Sätze je Rechnung, Vorperiodenverrechnungen, alle Steueranpassungen oder Erklärungsoptionen. Den indikativen Saldo nicht direkt als Zahlbetrag übernehmen."
+
+msgid "Edit"
+msgstr "Bearbeiten"
+
+msgid "Linked to a repayable loan from"
+msgstr "Mit einem rückzahlbaren Darlehen von verknüpft"
+
+msgid "The opening funds are already present. Conversion or cancellation is blocked while this loan is linked."
+msgstr "Die Anfangsmittel sind bereits vorhanden. Umwandlung oder Stornierung ist gesperrt, solange das Darlehen verknüpft ist."
+
+msgid "Opening amount entered in error"
+msgstr "Anfangsbetrag versehentlich erfasst"
+
+msgid "Confirm cancellation of this opening balance"
+msgstr "Stornierung dieses Anfangssaldos bestätigen"
+
+msgid "Cancel incorrect opening balance"
+msgstr "Fehlerhaften Anfangssaldo stornieren"
+
+msgid "Rename account"
+msgstr "Konto umbenennen"
+
+msgid "Opening balance correction history"
+msgstr "Verlauf der Anfangssaldo-Korrekturen"
+
+msgid "Create a new cash or bank account (not a receipt)"
+msgstr "Neues Kassen- oder Bankkonto erstellen (kein Geldeingang)"
+
+msgid "Use a descriptive account name, such as Main bank or Cash register. Record donations, initial contributions and customer receipts as movements into an existing account."
+msgstr "Verwenden Sie aussagekräftige Kontonamen wie Hauptbank oder Kasse. Erfassen Sie Spenden, Anfangseinlagen und Kundeneinnahmen als Eingänge auf bestehende Konten."
+
+msgid "Save changes"
+msgstr "Änderungen speichern"
+
+msgid "Sponsor / lender"
+msgstr "Sponsor / Darlehensgeber"
+
+msgid "Funded by existing opening balance; no duplicate receipt"
+msgstr "Durch bestehenden Anfangssaldo finanziert; kein doppelter Geldeingang"
+
+msgid "Repayment when agreed, without fixed instalments. Interest: 0%."
+msgstr "Rückzahlung nach Vereinbarung, ohne feste Raten. Zinsen: 0 %."
+
+msgid "Capital already returned"
+msgstr "Bereits zurückgezahltes Kapital"
+
+msgid "repayments"
+msgstr "Rückzahlungen"
+
+msgid "Repay from"
+msgstr "Zurückzahlen von"
+
+msgid "Actual repayment date"
+msgstr "Tatsächliches Rückzahlungsdatum"
+
+msgid "Capital to repay (€)"
+msgstr "Zurückzuzahlendes Kapital (€)"
+
+msgid "I confirm that this amount was actually transferred to the lender."
+msgstr "Ich bestätige, dass dieser Betrag tatsächlich an den Darlehensgeber überwiesen wurde."
+
+msgid "Record actual repayment"
+msgstr "Tatsächliche Rückzahlung erfassen"
+
+msgid "Enter the amount borrowed. For a 0% sponsor loan repayable later without fixed instalments, choose 0 months, 0% interest, and leave the first repayment date empty. Record partial or total repayments only when actually made. For scheduled financing, specify term and first instalment date."
+msgstr "Geben Sie das geliehene Kapital ein. Für ein zinsfreies Sponsordarlehen ohne feste Raten wählen Sie 0 Monate, 0 % Zinsen und kein erstes Rückzahlungsdatum. Teil- oder Gesamtrückzahlungen nur bei tatsächlicher Zahlung erfassen. Für Ratenfinanzierungen Laufzeit und erste Rate angeben."
+
+msgid "Sponsor / lender name"
+msgstr "Name des Sponsors / Darlehensgebers"
+
+msgid "Sponsor / lender tax ID (optional)"
+msgstr "Steuernummer Sponsor / Darlehensgeber (optional)"
+
+msgid "Lender relationship"
+msgstr "Beziehung zum Darlehensgeber"
+
+msgid "Sponsor (repayable loan)"
+msgstr "Sponsor (rückzahlbares Darlehen)"
+
+msgid "Other lender"
+msgstr "Sonstiger Darlehensgeber"
+
+msgid "Loan agreement reference"
+msgstr "Referenz des Darlehensvertrags"
+
+msgid "Term in months (0 = repay later without fixed instalments)"
+msgstr "Laufzeit in Monaten (0 = später ohne feste Raten zurückzahlen)"
+
+msgid "First instalment date (optional for flexible 0% loans)"
+msgstr "Datum der ersten Rate (optional bei flexiblen 0-%-Darlehen)"
+
+msgid "Loan funds"
+msgstr "Darlehensmittel"
+
+msgid "Not received yet (do not change bank)"
+msgstr "Noch nicht erhalten (Bankkonto nicht ändern)"
+
+msgid "Already included in bank opening balance (do not duplicate)"
+msgstr "Bereits im Bankanfangssaldo enthalten (nicht doppelt buchen)"
+
+msgid "New confirmed bank receipt"
+msgstr "Neuer bestätigter Bankeingang"
+
+msgid "Bank receiving or holding loan funds"
+msgstr "Bankkonto, das Darlehensmittel erhält oder hält"
+
+msgid "opening"
+msgstr "Anfang"
+
+msgid "I confirm that the entire opening balance belongs to this loan and is already in this bank. Do not add money again."
+msgstr "Ich bestätige, dass der gesamte Anfangssaldo zu diesem Darlehen gehört und bereits auf diesem Bankkonto liegt. Kein Geld erneut hinzufügen."
+
+msgid "When linking an opening balance, the loan principal must equal that opening amount exactly. An opening balance can fund only one loan. No bank movement is created."
+msgstr "Bei Verknüpfung eines Anfangssaldos muss das Darlehenskapital diesem Betrag exakt entsprechen. Ein Anfangssaldo darf nur ein Darlehen finanzieren. Keine Bankbewegung wird erstellt."
+
+msgid "Select opening balance when funds from the lender are already included in the bank opening balance: no second receipt is created. Select new receipt only when funds have newly arrived. This is a repayable loan, not a donation or VAT sale. Instalments remain forecasts until confirmed."
+msgstr "Wählen Sie Anfangssaldo, wenn die Darlehensmittel bereits im Bankanfangssaldo enthalten sind: kein zweiter Eingang wird gebucht. Neuen Eingang nur bei neu eingetroffenen Mitteln wählen. Es handelt sich um ein rückzahlbares Darlehen, keine Spende oder umsatzsteuerpflichtige Lieferung. Raten bleiben Prognosen bis zur Bestätigung."

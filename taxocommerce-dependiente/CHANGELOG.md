@@ -1,3 +1,10 @@
+## [0.3.45] — 2026-11-19 — Administration gettext coverage (#2783)
+
+- Translate the remaining 41 administration notices and explanatory controls in ES/EN/FR/DE/NL, including learning/Academy progress, diagnostics, backups, portable knowledge import, permission errors and Linguist export.
+- Complete the French "Origen" field label and rebuild all five PO/MO catalog pairs. Leave long user-manual prose and generated assistant knowledge, reasoning, customer answers, catalog content and semantic export data untouched.
+- Extend the existing gettext regression to require translations of all source-referenced administration messages and byte-for-byte PO/MO agreement across the five locales.
+- No changes to the learning engines, L1–L10/M11/M12 execution, scheduled jobs, database, security controls or WooCommerce integration.
+
 ## [0.3.44] — 2026-11-13 — Code Check equiparado a Core 0.4.82 (#2626)
 
 - Code Check equiparado a Core 0.4.82: reglas autónomas PHP/WordPress/seguridad, clasificación por gravedad, detalles de archivos y recomendaciones, resumen y JSON; sin modificar el Autotest funcional. Issue #2626.

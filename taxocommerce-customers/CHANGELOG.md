@@ -1,5 +1,11 @@
 # TaxoCommerce Customers — Historial
 
+## 0.1.2 — 2026-11-16
+
+- Evitada la carga prematura de traducciones de Customers en el registro opcional de Core durante `plugins_loaded`. Se retrasa la traducción de la descripción hasta `init` y se usa el texto neutro antes de ese punto.
+- Corregido el aviso PHP visible en las páginas públicas de STAGING; regresión específica para los hooks `plugins_loaded`/`init` sin cambiar pedidos, pagos, ni cálculos de WooCommerce.
+- El diagnóstico del bloqueo del checkout se mantiene separado: el aviso puede corromper respuestas AJAX si se muestra en pantalla, pero requiere validación funcional del checkout.
+
 ## 0.1.1 — 2026-11-14
 
 - Privacidad: supresión de los campos personales replicados en CRM y marcador técnico con hash HMAC no reversible; los nuevos eventos de compra no restauran esos datos.

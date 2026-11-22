@@ -99,6 +99,7 @@ jobs:
           php taxocommerce-import-export/tests/i18n-empty-mo-smoke.php
           php taxocommerce-import-export/tests/empty-gettext-fallback-smoke.php
           php taxocommerce-import-export/tests/background-export-smoke.php
+          php taxocommerce-import-export/tests/export-file-smoke.php
           php taxocommerce-import-export/tests/auto-test-smoke.php
           php taxocommerce-import-export/tests/native-category-csv-smoke.php
           php taxocommerce-import-export/tests/country-csv-smoke.php

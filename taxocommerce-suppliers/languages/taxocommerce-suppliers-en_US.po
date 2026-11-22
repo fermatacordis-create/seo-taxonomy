@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: TaxoCommerce Suppliers 0.2.27\n"
+"Project-Id-Version: TaxoCommerce Suppliers 0.2.28\n"
 "Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2028,3 +2028,51 @@ msgstr "Supplier import is already running."
 
 msgid "Para editar muchas fichas, descarga el CSV desde Gestión de proveedores. El archivo incluye también proveedores sin ficha. Rellena las columnas conservando los nombres de proveedor y vuelve a importarlo. Se validan las identidades existentes; los nombres desconocidos se omiten. Los campos vacíos sobrescriben los valores anteriores. La importación se procesa por bloques y permite detenerse sin revertir los bloques ya completados."
 msgstr "Para editar muchas fichas, descarga el CSV desde Gestión de proveedores. El archivo incluye también proveedores sin ficha. Rellena las columnas conservando los nombres de proveedor y vuelve a importarlo. Se validan las identidades existentes; los nombres desconocidos se omiten. Los campos vacíos sobrescriben los valores anteriores. La importación se procesa por bloques y permite detenerse sin revertir los bloques ya completados."
+
+msgid "Supplier contact record deleted. Catalogue products were not changed."
+msgstr "Supplier contact record deleted. Catalogue products were not changed."
+
+msgid "This supplier is no longer in the directory."
+msgstr "This supplier is no longer in the directory."
+
+msgid "This supplier already exists. Edit its record instead."
+msgstr "This supplier already exists. Edit its record instead."
+
+msgid "Enter a supplier name with 190 characters or fewer."
+msgstr "Enter a supplier name with 190 characters or fewer."
+
+msgid "Add a supplier manually before importing any products. Imported suppliers also appear automatically."
+msgstr "Add a supplier manually before importing any products. Imported suppliers also appear automatically."
+
+msgid "Add supplier manually"
+msgstr "Add supplier manually"
+
+msgid "This supplier is not in the directory."
+msgstr "This supplier is not in the directory."
+
+msgid "%d suppliers in the directory"
+msgstr "%d suppliers in the directory"
+
+msgid "No suppliers found in the directory."
+msgstr "No suppliers found in the directory."
+
+msgid "Supplier names cannot be changed after saving. These records are private to store administrators."
+msgstr "Supplier names cannot be changed after saving. These records are private to store administrators."
+
+msgid "Export imported and manually created suppliers as an editable CSV. Import it to update private contact details; products, prices and orders never change."
+msgstr "Export imported and manually created suppliers as an editable CSV. Import it to update private contact details; products, prices and orders never change."
+
+msgid "CSV imports update only known suppliers (from Inventory or manual records). Unknown names are skipped. Blank cells replace existing values. Export a backup first."
+msgstr "CSV imports update only known suppliers (from Inventory or manual records). Unknown names are skipped. Blank cells replace existing values. Export a backup first."
+
+msgid "Crear proveedores manualmente o desde el catálogo importado, y editar sus fichas privadas, contactos, direcciones y observaciones."
+msgstr "Create suppliers manually or through imported catalogue data, and edit their private records, contacts, addresses and notes."
+
+msgid "La lista reúne los proveedores del inventario importado y los creados manualmente, aunque todavía no tengan productos. Para dar de alta uno nuevo, pulsa Añadir proveedor manualmente, introduce su nombre y completa los datos de su ficha. Cuando se importen productos con ese nombre, aparecerán vinculados al mismo proveedor."
+msgstr "The list includes suppliers from imported inventory and those created manually, even with no products. Select Add supplier manually, enter its name and complete its record. Products subsequently imported under that name will appear under the same supplier."
+
+msgid "Eliminar ficha borra únicamente los datos privados de contacto. Un proveedor con productos seguirá visible desde el inventario; uno creado solo manualmente desaparecerá del listado. Nunca se borran productos, precios ni pedidos."
+msgstr "Deleting a record removes only private contact data. Suppliers with products remain visible from Inventory; suppliers created only manually disappear from the list. Products, prices and orders are never deleted."
+
+msgid "Para editar muchas fichas, descarga el CSV desde Gestión de proveedores. Incluye los proveedores importados y los creados manualmente, incluso con cero productos. Rellena las columnas y vuelve a importarlo: los nombres deben existir ya en el listado; el CSV no da de alta proveedores nuevos. Los campos vacíos sobrescriben los valores anteriores. La importación se procesa por bloques y puede detenerse."
+msgstr "To edit many records, download the CSV from Supplier management. It includes imported and manually created suppliers, even with no products. Complete the columns and import it again: names must already exist in the directory; this CSV does not create new suppliers. Empty cells overwrite prior values. Import runs in stoppable batches."

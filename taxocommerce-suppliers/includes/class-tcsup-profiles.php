@@ -1,6 +1,6 @@
 <?php
 /**
- * Private supplier directory: names always come from the imported catalogue.
+ * Private supplier directory: imported names and manually created contacts.
  *
  * @package TaxoCommerceSuppliers
  */
@@ -31,7 +31,7 @@ final class TCSUP_Profiles {
 	}
 
 	/**
-	 * Resolve to the actual catalogue name. A profile can never invent a supplier.
+	 * Resolve canonical supplier names from the imported catalogue.
 	 *
 	 * @param string $name Supplier sent by a read-only link or a form.
 	 * @return string Canonical name from inventory, or an empty string.
@@ -69,18 +69,43 @@ final class TCSUP_Profiles {
 	}
 
 	/**
-	 * The inventory is authoritative; the profile table only enriches its names.
+	 * Existing names come from inventory OR a private manual supplier record.
+	 * A manually created record has zero catalogue products until an import.
+	 *
+	 * @param string $name Supplier name.
+	 * @return string Canonical existing name, or empty string.
+	 */
+	public static function supplier_in_directory( $name ) {
+		$name = trim( sanitize_text_field( (string) $name ) );
+		if ( '' === $name || ( function_exists( 'mb_strlen' ) ? mb_strlen( $name, 'UTF-8' ) : strlen( $name ) ) > 190 ) {
+			return '';
+		}
+		$catalogue = self::supplier_in_catalogue( $name );
+		if ( '' !== $catalogue ) {
+			return $catalogue;
+		}
+		$record = self::profile( $name );
+		return isset( $record['proveedor'] ) ? (string) $record['proveedor'] : '';
+	}
+
+	/**
+	 * Merge imported names and manual profiles into one paginated directory.
 	 */
 	private static function listing( $search, $page, $per_page = 30 ) {
 		global $wpdb;
 		$like   = '%' . $wpdb->esc_like( $search ) . '%';
 		$offset = ( $page - 1 ) * $per_page;
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Always display the actual inventory after a supplier import.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Show imported and manually saved suppliers immediately.
 		$total = absint( $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(DISTINCT proveedor) FROM %i WHERE proveedor<>%s AND (%s=%s OR proveedor LIKE %s)",
+				"SELECT COUNT(*) FROM (
+					SELECT proveedor FROM %i WHERE proveedor<>%s
+					UNION SELECT proveedor FROM %i WHERE proveedor<>%s
+				) AS s WHERE (%s=%s OR s.proveedor LIKE %s)",
 				TCSUP_Schema::catalog_table(),
+				'',
+				TCSUP_Schema::profiles_table(),
 				'',
 				$search,
 				'',
@@ -88,26 +113,35 @@ final class TCSUP_Profiles {
 			)
 		) );
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- The directory must reflect current catalogue names and row totals.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Live directory and current per-supplier product totals.
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT c.proveedor, c.productos, p.nombre_comercial, p.contacto_nombre,
-						p.telefono, p.email, p.actualizado AS ficha_actualizada
-				   FROM (
-					 SELECT proveedor, COUNT(*) AS productos FROM %i
-					 WHERE proveedor<>%s AND (%s=%s OR proveedor LIKE %s) GROUP BY proveedor
-					 ORDER BY proveedor ASC LIMIT %d OFFSET %d
-				   ) AS c
-				   LEFT JOIN %i AS p ON p.proveedor=c.proveedor
-				   ORDER BY c.proveedor ASC",
+				"SELECT s.proveedor, COALESCE(i.productos,0) AS productos,
+				 p.nombre_comercial, p.contacto_nombre, p.telefono, p.email,
+				 p.actualizado AS ficha_actualizada
+				 FROM (
+					SELECT proveedor FROM %i WHERE proveedor<>%s
+					UNION SELECT proveedor FROM %i WHERE proveedor<>%s
+				 ) AS s
+				 LEFT JOIN (
+					SELECT proveedor, COUNT(*) AS productos FROM %i
+					WHERE proveedor<>%s GROUP BY proveedor
+				 ) AS i ON i.proveedor=s.proveedor
+				 LEFT JOIN %i AS p ON p.proveedor=s.proveedor
+				 WHERE (%s=%s OR s.proveedor LIKE %s)
+				 ORDER BY s.proveedor ASC LIMIT %d OFFSET %d",
 				TCSUP_Schema::catalog_table(),
 				'',
+				TCSUP_Schema::profiles_table(),
+				'',
+				TCSUP_Schema::catalog_table(),
+				'',
+				TCSUP_Schema::profiles_table(),
 				$search,
 				'',
 				$like,
 				$per_page,
-				$offset,
-				TCSUP_Schema::profiles_table()
+				$offset
 			),
 			ARRAY_A
 		);
@@ -165,27 +199,31 @@ final class TCSUP_Profiles {
 		$requested = isset( $_GET['provider'] ) && is_string( $_GET['provider'] )
 			? sanitize_text_field( wp_unslash( $_GET['provider'] ) ) : '';
 		$status = isset( $_GET['profile_status'] ) ? sanitize_key( wp_unslash( $_GET['profile_status'] ) ) : '';
+		$new    = isset( $_GET['new_supplier'] ) && '1' === sanitize_text_field( wp_unslash( $_GET['new_supplier'] ) );
 		// phpcs:enable WordPress.Security.NonceVerification.Recommended.
-		$supplier = self::supplier_in_catalogue( $requested );
+		$supplier = self::supplier_in_directory( $requested );
 		$list     = self::listing( $search, $page );
 		$record   = '' !== $supplier ? self::profile( $supplier ) : array();
 		$notices  = array(
 			'saved'   => __( 'Supplier record saved.', 'taxocommerce-suppliers' ),
-			'deleted' => __( 'Contact record deleted. The supplier and its products remain in the catalogue.', 'taxocommerce-suppliers' ),
-			'missing' => __( 'This supplier no longer exists in the catalogue.', 'taxocommerce-suppliers' ),
+			'deleted' => __( 'Supplier contact record deleted. Catalogue products were not changed.', 'taxocommerce-suppliers' ),
+			'missing' => __( 'This supplier is no longer in the directory.', 'taxocommerce-suppliers' ),
+			'exists'  => __( 'This supplier already exists. Edit its record instead.', 'taxocommerce-suppliers' ),
+			'invalid' => __( 'Enter a supplier name with 190 characters or fewer.', 'taxocommerce-suppliers' ),
 			'error'   => __( 'The supplier record could not be saved.', 'taxocommerce-suppliers' ),
 		);
 		?>
 		<section class="tcsup-card">
 			<h2><?php esc_html_e( 'Supplier management', 'taxocommerce-suppliers' ); ?></h2>
-			<p><?php esc_html_e( 'Suppliers are discovered automatically from imported inventory. New suppliers appear after their first successful catalogue import; only their private contact details are edited here.', 'taxocommerce-suppliers' ); ?></p>
+			<p><?php esc_html_e( 'Add a supplier manually before importing any products. Imported suppliers also appear automatically.', 'taxocommerce-suppliers' ); ?></p>
+			<p><a class="button button-primary" href="<?php echo esc_url( self::url( array( 'new_supplier' => 1 ) ) . '#tcsup-provider-record' ); ?>"><?php esc_html_e( 'Add supplier manually', 'taxocommerce-suppliers' ); ?></a></p>
 			<?php if ( isset( $notices[ $status ] ) ) : ?>
-				<div class="notice <?php echo esc_attr( in_array( $status, array( 'error', 'missing' ), true ) ? 'notice-error' : 'notice-success' ); ?> inline">
+				<div class="notice <?php echo esc_attr( in_array( $status, array( 'error', 'missing', 'invalid' ), true ) ? 'notice-error' : 'notice-success' ); ?> inline">
 					<p><?php echo esc_html( $notices[ $status ] ); ?></p>
 				</div>
 			<?php endif; ?>
-			<?php if ( '' !== $requested && '' === $supplier ) : ?>
-				<div class="notice notice-error inline"><p><?php esc_html_e( 'The requested supplier is not in the inventory.', 'taxocommerce-suppliers' ); ?></p></div>
+			<?php if ( '' !== $requested && '' === $supplier && ! $new ) : ?>
+				<div class="notice notice-error inline"><p><?php esc_html_e( 'This supplier is not in the directory.', 'taxocommerce-suppliers' ); ?></p></div>
 			<?php endif; ?>
 			<form method="get" class="tcsup-filter">
 				<input type="hidden" name="page" value="<?php echo esc_attr( TCSUP_Admin::PAGE ); ?>">
@@ -196,8 +234,8 @@ final class TCSUP_Profiles {
 			</form>
 			<p>
 				<?php
-				/* translators: %d: count of suppliers currently in the imported catalogue. */
-				printf( esc_html__( '%d suppliers in the catalogue', 'taxocommerce-suppliers' ), absint( $list['total'] ) );
+				/* translators: %d: total suppliers (imported or manually created). */
+				printf( esc_html__( '%d suppliers in the directory', 'taxocommerce-suppliers' ), absint( $list['total'] ) );
 				?>
 			</p>
 			<div class="tcsup-scroll">
@@ -226,7 +264,7 @@ final class TCSUP_Profiles {
 						</tr>
 					<?php endforeach; ?>
 					<?php if ( ! $list['rows'] ) : ?>
-						<tr><td colspan="7"><?php esc_html_e( 'No suppliers found in the imported catalogue.', 'taxocommerce-suppliers' ); ?></td></tr>
+						<tr><td colspan="7"><?php esc_html_e( 'No suppliers found in the directory.', 'taxocommerce-suppliers' ); ?></td></tr>
 					<?php endif; ?>
 					</tbody>
 				</table>
@@ -248,13 +286,19 @@ final class TCSUP_Profiles {
 			<?php TCSUP_Profiles_Transfer::render_controls(); ?>
 		</section>
 
-		<?php if ( '' !== $supplier ) : ?>
+		<?php if ( '' !== $supplier || $new ) : ?>
 			<section class="tcsup-card" id="tcsup-provider-record">
-				<h2><?php echo esc_html( ( $record ? __( 'Edit supplier record', 'taxocommerce-suppliers' ) : __( 'Create supplier record', 'taxocommerce-suppliers' ) ) . ': ' . $supplier ); ?></h2>
-				<p><?php esc_html_e( 'Supplier identity comes from the inventory and cannot be changed here. These details are private to store administrators.', 'taxocommerce-suppliers' ); ?></p>
+				<h2><?php echo esc_html( ( $record ? __( 'Edit supplier record', 'taxocommerce-suppliers' ) : __( 'Create supplier record', 'taxocommerce-suppliers' ) ) . ( $new ? '' : ': ' . $supplier ) ); ?></h2>
+				<p><?php esc_html_e( 'Supplier names cannot be changed after saving. These records are private to store administrators.', 'taxocommerce-suppliers' ); ?></p>
 				<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 					<input type="hidden" name="action" value="tcsup_profile_save">
-					<input type="hidden" name="provider" value="<?php echo esc_attr( $supplier ); ?>">
+					<?php if ( $new ) : ?>
+						<input type="hidden" name="new_supplier" value="1">
+						<p><label for="tcsup-new-supplier"><strong><?php esc_html_e( 'Supplier', 'taxocommerce-suppliers' ); ?></strong></label><br>
+						<input id="tcsup-new-supplier" type="text" name="provider" maxlength="190" required class="regular-text" autocomplete="organization"></p>
+					<?php else : ?>
+						<input type="hidden" name="provider" value="<?php echo esc_attr( $supplier ); ?>">
+					<?php endif; ?>
 					<?php wp_nonce_field( 'tcsup_profile_save' ); ?>
 					<h3><?php esc_html_e( 'Company details', 'taxocommerce-suppliers' ); ?></h3>
 					<div class="tcsup-form-grid">
@@ -272,7 +316,7 @@ final class TCSUP_Profiles {
 					<p><textarea id="tcsup-provider-notes" name="observaciones" rows="7" class="large-text" maxlength="10000" placeholder="<?php echo esc_attr__( 'Contact preferences, delivery delays, incorrect shipments or other notes...', 'taxocommerce-suppliers' ); ?>"><?php echo esc_textarea( $record['observaciones'] ?? '' ); ?></textarea></p>
 					<?php submit_button( __( 'Save supplier record', 'taxocommerce-suppliers' ) ); ?>
 				</form>
-				<?php if ( $record ) : ?>
+				<?php if ( $record && ! $new ) : ?>
 					<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" onsubmit="return confirm(<?php echo esc_attr( wp_json_encode( __( 'Delete only the contact record? Catalogue products will not be removed.', 'taxocommerce-suppliers' ) ) ); ?>);">
 						<input type="hidden" name="action" value="tcsup_profile_delete">
 						<input type="hidden" name="provider" value="<?php echo esc_attr( $supplier ); ?>">
@@ -285,7 +329,7 @@ final class TCSUP_Profiles {
 	}
 
 	private static function posted_supplier( $requested ) {
-		$supplier = self::supplier_in_catalogue( $requested );
+		$supplier = self::supplier_in_directory( $requested );
 		if ( '' === $supplier ) {
 			self::redirect( '', 'missing' );
 		}
@@ -297,7 +341,11 @@ final class TCSUP_Profiles {
 		if ( '' !== $supplier ) {
 			$args['provider'] = $supplier;
 		}
-		wp_safe_redirect( self::url( $args ) );
+		$url = self::url( $args );
+		if ( '' !== $supplier ) {
+			$url .= '#tcsup-provider-record';
+		}
+		wp_safe_redirect( $url );
 		exit;
 	}
 
@@ -318,7 +366,22 @@ final class TCSUP_Profiles {
 		check_admin_referer( 'tcsup_profile_save' );
 		$requested = isset( $_POST['provider'] ) && is_string( $_POST['provider'] )
 			? sanitize_text_field( wp_unslash( $_POST['provider'] ) ) : '';
-		$supplier = self::posted_supplier( $requested );
+		// New suppliers are created only by the explicit manual form, never by editing a made-up URL.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified above.
+		$new = isset( $_POST['new_supplier'] ) && '1' === sanitize_text_field( wp_unslash( $_POST['new_supplier'] ) );
+		if ( $new ) {
+			$supplier = trim( $requested );
+			$length   = function_exists( 'mb_strlen' ) ? mb_strlen( $supplier, 'UTF-8' ) : strlen( $supplier );
+			if ( '' === $supplier || $length > 190 ) {
+				self::redirect( '', 'invalid' );
+			}
+			$existing = self::supplier_in_directory( $supplier );
+			if ( '' !== $existing ) {
+				self::redirect( $existing, 'exists' );
+			}
+		} else {
+			$supplier = self::posted_supplier( $requested );
+		}
 
 		// A single nonce-protected, unslashed and sanitised input snapshot.
 		$submitted = map_deep( wp_unslash( $_POST ), 'sanitize_textarea_field' );
@@ -340,7 +403,7 @@ final class TCSUP_Profiles {
 		} else {
 			$data['proveedor'] = $supplier;
 			$data['creado']   = current_time( 'mysql' );
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Private supplier record creation for an existing catalogue supplier.
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Create only a private supplier record after capability, nonce, and unique-name checks.
 			$ok = $wpdb->insert( TCSUP_Schema::profiles_table(), $data );
 		}
 		self::redirect( $supplier, false === $ok ? 'error' : 'saved' );
@@ -355,6 +418,8 @@ final class TCSUP_Profiles {
 		global $wpdb;
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Delete only profile data, never inventory or WooCommerce products.
 		$ok = $wpdb->delete( TCSUP_Schema::profiles_table(), array( 'proveedor' => $supplier ) );
-		self::redirect( $supplier, false === $ok ? 'error' : 'deleted' );
+		// Imported names remain visible; manually added names disappear when their record is deleted.
+		$remaining = self::supplier_in_catalogue( $supplier );
+		self::redirect( $remaining, false === $ok ? 'error' : 'deleted' );
 	}
 }

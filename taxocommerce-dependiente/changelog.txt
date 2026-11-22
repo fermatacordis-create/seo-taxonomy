@@ -1,3 +1,6 @@
+= 0.3.45 (2026-11-19) =
+* Localize 41 remaining administrator notices in ES/EN/FR/DE/NL plus the French Origin field. Rebuild five PO/MO catalogs; require full administration gettext coverage in CI. No learning-engine or customer-content changes. Issue #2783.
+
 = 0.3.44 (2026-11-13) =
 * Code Check equiparado a Core 0.4.82: reglas autónomas PHP/WordPress/seguridad, clasificación por gravedad, detalles de archivos y recomendaciones, resumen y JSON; sin modificar el Autotest funcional. Issue #2626.
 

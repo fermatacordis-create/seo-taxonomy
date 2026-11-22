@@ -7,6 +7,7 @@ $install = file_get_contents( $root . '/includes/class-seo-facturas-install.php'
 $settings = file_get_contents( $root . '/includes/class-seo-facturas-settings.php' );
 $pdf = file_get_contents( $root . '/includes/class-seo-facturas-pdf.php' );
 $quotes = file_get_contents( $root . '/includes/class-seo-facturas-quotes.php' );
+$quote_template = file_get_contents( $root . '/includes/templates/quote.php' );
 
 $checks = array(
     strpos( $main, "class_exists( 'SEO_Facturas_Admin', false )" ) !== false,
@@ -19,6 +20,17 @@ $checks = array(
     strpos( $settings, 'seo_facturas_quote_settings' ) !== false,
     strpos( $pdf, "Dompdf\\\\Dompdf" ) !== false,
     strpos( $quotes, 'render_block_woocommerce/cart' ) !== false,
+    // Shipping must be calculated from the destination entered on the quote,
+    // not from the previous session's shipping-calculated flag.
+    strpos( $quotes, 'WC()->cart->calculate_shipping()' ) !== false,
+    strpos( $quotes, 'WC()->cart->calculate_totals()' ) !== false,
+    strpos( $quotes, 'woocommerce_state_code(' ) !== false,
+    strpos( $quotes, 'get_shipping_methods()' ) !== false,
+    strpos( $quotes, 'has_calculated_shipping()' ) !== false,
+    strpos( $quotes, '$customer->has_calculated_shipping()' ) === false,
+    strpos( $quotes, "'shipping_tax'   => (float) $cart->get_shipping_tax()" ) !== false,
+    strpos( $quote_template, 'shipping_net + $taxocommerce_billing_shipping_tax' ) !== false,
+    strpos( $quote_template, 'IVA incluido' ) !== false,
     is_file( $root . '/includes/templates/document.php' ),
     is_file( $root . '/includes/templates/quote.php' ),
     is_file( $repo . '/includes/facturas/dompdf/autoload.inc.php' ),

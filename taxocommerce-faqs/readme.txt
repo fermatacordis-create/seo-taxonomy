@@ -12,14 +12,9 @@ Manage product and page FAQs in WordPress and WooCommerce with CSV exchange, sta
 
 == Description ==
 
-* Admin header: plugin title, a single local `Description` with the static `Plugin URI` link below it (left); a wider collapsed `CHANGELOG.md` history (center); local version and release date (right). No duplicated information panel or external requests.
-
-* The admin header reads this plugin's local `Description` and links to `Plugin URI`, without external requests or caching. The version history is bundled in `CHANGELOG.md`.
-
-* One collapsible version-history control, without a duplicate plugin-information box.
-
-
 TaxoCommerce FAQs works with an existing canonical FAQ table on migration and optionally integrates its admin screens into TaxoCommerce Core.
+
+= Key Features =
 
 * Manage FAQs attached to pages, hubs, WooCommerce product categories and products.
 * Create, edit, enable and delete FAQ records individually.

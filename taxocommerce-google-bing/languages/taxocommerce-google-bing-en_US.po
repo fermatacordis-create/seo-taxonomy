@@ -888,103 +888,103 @@ msgstr "Rule"
 #: includes/class-taxocommerce-connections-admin.php:38
 #: includes/class-taxocommerce-connections-google-bing.php:260
 msgid "You do not have permission to manage connections."
-msgstr ""
+msgstr "You do not have permission to manage connections."
 
 #: includes/class-taxocommerce-connections-admin.php:60
 msgid "Amazon Creators API responded successfully."
-msgstr ""
+msgstr "Amazon Creators API responded successfully."
 
 #: includes/class-taxocommerce-connections-admin.php:85
 msgid "Pinterest responded successfully and the selected board is accessible."
-msgstr ""
+msgstr "Pinterest responded successfully and the selected board is accessible."
 
 #: includes/class-taxocommerce-connections-admin.php:108
 msgid "Google settings saved."
-msgstr ""
+msgstr "Google settings saved."
 
 #: includes/class-taxocommerce-connections-admin.php:109
 msgid "The Google Measurement ID format is invalid."
-msgstr ""
+msgstr "The Google Measurement ID format is invalid."
 
 #: includes/class-taxocommerce-connections-admin.php:110
 msgid "The Google service account JSON is invalid."
-msgstr ""
+msgstr "The Google service account JSON is invalid."
 
 #: includes/class-taxocommerce-connections-admin.php:111
 msgid "Google Merchant Center settings saved."
-msgstr ""
+msgstr "Google Merchant Center settings saved."
 
 #: includes/class-taxocommerce-connections-admin.php:112
 msgid "The Google Merchant Center ID is invalid."
-msgstr ""
+msgstr "The Google Merchant Center ID is invalid."
 
 #: includes/class-taxocommerce-connections-admin.php:113
 msgid "Bing Webmaster settings saved."
-msgstr ""
+msgstr "Bing Webmaster settings saved."
 
 #: includes/class-taxocommerce-connections-admin.php:114
 msgid "Amazon settings saved."
-msgstr ""
+msgstr "Amazon settings saved."
 
 #: includes/class-taxocommerce-connections-admin.php:115
 msgid "Amazon settings could not be saved."
-msgstr ""
+msgstr "Amazon settings could not be saved."
 
 #: includes/class-taxocommerce-connections-admin.php:116
 msgid "Pinterest settings saved."
-msgstr ""
+msgstr "Pinterest settings saved."
 
 #: includes/class-taxocommerce-connections-admin.php:117
 msgid "Pinterest settings could not be saved."
-msgstr ""
+msgstr "Pinterest settings could not be saved."
 
 #: includes/class-taxocommerce-connections-admin.php:118
 msgid "Pinterest authorized through OAuth."
-msgstr ""
+msgstr "Pinterest authorized through OAuth."
 
 #: includes/class-taxocommerce-connections-admin.php:119
 msgid "Save the Pinterest App ID and App Secret first."
-msgstr ""
+msgstr "Save the Pinterest App ID and App Secret first."
 
 #: includes/class-taxocommerce-connections-admin.php:120
 msgid "Pinterest Merchant settings saved."
-msgstr ""
+msgstr "Pinterest Merchant settings saved."
 
 #: includes/class-taxocommerce-connections-admin.php:121
 msgid "Pinterest Merchant verification is invalid."
-msgstr ""
+msgstr "Pinterest Merchant verification is invalid."
 
 #: includes/class-taxocommerce-connections-admin.php:127
 msgid "Google OAuth settings saved."
-msgstr ""
+msgstr "Google OAuth settings saved."
 
 #: includes/class-taxocommerce-connections-admin.php:128
 msgid "Google Search Console authorized successfully."
-msgstr ""
+msgstr "Google Search Console authorized successfully."
 
 #: includes/class-taxocommerce-connections-admin.php:129
 msgid "Google OAuth authorization removed."
-msgstr ""
+msgstr "Google OAuth authorization removed."
 
 #: includes/class-taxocommerce-connections-admin.php:130
 msgid "Google OAuth connection verified."
-msgstr ""
+msgstr "Google OAuth connection verified."
 
 #: includes/class-taxocommerce-connections-admin.php:131
 msgid "Google OAuth Client ID or Client Secret is missing."
-msgstr ""
+msgstr "Google OAuth Client ID or Client Secret is missing."
 
 #: includes/class-taxocommerce-connections-admin.php:132
 msgid "Google OAuth state validation failed."
-msgstr ""
+msgstr "Google OAuth state validation failed."
 
 #: includes/class-taxocommerce-connections-admin.php:133
 msgid "Google did not return an authorization code."
-msgstr ""
+msgstr "Google did not return an authorization code."
 
 #: includes/class-taxocommerce-connections-admin.php:134
 msgid "Google OAuth authorization could not be completed."
-msgstr ""
+msgstr "Google OAuth authorization could not be completed."
 
 #: includes/class-taxocommerce-connections-admin.php:135
 msgid "Google OAuth test failed."
@@ -1280,15 +1280,15 @@ msgstr "Last run"
 
 #: includes/class-taxocommerce-google-bing-auto-test.php:720
 msgid "Aún no se ha realizado ningún autochequeo."
-msgstr ""
+msgstr "No self-check has been run yet."
 
 #: includes/class-taxocommerce-google-bing-auto-test.php:724
 msgid "Resultados del último chequeo"
-msgstr ""
+msgstr "Latest check results"
 
 #: includes/class-taxocommerce-google-bing-auto-test.php:732
 msgid "Comparación de regresiones — ANTES / DESPUÉS"
-msgstr ""
+msgstr "Regression comparison — BEFORE / AFTER"
 
 #: includes/class-taxocommerce-google-bing-auto-test.php:737
 msgid ""
@@ -1313,7 +1313,7 @@ msgstr ""
 
 #: includes/class-taxocommerce-google-bing-connections.php:191
 msgid "Modo conexión:"
-msgstr ""
+msgstr "Connection mode:"
 
 #: includes/class-taxocommerce-google-bing-connections.php:191
 msgid ""
@@ -1414,7 +1414,7 @@ msgstr ""
 
 #: includes/class-taxocommerce-google-bing-merchant.php:311
 msgid "Google Merchant Center · informes de mercado"
-msgstr ""
+msgstr "Google Merchant Center · market reports"
 
 #: includes/class-taxocommerce-google-bing-merchant.php:312
 msgid ""
@@ -1425,7 +1425,7 @@ msgstr ""
 
 #: includes/class-taxocommerce-google-bing-merchant.php:317
 msgid "Fuente de mercado"
-msgstr ""
+msgstr "Market data source"
 
 #: includes/class-taxocommerce-google-bing-merchant.php:321
 msgid ""
@@ -1445,7 +1445,7 @@ msgstr ""
 
 #: includes/class-taxocommerce-google-bing-merchant.php:331
 msgid "Reiniciar lectura desde primera página"
-msgstr ""
+msgstr "Restart reading from the first page"
 
 #: includes/class-taxocommerce-google-bing-merchant.php:334
 msgid "Comparar con Ojeador PRO"
@@ -1470,7 +1470,7 @@ msgstr "Product"
 
 #: includes/class-taxocommerce-google-bing-merchant.php:343
 msgid "Mediana ofertas observadas"
-msgstr ""
+msgstr "Median of observed offers"
 
 #: includes/class-taxocommerce-google-bing-merchant.php:343
 msgid "Benchmark Merchant"
@@ -1478,15 +1478,15 @@ msgstr ""
 
 #: includes/class-taxocommerce-google-bing-merchant.php:343
 msgid "Diferencia"
-msgstr ""
+msgstr "Difference"
 
 #: includes/class-taxocommerce-google-bing-merchant.php:343
 msgid "Ofertas históricas"
-msgstr ""
+msgstr "Historical offers"
 
 #: includes/class-taxocommerce-google-bing-merchant.php:350
 msgid "Productos populares ajenos al inventario"
-msgstr ""
+msgstr "Popular products outside the inventory"
 
 #: includes/class-taxocommerce-google-bing-merchant.php:351
 msgid ""
@@ -1496,157 +1496,157 @@ msgstr ""
 
 #: includes/class-taxocommerce-google-bing-merchant.php:355
 msgid "Producto / marca"
-msgstr ""
+msgstr "Product / brand"
 
 #: includes/class-taxocommerce-google-bing-merchant.php:355
 msgid "Categoría Google"
-msgstr ""
+msgstr "Google category"
 
 #: includes/class-taxocommerce-google-bing-merchant.php:355
 msgid "Popularidad"
-msgstr ""
+msgstr "Popularity"
 
 #: includes/class-taxocommerce-google-bing-merchant.php:355
 msgid "Fecha del informe"
-msgstr ""
+msgstr "Report date"
 
 #: includes/class-taxocommerce-google-bing-oauth.php:151
 msgid "Google Search Console · OAuth"
-msgstr ""
+msgstr "Google Search Console · OAuth"
 
 #: includes/class-taxocommerce-google-bing-oauth.php:151
 msgid ""
 "Credentials, authorization, and tokens. It does not download queries, "
 "clicks, impressions, or positions."
-msgstr ""
+msgstr "Credentials, authorization, and tokens. It does not download queries, clicks, impressions, or positions."
 
 #: includes/class-taxocommerce-google-bing-oauth.php:158
 msgid "Legacy OAuth migrated to the modern plugin."
-msgstr ""
+msgstr "Legacy OAuth migrated to the modern plugin."
 
 #: includes/class-taxocommerce-google-bing-oauth.php:166
 #: includes/google/seo-google-info.php:2202
 msgid "Client ID"
-msgstr ""
+msgstr "Client ID"
 
 #: includes/class-taxocommerce-google-bing-oauth.php:168
 msgid "OAuth 2.0 client of type Web application."
-msgstr ""
+msgstr "OAuth 2.0 client of type Web application."
 
 #: includes/class-taxocommerce-google-bing-oauth.php:170
 #: includes/google/seo-google-info.php:2207
 msgid "Client Secret"
-msgstr ""
+msgstr "Client Secret"
 
 #: includes/class-taxocommerce-google-bing-oauth.php:172
 msgid "Stored in WordPress and never displayed again."
-msgstr ""
+msgstr "Stored in WordPress and never displayed again."
 
 #: includes/class-taxocommerce-google-bing-oauth.php:174
 msgid "Redirect URI"
-msgstr ""
+msgstr "Redirect URI"
 
 #: includes/class-taxocommerce-google-bing-oauth.php:176
 msgid "Must exactly match the authorized URI in Google Cloud."
-msgstr ""
+msgstr "Must exactly match the authorized URI in Google Cloud."
 
 #: includes/class-taxocommerce-google-bing-oauth.php:178
 msgid "Search Console property"
-msgstr ""
+msgstr "Search Console property"
 
 #: includes/class-taxocommerce-google-bing-oauth.php:180
 msgid ""
 "Opening this screen does not query Search Console. The property is validated"
 " only when you click Test connection."
-msgstr ""
+msgstr "Opening this screen does not query Search Console. The property is validated only when you click Test connection."
 
 #: includes/class-taxocommerce-google-bing-oauth.php:208
 msgid "How to obtain these credentials"
-msgstr ""
+msgstr "How to obtain these credentials"
 
 #: includes/class-taxocommerce-google-bing-oauth.php:209
 msgid "Google Cloud Console → the corresponding project."
-msgstr ""
+msgstr "Google Cloud Console → the corresponding project."
 
 #: includes/class-taxocommerce-google-bing-oauth.php:210
 msgid "Enable the Google Search Console API."
-msgstr ""
+msgstr "Enable the Google Search Console API."
 
 #: includes/class-taxocommerce-google-bing-oauth.php:211
 msgid "Google Auth Platform → Clients."
-msgstr ""
+msgstr "Google Auth Platform → Clients."
 
 #: includes/class-taxocommerce-google-bing-oauth.php:212
 msgid "Create or open an OAuth 2.0 client of type Web application."
-msgstr ""
+msgstr "Create or open an OAuth 2.0 client of type Web application."
 
 #: includes/class-taxocommerce-google-bing-oauth.php:213
 msgid "Add exactly the Redirect URI shown above."
-msgstr ""
+msgstr "Add exactly the Redirect URI shown above."
 
 #: includes/class-taxocommerce-google-bing-oauth.php:214
 msgid ""
 "Copy the Client ID and Client Secret, save them, then click Connect Google."
-msgstr ""
+msgstr "Copy the Client ID and Client Secret, save them, then click Connect Google."
 
 #: includes/class-taxocommerce-google-bing-oauth.php:283
 msgid "You do not have permission to complete this connection."
-msgstr ""
+msgstr "You do not have permission to complete this connection."
 
 #: includes/class-taxocommerce-google-bing-oauth.php:456
 #: taxocommerce-google-bing.php:123
 msgid "Unauthorized access."
-msgstr ""
+msgstr "Unauthorized access."
 
 #: includes/class-taxocommerce-google-bing-reports.php:73
 msgid ""
 "Charts are generated from the latest saved data. Opening the page or "
 "changing the period does not call external APIs."
-msgstr ""
+msgstr "Charts are generated from the latest saved data. Opening the page or changing the period does not call external APIs."
 
 #: includes/class-taxocommerce-google-bing-reports.php:89
 msgid "Aplicar fechas (sin actualizar)"
-msgstr ""
+msgstr "Apply dates (without refreshing)"
 
 #: includes/class-taxocommerce-google-bing-reports.php:116
 msgid ""
 "No saved report exists for the requested dates. The latest available "
 "snapshot is shown without downloading new data."
-msgstr ""
+msgstr "No saved report exists for the requested dates. The latest available snapshot is shown without downloading new data."
 
 #: includes/class-taxocommerce-google-bing-reports.php:120
 msgid "Saved reports:"
-msgstr ""
+msgstr "Saved reports:"
 
 #: includes/class-taxocommerce-google-bing-reports.php:139
 msgid ""
 "No hay datos guardados todavía. Pulsa “Actualizar datos” para consultar la "
 "API."
-msgstr ""
+msgstr "No data has been saved yet. Click “Refresh data” to query the API."
 
 #: includes/class-taxocommerce-google-bing-reports.php:167
 msgid ""
 "GA4 records events and sessions, not HTTP requests. Search Console and Bing "
 "show search-engine traffic, not total site visits. Periods may be incomplete"
 " because each provider has its own processing delay."
-msgstr ""
+msgstr "GA4 records events and sessions, not HTTP requests. Search Console and Bing show search-engine traffic, not total site visits. Periods may be incomplete because each provider has its own processing delay."
 
 #: includes/class-taxocommerce-google-bing-reports.php:179
 #: includes/class-taxocommerce-google-bing-reports.php:235
 msgid "Invalid report."
-msgstr ""
+msgstr "Invalid report."
 
 #: includes/class-taxocommerce-google-bing-reports.php:245
 msgid "Report not available. Download it first."
-msgstr ""
+msgstr "Report not available. Download it first."
 
 #: includes/class-taxocommerce-google-bing-reports.php:321
 msgid "Google Search performance"
-msgstr ""
+msgstr "Google Search performance"
 
 #: includes/class-taxocommerce-google-bing-reports.php:322
 msgid "Web results: trends, queries, pages, countries, and devices."
-msgstr ""
+msgstr "Web results: trends, queries, pages, countries, and devices."
 
 #: includes/class-taxocommerce-google-bing-reports.php:322
 #: includes/google/seo-google-growth-guidance.php:58
@@ -1654,23 +1654,23 @@ msgstr ""
 #: includes/google/seo-google-opportunity-engine.php:1710
 #: includes/google/seo-google-trends.php:2641
 msgid "Search Console"
-msgstr ""
+msgstr "Search Console"
 
 #: includes/class-taxocommerce-google-bing-reports.php:363
 msgid "No records for this period."
-msgstr ""
+msgstr "No records for this period."
 
 #: includes/class-taxocommerce-google-bing-reports.php:367
 msgid "Query / page"
-msgstr ""
+msgstr "Query / page"
 
 #: includes/class-taxocommerce-google-bing-reports.php:367
 msgid "Clicks"
-msgstr ""
+msgstr "Clicks"
 
 #: includes/class-taxocommerce-google-bing-reports.php:367
 msgid "Impressions"
-msgstr ""
+msgstr "Impressions"
 
 #: includes/class-taxocommerce-google-bing-reports.php:367
 #: includes/google/seo-google-demand-catalog.php:1669
@@ -1679,61 +1679,61 @@ msgstr ""
 #: includes/google/seo-google-info.php:3366
 #: includes/google/seo-google-info.php:4550
 msgid "CTR"
-msgstr ""
+msgstr "CTR"
 
 #: includes/class-taxocommerce-google-bing-reports.php:367
 msgid "Average position"
-msgstr ""
+msgstr "Average position"
 
 #: includes/class-taxocommerce-google-bing-reports.php:392
 msgid "Google Analytics 4"
-msgstr ""
+msgstr "Google Analytics 4"
 
 #: includes/class-taxocommerce-google-bing-reports.php:392
 msgid "Traffic, users, recurrence, engagement, and geographic origin."
-msgstr ""
+msgstr "Traffic, users, recurrence, engagement, and geographic origin."
 
 #: includes/class-taxocommerce-google-bing-reports.php:482
 msgid ""
 "Purchases and key events are shown only when GA4 receives the corresponding "
 "events."
-msgstr ""
+msgstr "Purchases and key events are shown only when GA4 receives the corresponding events."
 
 #: includes/class-taxocommerce-google-bing-reports.php:487
 msgid "Most viewed pages (GA4)"
-msgstr ""
+msgstr "Most viewed pages (GA4)"
 
 #: includes/class-taxocommerce-google-bing-reports.php:489
 msgid "No pages recorded for this period."
-msgstr ""
+msgstr "No pages recorded for this period."
 
 #: includes/class-taxocommerce-google-bing-reports.php:492
 msgid "Path"
-msgstr ""
+msgstr "Path"
 
 #: includes/class-taxocommerce-google-bing-reports.php:492
 msgid "Current views"
-msgstr ""
+msgstr "Current views"
 
 #: includes/class-taxocommerce-google-bing-reports.php:492
 msgid "Previous views"
-msgstr ""
+msgstr "Previous views"
 
 #: includes/class-taxocommerce-google-bing-reports.php:492
 msgid "Change"
-msgstr ""
+msgstr "Change"
 
 #: includes/class-taxocommerce-google-bing-reports.php:507
 msgid "Organic traffic, search terms, top pages, indexing, and crawl health."
-msgstr ""
+msgstr "Organic traffic, search terms, top pages, indexing, and crawl health."
 
 #: includes/class-taxocommerce-google-bing-reports.php:507
 msgid "Bing"
-msgstr ""
+msgstr "Bing"
 
 #: includes/class-taxocommerce-google-bing-trends-hierarchy.php:201
 msgid "Tendencias de clústeres y hubs primarios"
-msgstr ""
+msgstr "Trends for clusters and primary hubs"
 
 #: includes/class-taxocommerce-google-bing-trends-hierarchy.php:202
 msgid ""
@@ -1749,7 +1749,7 @@ msgstr ""
 
 #: includes/class-taxocommerce-google-bing-trends-hierarchy.php:204
 msgid "Google Trends expresa interés relativo (0–100), no volumen absoluto."
-msgstr ""
+msgstr "Google Trends shows relative interest (0–100), not absolute search volume."
 
 #: includes/class-taxocommerce-google-bing-trends-hierarchy.php:205
 msgid ""
@@ -1759,7 +1759,7 @@ msgstr ""
 
 #: includes/class-taxocommerce-google-bing-trends-hierarchy.php:206
 msgid "Revisa las consultas en Google Trends antes de cambiar nombres de SEO."
-msgstr ""
+msgstr "Review Google Trends queries before changing SEO names."
 
 #: includes/class-taxocommerce-google-bing-trends-hierarchy.php:214
 msgid ""
@@ -1768,11 +1768,11 @@ msgstr ""
 
 #: includes/class-taxocommerce-google-bing-trends-hierarchy.php:217
 msgid "Pendiente de consultar"
-msgstr ""
+msgstr "Pending query"
 
 #: includes/class-taxocommerce-google-bing-trends-hierarchy.php:218
 msgid "Abrir esta comparación en Google Trends"
-msgstr ""
+msgstr "Open this comparison in Google Trends"
 
 #: includes/class-taxocommerce-google-bing-trends-hierarchy.php:224
 msgid ""
@@ -1787,11 +1787,11 @@ msgstr ""
 
 #: includes/class-taxocommerce-google-bing-trends-hierarchy.php:231
 msgid "Sin consultar"
-msgstr ""
+msgstr "Not queried"
 
 #: includes/class-taxocommerce-google-bing-trends-hierarchy.php:274
 msgid "Radar de tendencias · jerarquía SEO (España)"
-msgstr ""
+msgstr "Trend radar · SEO hierarchy (Spain)"
 
 #: includes/class-taxocommerce-google-bing-trends-hierarchy.php:275
 msgid ""
@@ -1806,7 +1806,7 @@ msgstr ""
 
 #: includes/class-taxocommerce-google-bing-trends-hierarchy.php:277
 msgid "Límite de la fuente:"
-msgstr ""
+msgstr "Source limitation:"
 
 #: includes/class-taxocommerce-google-bing-trends-hierarchy.php:277
 msgid "Google facilita gráficos visuales, pero esta integración"
@@ -1836,11 +1836,11 @@ msgstr ""
 
 #: includes/class-taxocommerce-google-bing-trends-hierarchy.php:300
 msgid "Región: España"
-msgstr ""
+msgstr "Region: Spain"
 
 #: includes/class-taxocommerce-google-bing-trends-hierarchy.php:307
 msgid "Gestor de carga · velocidad"
-msgstr ""
+msgstr "Workload manager · speed"
 
 #: includes/class-taxocommerce-google-bing-trends-hierarchy.php:309
 msgid ""
@@ -1854,7 +1854,7 @@ msgstr ""
 
 #: includes/class-taxocommerce-google-bing-trends-hierarchy.php:312
 msgid "Actualizar gráficos"
-msgstr ""
+msgstr "Refresh charts"
 
 #: includes/class-taxocommerce-google-bing-trends-hierarchy.php:313
 msgid "Pausar"
@@ -1866,35 +1866,35 @@ msgstr "Resume"
 
 #: includes/class-taxocommerce-google-bing-trends-hierarchy.php:315
 msgid "Detener"
-msgstr ""
+msgstr "Stop"
 
 #: includes/class-taxocommerce-google-bing-trends-hierarchy.php:318
 msgid "Preparando comparaciones automáticas…"
-msgstr ""
+msgstr "Preparing automatic comparisons…"
 
 #: includes/class-taxocommerce-google-bing-trends-hierarchy.php:319
 msgid "Registro del proceso"
-msgstr ""
+msgstr "Process log"
 
 #: includes/class-taxocommerce-google-bing-trends-hierarchy.php:324
 msgid "Exploración detallada opcional · hubs secundarios y categorías"
-msgstr ""
+msgstr "Optional detailed exploration · secondary hubs and categories"
 
 #: includes/class-taxocommerce-google-bing-trends-hierarchy.php:342
 msgid "Selecciona una categoría"
-msgstr ""
+msgstr "Select a category"
 
 #: includes/class-taxocommerce-google-bing-trends-hierarchy.php:348
 msgid "Consultar categoría"
-msgstr ""
+msgstr "Query category"
 
 #: includes/class-taxocommerce-google-bing-trends-hierarchy.php:351
 msgid "Sin categorías españolas asignadas."
-msgstr ""
+msgstr "No Spanish categories assigned."
 
 #: includes/class-taxocommerce-google-bing-trends-hierarchy.php:362
 msgid "Selecciona una tendencia"
-msgstr ""
+msgstr "Select a trend"
 
 #: includes/class-taxocommerce-google-bing-trends-hierarchy.php:363
 msgid ""
@@ -1904,11 +1904,11 @@ msgstr ""
 
 #: includes/class-taxocommerce-google-bing-trends-hierarchy.php:364
 msgid "Abrir en Google Trends"
-msgstr ""
+msgstr "Open in Google Trends"
 
 #: includes/class-taxocommerce-google-bing-trends-hierarchy.php:366
 msgid "Si Google impide insertar el gráfico, utiliza el enlace oficial."
-msgstr ""
+msgstr "If Google blocks chart embedding, use the official link."
 
 #: includes/class-taxocommerce-google-bing-trends-hierarchy.php:367
 msgid ""
@@ -1929,11 +1929,11 @@ msgstr ""
 
 #: includes/class-taxocommerce-google-bing-trends.php:192
 msgid "Búsqueda manual de términos"
-msgstr ""
+msgstr "Manual term search"
 
 #: includes/class-taxocommerce-google-bing-trends.php:199
 msgid "Words or phrases to explore"
-msgstr ""
+msgstr "Words or phrases to explore"
 
 #: includes/class-taxocommerce-google-bing-trends.php:201
 msgid ""
@@ -1951,19 +1951,19 @@ msgstr ""
 
 #: includes/class-taxocommerce-google-bing-trends.php:207
 msgid "Period:"
-msgstr ""
+msgstr "Period:"
 
 #: includes/class-taxocommerce-google-bing-trends.php:222
 msgid "Search trends"
-msgstr ""
+msgstr "Search trends"
 
 #: includes/class-taxocommerce-google-bing-trends.php:223
 msgid "Open in Google Trends ↗"
-msgstr ""
+msgstr "Open in Google Trends ↗"
 
 #: includes/class-taxocommerce-google-bing-trends.php:231
 msgid "No results for this query yet."
-msgstr ""
+msgstr "No results for this query yet."
 
 #: includes/class-taxocommerce-google-bing-trends.php:232
 msgid ""
@@ -1974,7 +1974,7 @@ msgstr ""
 
 #: includes/class-taxocommerce-google-bing-trends.php:236
 msgid "Source:"
-msgstr ""
+msgstr "Source:"
 
 #: includes/class-taxocommerce-google-bing-trends.php:236
 msgid ""
@@ -1992,15 +1992,15 @@ msgstr ""
 
 #: includes/class-taxocommerce-google-bing-trends.php:355
 msgid "You do not have permission to download reports."
-msgstr ""
+msgstr "You do not have permission to download reports."
 
 #: includes/class-taxocommerce-google-bing-trends.php:388
 msgid "You do not have permission to export reports."
-msgstr ""
+msgstr "You do not have permission to export reports."
 
 #: includes/class-taxocommerce-google-bing-trends.php:396
 msgid "There are no saved data to export."
-msgstr ""
+msgstr "There are no saved data to export."
 
 #: includes/class-taxocommerce-google-bing-user-guide.php:89
 msgid "No tienes permisos para consultar esta documentación."

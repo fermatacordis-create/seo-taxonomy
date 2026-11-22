@@ -19,7 +19,7 @@ final class TCV_Extractor {
     public static function context( $values ) {
         $raw = array();
         $segments = array();
-        foreach ( array( 'title', 'excerpt', 'content', 'categories', 'tags', 'brands', 'sku', 'supplier' ) as $field ) {
+        foreach ( array( 'title', 'excerpt', 'content', 'categories', 'tags', 'brands', 'sku', 'supplier', 'attributes' ) as $field ) {
             $value = isset( $values[ $field ] ) ? (string) $values[ $field ] : '';
             $raw[ $field ] = mb_substr( $value, 0, 18000, 'UTF-8' );
             $segments[ $field ] = self::normalize( $raw[ $field ] );
@@ -67,7 +67,7 @@ final class TCV_Extractor {
             return array( 'score' => 0.0, 'evidence' => array() );
         }
         $weights = array( 'identity' => 1.0, 'title' => 1.0, 'brands' => 0.94,
-            'supplier' => 0.9, 'tags' => 0.88, 'excerpt' => 0.8,
+            'supplier' => 0.9, 'tags' => 0.88, 'attributes' => 0.92, 'excerpt' => 0.8,
             'categories' => 0.76, 'content' => 0.64 );
         $segments = isset( $context['segments'] ) ? $context['segments'] : array();
         $sets = array();
@@ -131,7 +131,7 @@ final class TCV_Extractor {
                     continue;
                 }
                 foreach ( array( 'title' => 0.98, 'brands' => 0.96, 'supplier' => 0.94,
-                    'tags' => 0.92, 'excerpt' => 0.88, 'content' => 0.80,
+                    'tags' => 0.92, 'attributes' => 0.96, 'excerpt' => 0.88, 'content' => 0.80,
                     'categories' => 0.76 ) as $source => $confidence ) {
                     $text = isset( $context['segments'][ $source ] ) ? $context['segments'][ $source ] : '';
                     if ( false === strpos( ' ' . $text . ' ', ' ' . $phrase . ' ' ) ) {
@@ -190,7 +190,7 @@ final class TCV_Extractor {
         if ( '' === $units ) {
             return null;
         }
-        foreach ( array( 'title' => 0.99, 'supplier' => 0.95, 'excerpt' => 0.91,
+        foreach ( array( 'title' => 0.99, 'attributes' => 0.98, 'supplier' => 0.95, 'excerpt' => 0.91,
             'content' => 0.84 ) as $source => $confidence ) {
             $text = isset( $context['raw'][ $source ] ) ? $context['raw'][ $source ] : '';
             if ( '' === $text ) {

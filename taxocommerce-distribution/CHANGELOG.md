@@ -1,3 +1,8 @@
+## [0.1.21] — 2026-11-18 — Spanish administration navigation (#2783)
+
+- Correct the Overview tab label in es_ES to «Resumen» and rebuild the Spanish gettext MO catalog. Other locales remain unchanged.
+- Add a compiled-MO regression for the administration tab; no changes to feed, sitemap, automation or WordPress menu behavior.
+
 ## [0.1.20] — 2026-11-13 — Code Check equiparado a Core 0.4.82 (#2626)
 
 - Code Check equiparado a Core 0.4.82: reglas autónomas PHP/WordPress/seguridad, clasificación por gravedad, detalles de archivos y recomendaciones, resumen y JSON; sin modificar el Autotest funcional. Issue #2626.

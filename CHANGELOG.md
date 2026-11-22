@@ -1,3 +1,22 @@
+## 2026-11-20 - STAGING/Focazul automatic only; production by explicit manual approval (#2868)
+
+- Removed the automatic `push` trigger from the three-stage STAGING / Plugin Check / PRO workflow; it remains available only upon explicit manual PRO approval.
+- Normal merges to `staging` now trigger the dedicated STAGING/Focazul delivery workflow, without any PRO deployment job.
+- Quick validation checks PHP syntax and optional standalone bootstrap tests only for changed plugins; full-family regression stays available on a requested manual full reconciliation.
+- Retained incremental FTPS uploads, checksum verification, and current per-site plugin installation restrictions. No production release is performed.
+
+## Documentation — 2026-11-18 — Public readme descriptions (#2814)
+
+- Standardized all 22 TaxoCommerce plugin `readme.txt` descriptions: purpose first, shared `Key Features` subsection, no introductory release notes or internal admin-header details; added missing installation instructions for Logistics and Import-Export.
+- Preserved the other readme sections and independent version-history files. Customers and Accounting already had suitable introductory text; both now use the same features subheading. No PHP/runtime changes or changes to requirements, versions, license metadata or independent history files.
+
+## 2026-11-17 - Resolución de conflicto de ramas en PR #2759
+
+- Fusionado el historial de `main` en `staging` para resolver el conflicto `add/add` de `.github/workflows/staging-a-pro-manual.yml`, conservando todos los cambios de plugins de ambas ramas.
+- El YAML de producción mantiene ejecución **exclusivamente manual** (`workflow_dispatch`), selección de diferencias de Git y transferencia FTPS; no se ejecutó despliegue a producción.
+- Eliminada la comprobación incorrecta de `GITHUB_REF_NAME=staging` en el disparador manual publicado desde `main`; el código que se copia sigue obteniéndose explícitamente desde `staging`.
+- PR #2759 reabierto y comprobado fusionable; pendiente de revisión/merge a `main` de la entrega del milestone.
+
 ## 2026-11-14 - Retirada del puente temporal TaxoCommerce Connections (#2671)
 
 - Eliminado de GitHub el plugin autónomo `taxocommerce-connections/` (Compatibility Bridge), ya consolidado en TaxoCommerce Insights.

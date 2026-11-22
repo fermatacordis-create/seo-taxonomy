@@ -3,8 +3,8 @@
  * Plugin Name: TaxoCommerce System Check
  * Plugin URI: https://asociacionfocazul.com/taxocommerce-system-check/
  * Description: Independent WordPress, server and plugin diagnostics with local checks, reports and optional administrator notifications.
- * Version: 0.2.40
- * Release Date: 2026-11-15
+ * Version: 0.2.45
+ * Release Date: 2026-11-20
  * Requires at least: 6.2
  * Requires PHP: 7.4
  * Author: David Perez
@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) || exit;
 
 require_once __DIR__ . '/includes/admin-branding.php';
 
-define( 'TAXOCOMMERCE_SYSTEM_CHECK_VERSION', '0.2.40' );
+define( 'TAXOCOMMERCE_SYSTEM_CHECK_VERSION', '0.2.45' );
 define( 'TAXOCOMMERCE_SYSTEM_CHECK_FILE', __FILE__ );
 define( 'TAXOCOMMERCE_SYSTEM_CHECK_PATH', plugin_dir_path( __FILE__ ) );
 define( 'TAXOCOMMERCE_SYSTEM_CHECK_URL', plugin_dir_url( __FILE__ ) );
@@ -90,6 +90,13 @@ function taxocommerce_system_check_boot() {
         }
     }
     require_once TAXOCOMMERCE_SYSTEM_CHECK_PATH . 'includes/class-taxocommerce-system-check-family-runner.php';
+    // Non-atomic FTPS delivery must not make Plugin Validation fatal if an
+    // entrypoint arrives before its optional per-plugin diagnostic module.
+    $module_audit_file = TAXOCOMMERCE_SYSTEM_CHECK_PATH . 'includes/class-taxocommerce-system-check-module-audit.php';
+    if ( is_readable( $module_audit_file ) ) {
+        require_once $module_audit_file;
+        TaxoCommerce_System_Check_Module_Audit::boot();
+    }
     TaxoCommerce_System_Check_Family_Runner::boot();
     // Incremental FTPS updates can expose mixed revisions briefly. Processes
     // keeps its existing controls available even if detail views are not yet installed.
@@ -129,18 +136,31 @@ function taxocommerce_system_check_boot() {
 add_action( 'plugins_loaded', 'taxocommerce_system_check_boot', 100 );
 
 function taxocommerce_system_check_register_with_core( $core ) {
-    if ( is_object( $core ) && method_exists( $core, 'register_module' ) ) {
-        $core->register_module(
-            'system_check',
-            array(
-                'name'        => 'TaxoCommerce System Check',
-                'version'     => TAXOCOMMERCE_SYSTEM_CHECK_VERSION,
-                'status'      => 'active',
-                'description' => 'Diagnostico de sistema, validacion del plugin e informes.',
-                'admin_url'   => admin_url( 'admin.php?page=taxocommerce-system-check' ),
-            )
-        );
+    if ( ! is_object( $core ) || ! method_exists( $core, 'register_module' ) ) {
+        return;
     }
+
+    // Core may request module metadata during plugins_loaded. Translating the
+    // description before init triggers WordPress's just-in-time gettext notice,
+    // which can corrupt WooCommerce AJAX JSON on front-end checkout requests.
+    // Preserve the optional Core registry while deferring only its metadata.
+    if ( ! did_action( 'init' ) ) {
+        add_action( 'init', static function () use ( $core ) {
+            taxocommerce_system_check_register_with_core( $core );
+        }, 11 );
+        return;
+    }
+
+    $core->register_module(
+        'system_check',
+        array(
+            'name'        => 'TaxoCommerce System Check',
+            'version'     => TAXOCOMMERCE_SYSTEM_CHECK_VERSION,
+            'status'      => 'active',
+            'description' => __( 'System diagnostics, plugin checks and reports.', 'taxocommerce-system-check' ),
+            'admin_url'   => admin_url( 'admin.php?page=taxocommerce-system-check' ),
+        )
+    );
 }
 
 function taxocommerce_system_check_register_menu() {
@@ -185,8 +205,8 @@ function taxocommerce_system_check_active_tab() {
 }
 
 function taxocommerce_system_check_render_tabs( $active ) {
-    echo '<nav class="nav-tab-wrapper" aria-label="Chequeos de System Check">';
-    foreach ( array( 'system' => 'Sistema', 'plugin' => 'Plugin Validation', 'http' => 'HTTP', 'processes' => __( 'Procesos', 'taxocommerce-system-check' ), 'auto-test' => __( 'Autocheck', 'taxocommerce-system-check' ), 'manual' => 'Manual' ) as $tab => $label ) {
+    echo '<nav class="nav-tab-wrapper" aria-label="' . esc_attr__( 'System Check tabs', 'taxocommerce-system-check' ) . '">';
+    foreach ( array( 'system' => __( 'System', 'taxocommerce-system-check' ), 'plugin' => __( 'Plugin Validation', 'taxocommerce-system-check' ), 'http' => 'HTTP', 'processes' => __( 'Procesos', 'taxocommerce-system-check' ), 'auto-test' => __( 'Autocheck', 'taxocommerce-system-check' ), 'manual' => __( 'Manual', 'taxocommerce-system-check' ) ) as $tab => $label ) {
         echo '<a class="nav-tab' . ( $active === $tab ? ' nav-tab-active' : '' ) . '" href="'
             . esc_url( taxocommerce_system_check_tab_url( $tab ) ) . '">'
             . esc_html( $label ) . '</a>';
@@ -257,6 +277,7 @@ function taxocommerce_system_check_enqueue_assets() {
     }
     if ( 'taxocommerce-system-check' === $page && 'plugin' === taxocommerce_system_check_active_tab() ) {
         wp_enqueue_script( 'taxocommerce-system-check-family-runner', TAXOCOMMERCE_SYSTEM_CHECK_URL . 'assets/family-runner.js', array(), TAXOCOMMERCE_SYSTEM_CHECK_VERSION, true );
+        wp_enqueue_script( 'taxocommerce-system-check-module-audit', TAXOCOMMERCE_SYSTEM_CHECK_URL . 'assets/module-audit.js', array(), TAXOCOMMERCE_SYSTEM_CHECK_VERSION, true );
     }
     if ( in_array( $page, array( 'tcs-plugin-validation', 'seo-core-system-test' ), true ) || ( 'taxocommerce-system-check' === $page && 'plugin' === taxocommerce_system_check_active_tab() ) ) {
         wp_enqueue_style(
@@ -298,9 +319,9 @@ function taxocommerce_system_check_home() {
     taxocommerce_system_check_render_tabs( $tab );
     // Each tab downloads its stored results. No scan is started here.
     $exports = array(
-        'system' => array( 'seo_system_diagnostics_download_server_json', 'Descargar JSON de Sistema' ),
-        'plugin' => array( 'taxocommerce_system_check_modules_json', 'Descargar JSON de comprobación básica' ),
-        'http'   => array( 'taxocommerce_system_check_http_json', 'Descargar JSON de HTTP' ),
+        'system' => array( 'seo_system_diagnostics_download_server_json', __( 'Download system JSON', 'taxocommerce-system-check' ) ),
+        'plugin' => array( 'taxocommerce_system_check_modules_json', __( 'Download basic checks JSON', 'taxocommerce-system-check' ) ),
+        'http'   => array( 'taxocommerce_system_check_http_json', __( 'Download HTTP JSON', 'taxocommerce-system-check' ) ),
     );
     if ( isset( $exports[ $tab ] ) ) {
         $action = $exports[ $tab ][0];
@@ -315,11 +336,11 @@ function taxocommerce_system_check_home() {
             . esc_html( $exports[ $tab ][1] ) . '</a></p>';
         if ( 'plugin' === $tab ) {
             $history_url = wp_nonce_url( add_query_arg( array( 'action' => 'seo_system_diagnostics_download_validation_json' ), admin_url( 'admin-post.php' ) ), 'seo_system_diagnostics_download_validation_json' );
-            echo '<p><a class="button button-secondary" href="' . esc_url( $history_url ) . '">Descargar JSON de chequeos anteriores (histórico)</a></p>';
+            echo '<p><a class="button button-secondary" href="' . esc_url( $history_url ) . '">' . esc_html__( 'Download previous checks JSON (history)', 'taxocommerce-system-check' ) . '</a></p>';
         }
         if ( 'system' === $tab ) {
             $complete_url = wp_nonce_url( add_query_arg( array( 'action' => 'seo_system_diagnostics_download_json' ), admin_url( 'admin-post.php' ) ), 'seo_system_diagnostics_download_json' );
-            echo '<p><a class="button button-secondary" href="' . esc_url( $complete_url ) . '">Descargar JSON completo</a></p>';
+            echo '<p><a class="button button-secondary" href="' . esc_url( $complete_url ) . '">' . esc_html__( 'Download complete JSON', 'taxocommerce-system-check' ) . '</a></p>';
         }
     }
     echo '</div>';
@@ -342,7 +363,7 @@ function taxocommerce_system_check_server_screen() {
     if ( ! current_user_can( 'manage_options' ) ) {
         wp_die( esc_html__( 'Acceso no autorizado.', 'taxocommerce-system-check' ) );
     }
-    echo '<div class="notice notice-info inline"><p><a href="' . esc_url( admin_url( 'admin.php?page=tcs-native-php' ) ) . '">Abrir diagnóstico PHP independiente</a> · Nueva implementación autónoma.</p></div>';
+    echo '<div class="notice notice-info inline"><p><a href="' . esc_url( admin_url( 'admin.php?page=tcs-native-php' ) ) . '">' . esc_html__( 'Open independent PHP diagnostics', 'taxocommerce-system-check' ) . '</a> · ' . esc_html__( 'Independent implementation.', 'taxocommerce-system-check' ) . '</p></div>';
     if ( function_exists( 'seo_server_status' ) ) {
         seo_server_status();
         return;
@@ -374,20 +395,20 @@ function taxocommerce_system_check_registered_modules() {
 /** Basic checks available for every active module without static module lists. */
 function taxocommerce_system_check_module_checks( $id, $module ) {
     $checks = array(
-        'registered' => array( 'ok' => true, 'label' => 'Cargado y registrado' ),
+        'registered' => array( 'ok' => true, 'label' => __( 'Loaded and registered', 'taxocommerce-system-check' ) ),
         'version'    => array(
             'ok'    => ! empty( $module['version'] ),
-            'label' => 'Versión declarada',
+            'label' => __( 'Version declared', 'taxocommerce-system-check' ),
         ),
     );
     if ( 'system_check' === $id ) {
         $checks['server'] = array(
             'ok'    => function_exists( 'seo_server_status' ),
-            'label' => 'Motor de diagnóstico del sistema disponible',
+            'label' => __( 'System diagnostics engine available', 'taxocommerce-system-check' ),
         );
         $checks['http'] = array(
             'ok'    => class_exists( 'TaxoCommerce_System_Check_URL_Audit' ),
-            'label' => 'Auditor HTTP disponible',
+            'label' => __( 'HTTP auditor available', 'taxocommerce-system-check' ),
         );
     }
     return $checks;
@@ -421,7 +442,7 @@ function taxocommerce_system_check_modules_json() {
         'generated_at' => gmdate( 'c' ),
         'source' => function_exists( 'taxocommerce_core' ) ? 'core_runtime_registry' : 'standalone',
         'modules' => taxocommerce_system_check_module_results(),
-        'note' => 'Comprobación básica de carga; no equivale a un chequeo funcional exhaustivo.',
+        'note' => __( 'Basic availability checks; not a full functional validation.', 'taxocommerce-system-check' ),
     ), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- JSON download.
     exit;
 }
@@ -434,22 +455,32 @@ function taxocommerce_system_check_validation_screen() {
 
     echo '<div class="wrap">' . '<h2>' . esc_html__( 'Plugin Validation · módulos activos', 'taxocommerce-system-check' ) . '</h2>';
     echo '<p>' . esc_html__( 'Sin Core solo se comprueba System Check. Con Core se usan sus módulos activos; no hay una lista duplicada.', 'taxocommerce-system-check' ) . '</p>';
+    if ( class_exists( 'TaxoCommerce_System_Check_Module_Audit', false ) ) {
+        TaxoCommerce_System_Check_Module_Audit::render();
+    } else {
+        echo '<div class="notice notice-warning inline"><p>' . esc_html__( 'Unavailable', 'taxocommerce-system-check' ) . '</p></div>';
+    }
+    echo '<details style="margin:8px 0 16px"><summary>' . esc_html__( 'Core pilot (previous validation mode)', 'taxocommerce-system-check' ) . '</summary>';
     TaxoCommerce_System_Check_Family_Runner::render();
-    echo '<table class="widefat striped">' . '<thead>' . '<tr>' . '<th>' . esc_html__( 'Plugin', 'taxocommerce-system-check' ) . '</th>' . '<th>' . esc_html__( 'Versión', 'taxocommerce-system-check' ) . '</th>' . '<th>' . esc_html__( 'Comprobación básica', 'taxocommerce-system-check' ) . '</th>' . '<th>' . esc_html__( 'Funcionalidades', 'taxocommerce-system-check' ) . '</th>' . '<th>' . esc_html__( 'Código', 'taxocommerce-system-check' ) . '</th>' . '</tr>' . '</thead>' . '<tbody>';
-    foreach ( $modules as $module ) {
+    echo '</details>';
+    echo '<table class="widefat striped">' . '<thead>' . '<tr>' . '<th>' . esc_html__( 'Plugin', 'taxocommerce-system-check' ) . '</th>' . '<th>' . esc_html__( 'Versión', 'taxocommerce-system-check' ) . '</th>' . '<th>' . esc_html__( 'Comprobación básica', 'taxocommerce-system-check' ) . '</th>' . '<th>' . esc_html__( 'Funcionalidades', 'taxocommerce-system-check' ) . '</th>' . '<th>' . esc_html__( 'Código', 'taxocommerce-system-check' ) . '</th>' . '<th>' . esc_html__( 'Acciones', 'taxocommerce-system-check' ) . '</th>' . '</tr>' . '</thead>' . '<tbody>';
+    foreach ( $modules as $id => $module ) {
         $messages = array();
         foreach ( $module['checks'] as $check ) {
-            $messages[] = ( $check['ok'] ? 'OK: ' : 'Aviso: ' ) . $check['label'];
+            $messages[] = ( $check['ok'] ? 'OK: ' : __( 'Warning: ', 'taxocommerce-system-check' ) ) . $check['label'];
         }
         echo '<tr><th scope="row">' . esc_html( (string) $module['name'] ) . '</th>';
         echo '<td>' . esc_html( (string) $module['version'] ) . '</td>';
         echo '<td>' . esc_html( implode( ' · ', $messages ) ) . '</td>';
-        $core_pilot = 'TaxoCommerce Core' === (string) $module['name'];
-        echo $core_pilot ? '<td data-tcs-kpi="functional">Pendiente</td><td data-tcs-kpi="code">Pendiente</td>' : '<td>No integrado</td><td>No integrado</td>';
+        if ( class_exists( 'TaxoCommerce_System_Check_Module_Audit', false ) ) {
+            TaxoCommerce_System_Check_Module_Audit::row( $id );
+        } else {
+            echo '<td>' . esc_html__( 'Unavailable', 'taxocommerce-system-check' ) . '</td><td>' . esc_html__( 'Unavailable', 'taxocommerce-system-check' ) . '</td><td></td>';
+        }
         echo '</tr>';
     }
     echo '</tbody></table>';
-    echo '<p class="description">' . esc_html__( 'Comprobación de carga y servicios básicos de System Check. No sustituye todavía los chequeos profundos, que se adaptarán por módulo.', 'taxocommerce-system-check' ) . '</p>';
+    echo '<p class="description">' . esc_html__( 'Native functional checks are used when available. Basic checks never imply a full integration check; local source reviews are not official WordPress Plugin Check.', 'taxocommerce-system-check' ) . '</p>';
     echo '</div>';
 }
 

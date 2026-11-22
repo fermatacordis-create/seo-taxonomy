@@ -32,4 +32,22 @@ foreach ( array( 'wp_remote_post(', 'wp_remote_get(', 'wp_delete_post(', 'wc_del
         exit( 1 );
     }
 }
+$rectification_contracts = array(
+    'function tca_on_billing_rectification_issued(',
+    "'taxocommerce_billing_rectification_issued'",
+    'TCA_Settlements::sum( (int) $entry->id )',
+    "'status' => 'draft'",
+    "'amount_base' => (float) \$invoice['amount_base']",
+);
+foreach ( $rectification_contracts as $contract ) {
+    if ( false === strpos( $source, $contract ) ) {
+        fwrite( STDERR, 'Missing safe rectification contract: ' . $contract . PHP_EOL );
+        exit( 1 );
+    }
+}
+$issuer = file_get_contents( dirname( __DIR__ ) . '/includes/class-tca-issued-invoice.php' );
+if ( false === $issuer || false === strpos( $issuer, "'rectification_original_total'" ) ) {
+    fwrite( STDERR, 'Accounting does not validate original amount in rectification.' . PHP_EOL );
+    exit( 1 );
+}
 echo "TaxoCommerce Accounting isolated smoke: PASS\n";

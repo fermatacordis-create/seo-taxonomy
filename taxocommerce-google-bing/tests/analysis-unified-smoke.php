@@ -9,7 +9,7 @@ define( 'SEO_ANALISTA_VERSION', '3.9.0' );
 class Insights_Stop_Response extends Exception {}
 $GLOBALS['invocations'] = array(
     'decision_plan' => 0, 'directrices' => 0, 'roadmap' => 0,
-    'geo' => 0, 'google_snapshot' => 0, 'other' => 0, 'competition' => 0,
+    'geo' => 0, 'google_snapshot' => 0, 'other' => 0, 'competition' => 0, 'indicators' => 0,
 );
 function insights_check( $condition, $description ) {
     if ( ! $condition ) {
@@ -140,14 +140,35 @@ function seo_analista_render_roadmap( $plan, $summary, $suppliers, $search ) {
 }
 function add_action( $tag, $handler ) { return true; }
 
+function taxocommerce_insights_indicators_build( $mode = 'week' ) {
+    $GLOBALS['invocations']['indicators']++;
+    insights_check( 'week' === $mode, 'calendar mode forwarded to indicator builder' );
+    return array(
+        'schema' => array( 'name' => 'taxocommerce-insights-indicadores', 'version' => 1 ),
+        'generated_at' => gmdate( 'c' ),
+        'period_mode' => $mode,
+        'source_cutoffs' => array( 'gsc_latest_imported_date' => '2026-11-08' ),
+        'periods' => array( array(
+            'date_from' => '2026-11-02',
+            'date_to' => '2026-11-08',
+            'gsc' => array( 'source' => 'Google Search Console', 'metrics' => array( 'impressions' => 100 ) ),
+            'ga4' => array( 'source' => 'Google Analytics 4', 'metrics' => array( 'sessions' => 20 ) ),
+        ) ),
+        'signals' => array( 'categories' => array(), 'queries' => array( array( 'query' => 'grapadoras' ) ) ),
+    );
+}
+function taxocommerce_insights_indicators_render( array $report ) {
+    echo '<section><h2>Indicadores para la acción</h2><p>2026-11-02 a 2026-11-08 · grapadoras</p></section>';
+}
+
 require dirname( __DIR__ ) . '/includes/analysis/analista-geo-bridge.php';
 
 $reports = taxocommerce_google_bing_analysis_reports();
 insights_check( 3 === count( $reports ), 'existing unified report catalog retained' );
 insights_check( ! isset( $reports['trabajo'] ), 'duplicate work button remains absent' );
-insights_check( 'Plan de trabajo' === $reports['directrices']['label'], 'combined report label retained' );
+insights_check( 'Indicadores para la acción' === $reports['directrices']['label'], 'evidence report label replaces action plan' );
 
-$_POST = array( 'report' => 'directrices', 'days' => '28' );
+$_POST = array( 'report' => 'directrices', 'days' => '28', 'period_mode' => 'week' );
 try {
     taxocommerce_insights_analysis_ajax();
 } catch ( Insights_Stop_Response $stop ) {
@@ -155,18 +176,20 @@ try {
 $result = $GLOBALS['last_response'];
 insights_check( true === $result['success'], 'market report response succeeds' );
 $html = $result['data']['html'];
-insights_check( false !== strpos( $html, 'Qué hacer para vender más' ), 'existing commercial advice retained' );
-insights_check( false !== strpos( $html, 'Oportunidades de mercado' ), 'executive market view rendered' );
-insights_check( false !== strpos( $html, 'Visitas referidas desde IA' ), 'AI referral comparison rendered' );
+insights_check( false !== strpos( $html, 'Indicadores para la acción' ), 'observable indicators replace commercial action advice' );
+insights_check( false !== strpos( $html, '2026-11-02' ), 'shared calendar dates displayed' );
+insights_check( false === strpos( $html, 'Crear post' ), 'report does not prescribe content creation' );
 insights_check( false !== strpos( $html, 'grapadoras' ), 'GSC demand opportunity included' );
 insights_check( false === strpos( $html, 'Plan de acción incoherente' ), 'legacy entity audit gate not shown' );
 $export = $result['data']['plan_export'] ?? array();
-insights_check( 'taxocommerce-insights-plan-accion' === (string) ( $export['schema']['name'] ?? '' ), 'existing JSON contract name' );
-insights_check( 28 === (int) ( $export['period_days'] ?? 0 ), 'correct reporting period' );
-insights_check( 2 === (int) ( $export['total'] ?? 0 ), 'one demand and one AI growth opportunity' );
-insights_check( ! empty( $export['plan_accion'][0]['market_signal'] ), 'plan exports market evidence, not editorial errors' );
-insights_check( 'Google Search Console' === (string) ( $export['plan_accion'][0]['source'] ?? '' ), 'source attribution preserved' );
-insights_check( 2 === (int) ( $export['summary']['hacer_despues'] ?? 0 ), 'market triage retained' );
+insights_check( 'taxocommerce-insights-indicadores' === (string) ( $export['schema']['name'] ?? '' ), 'evidence-only JSON schema' );
+insights_check( 'week' === (string) ( $export['period_mode'] ?? '' ), 'calendar mode persisted' );
+insights_check( 1 === count( (array) ( $export['periods'] ?? array() ) ), 'complete calendar period exported' );
+insights_check( ! isset( $export['plan_accion'] ), 'no executable action plan exported' );
+insights_check( 'Google Search Console' === (string) ( $export['periods'][0]['gsc']['source'] ?? '' ), 'source attribution preserved' );
+insights_check( '2026-11-08' === ( $export['source_cutoffs']['gsc_latest_imported_date'] ?? '' ), 'cutoff retained for provenance' );
+insights_check( 1 === $GLOBALS['invocations']['indicators'], 'new indicator builder runs once' );
+insights_check( 0 === $GLOBALS['invocations']['directrices'], 'legacy directrices renderer is skipped' );
 insights_check( 0 === $GLOBALS['invocations']['decision_plan'], 'legacy editorial validation not executed' );
 insights_check( 0 === $GLOBALS['invocations']['roadmap'], 'legacy editorial roadmap not executed' );
 insights_check( 0 === $GLOBALS['invocations']['geo'], 'legacy GEO editorial selection not executed' );

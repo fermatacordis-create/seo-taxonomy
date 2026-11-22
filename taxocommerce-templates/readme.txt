@@ -12,16 +12,9 @@ Register WordPress and WooCommerce request templates, maintain SEO role assignme
 
 == Description ==
 
-* Admin header: plugin title, a single local `Description` with the static `Plugin URI` link below it (left); a wider collapsed `CHANGELOG.md` history (center); local version and release date (right). No duplicated information panel or external requests.
-
-* The admin header shows the plugin's bundled `Description` and links to its `Plugin URI`, without network requests or caching. Version history uses the bundled `CHANGELOG.md`.
-
-
-
-Version 0.4.21 adds a guarded, opt-in SEO content reconciliation tab: compare native WooCommerce category descriptions against the optional legacy SEO table and synchronize selected, unchanged rows after an administrator nonce check. It never runs automatically.
-
-
 TaxoCommerce Templates is a standalone request-template routing and management plugin for WordPress and WooCommerce. It supports three areas:
+
+= Key Features =
 
 * Request types: WordPress front page, posts, pages, archives, taxonomies, search, 404, custom post types and registered public taxonomies, as well as classic WooCommerce shop/cart/checkout/account/order pages and selected native WooCommerce PHP template hooks.
 * Editorial roles: retain cluster, primary and secondary hub, landing and mail-template assignments using compatible `seo_nodes`, `seo_templates` and `seo_mail_templates` records. Mobile and desktop variants belong to one primary assignment.

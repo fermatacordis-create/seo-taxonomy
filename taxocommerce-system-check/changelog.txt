@@ -1,3 +1,21 @@
+= 0.2.45 (2026-11-20) =
+* Defer translated optional Core registration to WordPress init to avoid early gettext notices corrupting WooCommerce AJAX JSON on checkout. Preserve existing checks and optional registry. Add initialization-order regression. Issue #2848.
+
+= 0.2.44 (2026-11-18) =
+* Translate System Check navigation, CPU choices, exports and visible validation progress in the active WordPress locale. Keep AJAX/JSON status identifiers unchanged; refresh five POT/PO/MO catalogs (555 keys per locale), add locale regression test. Issue #2789.
+
+= 0.2.43 (2026-11-16) =
+* Add a Check all plugins button next to CPU usage to run active Core-registered modules sequentially through the existing per-plugin AJAX checks.
+* Show aggregate progress and counts; reuse cooperative Stop/Resume and individual reports, execution logs and JSON. Browser-driven; read-only. Issue #2755.
+
+= 0.2.42 (2026-11-16) =
+* Fix per-plugin functional report normalization for Billing and other Autotests that return rows directly.
+* Show per-plugin batch progress on each row, persist selected jobs across page reloads, support per-row Stop/Resume and show explicit AJAX invalid-JSON errors.
+* Add bounded execution events to detailed reports/JSON and expose browser-driven validation jobs in Processes with a cooperative stop, without claiming to kill PHP requests. Issue #2748.
+
+= 0.2.41 (2026-11-16) =
+* Validate one active plugin at a time from its Plugin Validation row, with native read-only Autocheck adapters when available, bounded code inspection, per-test failures and file-level findings; JSON export, per-user isolation and safe stop/resume. Preserve previous Core pilot. Issue #2742.
+
 = 0.2.40 (2026-11-15) =
 * Prevent Processes fatal when the optional Process_Details class arrives after the process manager in an incremental FTPS update. Load detail class lazily and preserve existing process controls with a temporary warning. Added partial-install regression test. Issue #2711.
 

@@ -113,6 +113,39 @@ final class TCV_Classifier {
             }
         }
         $supplier[] = self::supplier_source_context( $product_id );
+
+        // Native WooCommerce attributes are read as evidence, never modified.
+        // New installations without WooCommerce attribute objects still work.
+        $native_attributes = array();
+        $wc_product = function_exists( 'wc_get_product' ) ? wc_get_product( $product_id ) : false;
+        if ( $wc_product && method_exists( $wc_product, 'get_attributes' ) ) {
+            foreach ( (array) $wc_product->get_attributes() as $attribute ) {
+                if ( ! is_object( $attribute ) || ! method_exists( $attribute, 'get_name' )
+                    || ! method_exists( $attribute, 'get_options' ) || ! method_exists( $attribute, 'is_taxonomy' ) ) {
+                    continue;
+                }
+                $name = (string) $attribute->get_name();
+                $values = $attribute->is_taxonomy() && taxonomy_exists( $name )
+                    ? wp_get_post_terms( $product_id, $name, array( 'fields' => 'names' ) )
+                    : $attribute->get_options();
+                if ( is_wp_error( $values ) || ! is_array( $values ) ) {
+                    continue;
+                }
+                $texts = array();
+                foreach ( array_slice( $values, 0, 12 ) as $value ) {
+                    if ( is_scalar( $value ) && '' !== trim( (string) $value ) ) {
+                        $texts[] = mb_substr( sanitize_text_field( (string) $value ), 0, 150, 'UTF-8' );
+                    }
+                }
+                if ( $texts ) {
+                    $label = function_exists( 'wc_attribute_label' ) ? wc_attribute_label( $name, $wc_product ) : $name;
+                    $native_attributes[] = sanitize_text_field( $label ) . ': ' . implode( ', ', $texts );
+                }
+                if ( count( $native_attributes ) >= 40 ) {
+                    break;
+                }
+            }
+        }
         $values = array(
             'title' => $post->post_title,
             'excerpt' => $post->post_excerpt,
@@ -122,6 +155,7 @@ final class TCV_Classifier {
             'brands' => implode( ' ', array_unique( $brands ) ),
             'sku' => (string) get_post_meta( $product_id, '_sku', true ),
             'supplier' => implode( ' ', $supplier ),
+            'attributes' => implode( '; ', $native_attributes ),
         );
         // Optional read-only integration for any supplier/catalog provider;
         // no vendor, plugin, or external service is required.
@@ -252,6 +286,81 @@ final class TCV_Classifier {
 
 
     // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+
+    /**
+     * Small, per-request cached category profiles from existing canonical
+     * assignments. A category only adds a bounded bonus to a textual match;
+     * it can never impose a tag without corroborating product evidence.
+     */
+    private static function category_profile( $category_id ) {
+        static $cache = array();
+        $category_id = absint( $category_id );
+        if ( isset( $cache[ $category_id ] ) ) {
+            return $cache[ $category_id ];
+        }
+        global $wpdb;
+        $tables = TCV_Schema::tables();
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Own canonical assignments and indexed WP category relations; result cached for the current block.
+        $rows = $wpdb->get_results( $wpdb->prepare(
+            "SELECT v.semantic_group, ov.vocabulary_id, COUNT(DISTINCT ov.object_id) AS supporters
+             FROM %i ov INNER JOIN %i v ON v.id=ov.vocabulary_id
+             INNER JOIN %i tr ON tr.object_id=ov.object_id
+             INNER JOIN %i tt ON tt.term_taxonomy_id=tr.term_taxonomy_id
+             WHERE tt.taxonomy='product_cat' AND tt.term_id=%d
+             AND ov.object_type='product' AND ov.status=1 AND ov.source<>%s
+             AND v.active=1 AND v.semantic_group IN ('tipo','aplicacion','plataforma','subtipo')
+             GROUP BY v.semantic_group, ov.vocabulary_id",
+            $tables['objects'], $tables['vocabulary'], $wpdb->term_relationships,
+            $wpdb->term_taxonomy, $category_id, 'classifier_auto'
+        ), ARRAY_A );
+        $by_group = array();
+        foreach ( (array) $rows as $row ) {
+            $group = sanitize_key( $row['semantic_group'] );
+            $by_group[ $group ][] = array( 'id' => absint( $row['vocabulary_id'] ), 'n' => absint( $row['supporters'] ) );
+        }
+        $result = array();
+        foreach ( $by_group as $group => $counts ) {
+            usort( $counts, static function ( $a, $b ) { return $b['n'] <=> $a['n']; } );
+            $total = array_sum( array_column( $counts, 'n' ) );
+            if ( $counts[0]['n'] >= 5 && $total > 0 && ( $counts[0]['n'] / $total ) >= 0.72 ) {
+                $result[ $group ] = $counts[0];
+            }
+        }
+        $cache[ $category_id ] = $result;
+        return $result;
+    }
+
+    private static function improve_with_learned_profiles( $product_id, $group, $candidates ) {
+        if ( ! $candidates ) {
+            return $candidates;
+        }
+        $categories = wp_get_post_terms( $product_id, 'product_cat', array( 'fields' => 'ids' ) );
+        if ( is_wp_error( $categories ) || ! is_array( $categories ) ) {
+            return $candidates;
+        }
+        foreach ( array_slice( $categories, 0, 3 ) as $category_id ) {
+            $profile = self::category_profile( $category_id );
+            if ( empty( $profile[ $group ] ) ) {
+                continue;
+            }
+            foreach ( $candidates as &$candidate ) {
+                if ( absint( $candidate['id'] ) !== $profile[ $group ]['id'] || (float) $candidate['score'] < 0.50 ) {
+                    continue;
+                }
+                $candidate['score'] = round( min( 1.0, (float) $candidate['score'] + 0.05 ), 4 );
+                $candidate['evidence'][] = array(
+                    'source' => 'reviewed_category_pattern',
+                    'category_id' => absint( $category_id ),
+                    'supporters' => $profile[ $group ]['n'],
+                );
+                break;
+            }
+            unset( $candidate );
+        }
+        usort( $candidates, static function ( $a, $b ) { return $b['score'] <=> $a['score']; } );
+        return $candidates;
+    }
+
     public static function analyze_product( $product_id ) {
         $product_id = absint( $product_id );
         $ctx = self::product_context( $product_id );
@@ -262,11 +371,27 @@ final class TCV_Classifier {
         $result = array( 'product_id' => $product_id, 'labels' => array(), 'attributes' => array() );
         $groups = array( 'tipo', 'aplicacion', 'plataforma', 'subtipo' );
         $type_choice = null;
+        if ( 1 === count( $current['tipo'] ) ) {
+            // A reviewed canonical type may support a missing derived role.
+            $type_choice = array( 'vocabulary_id' => $current['tipo'][0], 'confidence' => 1.0, 'label' => '' );
+        }
         foreach ( $groups as $group ) {
+            $candidates = self::improve_with_learned_profiles(
+                $product_id, $group, self::vocabulary_candidates( $group, $ctx )
+            );
             if ( ! empty( $current[ $group ] ) ) {
+                // Review conflicts without replacing any pre-existing assignment.
+                if ( $candidates && ! in_array( absint( $candidates[0]['id'] ), $current[ $group ], true )
+                    && (float) $candidates[0]['score'] >= 0.94
+                    && ( (float) $candidates[0]['score'] - (float) ( $candidates[1]['score'] ?? 0 ) ) >= 0.20 ) {
+                    self::persist_proposal( $product_id, $group, array(
+                        'group' => $group, 'vocabulary_id' => absint( $candidates[0]['id'] ),
+                        'label' => $candidates[0]['label'], 'confidence' => (float) $candidates[0]['score'],
+                        'state' => 'review', 'evidence' => array( 'reason' => 'conflicts_with_existing_value', 'matches' => $candidates ),
+                    ) );
+                }
                 continue;
             }
-            $candidates = self::vocabulary_candidates( $group, $ctx );
             if ( ! $candidates || (float) $candidates[0]['score'] < 0.52 ) {
                 // Legacy discovery is review-only. It does not insert terms
                 // into WooCommerce or the canonical vocabulary.
@@ -283,7 +408,7 @@ final class TCV_Classifier {
             $proposal = array( 'group' => $group, 'vocabulary_id' => absint( $top['id'] ), 'label' => $top['label'], 'confidence' => (float) $top['score'], 'state' => $state, 'evidence' => $candidates );
             $result['labels'][] = $proposal;
             self::persist_proposal( $product_id, $group, $proposal );
-            if ( 'tipo' === $group ) {
+            if ( 'tipo' === $group && 'safe' === $state ) {
                 $type_choice = $proposal;
             }
         }
@@ -297,6 +422,16 @@ final class TCV_Classifier {
         }
 
         $result['attributes'] = self::attribute_candidates( $ctx );
+        // The classifier must never propose the same technical attribute twice.
+        global $wpdb;
+        $tables = TCV_Schema::tables();
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Own canonical product attribute assignments.
+        $assigned = array_map( 'absint', (array) $wpdb->get_col( $wpdb->prepare(
+            'SELECT DISTINCT atributo_id FROM %i WHERE product_id=%d', $tables['product_att'], $product_id
+        ) ) );
+        $result['attributes'] = array_values( array_filter( $result['attributes'], static function ( $item ) use ( $assigned ) {
+            return ! in_array( absint( $item['attribute_id'] ), $assigned, true );
+        } ) );
         foreach ( $result['attributes'] as $proposal ) {
             self::persist_proposal( $product_id, 'attribute:' . absint( $proposal['attribute_id'] ), array(
                 'group' => 'attribute', 'vocabulary_id' => null, 'label' => $proposal['attribute'] . ': ' . $proposal['value'], 'confidence' => $proposal['confidence'], 'state' => 'review', 'evidence' => $proposal,
@@ -328,6 +463,176 @@ final class TCV_Classifier {
     }
 
     // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+
+    /**
+     * Assign only an active existing canonical term to a product with no value
+     * in that group. Never replace a manually/imported assignment.
+     *
+     * @return true|WP_Error
+     */
+    private static function assign_canonical( $product_id, $group, $vocabulary_id, $confidence, $origin ) {
+        global $wpdb;
+        $product_id = absint( $product_id );
+        $vocabulary_id = absint( $vocabulary_id );
+        $group = sanitize_key( $group );
+        $product = get_post( $product_id );
+        if ( ! $product || 'product' !== $product->post_type || ! in_array( $group, self::GROUPS, true ) || ! $vocabulary_id ) {
+            return new WP_Error( 'tcv_invalid_assignment', __( 'Asignación canónica no válida.', 'taxocommerce-vocabulary' ) );
+        }
+        $t = TCV_Schema::tables();
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Canonical vocabulary and assignments are authoritative and must be read immediately.
+        $valid = $wpdb->get_var( $wpdb->prepare(
+            'SELECT id FROM %i WHERE id=%d AND semantic_group=%s AND active=1',
+            $t['vocabulary'], $vocabulary_id, $group
+        ) );
+        if ( ! $valid ) {
+            return new WP_Error( 'tcv_missing_canonical_term', __( 'El término canónico ya no está activo.', 'taxocommerce-vocabulary' ) );
+        }
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Guard against overwriting an existing reviewed product label.
+        $existing = $wpdb->get_var( $wpdb->prepare(
+            "SELECT ov.id FROM %i ov INNER JOIN %i v ON v.id=ov.vocabulary_id
+             WHERE ov.object_type='product' AND ov.object_id=%d AND ov.status=1 AND v.semantic_group=%s LIMIT 1",
+            $t['objects'], $t['vocabulary'], $product_id, $group
+        ) );
+        if ( $existing ) {
+            return new WP_Error( 'tcv_group_filled', __( 'El producto ya tiene una etiqueta de ese grupo; no se sobrescribe.', 'taxocommerce-vocabulary' ) );
+        }
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Authorised insertion into own canonical assignment table.
+        $inserted = $wpdb->insert( $t['objects'], array(
+            'object_type' => 'product', 'object_id' => $product_id, 'vocabulary_id' => $vocabulary_id,
+            'source' => $origin, 'confidence' => max( 0, min( 1, (float) $confidence ) ),
+            'status' => 1,
+        ), array( '%s', '%d', '%d', '%s', '%f', '%d' ) );
+        if ( false === $inserted ) {
+            return new WP_Error( 'tcv_assignment_failed', __( 'No se pudo guardar la asignación canónica.', 'taxocommerce-vocabulary' ) );
+        }
+        return true;
+    }
+
+    /**
+     * Optional automatic application is stricter than the review/safe display
+     * threshold and only writes existing canonical labels, never attributes.
+     *
+     * @return int Number of new assignments.
+     */
+    public static function apply_safe_labels( $product_id, $labels ) {
+        $added = 0;
+        foreach ( (array) $labels as $proposal ) {
+            if ( ! is_array( $proposal ) || ( $proposal['state'] ?? '' ) !== 'safe'
+                || (float) ( $proposal['confidence'] ?? 0 ) < 0.90 || empty( $proposal['vocabulary_id'] ) ) {
+                continue;
+            }
+            $result = self::assign_canonical(
+                $product_id, $proposal['group'] ?? '', $proposal['vocabulary_id'],
+                $proposal['confidence'], 'classifier_auto'
+            );
+            if ( ! is_wp_error( $result ) ) {
+                ++$added;
+                global $wpdb;
+                $table = TCV_Schema::tables()['proposals'];
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Mark successful own proposal as applied without deleting its audit evidence.
+                $wpdb->update(
+                    $table, array( 'state' => 'applied', 'updated_at' => current_time( 'mysql', true ) ),
+                    array( 'product_id' => absint( $product_id ), 'semantic_group' => sanitize_key( $proposal['group'] ) ),
+                    array( '%s', '%s' ), array( '%d', '%s' )
+                );
+            }
+        }
+        return $added;
+    }
+
+    /**
+     * Apply one administrator-reviewed proposal, verifying master identifiers
+     * and preserving the existing assignment if a value is already present.
+     *
+     * @return true|WP_Error
+     */
+    public static function apply_proposal( $proposal_id ) {
+        global $wpdb;
+        $t = TCV_Schema::tables();
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Immediate read of our own review queue.
+        $row = $wpdb->get_row( $wpdb->prepare(
+            'SELECT * FROM %i WHERE id=%d AND active=1', $t['proposals'], absint( $proposal_id )
+        ), ARRAY_A );
+        if ( ! $row || ! in_array( $row['state'], array( 'safe', 'review', 'derived' ), true ) ) {
+            return new WP_Error( 'tcv_proposal_not_reviewable', __( 'La propuesta no está disponible para aprobar.', 'taxocommerce-vocabulary' ) );
+        }
+        $product_id = absint( $row['product_id'] );
+        $product = get_post( $product_id );
+        if ( ! $product || 'product' !== $product->post_type ) {
+            return new WP_Error( 'tcv_product_missing', __( 'El producto ya no existe.', 'taxocommerce-vocabulary' ) );
+        }
+        $group = (string) $row['semantic_group'];
+        if ( in_array( $group, self::GROUPS, true ) ) {
+            $result = self::assign_canonical(
+                $product_id, $group, absint( $row['vocabulary_id'] ), (float) $row['confidence'], 'classifier_reviewed'
+            );
+            if ( is_wp_error( $result ) ) {
+                return $result;
+            }
+        } elseif ( 0 === strpos( $group, 'attribute:' ) ) {
+            $attribute_id = absint( substr( $group, 10 ) );
+            $payload = json_decode( (string) $row['payload_json'], true );
+            $evidence = is_array( $payload ) && is_array( $payload['evidence'] ?? null ) ? $payload['evidence'] : array();
+            if ( ! $attribute_id || absint( $evidence['attribute_id'] ?? 0 ) !== $attribute_id ) {
+                return new WP_Error( 'tcv_invalid_attribute', __( 'La propuesta de atributo no tiene evidencia válida.', 'taxocommerce-vocabulary' ) );
+            }
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Own canonical attribute master.
+            $attribute = $wpdb->get_row( $wpdb->prepare(
+                'SELECT id,tipo FROM %i WHERE id=%d AND activo=1', $t['attributes'], $attribute_id
+            ), ARRAY_A );
+            if ( ! $attribute ) {
+                return new WP_Error( 'tcv_attribute_missing', __( 'El atributo canónico ya no está activo.', 'taxocommerce-vocabulary' ) );
+            }
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Never overwrite an already recorded technical attribute.
+            $existing = $wpdb->get_var( $wpdb->prepare(
+                'SELECT id FROM %i WHERE product_id=%d AND atributo_id=%d LIMIT 1',
+                $t['product_att'], $product_id, $attribute_id
+            ) );
+            if ( $existing ) {
+                return new WP_Error( 'tcv_attribute_exists', __( 'El producto ya tiene ese atributo; no se sobrescribe.', 'taxocommerce-vocabulary' ) );
+            }
+            $data = array( 'product_id' => $product_id, 'atributo_id' => $attribute_id );
+            $formats = array( '%d', '%d' );
+            if ( 'termino' === $attribute['tipo'] ) {
+                $term_id = absint( $evidence['term_id'] ?? 0 );
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Ensure that the exact controlled term belongs to the active attribute.
+                $term = $wpdb->get_var( $wpdb->prepare(
+                    'SELECT id FROM %i WHERE id=%d AND atributo_id=%d AND activo=1',
+                    $t['terms'], $term_id, $attribute_id
+                ) );
+                if ( ! $term ) {
+                    return new WP_Error( 'tcv_term_missing', __( 'El valor controlado ya no existe.', 'taxocommerce-vocabulary' ) );
+                }
+                $data['termino_id'] = $term_id;
+                $formats[] = '%d';
+            } elseif ( in_array( $attribute['tipo'], array( 'numero', 'rango' ), true ) ) {
+                if ( ! isset( $evidence['value'] ) || ! is_numeric( $evidence['value'] ) ) {
+                    return new WP_Error( 'tcv_numeric_invalid', __( 'El valor numérico no es válido.', 'taxocommerce-vocabulary' ) );
+                }
+                $data['valor_numero'] = (float) $evidence['value'];
+                $data['unidad'] = mb_substr( sanitize_text_field( $evidence['unit'] ?? '' ), 0, 30, 'UTF-8' );
+                $formats[] = '%f';
+                $formats[] = '%s';
+            } else {
+                return new WP_Error( 'tcv_attribute_unsupported', __( 'Este tipo de atributo requiere revisión manual.', 'taxocommerce-vocabulary' ) );
+            }
+            $data['valor_original'] = sanitize_text_field( (string) ( $evidence['value'] ?? '' ) );
+            $formats[] = '%s';
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Explicit approval writes only to the own canonical attribute table.
+            if ( false === $wpdb->insert( $t['product_att'], $data, $formats ) ) {
+                return new WP_Error( 'tcv_attribute_insert_failed', __( 'No se pudo guardar el atributo.', 'taxocommerce-vocabulary' ) );
+            }
+        } else {
+            return new WP_Error( 'tcv_unrecognized_group', __( 'La propuesta no tiene un grupo válido.', 'taxocommerce-vocabulary' ) );
+        }
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Keep the original evidence as an audit trail.
+        $wpdb->update( $t['proposals'], array(
+            'state' => 'applied', 'updated_at' => current_time( 'mysql', true )
+        ), array( 'id' => absint( $proposal_id ) ), array( '%s', '%s' ), array( '%d' ) );
+        return true;
+    }
+
     private static function category_context( $term_id ) {
         $term = get_term( $term_id, 'product_cat' );
         if ( ! $term || is_wp_error( $term ) ) {
@@ -533,6 +838,36 @@ final class TCV_Classifier {
 
     // Classifier must read and update shared canonical vocabulary and proposal tables immediately; external writers cannot invalidate a local cache.
     // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+    /**
+     * Group recent missing concepts for human vocabulary normalization.
+     * Bounded to 500 proposal records; no master writes.
+     */
+    public static function unmapped_terms( $limit = 25 ) {
+        global $wpdb;
+        $tables = TCV_Schema::tables();
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Own bounded proposal queue, grouped without scanning the entire catalogue.
+        $rows = $wpdb->get_results( $wpdb->prepare(
+            "SELECT product_id,semantic_group,label FROM %i WHERE active=1 AND state='review'
+             AND vocabulary_id=0 AND label<>'' ORDER BY updated_at DESC LIMIT %d",
+            $tables['proposals'], 500
+        ), ARRAY_A );
+        $grouped = array();
+        foreach ( (array) $rows as $row ) {
+            $group = sanitize_key( $row['semantic_group'] );
+            $label = sanitize_text_field( $row['label'] );
+            if ( ! in_array( $group, array( 'tipo', 'aplicacion', 'plataforma', 'subtipo' ), true ) || '' === $label ) {
+                continue;
+            }
+            $key = $group . ':' . sanitize_title( $label );
+            if ( ! isset( $grouped[ $key ] ) ) {
+                $grouped[ $key ] = array( 'group' => $group, 'label' => $label, 'count' => 0 );
+            }
+            ++$grouped[ $key ]['count'];
+        }
+        uasort( $grouped, static function ( $a, $b ) { return $b['count'] <=> $a['count']; } );
+        return array_slice( array_values( $grouped ), 0, min( 50, max( 1, absint( $limit ) ) ) );
+    }
+
     public static function recent_category_proposals( $limit = 100 ) {
         global $wpdb;
         $t = TCV_Schema::tables();
@@ -547,7 +882,7 @@ final class TCV_Classifier {
         global $wpdb;
         $t = TCV_Schema::tables();
         $limit = max( 1, min( 500, absint( $limit ) ) );
-        return $wpdb->get_results( $wpdb->prepare( "SELECT * FROM %i WHERE active=1 ORDER BY updated_at DESC LIMIT %d", $t['proposals'], $limit ), ARRAY_A );
+        return $wpdb->get_results( $wpdb->prepare( "SELECT * FROM %i WHERE active=1 AND label<>'' ORDER BY updated_at DESC LIMIT %d", $t['proposals'], $limit ), ARRAY_A );
     }
 
     // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching

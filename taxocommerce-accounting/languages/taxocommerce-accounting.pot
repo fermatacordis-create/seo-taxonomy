@@ -394,3 +394,1009 @@ msgstr ""
 
 msgid "Download AEAT XLSX template — general"
 msgstr ""
+
+msgid "Expense CSV processed. Verify the new drafts in Expenses."
+msgstr ""
+
+msgid "Select a valid CSV file smaller than 2 MB."
+msgstr ""
+
+msgid "Invalid CSV headers. Download and use the exact template."
+msgstr ""
+
+msgid "CSV contains too many rows; maximum 500."
+msgstr ""
+
+msgid "CSV contains invalid expense data; nothing was imported."
+msgstr ""
+
+msgid "CSV contains no expense documents."
+msgstr ""
+
+msgid "Could not save the CSV batch; please retry."
+msgstr ""
+
+msgid "Export limit exceeded; use a narrower reporting period."
+msgstr ""
+
+msgid "Expense documents: CSV import and export"
+msgstr ""
+
+msgid "For domains, hosting, digital certificates, administrative fees, postal services, software and other association or business expenses. Imports go to Accounting > Expenses as unapproved drafts. They do not change bank/cash balances or automatically create a tax deduction."
+msgstr ""
+
+msgid "Download blank CSV template"
+msgstr ""
+
+msgid "Export expense CSV for %d"
+msgstr ""
+
+msgid "Use UTF-8 CSV with semicolon or comma separators. Keep the template column names unchanged. Dates: YYYY-MM-DD; values: base and VAT in EUR; deductible_vat_pct is the percentage of VAT deductible, not the VAT rate (0 until verified). vat_treatment: review, domestic, intra, reverse, exempt. scope: review, association, commercial, shared."
+msgstr ""
+
+msgid "Expense CSV file"
+msgstr ""
+
+msgid "Import expense drafts"
+msgstr ""
+
+msgid "Maximum 500 rows / 2 MB per import. Repeated documents are skipped. Attach original PDF receipts individually in Expenses, verify the legal tax treatment, then validate each entry."
+msgstr ""
+
+msgid "Imported: %1$d drafts. Existing/duplicate documents skipped: %2$d."
+msgstr ""
+
+msgid "Cash"
+msgstr ""
+
+msgid "Bank"
+msgstr ""
+
+msgid "Treasury: cash, bank and loans"
+msgstr ""
+
+msgid "Historical reconciliation: %1$d payments posted, %2$d skipped, %3$d errors. Review the bank balance before posting anything again."
+msgstr ""
+
+msgid "Balances use opening funds and confirmed payments/receipts (including invoice-linked settlements). An opening balance is not a monthly Cash in / Bank in. If it actually represents a contribution received this year, you can convert it to a dated receipt below without changing the balance. Unpaid invoices and future loan instalments never move money."
+msgstr ""
+
+msgid "Cash on hand"
+msgstr ""
+
+msgid "Bank accounts"
+msgstr ""
+
+msgid "Total available funds"
+msgstr ""
+
+msgid "Loans outstanding (reported)"
+msgstr ""
+
+msgid "Scheduled monthly loan instalments"
+msgstr ""
+
+msgid "Cash and bank accounts"
+msgstr ""
+
+msgid "Account"
+msgstr ""
+
+msgid "Type"
+msgstr ""
+
+msgid "Opening balance"
+msgstr ""
+
+msgid "Current balance"
+msgstr ""
+
+msgid "Funding entry"
+msgstr ""
+
+msgid "Actual contribution date"
+msgstr ""
+
+msgid "Funding reference"
+msgstr ""
+
+msgid "Initial loan / contribution"
+msgstr ""
+
+msgid "Convert the opening balance, without adding funds twice"
+msgstr ""
+
+msgid "Convert to receipt"
+msgstr ""
+
+msgid "Add your cash register or first bank account to start tracking funds."
+msgstr ""
+
+msgid "Add cash register / bank account"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Opening date"
+msgstr ""
+
+msgid "Opening balance (€)"
+msgstr ""
+
+msgid "Add account"
+msgstr ""
+
+msgid "Record a payment or receipt"
+msgstr ""
+
+msgid "Movement"
+msgstr ""
+
+msgid "Money in"
+msgstr ""
+
+msgid "Money out"
+msgstr ""
+
+msgid "Amount (€)"
+msgstr ""
+
+msgid "Reference / concept"
+msgstr ""
+
+msgid "Save movement"
+msgstr ""
+
+msgid "Transfer between accounts"
+msgstr ""
+
+msgid "From"
+msgstr ""
+
+msgid "To"
+msgstr ""
+
+msgid "Transfer funds"
+msgstr ""
+
+msgid "Monthly cash flow"
+msgstr ""
+
+msgid "Cash in"
+msgstr ""
+
+msgid "Cash out"
+msgstr ""
+
+msgid "Bank in"
+msgstr ""
+
+msgid "Bank out"
+msgstr ""
+
+msgid "Cash balance"
+msgstr ""
+
+msgid "Bank balance"
+msgstr ""
+
+msgid "Recent cash and bank movements"
+msgstr ""
+
+msgid "Amount"
+msgstr ""
+
+msgid "Reference"
+msgstr ""
+
+msgid "No movements recorded yet."
+msgstr ""
+
+msgid "Loans"
+msgstr ""
+
+msgid "New fixed-rate loans show monthly capital/interest forecasts. Interest on ordinary money loans is generally VAT-exempt; the schedule never changes model 303. Neither a future instalment nor an unconfirmed loan disbursement changes bank balances. Older manual loans retain their original update controls."
+msgstr ""
+
+msgid "Loan"
+msgstr ""
+
+msgid "Lender"
+msgstr ""
+
+msgid "Original loan"
+msgstr ""
+
+msgid "Monthly payment"
+msgstr ""
+
+msgid "Outstanding"
+msgstr ""
+
+msgid "Next payment date"
+msgstr ""
+
+msgid "Payment / updates"
+msgstr ""
+
+msgid "months; annual nominal rate"
+msgstr ""
+
+msgid "Down payment"
+msgstr ""
+
+msgid "Interest already paid"
+msgstr ""
+
+msgid "Next instalment"
+msgstr ""
+
+msgid "Capital"
+msgstr ""
+
+msgid "Interest"
+msgstr ""
+
+msgid "Pay from"
+msgstr ""
+
+msgid "Actual payment date"
+msgstr ""
+
+msgid "I confirm this instalment was actually paid from this account."
+msgstr ""
+
+msgid "Confirm instalment paid"
+msgstr ""
+
+msgid "Amortisation schedule"
+msgstr ""
+
+msgid "Due date"
+msgstr ""
+
+msgid "Instalment"
+msgstr ""
+
+msgid "Paid"
+msgstr ""
+
+msgid "Forecast"
+msgstr ""
+
+msgid "Update loan"
+msgstr ""
+
+msgid "No loans entered."
+msgstr ""
+
+msgid "Add a loan"
+msgstr ""
+
+msgid "Enter the amount actually borrowed, excluding any down payment. Set TIN and term to calculate instalments; leave term zero and enter a manual monthly amount for an old-style loan. The optional final balloon is extra principal due with the last instalment."
+msgstr ""
+
+msgid "Loan name"
+msgstr ""
+
+msgid "Annual nominal interest (TIN %)"
+msgstr ""
+
+msgid "Financed principal (€)"
+msgstr ""
+
+msgid "Term in months (0 = manual)"
+msgstr ""
+
+msgid "Down payment from own funds (€)"
+msgstr ""
+
+msgid "Extra principal on final instalment (€)"
+msgstr ""
+
+msgid "Manual monthly payment (€; only term 0)"
+msgstr ""
+
+msgid "Loan date"
+msgstr ""
+
+msgid "First instalment date"
+msgstr ""
+
+msgid "Loan funds actually received in bank (confirmed)"
+msgstr ""
+
+msgid "Bank receiving loan"
+msgstr ""
+
+msgid "Select bank"
+msgstr ""
+
+msgid "Confirm funds received only if a real transfer into this bank account occurred. Saving the loan does not repeat the supplier payment; the down payment is informational and never moves cash automatically. Loan instalments are forecast until manually confirmed."
+msgstr ""
+
+msgid "Save loan"
+msgstr ""
+
+msgid "Treasury"
+msgstr ""
+
+msgid "Expense type"
+msgstr ""
+
+msgid "Current expense"
+msgstr ""
+
+msgid "Fixed asset (depreciable)"
+msgstr ""
+
+msgid "Fixed asset"
+msgstr ""
+
+msgid "Date put into service"
+msgstr ""
+
+msgid "Useful life (years)"
+msgstr ""
+
+msgid "Annual straight-line allocation starts when the asset is ready for use. The first and last years are prorated by days. Confirm the applicable accounting and tax rules separately."
+msgstr ""
+
+msgid "Error detected"
+msgstr ""
+
+msgid "Pending"
+msgstr ""
+
+msgid "Validated and linked to payment"
+msgstr ""
+
+msgid "No records"
+msgstr ""
+
+msgid "Payment not linked. Check Treasury before recording another payment."
+msgstr ""
+
+msgid "Linked payments exceed the recorded amount. Review the settlement."
+msgstr ""
+
+msgid "Green: validated and payment linked"
+msgstr ""
+
+msgid "Amber: pending validation, payment link or repayment"
+msgstr ""
+
+msgid "Red: detected inconsistency"
+msgstr ""
+
+msgid "Recorded movement without an invoice or loan link. Check before adding another payment."
+msgstr ""
+
+
+msgid "Incidents"
+msgstr ""
+
+msgid "Showing the selected accounting record."
+msgstr ""
+
+msgid "Show all records"
+msgstr ""
+
+msgid "Review"
+msgstr ""
+
+msgid "Issued invoice and accounting totals disagree."
+msgstr ""
+
+msgid "Check the domestic sale with zero VAT."
+msgstr ""
+
+msgid "Check the missing invoice reference."
+msgstr ""
+
+msgid "Tax treatment requires review."
+msgstr ""
+
+msgid "Pending validation."
+msgstr ""
+
+msgid "Incidents requiring review"
+msgstr ""
+
+msgid "No matching records remain for this month."
+msgstr ""
+
+msgid "Correct entry"
+msgstr ""
+
+msgid "History"
+msgstr ""
+
+msgid "Correct accounting entry"
+msgstr ""
+
+msgid "This accounting record cannot be corrected."
+msgstr ""
+
+msgid "Check the amounts, date, VAT deduction and correction reason."
+msgstr ""
+
+msgid "Amounts must match the sign of the sale or refund."
+msgstr ""
+
+msgid "A valid invoice or credit note reference is required."
+msgstr ""
+
+msgid "Check the supplier or customer and tax identification."
+msgstr ""
+
+msgid "Check the asset category, in-service date and useful life."
+msgstr ""
+
+msgid "Fiscal date"
+msgstr ""
+
+msgid "Invoice reference"
+msgstr ""
+
+msgid "Customer or supplier"
+msgstr ""
+
+msgid "VAT amount"
+msgstr ""
+
+msgid "Deductible VAT percentage"
+msgstr ""
+
+msgid "Notes"
+msgstr ""
+
+msgid "Correction reason"
+msgstr ""
+
+msgid "Save correction as draft"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Accounting correction history (latest 50)"
+msgstr ""
+
+msgid "No corrections recorded."
+msgstr ""
+
+msgid "Administrator ID"
+msgstr ""
+
+msgid "Reason"
+msgstr ""
+
+msgid "Before: date / invoice / base / VAT / total"
+msgstr ""
+
+msgid "After: date / invoice / base / VAT / total"
+msgstr ""
+
+msgid "Check payment date, account and amount."
+msgstr ""
+
+msgid "Payment exceeds the outstanding amount or has invalid dates/account."
+msgstr ""
+
+msgid "Payment could not be recorded."
+msgstr ""
+
+msgid "Paid/received:"
+msgstr ""
+
+msgid "Add a bank or cash account in Treasury to record an actual payment."
+msgstr ""
+
+msgid "Paid from / received into"
+msgstr ""
+
+msgid "Payment date"
+msgstr ""
+
+msgid "Record receipt"
+msgstr ""
+
+msgid "Record payment"
+msgstr ""
+
+msgid "Record only actual bank/cash payments. Importing or validating an invoice never assumes it was paid."
+msgstr ""
+
+msgid "Bank or cash account"
+msgstr ""
+
+msgid "Select an account"
+msgstr ""
+
+msgid "Paid amount"
+msgstr ""
+
+msgid "Invoice total including VAT"
+msgstr ""
+
+msgid "Financial overview (not sales or VAT)"
+msgstr ""
+
+msgid "Initial loan funding (already in opening balance)"
+msgstr ""
+
+msgid "Current bank balance"
+msgstr ""
+
+msgid "The opening loan is shown as a bank inflow in its start month for reporting. It is already included in the opening bank balance: no second bank movement, sale or VAT is created."
+msgstr ""
+
+msgid "Issued invoice totals differ from the WooCommerce order. Review the original invoice and order before approving this draft."
+msgstr ""
+
+msgid "Totals updated from rectifying invoice %s; review the VAT classification and approve the draft again."
+msgstr ""
+
+msgid "Issued invoice and accounting totals disagree. Check the original invoice and the order; validation is blocked until reconciled."
+msgstr ""
+
+msgid "Validated sale has zero VAT. Check its original invoice and applicable tax regime."
+msgstr ""
+
+msgid "(automatically linked to this WooCommerce order)"
+msgstr ""
+
+msgid "WooCommerce imported this sale with zero VAT. Check its invoice and the correct fiscal treatment before approving."
+msgstr ""
+
+msgid "I have checked the zero VAT amount and confirm its domestic tax treatment."
+msgstr ""
+
+msgid "Deductible percentage of the VAT amount, NOT the invoice VAT rate. 0% means no deduction; 100% only when fully deductible."
+msgstr ""
+
+msgid "Enter the percentage of VAT legally deductible, NOT the VAT rate: 0% if not deductible, 100% only if fully deductible, or another applicable percentage. You must choose a value."
+msgstr ""
+
+msgid "Invoice amount checks"
+msgstr ""
+
+msgid "Total of supplier invoice (base + VAT):"
+msgstr ""
+
+msgid "Potential deductible VAT (VAT × deductible percentage):"
+msgstr ""
+
+msgid "Compare these amounts with the supplier invoice. This preview is not a tax deduction decision."
+msgstr ""
+
+msgid "Original PDF or image securely archived with this accounting entry."
+msgstr ""
+
+msgid "Select a valid original PDF, JPG, PNG or WEBP document smaller than 10 MB."
+msgstr ""
+
+msgid "Correction saved. This entry is now a draft and must be validated again."
+msgstr ""
+
+msgid "Could not correct the entry. Check all fields and the mandatory reason."
+msgstr ""
+
+msgid "No data changed; nothing was recorded."
+msgstr ""
+
+msgid "The correction failed. The previous ledger entry was retained."
+msgstr ""
+
+msgid "This WooCommerce sale has zero VAT. Check its issued invoice and confirm the domestic VAT treatment before validating it."
+msgstr ""
+
+msgid "Accounting totals do not match the immutable issued invoice. Validation was blocked; reconcile the original document and WooCommerce order."
+msgstr ""
+
+msgid "Actual payment/receipt recorded in Treasury."
+msgstr ""
+
+msgid "Historical payment reconciliation processed; review the posted, skipped and error counts shown."
+msgstr ""
+
+msgid "Invoice draft saved, but the selected payment could not be recorded. Register it from the invoice row after checking account, date and amount."
+msgstr ""
+
+msgid "Invoice validated, but the selected payment could not be recorded. Register it from the invoice row."
+msgstr ""
+
+msgid "Payment amount, date or account is invalid or exceeds the outstanding balance."
+msgstr ""
+
+msgid "Payment could not be recorded; no money was moved."
+msgstr ""
+
+msgid "Treasury record saved."
+msgstr ""
+
+msgid "Could not save the treasury record."
+msgstr ""
+
+msgid "Check the treasury values and dates."
+msgstr ""
+
+msgid "Supplier purchase CSV processed. Check the drafts in Received invoices."
+msgstr ""
+
+msgid "Select a valid supplier purchase CSV smaller than 2 MB."
+msgstr ""
+
+msgid "Invalid purchase CSV headers; use the downloaded template."
+msgstr ""
+
+msgid "Purchase CSV contains more than 500 rows."
+msgstr ""
+
+msgid "Invalid supplier purchase data; no rows imported."
+msgstr ""
+
+msgid "Supplier purchase CSV contains no documents."
+msgstr ""
+
+msgid "Could not save the supplier purchase batch; please retry."
+msgstr ""
+
+msgid "%d validated domestic WooCommerce sales have positive values but zero VAT. Review the original invoice and the tax treatment; these entries still contribute zero output VAT to this summary."
+msgstr ""
+
+msgid "Review sales"
+msgstr ""
+
+msgid "Import new paid WooCommerce orders automatically in small background batches"
+msgstr ""
+
+msgid "Uses WordPress WP-Cron while the website receives visits. Imported sales and refunds remain drafts until invoice numbers, dates and tax treatment are verified. Does not import supplier bills or mark taxes as ready."
+msgstr ""
+
+msgid "Bank receipts from paid WooCommerce orders"
+msgstr ""
+
+msgid "Optional. Only WooCommerce orders with an actual payment date, an issued invoice number and matching totals are recorded. No tax validation or payment is inferred from an unpaid order. Existing unrelated bank movements must be reconciled first."
+msgstr ""
+
+msgid "Bank for confirmed WooCommerce payments"
+msgstr ""
+
+msgid "Do not record payments automatically"
+msgstr ""
+
+msgid "Only payments received since"
+msgstr ""
+
+msgid "When an eligible WooCommerce order is synchronised, post its confirmed receipt once to this bank. Earlier payments remain available for manual reconciliation in Treasury. Fees and bank net deposits may need separate entries."
+msgstr ""
+
+msgid "Fixed asset depreciation"
+msgstr ""
+
+msgid "Straight-line accounting allocation by actual days from the in-service date. Does not change VAT, supplier invoices, bank payments, or determine a statutory tax deduction."
+msgstr ""
+
+msgid "Asset"
+msgstr ""
+
+msgid "In service"
+msgstr ""
+
+msgid "Amortizable cost"
+msgstr ""
+
+msgid "Annual depreciation"
+msgstr ""
+
+msgid "Remaining book value"
+msgstr ""
+
+msgid "No validated fixed assets for this year."
+msgstr ""
+
+msgid "Total annual depreciation:"
+msgstr ""
+
+msgid "Supplier purchases: CSV import and export"
+msgstr ""
+
+msgid "Import supplier invoices for merchandise bought for resale. All entries are draft purchases and require review. Upload the original PDF or image to each row after importing."
+msgstr ""
+
+msgid "Export supplier purchases CSV for %d"
+msgstr ""
+
+msgid "Supplier purchases CSV file"
+msgstr ""
+
+msgid "Import supplier purchase drafts"
+msgstr ""
+
+msgid "Maximum 500 rows / 2 MB per import. Repeated documents are skipped. Attach PDF, JPG, PNG or WEBP originals to each imported row, then verify VAT and approve. CSV imports never attach the original document or register a payment."
+msgstr ""
+
+msgid "This changes only the accounting record, not the WooCommerce order, issued invoice, or supplier PDF. If an issued invoice is wrong, follow the required rectifying-invoice procedure before fiscal approval."
+msgstr ""
+
+msgid "Saving a correction moves this record back to draft and removes it from validated tax totals until it is reviewed and approved again."
+msgstr ""
+
+msgid "Configure a bank or cash account in Treasury before linking a payment."
+msgstr ""
+
+msgid "Payment received and verified"
+msgstr ""
+
+msgid "Invoice already paid (confirmed)"
+msgstr ""
+
+msgid "Select this only if the payment actually occurred. It immediately creates a linked cash/bank movement when this form is saved; leave unchecked for unpaid invoices."
+msgstr ""
+
+msgid "Reconcile confirmed payments and receipts"
+msgstr ""
+
+msgid "Only for invoices paid or customer sales actually collected and not yet linked to Treasury. Review each item and its actual payment date. Purchases are bank/cash out; sales are bank/cash in. No movements are generated until confirmed."
+msgstr ""
+
+msgid "Account used for the confirmed payments or receipts"
+msgstr ""
+
+msgid "Select bank or cash account"
+msgstr ""
+
+msgid "Confirmed?"
+msgstr ""
+
+msgid "Invoice"
+msgstr ""
+
+msgid "Actual bank payment date"
+msgstr ""
+
+msgid "Sale"
+msgstr ""
+
+msgid "Refund"
+msgstr ""
+
+msgid "Purchase / expense"
+msgstr ""
+
+msgid "I confirm each selected purchase was paid or sale was received using this account on the dates shown, with no matching Treasury movement already recorded."
+msgstr ""
+
+msgid "Post confirmed historical payments"
+msgstr ""
+
+msgid "At most 100 invoices are shown at once. Refresh to reconcile more. This does not change invoices, VAT deductions or financing/loan balances."
+msgstr ""
+
+msgid "Select a PDF, JPG, PNG or WEBP document smaller than 10 MB."
+msgstr ""
+
+msgid "Select a valid original PDF or image."
+msgstr ""
+
+msgid "Original invoice documents"
+msgstr ""
+
+msgid "Attach original PDF or image (up to 10 MB)"
+msgstr ""
+
+msgid "Archive document"
+msgstr ""
+
+msgid "Preparation checklist"
+msgstr ""
+
+msgid "WooCommerce background sales import:"
+msgstr ""
+
+msgid "Not enabled. Enable it under Accounting Settings to keep new paid orders available for review."
+msgstr ""
+
+msgid "Enabled but not executed yet. WP-Cron requires site traffic or an external scheduler."
+msgstr ""
+
+msgid "Last check:"
+msgstr ""
+
+msgid "Last full cycle:"
+msgstr ""
+
+msgid "Not completed yet"
+msgstr ""
+
+msgid "Error:"
+msgstr ""
+
+msgid "Accounting entries in selected period:"
+msgstr ""
+
+msgid "Pending validation:"
+msgstr ""
+
+msgid "Operations outside standard domestic VAT:"
+msgstr ""
+
+msgid "Entries without a document number:"
+msgstr ""
+
+msgid "There are no recorded operations in this period. This does not establish that the tax return is zero: first check the WooCommerce import and supplier invoices."
+msgstr ""
+
+msgid "Review the outstanding records before using these figures. Non-domestic transactions and missing references need individual tax treatment."
+msgstr ""
+
+msgid "No pending status or missing document numbers were detected. This does NOT mean a tax return is complete, accurate or ready for filing."
+msgstr ""
+
+msgid "Entries without tax identification (check only where legally required):"
+msgstr ""
+
+msgid "Review purchases and expenses"
+msgstr ""
+
+msgid "Verify that the fiscal start date includes the entire applicable reporting period. Imported WooCommerce orders are drafts until reviewed, and the ledger may omit transactions not entered manually."
+msgstr ""
+
+msgid "Reporting period:"
+msgstr ""
+
+msgid "Figures recalculate from the current register whenever you open this screen; you do not have to wait for the tax deadline."
+msgstr ""
+
+msgid "The tax models shown are references, not a list of mandatory returns for this merchant. Applicability depends on tax registration and legal form; for example, Model 130 may apply to certain self-employed taxpayers under direct estimation, while Model 200 concerns corporate income tax. Check tax registration with the AEAT or your adviser before preparing a return."
+msgstr ""
+
+msgid "Official AEAT Model 130 information"
+msgstr ""
+
+msgid "Accumulated figures for the selected period"
+msgstr ""
+
+msgid "Domestic sales taxable base (validated)"
+msgstr ""
+
+msgid "Domestic sales with VAT"
+msgstr ""
+
+msgid "Domestic purchases / expenses taxable base (validated)"
+msgstr ""
+
+msgid "Domestic purchases / expenses with VAT"
+msgstr ""
+
+msgid "Accrued output VAT"
+msgstr ""
+
+msgid "Indicative domestic VAT balance (not final tax due)"
+msgstr ""
+
+msgid "Operations pending review or special tax treatment"
+msgstr ""
+
+msgid "These are live accounting totals, not official AEAT boxes. The current register does not retain an invoice-by-invoice split of VAT rates, prior period offsets, all tax adjustments or filing options. Do not copy the indicative balance directly as the amount to pay."
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "Linked to a repayable loan from"
+msgstr ""
+
+msgid "The opening funds are already present. Conversion or cancellation is blocked while this loan is linked."
+msgstr ""
+
+msgid "Opening amount entered in error"
+msgstr ""
+
+msgid "Confirm cancellation of this opening balance"
+msgstr ""
+
+msgid "Cancel incorrect opening balance"
+msgstr ""
+
+msgid "Rename account"
+msgstr ""
+
+msgid "Opening balance correction history"
+msgstr ""
+
+msgid "Create a new cash or bank account (not a receipt)"
+msgstr ""
+
+msgid "Use a descriptive account name, such as Main bank or Cash register. Record donations, initial contributions and customer receipts as movements into an existing account."
+msgstr ""
+
+msgid "Save changes"
+msgstr ""
+
+msgid "Sponsor / lender"
+msgstr ""
+
+msgid "Funded by existing opening balance; no duplicate receipt"
+msgstr ""
+
+msgid "Repayment when agreed, without fixed instalments. Interest: 0%."
+msgstr ""
+
+msgid "Capital already returned"
+msgstr ""
+
+msgid "repayments"
+msgstr ""
+
+msgid "Repay from"
+msgstr ""
+
+msgid "Actual repayment date"
+msgstr ""
+
+msgid "Capital to repay (€)"
+msgstr ""
+
+msgid "I confirm that this amount was actually transferred to the lender."
+msgstr ""
+
+msgid "Record actual repayment"
+msgstr ""
+
+msgid "Enter the amount borrowed. For a 0% sponsor loan repayable later without fixed instalments, choose 0 months, 0% interest, and leave the first repayment date empty. Record partial or total repayments only when actually made. For scheduled financing, specify term and first instalment date."
+msgstr ""
+
+msgid "Sponsor / lender name"
+msgstr ""
+
+msgid "Sponsor / lender tax ID (optional)"
+msgstr ""
+
+msgid "Lender relationship"
+msgstr ""
+
+msgid "Sponsor (repayable loan)"
+msgstr ""
+
+msgid "Other lender"
+msgstr ""
+
+msgid "Loan agreement reference"
+msgstr ""
+
+msgid "Term in months (0 = repay later without fixed instalments)"
+msgstr ""
+
+msgid "First instalment date (optional for flexible 0% loans)"
+msgstr ""
+
+msgid "Loan funds"
+msgstr ""
+
+msgid "Not received yet (do not change bank)"
+msgstr ""
+
+msgid "Already included in bank opening balance (do not duplicate)"
+msgstr ""
+
+msgid "New confirmed bank receipt"
+msgstr ""
+
+msgid "Bank receiving or holding loan funds"
+msgstr ""
+
+msgid "opening"
+msgstr ""
+
+msgid "I confirm that the entire opening balance belongs to this loan and is already in this bank. Do not add money again."
+msgstr ""
+
+msgid "When linking an opening balance, the loan principal must equal that opening amount exactly. An opening balance can fund only one loan. No bank movement is created."
+msgstr ""
+
+msgid "Select opening balance when funds from the lender are already included in the bank opening balance: no second receipt is created. Select new receipt only when funds have newly arrived. This is a repayable loan, not a donation or VAT sale. Instalments remain forecasts until confirmed."
+msgstr ""

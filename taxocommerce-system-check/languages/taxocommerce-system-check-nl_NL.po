@@ -2103,3 +2103,289 @@ msgstr "Logboek / diagnose bekijken"
 
 msgid "Process diagnostics are unavailable until the plugin update completes."
 msgstr "Procesdiagnose is niet beschikbaar totdat de pluginupdate is voltooid."
+
+msgid "Select an active plugin from the table."
+msgstr "Selecteer een actieve plugin uit de tabel."
+
+msgid "The active plugin directory could not be verified."
+msgstr "De map van de actieve plugin kon niet worden gecontroleerd."
+
+msgid "Real operations are not executed by this check."
+msgstr "Deze controle voert geen echte bewerkingen uit."
+
+msgid "Only basic availability checks are supported by this plugin."
+msgstr "Deze plugin ondersteunt alleen basiscontroles op beschikbaarheid."
+
+msgid "The native test returned an invalid report."
+msgstr "De ingebouwde test heeft een ongeldig rapport teruggegeven."
+
+msgid "File unavailable or over the size limit."
+msgstr "Bestand niet beschikbaar of te groot."
+
+msgid "Basic availability check; not a functional integration test."
+msgstr "Basiscontrole op beschikbaarheid, geen functionele integratietest."
+
+msgid "Insufficient permissions."
+msgstr "Onvoldoende rechten."
+
+msgid "The selected plugin is not registered as active."
+msgstr "De geselecteerde plugin is niet als actief geregistreerd."
+
+msgid "The check was paused after an execution error."
+msgstr "De controle is na een uitvoeringsfout gepauzeerd."
+
+msgid "Unknown plugin."
+msgstr "Onbekende plugin."
+
+msgid "Complete the selected plugin check before downloading the report."
+msgstr "Voltooi de controle van de geselecteerde plugin voordat u het rapport downloadt."
+
+msgid "failures"
+msgstr "fouten"
+
+msgid "warnings to review"
+msgstr "waarschuwingen om te beoordelen"
+
+msgid "Check plugin"
+msgstr "Plugin controleren"
+
+msgid "View results"
+msgstr "Resultaten bekijken"
+
+msgid "Individual plugin validation"
+msgstr "Afzonderlijke validatie per plugin"
+
+msgid "Select Check plugin in a row. Only that registered plugin is tested; detailed results and JSON are available without rerunning it."
+msgstr "Klik op ‘Plugin controleren’ in de gewenste rij. Alleen die plugin wordt gecontroleerd; details en JSON zijn beschikbaar zonder opnieuw te testen."
+
+msgid "CPU usage"
+msgstr "CPU-belasting"
+
+msgid "Plugin validation results"
+msgstr "Resultaten van pluginvalidatie"
+
+msgid "Unable to execute the check."
+msgstr "Kan de controle niet uitvoeren."
+
+msgid "skipped"
+msgstr "overgeslagen"
+
+msgid "errors"
+msgstr "fouten"
+
+msgid "warnings"
+msgstr "waarschuwingen"
+
+msgid "Basic only: "
+msgstr "Alleen basiscontrole: "
+
+msgid "No details available."
+msgstr "Geen details beschikbaar."
+
+msgid "Review required."
+msgstr "Beoordeling vereist."
+
+msgid "Recommendation: "
+msgstr "Aanbeveling: "
+
+msgid "No results in this category."
+msgstr "Geen resultaten in deze categorie."
+
+msgid "No report exists for this plugin yet."
+msgstr "Er is nog geen rapport voor deze plugin."
+
+msgid "Results for "
+msgstr "Resultaten voor "
+
+msgid "Status: "
+msgstr "Status: "
+
+msgid " · Date: "
+msgstr " · Datum: "
+
+msgid "Download complete JSON for this plugin"
+msgstr "Volledige JSON voor deze plugin downloaden"
+
+msgid "Functional failures"
+msgstr "Functionele fouten"
+
+msgid "Skipped checks"
+msgstr "Overgeslagen controles"
+
+msgid "Passed checks"
+msgstr "Geslaagde controles"
+
+msgid "Code errors"
+msgstr "Codefouten"
+
+msgid "Code warnings (manual review)"
+msgstr "Codewaarschuwingen (handmatige beoordeling)"
+
+msgid "Unchecked files"
+msgstr "Niet-gecontroleerde bestanden"
+
+msgid "Local code review is not the official WordPress Plugin Check."
+msgstr "Lokale codecontrole vervangt de officiële WordPress Plugin Check niet."
+
+msgid " · You can resume this check."
+msgstr " · U kunt deze controle hervatten."
+
+msgid "Preparing check for "
+msgstr "Controle voorbereiden voor "
+
+msgid "Functions"
+msgstr "Functies"
+
+msgid "Code"
+msgstr "Code"
+
+msgid "Core pilot (previous validation mode)"
+msgstr "Core-pilot (vorige validatiemodus)"
+
+msgid "Funcionalidades"
+msgstr "Functies"
+
+msgid "Código"
+msgstr "Code"
+
+msgid "Acciones"
+msgstr "Acties"
+
+msgid "Native functional checks are used when available. Basic checks never imply a full integration check; local source reviews are not official WordPress Plugin Check."
+msgstr "Ingebouwde functionele controles worden gebruikt wanneer beschikbaar. Basiscontroles bewijzen geen volledige integratie; lokale codecontrole is geen officiële WordPress Plugin Check."
+
+msgid "Plugin check: %s"
+msgstr "Plugincontrole: %s"
+
+msgid "Browser-driven check, not PHP background execution; function tests: %1$d, code files: %2$d/%3$d."
+msgstr "Browsergestuurde controle, geen PHP-achtergrondproces; functietests: %1$d, codebestanden: %2$d/%3$d."
+
+msgid "Paused from Processes."
+msgstr "Gepauzeerd vanuit Processen."
+
+msgid "Plugin validation started."
+msgstr "Pluginvalidatie gestart."
+
+msgid "Stopped by administrator; active PHP requests cannot be interrupted."
+msgstr "Gestopt door de beheerder; een actief PHP-verzoek kan niet worden onderbroken."
+
+msgid "Validation resumed in browser."
+msgstr "Validatie hervat in de browser."
+
+msgid "Execution log"
+msgstr "Uitvoeringslogboek"
+
+msgid "The server returned an invalid JSON response. Check PHP notices or the server error log."
+msgstr "De server heeft een ongeldig JSON-antwoord teruggegeven. Controleer PHP-meldingen of het foutlogboek van de server."
+
+msgid "The browser is not processing batches; press Resume to continue."
+msgstr "De browser verwerkt geen batches; klik op Hervatten om door te gaan."
+
+msgid "Check all plugins"
+msgstr "Alle plugins controleren"
+
+msgid "Plugins checked"
+msgstr "Gecontroleerde plugins"
+
+msgid "Checks with findings"
+msgstr "Controles met bevindingen"
+
+msgid "Execution errors"
+msgstr "Uitvoeringsfouten"
+
+msgid "Paused"
+msgstr "Gepauzeerd"
+
+msgid "All plugin checks finished"
+msgstr "Alle plugincontroles voltooid"
+
+msgid "Check plugins individually or run all active TaxoCommerce modules sequentially. Each plugin keeps its own results, log and JSON report."
+msgstr "Controleer plugins afzonderlijk of voer alle actieve TaxoCommerce-modules na elkaar uit. Elke plugin behoudt resultaten, logboek en JSON-rapport."
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "System diagnostics, plugin checks and reports."
+msgstr "Systeemdiagnose, plugincontroles en rapporten."
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "System Check tabs"
+msgstr "Tabbladen van System Check"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "System"
+msgstr "Systeem"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Manual"
+msgstr "Handleiding"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Download system JSON"
+msgstr "Systeem-JSON downloaden"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Download basic checks JSON"
+msgstr "JSON met basiscontroles downloaden"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Download HTTP JSON"
+msgstr "HTTP-JSON downloaden"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Loaded and registered"
+msgstr "Geladen en geregistreerd"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Version declared"
+msgstr "Versie opgegeven"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "System diagnostics engine available"
+msgstr "Systeemdiagnosemodule beschikbaar"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "HTTP auditor available"
+msgstr "HTTP-controle beschikbaar"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Basic availability checks; not a full functional validation."
+msgstr "Basiscontroles op beschikbaarheid; geen volledige functionele validatie."
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Download previous checks JSON (history)"
+msgstr "JSON van eerdere controles downloaden (geschiedenis)"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Download complete JSON"
+msgstr "Volledige JSON downloaden"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Open independent PHP diagnostics"
+msgstr "Onafhankelijke PHP-diagnose openen"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Independent implementation."
+msgstr "Onafhankelijke implementatie."
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Warning: "
+msgstr "Waarschuwing: "
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Running"
+msgstr "Wordt uitgevoerd"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Completed"
+msgstr "Voltooid"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Pending"
+msgstr "In afwachting"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Waiting"
+msgstr "Wachten"
+
+#: taxocommerce-system-check/taxocommerce-system-check.php
+msgid "Findings"
+msgstr "Bevindingen"

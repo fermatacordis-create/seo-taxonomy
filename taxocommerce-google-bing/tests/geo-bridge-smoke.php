@@ -11,10 +11,10 @@ $checks = array(
     strpos( $client, "action: 'taxocommerce_insights_analysis'" ) !== false,
     strpos( $bridge, "add_action( 'wp_ajax_taxocommerce_insights_analysis'" ) !== false,
     strpos( $bridge, "seo_analista_lazy_render_partial( \$report, \$days )" ) !== false,
-    strpos( $bridge, "taxocommerce_insights_market_render( \$market )" ) !== false,
+    strpos( $bridge, "taxocommerce_insights_indicators_render( \$plan_export )" ) !== false,
     strpos( $bridge, "check_ajax_referer( 'taxocommerce_insights_analysis'" ) !== false,
     strpos( $bridge, "unset( \$reports['trabajo'] )" ) !== false,
-    strpos( $bridge, "taxocommerce_insights_market_plan( \$days, \$google )" ) !== false,
+    strpos( $bridge, "taxocommerce_insights_indicators_build( \$period_mode )" ) !== false,
     strpos( $bridge, "require_once __DIR__ . '/analista-mercado-ejecutivo.php'" ) !== false,
 );
 foreach ( $checks as $i => $ok ) {

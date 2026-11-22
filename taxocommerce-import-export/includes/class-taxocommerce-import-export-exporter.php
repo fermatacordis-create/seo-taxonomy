@@ -481,7 +481,7 @@ final class TaxoCommerce_Import_Export_Exporter {
 	 * @param string $job Job UUID.
 	 * @return void
 	 */
-	public function background_worker( $user_id, $job ) {
+	public function background_worker( $user_id, $job, $dispatch_continuation = true ) {
 		$user_id = absint( $user_id );
 		$job = sanitize_text_field( (string) $job );
 		if ( ! $user_id || ! preg_match( '/^[a-f0-9-]{36}$/i', $job ) ) {
@@ -542,7 +542,7 @@ final class TaxoCommerce_Import_Export_Exporter {
 			}
 			// Launch the next loopback only after the exclusive writer lock
 			// is released: otherwise short requests can see BUSY and stop.
-			if ( ! empty( $continue ) ) {
+			if ( ! empty( $continue ) && $dispatch_continuation ) {
 				$this->dispatch_next( $user_id, $job, TaxoCommerce_IE_Load::delay( 'export' ) );
 			}
 		} finally {
@@ -639,7 +639,19 @@ final class TaxoCommerce_Import_Export_Exporter {
 		if ( ! $state || ! hash_equals( (string) $state['id'], $job ) ) {
 			wp_send_json_error( array( 'message' => __( 'La exportación ha caducado o pertenece a otra sesión.', 'taxocommerce-import-export' ) ), 409 );
 		}
-		// Backward compatibility: this endpoint no longer writes CSV rows.
+		// Browser-assisted fallback: process one bounded block only when the
+		// background loopback is not advancing. The shared worker owns the
+		// existing per-user lock and byte checkpoint, preventing duplicate rows.
+		$status = (string) ( $state['status'] ?? '' );
+		$delay  = max( 2, TaxoCommerce_IE_Load::delay( 'export' ) );
+		if ( in_array( $status, array( 'queued', 'running' ), true )
+			&& time() - absint( $state['updated'] ?? 0 ) >= $delay ) {
+			$this->background_worker( get_current_user_id(), $job, false );
+			$state = $this->state();
+			if ( ! $state ) {
+				wp_send_json_error( array( 'message' => __( 'La exportación ya no está disponible.', 'taxocommerce-import-export' ) ), 409 );
+			}
+		}
 		wp_send_json_success( $this->response_state( $state ) );
 	}
 
@@ -724,6 +736,49 @@ final class TaxoCommerce_Import_Export_Exporter {
 	}
 
 	/**
+	 * Read-only validation of the saved CSV before download or Autocheck.
+	 * Only the header is parsed; no exported content is exposed.
+	 *
+	 * @param array $state Export state.
+	 * @return true|WP_Error
+	 */
+	public static function validate_export_file( $state ) {
+		$uploads = wp_upload_dir( null, false );
+		$base = isset( $uploads['basedir'] ) ? realpath( trailingslashit( $uploads['basedir'] ) . 'taxocommerce-import-export/exports' ) : false;
+		$path = isset( $state['path'] ) && is_string( $state['path'] ) ? realpath( $state['path'] ) : false;
+		if ( ! $base || ! $path || 0 !== strpos( $path, trailingslashit( $base ) ) || ! is_file( $path ) || ! is_readable( $path ) ) {
+			return new WP_Error( 'tc_ie_export_missing_file', __( 'El archivo temporal de exportación no existe o no se puede leer.', 'taxocommerce-import-export' ) );
+		}
+		clearstatcache( true, $path );
+		$size = filesize( $path );
+		if ( false === $size || $size < 5 || $size < absint( $state['file_size'] ?? 0 ) ) {
+			return new WP_Error( 'tc_ie_export_incomplete_file', __( 'El archivo CSV está vacío o incompleto.', 'taxocommerce-import-export' ) );
+		}
+		$handle = fopen( $path, 'rb' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- Read-only CSV verification.
+		if ( false === $handle ) {
+			return new WP_Error( 'tc_ie_export_read_file', __( 'No se puede abrir el archivo CSV generado.', 'taxocommerce-import-export' ) );
+		}
+		$header = fgetcsv( $handle, 0, ',', '"', '' );
+		$header_bytes = ftell( $handle );
+		fclose( $handle ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
+		if ( ! is_array( $header ) || ! isset( $header[0] ) ) {
+			return new WP_Error( 'tc_ie_export_invalid_csv', __( 'El CSV exportado no tiene cabecera válida.', 'taxocommerce-import-export' ) );
+		}
+		$header[0] = preg_replace( '/^\\xEF\\xBB\\xBF/', '', (string) $header[0] );
+		$type = sanitize_key( (string) ( $state['type'] ?? '' ) );
+		$csv = new TaxoCommerce_Import_Export_CSV();
+		if ( ! isset( self::types()[ $type ] ) || $header !== $csv->export_header_for_job( $type ) ) {
+			return new WP_Error( 'tc_ie_export_header_mismatch', __( 'La cabecera del CSV exportado no coincide con el tipo solicitado.', 'taxocommerce-import-export' ) );
+		}
+		if ( ! empty( $state['complete'] ) &&
+			( ( absint( $state['processed'] ?? 0 ) > 0 && $size <= $header_bytes ) ||
+			  ( absint( $state['total'] ?? 0 ) > 0 && 0 === absint( $state['examined'] ?? 0 ) ) ) ) {
+			return new WP_Error( 'tc_ie_export_no_rows', __( 'La exportación figura terminada pero faltan las filas esperadas.', 'taxocommerce-import-export' ) );
+		}
+		return true;
+	}
+
+	/**
 	 * Authenticated completed-file download.
 	 *
 	 * @return void
@@ -737,8 +792,9 @@ final class TaxoCommerce_Import_Export_Exporter {
 		if ( ! $state || ! $job || ! hash_equals( (string) $state['id'], $job ) || empty( $state['complete'] ) ) {
 			wp_die( esc_html__( 'El CSV no está terminado o ha caducado.', 'taxocommerce-import-export' ) );
 		}
-		if ( empty( $state['path'] ) || ! is_file( $state['path'] ) ) {
-			wp_die( esc_html__( 'El archivo exportado ya no está disponible.', 'taxocommerce-import-export' ) );
+		$validation = self::validate_export_file( $state );
+		if ( is_wp_error( $validation ) ) {
+			wp_die( esc_html( $validation->get_error_message() ), '', array( 'response' => 500 ) );
 		}
 
 		while ( ob_get_level() ) {

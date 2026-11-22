@@ -734,6 +734,10 @@ final class TaxoCommerce_Import_Export_CSV {
 			// Historical product CSVs use excerpt as an alias for short_description.
 			$data['short_description'] = $data['excerpt'];
 		}
+		// Append-only CSV pages have a separate, field-preserving import contract.
+		if ( 'page' === $type && array_key_exists( 'content_append', $data ) ) {
+			return $this->append_page_content_for_batch( $data );
+		}
 		if ( in_array( $type, array( 'page', 'post' ), true ) ) {
             if ( ! isset( $data['title'] ) && isset( $data['name'] ) ) { $data['title'] = $data['name']; }
             if ( ! isset( $data['excerpt'] ) && isset( $data['short_description'] ) ) { $data['excerpt'] = $data['short_description']; }
@@ -1211,6 +1215,50 @@ final class TaxoCommerce_Import_Export_CSV {
 			if ( $image_id ) { update_term_meta( $result, 'thumbnail_id', $image_id ); }
 		}
 		return true;
+	}
+
+	/**
+	 * Add HTML to an existing page without changing other post fields.
+	 *
+	 * CSV contract: record_type=page,id,slug,content_append.
+	 *
+	 * @param array $data CSV row.
+	 * @return true|WP_Error
+	 */
+	private function append_page_content_for_batch( $data ) {
+		$id   = absint( isset( $data['id'] ) ? $data['id'] : 0 );
+		$slug = sanitize_title( (string) ( $data['slug'] ?? '' ) );
+		$post = $id ? get_post( $id ) : null;
+		if ( ! $post || 'page' !== $post->post_type || '' === $slug || $slug !== $post->post_name ) {
+			return new WP_Error( 'taxocommerce_ie_page_append_identity', __( 'La página no existe o su ID y slug no coinciden.', 'taxocommerce-import-export' ) );
+		}
+		$allowed = array( 'record_type', 'id', 'slug', 'content_append' );
+		if ( array_diff( array_keys( $data ), $allowed ) ) {
+			return new WP_Error( 'taxocommerce_ie_page_append_fields', __( 'El CSV de anexos solo admite record_type, id, slug y content_append.', 'taxocommerce-import-export' ) );
+		}
+		$fragment = trim( wp_kses_post( (string) $data['content_append'] ) );
+		if ( '' === $fragment ) {
+			return new WP_Error( 'taxocommerce_ie_page_append_empty', __( 'El HTML para añadir está vacío.', 'taxocommerce-import-export' ) );
+		}
+		$original = (string) $post->post_content;
+		if ( false !== strpos( $original, $fragment ) ) {
+			return true;
+		}
+		// Recognise an existing canonical ZIP URL after block-editor reformatting.
+		if ( preg_match( '~href\s*=\s*["\x27](https?://[^"\x27]+\.zip)["\x27]~i', $fragment, $match ) ) {
+			$target = html_entity_decode( $match[1], ENT_QUOTES, 'UTF-8' );
+			if ( false !== strpos( html_entity_decode( $original, ENT_QUOTES, 'UTF-8' ), $target ) ) {
+				return true;
+			}
+		}
+		$result = wp_update_post(
+			array(
+				'ID'           => $id,
+				'post_content' => rtrim( $original ) . "\n\n" . $fragment,
+			),
+			true
+		);
+		return is_wp_error( $result ) ? $result : true;
 	}
 
 	/**

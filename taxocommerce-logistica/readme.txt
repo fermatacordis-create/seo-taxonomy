@@ -11,15 +11,9 @@ Manage shipping costs, package weight and dimensions in WooCommerce with manual 
 
 == Description ==
 
-* Admin header: plugin title, a single local `Description` with the static `Plugin URI` link below it (left); a wider collapsed `CHANGELOG.md` history (center); local version and release date (right). No duplicated information panel or external requests.
-
-* The admin header shows the plugin's bundled `Description` and links to its `Plugin URI`, without network requests or caching. Version history uses the bundled `CHANGELOG.md`.
-
-
-
 TaxoCommerce Logistics is the shipping-cost domain for the TaxoCommerce family.
 
-Features:
+= Key Features =
 
 * Active WooCommerce order weight audit.
 * Missing product-weight detection.
@@ -36,6 +30,12 @@ It retains shipping as its core function. Its optional Supplier purchases screen
 == Languages ==
 
 The WordPress administration locale automatically selects the gettext language. Bundled Spanish (es_ES), English (en_US), French (fr_FR), German (de_DE) and Dutch (nl_NL) PO/MO files cover every string in the current translation template. This does not translate store products, orders or editorial content.
+
+== Installation ==
+
+1. Upload the TaxoCommerce Logistics ZIP from WordPress Plugins > Add New > Upload Plugin and activate it.
+2. Open the plugin administration to review the available shipping settings and rules.
+3. When WooCommerce is active, use the order-weight audit and shipping-rate features as needed.
 
 == Changelog ==
 

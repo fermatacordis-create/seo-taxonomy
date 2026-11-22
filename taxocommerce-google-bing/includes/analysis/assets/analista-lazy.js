@@ -90,7 +90,8 @@ jQuery(function ($) {
                     action: 'taxocommerce_insights_analysis',
                     nonce: config.nonce,
                     report: item.report,
-                    days: config.days
+                    days: config.days,
+                    period_mode: String($('#tgb-indicators-period').val() || 'week')
                 }
             }).done(function (response) {
                 if (cancelled) {
@@ -231,6 +232,9 @@ jQuery(function ($) {
     var exportTimer = null;
     var exportRequest = null;
     var exportFailures = 0;
+    var exportPhase = '';
+    var sourceWarning = '';
+
 
     function exportBusy(active) {
         exportActive = active;
@@ -285,7 +289,8 @@ jQuery(function ($) {
             if (state.complete && state.download_url) {
                 exportBusy(false);
                 exportReady(state.download_url);
-                exportMessage('Informe completo generado en ' + state.done + ' bloques. Ya puedes descargar el JSON.', false);
+                exportMessage('Informe completo generado en ' + state.done + ' bloques. Ya puedes descargar el JSON.' +
+                    (state.gsc_warning ? ' Aviso: ' + state.gsc_warning : ''), Boolean(state.gsc_warning));
                 return;
             }
             exportTimer = setTimeout(exportNext, Math.max(300, Math.min(6000, Number(state.delay_ms) || 1000)));
@@ -311,27 +316,132 @@ jQuery(function ($) {
         exportMessage(message, true);
     }
 
-    exportStart.on('click', function () {
-        if (exportActive || !config.ajaxUrl || !config.chunkNonce) {
-            return;
-        }
-        exportClear();
-        exportJob = '';
-        exportFailures = 0;
-        exportBusy(true);
-        exportMessage('Iniciando informe completo por bloques…', false);
+    function exportError(xhr, fallback) {
+        return (xhr && xhr.responseJSON && xhr.responseJSON.data && xhr.responseJSON.data.message) || fallback;
+    }
+
+    function gscRequest(action, extra) {
+        return $.ajax({
+            url: config.ajaxUrl,
+            type: 'POST',
+            dataType: 'json',
+            timeout: 120000,
+            data: $.extend({
+                action: action,
+                nonce: config.gscSyncNonce
+            }, extra || {})
+        });
+    }
+
+    function exportBeginBlocks() {
+        if (!exportActive) return;
+        exportPhase = 'report';
+        exportMessage('Generando informe completo con los datos comprobados…', false);
         exportRequest = exportAjax('start', { days: config.days, speed: $('#tgb-chunked-json-speed').val() || 3 });
         exportRequest.done(function (response) {
             if (!exportActive) return;
             if (!response || !response.success || !response.data || !response.data.id) {
-                exportFailure('No se pudo iniciar la exportación.');
+                exportFailure((response && response.data && response.data.message) || 'No se pudo iniciar el informe.');
                 return;
             }
             exportJob = response.data.id;
             exportNext();
-        }).fail(function () {
-            if (exportActive) exportFailure('No se pudo crear el archivo temporal.');
+        }).fail(function (xhr, reason) {
+            if (exportActive && reason !== 'abort') exportFailure(exportError(xhr, 'No se pudo iniciar el informe.'));
         });
+    }
+
+    function exportSyncDays(run, failures) {
+        if (!exportActive) return;
+        exportPhase = 'sync';
+        exportMessage('Actualizando Search Console: ' + (run.days_completed || 0) +
+            ' de ' + (run.days_total || 0) + ' días sincronizados antes de generar el informe.', false);
+        exportRequest = gscRequest('seo_google_sync_day', { run_id: run.run_id });
+        exportRequest.done(function (response) {
+            if (!exportActive) return;
+            if (!response || !response.success || !response.data) {
+                exportFailure((response && response.data && response.data.message) ||
+                    'Search Console no ha podido sincronizarse. No se genera un informe aparentemente actualizado.');
+                return;
+            }
+            if (response.data.done) {
+                // The backend independently verifies freshness again before starting the report.
+                exportBeginBlocks();
+                return;
+            }
+            var speed = Math.max(1, Math.min(5, Number($('#tgb-chunked-json-speed').val()) || 3));
+            var delays = { 1: 6000, 2: 3500, 3: 2000, 4: 1000, 5: 300 };
+            exportTimer = setTimeout(function () {
+                exportSyncDays({
+                    run_id: run.run_id,
+                    days_total: response.data.days_total,
+                    days_completed: response.data.days_completed
+                }, 0);
+            }, delays[speed]);
+        }).fail(function (xhr, reason) {
+            if (!exportActive || reason === 'abort') return;
+            if (reason === 'timeout' && failures < 2) {
+                exportMessage('La sincronización ha tardado demasiado. Reintentando el día…', true);
+                exportTimer = setTimeout(function () { exportSyncDays(run, failures + 1); }, 2500);
+                return;
+            }
+            exportFailure('No se pudo actualizar Search Console: ' + exportError(xhr,
+                reason === 'timeout' ? 'Tiempo de espera agotado.' : 'Error de conexión.') +
+                ' El informe completo no se ha generado.');
+        });
+    }
+
+    function exportPreflight() {
+        exportMessage('Comprobando la fecha real de Search Console…', false);
+        exportRequest = exportAjax('preflight');
+        exportRequest.done(function (response) {
+            if (!exportActive) return;
+            if (!response || !response.success || !response.data) {
+                exportFailure('No se ha podido verificar la actualidad de Search Console.');
+                return;
+            }
+            var health = response.data;
+            sourceWarning = health.warning || '';
+            if (!health.needs_sync || !health.can_sync) {
+                exportBeginBlocks();
+                return;
+            }
+            if (!config.gscSyncNonce) {
+                exportFailure('Falta la autorización para sincronizar Search Console.');
+                return;
+            }
+            exportMessage('Search Console está desactualizado (SQL hasta ' +
+                (health.sql_date || 'sin datos') + ', datos hasta ' + health.target_date +
+                '). Iniciando sincronización por días…', false);
+            exportPhase = 'sync';
+            exportRequest = gscRequest('seo_google_sync_start');
+            exportRequest.done(function (reply) {
+                if (!exportActive) return;
+                if (!reply || !reply.success || !reply.data || !reply.data.run_id) {
+                    exportFailure((reply && reply.data && reply.data.message) ||
+                        'No se pudo iniciar la sincronización de Search Console.');
+                    return;
+                }
+                exportSyncDays(reply.data, 0);
+            }).fail(function (xhr, reason) {
+                if (exportActive && reason !== 'abort') exportFailure('No se pudo sincronizar Search Console: ' +
+                    exportError(xhr, 'Error al iniciar la sincronización.'));
+            });
+        }).fail(function (xhr, reason) {
+            if (exportActive && reason !== 'abort') exportFailure(exportError(xhr,
+                'No se ha podido verificar la fecha de los datos.'));
+        });
+    }
+
+    exportStart.on('click', function () {
+        if (exportActive || !config.ajaxUrl || !config.chunkNonce) return;
+        exportClear();
+        exportJob = '';
+        exportFailures = 0;
+        sourceWarning = '';
+        exportPhase = 'preflight';
+        exportBusy(true);
+        exportPreflight();
     });
 
     exportStop.on('click', function () {
@@ -340,7 +450,9 @@ jQuery(function ($) {
             if (exportTimer !== null) clearTimeout(exportTimer);
             if (exportRequest) exportRequest.abort();
             if (exportJob) exportAjax('cancel');
-            exportMessage('Informe detenido. No se puede descargar un archivo incompleto.', false);
+            exportMessage(exportPhase === 'sync'
+                ? 'Sincronización detenida en este navegador. Al volver a ejecutar el informe podrá reanudar los días pendientes.'
+                : 'Informe detenido. No se puede descargar un archivo incompleto.', false);
             return;
         }
         if (!running) return;

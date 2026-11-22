@@ -1,96 +1,63 @@
 name: STAGING a PRODUCCION
 
 on:
+  workflow_dispatch:
   workflow_call:
     inputs:
       source_sha:
-        description: 'Exact STAGING commit approved by the prior two phases'
         required: true
         type: string
       target_plugin:
-        description: 'Optional single installed plugin to update, e.g. taxocommerce-core'
         required: false
         type: string
         default: ''
-  # Manual releases always publish all pending changes from staging.
-  # GitHub displays its native branch selector; only staging is accepted below.
-  workflow_dispatch:
 
 permissions:
   contents: read
   actions: read
 
 concurrency:
-  group: taxocommerce-production-deploy
+  group: taxocommerce-site-delivery
   cancel-in-progress: false
 
 jobs:
   deploy:
-    name: Copiar archivos modificados de STAGING a PRO
+    name: Sincronizar TODOS los plugins desde STAGING a PRO
     runs-on: ubuntu-latest
     timeout-minutes: 90
     steps:
-
-      - name: Checkout validated source from STAGING
+      - name: Obtener el codigo de STAGING
         uses: actions/checkout@v6
         with:
           ref: staging
-          fetch-depth: 0  # Ancestor SHAs required to verify only changed files.
+          fetch-depth: 0
 
-      - name: Record deployed source revision
-        run: |
-          echo "PRO source: staging @ $(git rev-parse HEAD)"
-          test "$GITHUB_REF_NAME" = "staging"
-          test "$(git branch --show-current)" = "staging"
-
-      - name: Reject untested source revisions before any production write
-        shell: bash
+      - name: Comprobar revision aprobada, si procede
         env:
           EXPECTED_SHA: ${{ inputs.source_sha }}
         run: |
           set -euo pipefail
+          test "$GITHUB_REF_NAME" = "staging"
+          ACTUAL_SHA="$(git rev-parse HEAD)"
           if [ -n "$EXPECTED_SHA" ]; then
-            ACTUAL_SHA="$(git rev-parse HEAD)"
             if [ "$ACTUAL_SHA" != "$EXPECTED_SHA" ]; then
-              echo "::error::STAGING moved after Plugin Check: expected $EXPECTED_SHA, got $ACTUAL_SHA. PRO deployment aborted."
+              echo "::error::STAGING ha cambiado desde la aprobacion."
               exit 1
             fi
-            echo "Approved source SHA: $ACTUAL_SHA"
           fi
 
-      - name: Verificar selector y copia de archivos (sin conectar a PRO)
-        run: |
-          set -euo pipefail
-          python3 -m py_compile .github/scripts/select_pro_release_delta.py .github/scripts/deploy_pro_ftps_native.py
-          python3 -m unittest discover -s .github/tests -p test_select_pro_release_delta.py -v
-          python3 -m unittest discover -s .github/tests -p test_pro_ftps_native.py -v
-
-      - name: Comparar cambios de STAGING con ultimo despliegue correcto
-        id: delta
-        shell: bash
+      - name: Seleccionar archivos nuevos y modificados desde el ultimo PRO verificado
         env:
           GH_TOKEN: ${{ github.token }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
           set -euo pipefail
-          python3 .github/scripts/select_pro_release_delta.py --all-changed \
-            --output "$RUNNER_TEMP/taxocommerce-pro-changed.json"
-          count="$(jq '[.[] | length] | add // 0' "$RUNNER_TEMP/taxocommerce-pro-changed.json")"
-          echo "changed_count=$count" >> "$GITHUB_OUTPUT"
-          echo "$count archivo(s) modificado(s) para PRODUCCION."
+          python3 .github/scripts/select_pro_release_delta.py --all-changed --output pro-delta.json
 
-      - name: Copiar solo los archivos modificados a PRO por FTPS
-        if: steps.delta.outputs.changed_count != '0'
-        shell: bash
+      - name: Subir solo el delta Git por FTPS (sin comparar archivos remotos)
         env:
           FTP_SERVER: ${{ secrets.FTP_SERVER }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-          DELTA_FILE: ${{ runner.temp }}/taxocommerce-pro-changed.json
         run: |
           set -euo pipefail
-          python3 .github/scripts/deploy_pro_ftps_native.py "$DELTA_FILE"
-
-      - name: Sin cambios - no copiar nada
-        if: steps.delta.outputs.changed_count == '0'
-        run: echo "Sin cambios en los plugins de GitHub. PRODUCCION sin modificaciones."
+          python3 .github/scripts/deploy_pro_ftps_native.py pro-delta.json

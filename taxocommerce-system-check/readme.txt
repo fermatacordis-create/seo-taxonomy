@@ -4,160 +4,68 @@ Tags: diagnostics, security, performance, maintenance, monitoring
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.2.40
+Stable tag: 0.2.45
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Server, WordPress and plugin diagnostics with administrator-controlled reports and local checks.
+Independent WordPress, PHP and server diagnostics with administrator-controlled checks and reports.
 
 == Description ==
 
-Version 0.2.40 prevents a fatal error when the Processes diagnostic class is temporarily unavailable during an incremental FTPS update. The previous process list and controls remain usable until the transfer finishes.
+TaxoCommerce System Check helps administrators investigate their WordPress installation without requiring any other TaxoCommerce plugin.
 
-Version 0.2.39 adds administrator-only, on-demand job diagnostics inside Processes. Each Action Scheduler task has a bounded, redacted log view; WP-Cron jobs show callback availability without inventing execution history. Existing protected cancellation and cooperative stop remain unchanged, with the WP-Cron event signature corrected. No general PHP kill or arbitrary run-now action is provided.
+= Key Features =
 
-Version 0.2.38 adds read-only queue diagnostics **inside Procesos**, above the existing application-task manager: oldest overdue WP-Cron event, oldest pending Action Scheduler hook, latest failed attempt, activity during the last hour and cautious interpretation of backlogs versus recurring errors. Reads are limited, neither schedule nor cancel tasks, and do not infer that a runner is stopped from a single snapshot. No background execution duration is recorded or displayed. Active local HTTP audit workers additionally show the configured 1–8 URL batch size, completed/total count and the approximate next pending position (including paused runs). These are progress indicators, not an exposed stored cursor or a promise that a stopped job will resume. The Sistema/MySQL/Servidor sections and existing cancellation permissions are unchanged.
+* Inspect WordPress, PHP, hosting and server configuration from the administration area.
+* Review WP-Cron and Action Scheduler application jobs, their available diagnostics and eligible cancellation controls; active PHP requests cannot be forcibly terminated.
+* Run System Check's own functionality and code checks, review findings and export JSON reports.
+* Run optional, bounded HTTP URL audits only when explicitly started by an administrator.
+* When other TaxoCommerce plugins are active and registered by TaxoCommerce Core, run their available individual checks or use "Check all plugins" to process them sequentially, with progress and individual logs.
 
-
-Version 0.2.37 introduces a manual, phased family validation pilot for Core: read-only functionality cases followed by code-file inspection, with five adaptive workload settings, pause/resume and separate KPI columns. Other active modules remain clearly not integrated. Runs are never started by opening the page.
-
-Version 0.2.35 completes all 420 entries in each of the five existing gettext catalogs (es_ES, en_US, fr_FR, de_DE and nl_NL), including administrative controls, diagnostic messages and explanatory text. WordPress uses the active site/user locale. A full source-code audit for strings outside gettext and end-to-end language validation remain necessary before claiming full interface localization.
-
-
-## Actualización 0.2.33 — idiomas
-
-Se han ampliado las traducciones locales en es_ES, en_US, fr_FR, de_DE y nl_NL. El catálogo de inglés incorpora las claves que le faltaban y se han regenerado los archivos MO. La cobertura completa de la interfaz y la carga efectiva de traducciones siguen pendientes de validación.
-
-
-* Admin header: plugin title, a single local `Description` with the static `Plugin URI` link below it (left); a wider collapsed `CHANGELOG.md` history (center); local version and release date (right). No duplicated information panel or external requests.
-
-* The admin header shows the plugin's bundled `Description` and links to its `Plugin URI`, without network requests or caching. Version history uses the bundled `CHANGELOG.md`.
-
-
-
-TaxoCommerce System Check provides a standalone administration entry for diagnostics, and can integrate its menu with TaxoCommerce Core when installed.
-
-* WordPress, PHP and hosting/system status screens.
-* Processes tab: read and cancel eligible application jobs from Action Scheduler/WP-Cron, with optional cooperative controls for installed workers. Does not kill operating-system or running PHP processes.
-* Plugin validation and local PHP checks.
-* Autocheck is a single main tab with two subtabs: Functionality Check (the original on-demand functional tests and JSON) and Code Check (the native source audit and its own JSON).
-* The Code Check subtab inspects only System Check's own PHP files. It performs native PHP syntax parsing, checks known PHP 8 features against the declared PHP minimum, verifies resolvable local include paths, detects duplicate named declarations, checks selected WordPress structure conventions, and flags potential nonce, capability, input, output, REST and SQL risks for manual review. No other plugin is required. It displays counts by category/status and actionable file findings (including missing structure items and suspicious call locations), offers five bounded CPU speeds, stop/resume and private JSON export. It requires no other checker plugin, WP-CLI, GitHub or process-execution functions. The local rules are not the official WordPress Plugin Check, and untested security/publication rules remain explicitly unverified.
-* Optional HTTP URL audit of site content, when started explicitly by an administrator.
-* On-demand diagnostic reports and optional administrator-configured notification emails.
-* Dedicated bounded processing for longer URL checks. Neither external GitHub runners nor artificial traffic generation are necessary.
-* Historical administration URLs are kept for compatibility.
-
-Some historical diagnostic callbacks are reused when the old TaxoCommerce SEO plugin is still present. Standalone behavior must be tested with the old plugin disabled before publication.
+Checks are administrator-initiated and generally read-only. A job cancellation or another explicitly selected administrative action may change its corresponding queue state. System Check does not silently execute the checks of other plugins or alter WooCommerce products.
 
 == Installation ==
 
-1. Install and activate TaxoCommerce System Check.
-2. Open System Check in WordPress administration (or the Core submenu if Core is installed).
-3. Run a system or plugin check and review the findings.
-4. Start URL audits or enable scheduled email reports only when you intend to use them.
+1. Upload the standalone `taxocommerce-system-check` ZIP through Plugins > Add New > Upload Plugin, or install it from the WordPress plugin directory when available.
+2. Activate the plugin, then open System Check in WordPress administration.
+3. Run the system diagnostics or System Check's own Autocheck to inspect the local installation.
+4. If TaxoCommerce Core is also installed, use Plugin Validation for the active family modules that Core registers.
+
+== Compatibility and optional integrations ==
+
+* Standalone: System, PHP and WordPress diagnostics, local functionality/code checks, HTTP URL audits and available WP-Cron/Action Scheduler process information. No TaxoCommerce Core installation is required.
+* Optional TaxoCommerce Core: provides the active family-module inventory used to launch available checks in those plugins. Each plugin's own functionality and code checks remain its responsibility.
+* Optional WooCommerce and Action Scheduler: their specific data or jobs are shown only when available. They are not required for the independent WordPress/server checks.
+
+The built-in code review is not the official WordPress Plugin Check. The family-wide run is driven by the administrator's browser; a closed or inactive tab does not keep running an independent PHP background worker.
 
 == Privacy ==
 
-System diagnostics can include server configuration, URLs and error details. Treat exported results as potentially sensitive. No diagnostic report should be sent to a developer automatically: optional email reports must be explicitly enabled and target an address chosen by the site administrator. HTTP checks make requests to the site's specified URLs and must be used within hosting limits.
+System diagnostics may include configuration, URLs and error details; treat exported JSON and logs as potentially sensitive. No diagnostic report is automatically sent to the developer. Optional notifications require an administrator-selected destination. An HTTP URL audit sends requests to the URLs selected by the administrator and must respect hosting limits.
+
+== Frequently Asked Questions ==
+
+= Does it require TaxoCommerce Core? =
+
+No. Core is optional and enables the active-family plugin inventory for combined checks; System Check's own diagnostics work without it.
+
+= Does "Check all plugins" run checks on every WordPress plugin? =
+
+No. It runs the available checks of the active TaxoCommerce modules registered by Core, not arbitrary third-party plugins.
+
+= Does System Check run an official Plugin Check inside WordPress? =
+
+No. Its local source checks and reports are separate from the official Plugin Check used in the development and release pipeline.
 
 == Changelog ==
 
-= 0.2.30 =
-* Local Description and Plugin URI replace REST excerpt requests and caches in the header. Issue #2494.
+= 0.2.43 =
+* Add an administrator-triggered sequential "Check all plugins" action for active TaxoCommerce modules registered by Core; retain individual logs, reports and JSON exports.
 
+= 0.2.42 =
+* Improve per-plugin results, progress, errors, execution logs, cooperative Stop/Resume and visibility of browser-driven checks in Processes.
 
-= 0.2.29 =
-* Display the last verified official excerpt from the developer's Plugin URI during HTTP errors; avoid stale negative cache and show bundled author Description on first-install network failure. No dependency on customer content. Issue #2489.
+= 0.2.41 =
+* Add per-plugin diagnostics and detailed native functionality/code results with independent reports.
 
-
-
-= 0.2.28 =
-* Three-zone responsive admin header, centered official developer information and own Markdown history; remove shop administrator URL configuration. Issue #2476.
-
-= 0.2.25 =
-* Move Code Check into the main Autocheck tab as a second subtab, preserving the functional Autotest and the deeper standalone code audit.
-* Preserve legacy Code Check links and keep server diagnostics in the separate System tab.
-
-
-= 0.2.24 =
-* Collapsed history directly under the admin title, reading the bundled CHANGELOG.md.
-
-
-= 0.2.23 =
-* Expand standalone Code Check with local include integrity, duplicate class/function detection, PHP minimum-version indicators and security review signals (nonces, permissions, escaping, sanitization, SQL and REST).
-* Preserve three existing categories, 5 CPU speeds, stop/resume, and private JSON. Unverified flows, older PHP compatibility and official WordPress Plugin Check remain explicitly unverified.
-
-
-= 0.2.22 =
-* Separate Autocheck (existing functionality tests) and Code Check (own-source PHP/WordPress/security review) into two primary administration tabs. Preserve old Code Check links and all report actions.
-* Add category-level counts and actionable per-file evidence in Code Check; do not present local static checks as official WordPress Plugin Check certification. No mandatory checker dependencies or schema changes.
-
-
-= 0.2.21 =
-* Remove duplicate admin GET parsing and narrowly document the nonce-free, read-only asset selector to pass strict WordPress Plugin Check.
-* Preserve the two Autocheck subtabs (Functionality Check and Code Check) and their native, independent PHP/WordPress/security checks.
-
-
-= 0.2.20 =
-* Split Autocheck into Functionality Check and Code Check subtabs, both only for System Check itself.
-* Add three native, read-only code checks (PHP syntax, WordPress conventions, security patterns) without installing or invoking any other checker.
-* Code Check supports five CPU speeds, stop/resume and a user-scoped JSON report. Complex rule coverage remains explicitly unverified.
-
-
-= 0.2.18 =
-* Add a bounded, administrator-only Processes tab with application-task inventory, protected selective cancellation and cooperative stop controls. Preserve WooCommerce critical jobs and never claim to terminate active PHP or operating-system processes.
-
-
-= 0.2.17 =
-* Keep the most recent Autocheck JSON download available on returning to the tab, until the user- and site-scoped report expires. Export does not rerun tests.
-* Validate PHP diagnostic rows, active module results, HTTP callback/schedule contracts and JSON serialization. Include structured evidence and executed/total coverage in Autocheck output.
-* Read the last saved server snapshot without starting another scan: missing or older than 24 hours is reported as not executed, malformed data as failure. Environment warnings do not imply a broken plugin.
-
-= 0.2.16 =
-* Load bundled server diagnostics when legacy SEO is installed but inactive, or active without its Server Status module; avoid duplicate headers and reloading existing global engines.
-
-
-= 0.2.15 =
-* Pestaña homogénea «Autocheck» y descarga JSON del último informe, por usuario y sitio, con control de permisos y nonce.
-
-= 0.2.14 =
-* Cabecera administrativa unificada de TaxoCommerce con nombre, icono y versión.
-* Estilos propios sin Core, funciones y permisos intactos.
-
-
-= 0.2.13 =
-* Bind both Action Scheduler table identifiers using %i when retrieving the highest-volume pending action group.
-* Add source-regression checks to prevent restoring interpolated SQL and synchronize the standalone Auto Test version.
-* Preserve live diagnostics and all existing historical callbacks; production publication requires separate approval.
-
-= 0.2.12 =
-* Fix remaining Plugin Check SQL preparation findings by binding canonical table identifiers and preserving bound user values in billing, semantic checks, health scans and external images.
-* Document narrowly scoped live database diagnostics without introducing stale caches or changing public legacy SEO APIs.
-* Add regression assertions and validate installable ZIP with WordPress Plugin Check before release.
-
-
-= 0.2.11 =
-* Prepare the canonical table identifiers in all eight MySQL EXPLAIN diagnostics with the WordPress 6.2+ %i placeholder.
-* Extend offline SQL and malformed-input safety tests to PHP 7.4 and PHP 8.4; ignore array-valued HTTP audit filters and actions without changing valid requests or legacy public APIs.
-* This patch does not claim to resolve all remaining WordPress Plugin Check warnings; the compatibility and direct-database warnings continue to be tracked in GitHub issue #1958.
-
-
-= 0.2.9 =
-* Refresh WordPress.org metadata for the standalone System Check package.
-* Confirm current gettext calls use the standalone text domain and Action Scheduler table identifiers use prepared `%i` placeholders.
-
-= 0.2.8 =
-* Standalone system and plugin diagnostics with compatibility routes.
-* Local PHP checks and optional bounded HTTP URL audits.
-* Administrator-controlled reports and notifications.
-
-== Historical origins (monolith; not standalone releases) ==
-* Legacy origin: server diagnostics, plugin validation and HTTP/URL checks existed under TaxoCommerce SEO administration; the monolith's release numbers are not standalone System Check versions.
-* The old validation panel mixed site status, plugin-specific checks and URL/HTTP observations; its historical outputs were not automatically proof that newer modules had passed.
-* During modularisation System Check was isolated from SEO_SYSTEM_* globals and constants to prevent collisions with the still-installed monolith.
-* Standalone diagnostics distinguished the active plugin modules from installed but inactive extensions and retained administrator-controlled bounded scans and reports.
-* Later WordPress.org work corrected text-domain usage and prepared SQL identifiers; the historical original checker remained distinct from each plugin's own Auto Test.
-
-== Local plugin information ==
-
-The developer information panel shows only bundled `Description` metadata and an outbound `Plugin URI` link. No external request is made.
+For the complete version history, see the bundled `CHANGELOG.md` and `changelog.txt`.

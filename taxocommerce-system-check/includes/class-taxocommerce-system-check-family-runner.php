@@ -209,7 +209,7 @@ final class TaxoCommerce_System_Check_Family_Runner {
         echo '<p>' . esc_html__( 'Primero se ejecutan las funcionalidades de Core y después su chequeo de código por lotes. Los demás plugins permanecen pendientes de integración.', 'taxocommerce-system-check' ) . '</p>';
         echo '<label for="tcs-family-speed">' . esc_html__( 'Carga de análisis', 'taxocommerce-system-check' ) . '</label> ';
         echo '<select id="tcs-family-speed">';
-        foreach ( array( 1 => 'Suave', 2 => 'Baja', 3 => 'Normal', 4 => 'Alta', 5 => 'Máxima' ) as $speed => $name ) {
+        foreach ( array( 1 => __( 'Very low', 'taxocommerce-system-check' ), 2 => __( 'Low', 'taxocommerce-system-check' ), 3 => __( 'Normal', 'taxocommerce-system-check' ), 4 => __( 'High', 'taxocommerce-system-check' ), 5 => __( 'Maximum', 'taxocommerce-system-check' ) ) as $speed => $name ) {
             echo '<option value="' . esc_attr( (string) $speed ) . '"' . selected( 3, $speed, false ) . '>' . esc_html( $name ) . '</option>';
         }
         echo '</select> ';
@@ -224,6 +224,29 @@ final class TaxoCommerce_System_Check_Family_Runner {
                 'url' => admin_url( 'admin-ajax.php' ),
                 'nonce' => wp_create_nonce( self::ACTION ),
                 'state' => $summary,
+                'i18n' => array(
+                    'status' => __( 'Status: ', 'taxocommerce-system-check' ),
+                    'functions' => __( 'Functions', 'taxocommerce-system-check' ),
+                    'code' => __( 'Code', 'taxocommerce-system-check' ),
+                    'passed' => __( 'Passed', 'taxocommerce-system-check' ),
+                    'failures' => __( 'failures', 'taxocommerce-system-check' ),
+                    'skipped' => __( 'skipped', 'taxocommerce-system-check' ),
+                    'findings' => __( 'Findings', 'taxocommerce-system-check' ),
+                    'error' => __( 'Error', 'taxocommerce-system-check' ),
+                    'resume_hint' => __( ' · You can resume this check.', 'taxocommerce-system-check' ),
+                    'request_failed' => __( 'Unable to execute the check.', 'taxocommerce-system-check' ),
+                    'running' => __( 'Running', 'taxocommerce-system-check' ),
+                    'completed' => __( 'Completed', 'taxocommerce-system-check' ),
+                    'pending' => __( 'Pending', 'taxocommerce-system-check' ),
+                    'waiting' => __( 'Waiting', 'taxocommerce-system-check' ),
+                    'pass' => __( 'Passed', 'taxocommerce-system-check' ),
+                    'fail' => __( 'Failed', 'taxocommerce-system-check' ),
+                    'skip' => __( 'Not run', 'taxocommerce-system-check' ),
+                    'warning' => __( 'Review', 'taxocommerce-system-check' ),
+                    'not_run_status' => __( 'Not run', 'taxocommerce-system-check' ),
+                    'paused_status' => __( 'Paused', 'taxocommerce-system-check' ),
+                    'error_status' => __( 'Error', 'taxocommerce-system-check' ),
+                ),
             ) ) . ';',
             'before'
         );

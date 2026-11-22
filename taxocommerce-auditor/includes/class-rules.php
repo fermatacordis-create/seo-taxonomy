@@ -183,6 +183,49 @@ final class Rules {
         return false;
     }
 
+    /**
+     * Report only a demonstrable numeric-tag contradiction: a single value
+     * with a unit in the tag differs from the unique value of that unit in
+     * both the product title and description. Classification words are not
+     * compared lexically (Issue #2752).
+     */
+    private static function numeric_tag_conflict( $tag, $title, $description ) {
+        if ( ! preg_match( '/^\s*([0-9]+(?:[.,][0-9]+)?)\s*(kw|w|v|ah|mah|kg|bar|psi|rpm)\s*$/iu', (string) $tag, $matches ) ) {
+            return '';
+        }
+
+        $unit = strtolower( $matches[2] );
+        $value = (float) str_replace( ',', '.', $matches[1] );
+        if ( 'kw' === $unit ) {
+            $unit = 'w';
+            $value *= 1000;
+        } elseif ( 'mah' === $unit ) {
+            $unit = 'ah';
+            $value /= 1000;
+        }
+
+        $title_specs = self::numeric_specs( $title );
+        $body_specs = self::numeric_specs( $description );
+        if ( 1 !== count( $title_specs[ $unit ] ?? array() ) || 1 !== count( $body_specs[ $unit ] ?? array() ) ) {
+            return '';
+        }
+
+        $title_value = (float) $title_specs[ $unit ][0];
+        $body_value = (float) $body_specs[ $unit ][0];
+        $tolerance = max( 0.001, abs( $title_value ) * 0.001 );
+        if ( abs( $title_value - $body_value ) > $tolerance || abs( $value - $title_value ) <= $tolerance ) {
+            return '';
+        }
+
+        return sprintf(
+            /* translators: 1: tag, 2: title value, 3: unit */
+            __( 'Etiqueta técnica "%1$s" incompatible con la especificación %2$s %3$s confirmada por título y descripción.', 'taxocommerce-auditor' ),
+            $tag,
+            (string) $title_value,
+            $unit
+        );
+    }
+
     private static function finding( $code, $severity, $type, $id, $title, $evidence, $recommendation ) {
         return array(
             'code'           => $code,
@@ -275,9 +318,10 @@ final class Rules {
         if ( null !== $alignment && mb_strlen( $excerpt, 'UTF-8' ) >= 35 && $alignment < 0.2 ) {
             $findings[] = self::finding( 'product_title_excerpt_drift', 'high', 'product', $id, $title, __( 'Muy pocas palabras del título aparecen en el resumen.', 'taxocommerce-auditor' ), __( 'Contrastar título y resumen con la fuente original; posible desplazamiento de contenido.', 'taxocommerce-auditor' ) );
         }
-        // The legacy auditor distinguishes a weak textual match (review signal)
-        // from demonstrable displacement to another product (not inferred here).
-        if ( '' !== $body && mb_strlen( $body, 'UTF-8' ) >= 80 ) {
+        // A weak literal match is not a data error. Preserve this historical
+        // review signal only for explicitly enabled deep product audits.
+        if ( apply_filters( 'taxocommerce_auditor_enable_deep_product_signals', false )
+            && '' !== $body && mb_strlen( $body, 'UTF-8' ) >= 80 ) {
             $long_alignment = self::title_alignment( $title, $body );
             if ( null !== $long_alignment && $long_alignment < 0.08 ) {
                 $findings[] = self::finding(
@@ -321,27 +365,28 @@ final class Rules {
             );
         }
 
-        // A tag without meaningful support is a review signal, never a deletion.
+        // Only technical numeric contradictions can be evidenced by two
+        // independent existing fields. Generic product tags remain valid.
         if ( taxonomy_exists( 'product_tag' ) ) {
             $tags = wp_get_object_terms( $id, 'product_tag', array( 'fields' => 'names' ) );
             if ( ! is_wp_error( $tags ) ) {
-                $category_names = function_exists( 'wc_get_product_terms' )
-                    ? wc_get_product_terms( $id, 'product_cat', array( 'fields' => 'names' ) )
-                    : array();
-                $category_names = is_wp_error( $category_names ) ? array() : (array) $category_names;
-                $identity = $title . ' ' . $excerpt . ' ' . $body . ' ' . $attribute_text . ' ' . implode( ' ', $category_names );
-                foreach ( array_slice( (array) $tags, 0, 30 ) as $tag ) {
-                    if ( ! self::tag_supported( $tag, $identity ) ) {
+                foreach ( (array) $tags as $tag ) {
+                    $conflict = self::numeric_tag_conflict( $tag, $title, $excerpt . ' ' . $body );
+                    if ( '' !== $conflict ) {
                         $findings[] = self::finding(
-                            'product_tag_identity_drift', 'low', 'product', $id, $title,
-                            'La etiqueta "' . $tag . '" no aparece sustentada por título, contenido, categorías o atributos.',
-                            __( 'Comprobar si la etiqueta describe realmente el producto.', 'taxocommerce-auditor' )
+                            'product_tag_numeric_conflict', 'high', 'product', $id, $title,
+                            $conflict,
+                            __( 'Verificar la etiqueta técnica con la ficha del fabricante; no modificarla automáticamente.', 'taxocommerce-auditor' )
                         );
-                        break;
                     }
                 }
             }
         }
+
+        // WooCommerce product_tag terms classify products. Their labels need not
+        // occur verbatim in the title, copy, attributes or category names.
+        // Lexical mismatches are not evidence of an incorrect assignment.
+        // Keep the product's real taxonomy terms intact (Issue #2746).
 
         if ( '' === $sku ) {
             $findings[] = self::finding( 'product_no_stable_sku', 'low', 'product', $id, $title, 'SKU vacío; puede ser legítimo para algunos productos.', __( 'Comprobar si existe otro identificador estable en el proveedor.', 'taxocommerce-auditor' ) );
@@ -353,7 +398,7 @@ final class Rules {
         return array(
             'findings'  => $findings,
             'sku_key'   => self::identity_key( $sku ),
-            'template_key' => self::template_signature( $body, $title ),
+            'template_key' => apply_filters( 'taxocommerce_auditor_enable_deep_product_signals', false ) ? self::template_signature( $body, $title ) : '',
             'title_key' => self::identity_key( $title ),
             'quality'   => self::quality( 'product', $title, $body, $excerpt, '' !== $sku, (bool) $cats, $vocab, $slug, array( 'technical' => $product->get_image_id() > 0 ) ),
         );

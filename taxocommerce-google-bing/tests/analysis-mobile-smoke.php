@@ -23,7 +23,9 @@ tgb_assert_mobile( false === strpos( $main, "seo_analista_render_report();" ), '
 tgb_assert_mobile( false !== strpos( $main, "wp_create_nonce( 'taxocommerce_insights_analysis' )" ), 'Insights screen produces the matching nonce.' );
 tgb_assert_mobile( false !== strpos( $bridge, "check_ajax_referer( 'taxocommerce_insights_analysis', 'nonce' )" ), 'Insights AJAX verifies same nonce.' );
 tgb_assert_mobile( false !== strpos( $client, "action: 'taxocommerce_insights_analysis'" ), 'Browser uses Insights AJAX route.' );
-tgb_assert_mobile( false !== strpos( $bridge, 'taxocommerce_insights_action_plan_export( $plan, $days )' ), 'Plan export reuses same decision plan.' );
+tgb_assert_mobile( false !== strpos( $bridge, 'taxocommerce_insights_indicators_build( $period_mode )' ), 'Evidence report computes one JSON snapshot for display and download.' );
+tgb_assert_mobile( false !== strpos( $main, 'id="tgb-indicators-period"' ), 'Calendar week/month selector is separate from legacy 28/60/90 reports.' );
+tgb_assert_mobile( false !== strpos( $client, "period_mode: String($('#tgb-indicators-period').val() || 'week')" ), 'Calendar mode is sent with authenticated AJAX.' );
 tgb_assert_mobile( false !== strpos( $client, 'showSavedPlanDate(response.data)' ), 'Plan download date is updated after report succeeds.' );
 tgb_assert_mobile( false === strpos( $client, 'showPlanJson(' ), 'Plan download must not be appended after the report.' );
 tgb_assert_mobile( false === strpos( $client, 'new Blob([content]' ), 'Plan download uses a saved server-side JSON without a browser Blob.' );

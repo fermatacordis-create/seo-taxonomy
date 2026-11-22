@@ -1,4 +1,4 @@
-name: Immediate deployment to STAGING
+name: STAGING + Focazul - actualizacion selectiva
 
 on:
   workflow_call:
@@ -20,8 +20,16 @@ on:
         required: false
         type: boolean
         default: false
-  # Pushes are handled by the single gated workflow. The prior concurrent
-  # scoped Core/Tasks push was incorrectly recorded as a complete release.
+  # A merge deploys ONLY to STAGING and Focazul. No PRO job is reachable here.
+  push:
+    branches: [staging]
+    paths:
+      - 'taxocommerce-*/**'
+      - '.github/scripts/deploy_staging_delta.py'
+      - '.github/workflows/deploy-staging.yml'
+      - '.github/scripts/publish_ticketing_package.py'
+      - '.github/scripts/publish_focazul_ticketing_page.py'
+      - 'docs/focazul-taxocommerce-ticketing.html'
   pull_request:
     paths:
       - 'taxocommerce-*/**'
@@ -34,22 +42,85 @@ on:
       - '.github/tests/test_staging_check_subida_a_pro.py'
       - '.github/workflows/deploy-staging.yml'
       - '.github/workflows/staging_check_subida_a_pro.yml'
+      - '.github/scripts/publish_ticketing_package.py'
+      - '.github/scripts/publish_focazul_ticketing_page.py'
+      - '.github/tests/test_ticketing_delivery.py'
+      - 'docs/focazul-taxocommerce-ticketing.html'
 
 permissions:
   contents: read
   actions: read
 
 concurrency:
-  group: taxocommerce-staging-focazul-${{ github.event_name == 'pull_request' && github.head_ref || 'deploy' }}
+  group: ${{ github.event_name == 'pull_request' && format('taxocommerce-pr-{0}', github.head_ref) || 'taxocommerce-site-delivery' }}
   cancel-in-progress: false
 
 jobs:
   validate:
-    name: Validate incremental deployment and Core
+    name: Validate only changed plugins (full family only by manual request)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Validate changed plugin syntax and independent bootstrap
+        shell: bash
+        env:
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            base="$PR_BASE"
+            head="$PR_HEAD"
+          else
+            base="$(git rev-parse HEAD^)"
+            head="$(git rev-parse HEAD)"
+          fi
+          mapfile -t plugins < <(git diff --name-only "$base" "$head" | awk -F/ '$1 ~ /^taxocommerce-[a-z0-9-]+$/ {print $1}' | sort -u)
+          echo "Checking ${#plugins[@]} changed plugin(s): ${plugins[*]}"
+          for slug in "${plugins[@]}"; do
+            test -f "$slug/$slug.php" || continue
+            find "$slug" -type f -name '*.php' -not -path "$slug/tests/*" -print0 |
+              while IFS= read -r -d '' file; do php -l "$file" >/dev/null; done
+            if [ -f "$slug/tests/standalone-bootstrap-smoke.php" ]; then
+              php "$slug/tests/standalone-bootstrap-smoke.php"
+            fi
+            if [ "$slug" = "taxocommerce-ticketing" ]; then
+              php "$slug/tests/smoke.php"
+            fi
+            if [ "$slug" = "taxocommerce-mail" ]; then
+              php "$slug/tests/smoke.php"
+            fi
+            if [ "$slug" = "taxocommerce-google-bing" ]; then
+              php "$slug/tests/gsc-freshness-smoke.php"
+              php "$slug/tests/analysis-full-refresh-smoke.php"
+              node --check "$slug/includes/analysis/assets/analista-lazy.js"
+            fi
+            if [ "$slug" = "taxocommerce-vocabulary" ]; then
+              php -l "$slug/tests/classifier-extraction-smoke.php"
+              php "$slug/tests/classifier-extraction-smoke.php"
+              php -l "$slug/tests/classifier-cpu-smoke.php"
+              php "$slug/tests/classifier-cpu-smoke.php"
+            fi
+            if [ "$slug" = "taxocommerce-accounting" ]; then
+              php -l "$slug/tests/depreciation-smoke.php"
+              php "$slug/tests/depreciation-smoke.php"
+              php "$slug/tests/corrections-smoke.php"
+              php -l "$slug/tests/review-navigation-smoke.php"
+              php "$slug/tests/review-navigation-smoke.php"
+              node --check "$slug/assets/purchase-preview.js"
+            fi
+          done
+          python3 -m py_compile .github/scripts/deploy_staging_delta.py
+          python3 -m py_compile .github/scripts/publish_ticketing_package.py .github/scripts/publish_focazul_ticketing_page.py
+          python3 -m py_compile .github/scripts/publish_mail_package.py
+          python3 -m unittest discover -s .github/tests -p test_mail_package.py -v
+          python3 -m unittest discover -s .github/tests -p test_ticketing_delivery.py -v
+          python3 -m unittest discover -s .github/tests -p test_deploy_staging_delta.py -v
+          python3 -m unittest discover -s .github/tests -p test_staging_check_subida_a_pro.py -v
       - name: Validate System Check native code audit independently
+        if: ${{ inputs.full_sync == true }}
         run: |
           set -euo pipefail
           php -l taxocommerce-system-check/includes/class-taxocommerce-system-check-code-rules.php
@@ -59,6 +130,7 @@ jobs:
           php taxocommerce-system-check/tests/code-check-smoke.php
 
       - name: Validate independent Autotest Code Check for the entire new family
+        if: ${{ inputs.full_sync == true }}
         run: |
           set -euo pipefail
           for plugin in auditor campaigns core customers database dependiente distribution facturacion faqs google-bing images import-export logistica redirects scrappers social suppliers tasks templates vocabulary; do
@@ -75,6 +147,7 @@ jobs:
           php taxocommerce-system-check/tests/auto-test-guide-smoke.php
 
       - name: Validate Insights consent and editable legal text lifecycle
+        if: ${{ inputs.full_sync == true }}
         run: |
           php -l taxocommerce-google-bing/includes/class-taxocommerce-insights-consent.php
           php taxocommerce-google-bing/tests/consent-smoke.php
@@ -85,6 +158,7 @@ jobs:
           php taxocommerce-google-bing/tests/consent-json-import-smoke.php
           node --check taxocommerce-google-bing/assets/consent.js
       - name: Validate delta script and regression tests
+        if: ${{ inputs.full_sync == true }}
         run: |
           python3 -m py_compile .github/scripts/deploy_staging_delta.py
           python3 -m unittest discover -s .github/tests -p test_deploy_staging_delta.py -v
@@ -95,6 +169,7 @@ jobs:
           python3 -m py_compile .github/scripts/audit_core_dual_sites.py
           python3 -m unittest discover -s .github/tests -p test_audit_core_dual_sites.py -v
       - name: Verify all 20 Autocheck JSON contracts and PHP syntax
+        if: ${{ inputs.full_sync == true }}
         run: |
           set -euo pipefail
           php -l .github/tests/legacy-scrappers-coexistence-smoke.php
@@ -126,16 +201,39 @@ jobs:
           php taxocommerce-tasks/tests/standalone-bootstrap-smoke.php
           php -l taxocommerce-customers/tests/standalone-bootstrap-smoke.php
           php taxocommerce-customers/tests/standalone-bootstrap-smoke.php
+          php -l taxocommerce-customers/tests/early-core-translation-smoke.php
+          php taxocommerce-customers/tests/early-core-translation-smoke.php
           php -l taxocommerce-accounting/taxocommerce-accounting.php
           php -l taxocommerce-accounting/includes/class-tca-provider-invoices.php
           php -l taxocommerce-accounting/tests/provider-invoice-pdf-smoke.php
           php taxocommerce-accounting/tests/provider-invoice-pdf-smoke.php
+          php -l taxocommerce-accounting/includes/class-tca-expense-csv.php
+          php -l taxocommerce-accounting/tests/expense-csv-smoke.php
+          php taxocommerce-accounting/tests/expense-csv-smoke.php
           php -l taxocommerce-accounting/includes/class-tca-hacienda.php
           php -l taxocommerce-accounting/tests/hacienda-workspace-smoke.php
           php taxocommerce-accounting/tests/hacienda-workspace-smoke.php
+          php -l taxocommerce-accounting/includes/class-tca-issued-invoice.php
+          php -l taxocommerce-accounting/tests/issued-invoice-link-smoke.php
+          php taxocommerce-accounting/tests/issued-invoice-link-smoke.php
+          php -l taxocommerce-accounting/tests/rectification-smoke.php
+          php taxocommerce-accounting/tests/rectification-smoke.php
+          php -l taxocommerce-accounting/includes/class-tca-depreciation.php
+          php -l taxocommerce-accounting/tests/depreciation-smoke.php
+          php taxocommerce-accounting/tests/depreciation-smoke.php
+          php -l taxocommerce-accounting/includes/class-tca-corrections.php
+          php -l taxocommerce-accounting/tests/corrections-smoke.php
+          php taxocommerce-accounting/tests/corrections-smoke.php
+          php -l taxocommerce-accounting/includes/class-tca-settlements.php
+          php -l taxocommerce-accounting/tests/settlements-smoke.php
+          php taxocommerce-accounting/tests/settlements-smoke.php
+          php -l taxocommerce-accounting/includes/class-tca-treasury.php
+          php -l taxocommerce-accounting/tests/treasury-smoke.php
+          php taxocommerce-accounting/tests/treasury-smoke.php
           php -l taxocommerce-accounting/tests/live-tax-preparation-smoke.php
           php taxocommerce-accounting/tests/live-tax-preparation-smoke.php
           php taxocommerce-accounting/tests/smoke.php
+          node --check taxocommerce-accounting/assets/purchase-preview.js
           node --check taxocommerce-customers/assets/admin.js
           php -l taxocommerce-tasks/includes/class-tctasks-calendar.php
           php -l taxocommerce-tasks/tests/calendar-duration-smoke.php
@@ -146,9 +244,18 @@ jobs:
           php -l taxocommerce-system-check/tests/url-process-progress-smoke.php
           php taxocommerce-system-check/tests/url-process-progress-smoke.php
           php taxocommerce-system-check/tests/processes-smoke.php
+          php -l taxocommerce-system-check/tests/i18n-admin-ui-smoke.php
+          php taxocommerce-system-check/tests/i18n-admin-ui-smoke.php
           php -l taxocommerce-system-check/includes/class-taxocommerce-system-check-process-details.php
           php -l taxocommerce-system-check/tests/process-details-smoke.php
           php taxocommerce-system-check/tests/process-details-smoke.php
+          php -l taxocommerce-system-check/includes/class-taxocommerce-system-check-module-audit.php
+          php -l taxocommerce-system-check/tests/module-audit-smoke.php
+          php taxocommerce-system-check/tests/module-audit-smoke.php
+          php -l taxocommerce-system-check/includes/class-taxocommerce-system-check-module-audit.php
+          php -l taxocommerce-system-check/tests/module-audit-smoke.php
+          node --check taxocommerce-system-check/assets/module-audit.js
+          node taxocommerce-system-check/tests/module-audit-all-smoke.js
           php -l taxocommerce-system-check/tests/process-details-partial-deploy-smoke.php
           php taxocommerce-system-check/tests/process-details-partial-deploy-smoke.php
           php -l taxocommerce-system-check/includes/class-taxocommerce-system-check-code-check.php
@@ -172,7 +279,13 @@ jobs:
           php -l taxocommerce-dependiente/tests/m11-checkpoint-large-lexicon.php
           php taxocommerce-dependiente/tests/m11-checkpoint-large-lexicon.php
           php taxocommerce-distribution/tests/manual-autocheck-smoke.php
+          php -l taxocommerce-distribution/tests/overview-i18n-smoke.php
+          php taxocommerce-distribution/tests/overview-i18n-smoke.php
           php taxocommerce-facturacion/tests/manual-autotest-smoke.php
+          php -l taxocommerce-facturacion/includes/class-seo-facturas-rectifications.php
+          php -l taxocommerce-facturacion/includes/templates/rectification.php
+          php -l taxocommerce-facturacion/tests/rectification-smoke.php
+          php taxocommerce-facturacion/tests/rectification-smoke.php
           php taxocommerce-faqs/tests/auto-test-smoke.php
           php taxocommerce-google-bing/tests/auto-test-smoke.php
           php taxocommerce-google-bing/tests/head-tags-smoke.php
@@ -186,6 +299,9 @@ jobs:
           php -l taxocommerce-google-bing/includes/class-taxocommerce-google-bing-google-service.php
           php taxocommerce-google-bing/tests/gsc-sync-bridge-smoke.php
           php taxocommerce-google-bing/tests/analysis-unified-smoke.php
+          php -l taxocommerce-google-bing/includes/analysis/analista-indicadores.php
+          php -l taxocommerce-google-bing/tests/analysis-indicators-smoke.php
+          php taxocommerce-google-bing/tests/analysis-indicators-smoke.php
           php -l taxocommerce-google-bing/tests/analysis-mobile-smoke.php
           php taxocommerce-google-bing/tests/analysis-mobile-smoke.php
           php -l taxocommerce-google-bing/tests/analysis-chunked-json-smoke.php
@@ -195,11 +311,17 @@ jobs:
           node taxocommerce-google-bing/tests/head-tags-browser-smoke.js
           php taxocommerce-google-bing/tests/indexnow-smoke.php
           php taxocommerce-google-bing/tests/indexnow-i18n-smoke.php
+          php -l taxocommerce-google-bing/tests/admin-i18n-smoke.php
+          php taxocommerce-google-bing/tests/admin-i18n-smoke.php
           php taxocommerce-images/tests/auto-test-smoke.php
           php -l taxocommerce-images/includes/class-taxocommerce-autotest-code.php
           php taxocommerce-images/tests/code-check-smoke.php
           node --check taxocommerce-images/assets/autotest-code.js
           php taxocommerce-import-export/tests/auto-test-smoke.php
+          php taxocommerce-import-export/tests/export-file-smoke.php
+          php -l taxocommerce-import-export/includes/class-taxocommerce-import-export-csv.php
+          php -l taxocommerce-import-export/tests/page-append-csv-smoke.php
+          php taxocommerce-import-export/tests/page-append-csv-smoke.php
           php taxocommerce-logistica/tests/auto-test-smoke.php
           php taxocommerce-redirects/tests/auto-test-smoke.php
           php -l taxocommerce-redirects/tests/opnv-redirects-owner-smoke.php
@@ -244,7 +366,11 @@ jobs:
           php -l taxocommerce-vocabulary/includes/class-tcv-extractor.php
           php -l taxocommerce-vocabulary/tests/classifier-extraction-smoke.php
           php taxocommerce-vocabulary/tests/classifier-extraction-smoke.php
+          php -l taxocommerce-vocabulary/includes/class-tcv-classifier-batch.php
+          php -l taxocommerce-vocabulary/tests/classifier-cpu-smoke.php
+          php taxocommerce-vocabulary/tests/classifier-cpu-smoke.php
       - name: Import-Export native category CSV contracts and PHP syntax
+        if: ${{ inputs.full_sync == true }}
         run: |
           php -l taxocommerce-import-export/includes/class-taxocommerce-import-export-csv.php
           php -l taxocommerce-import-export/includes/class-taxocommerce-import-export-exporter.php
@@ -260,10 +386,12 @@ jobs:
           php taxocommerce-import-export/tests/batch-queue-smoke.php
           node --check taxocommerce-import-export/assets/exporter.js
       - name: Validate all TaxoCommerce binary gettext catalogs
+        if: ${{ inputs.full_sync == true }}
         run: |
           python3 -m unittest discover -s .github/tests -p test_verify_mo_catalogs.py -v
           python3 .github/scripts/verify_mo_catalogs.py --repo
       - name: Core PHP syntax and regression tests
+        if: ${{ inputs.full_sync == true }}
         run: |
           php -l taxocommerce-core/taxocommerce-core.php
           php -l taxocommerce-core/tests/action-scheduler-notice-smoke.php
@@ -322,6 +450,7 @@ jobs:
           php taxocommerce-redirects/tests/core-extension-menu-smoke.php core-before
           php taxocommerce-redirects/tests/core-extension-menu-smoke.php core-after
 
+
   plan:
     name: Select changed deployable plugin files
     needs: validate
@@ -342,9 +471,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAXOCOMMERCE_FULL_SYNC: ${{ inputs.full_sync && '1' || '0' }}
-          # Never mistake the last successful *partial* job for a verified
-          # whole-family release; inspect installed entrypoints on both sites.
-          TAXOCOMMERCE_REMOTE_VERIFY: '1'
+          # Only the Git delta is selected. Never inventory plugins from WordPress
+          # or convert an incremental upload into a whole-family reconciliation.
           STAGING_FTP_SERVER: ${{ secrets.STAGING_FTP_SERVER }}
           STAGING_FTP_USERNAME: ${{ secrets.STAGING_FTP_USERNAME }}
           STAGING_FTP_PASSWORD: ${{ secrets.STAGING_FTP_PASSWORD }}
@@ -381,12 +509,6 @@ jobs:
         # deploy() has a bounded 3-attempt reconnect loop; never retry it 3x in bash.
         # Unbuffered output records progress and the actual failing FTPS phase.
         run: python3 -u .github/scripts/deploy_staging_delta.py deploy --base "$BASE" --target staging --slug "$SLUG" --full "$SYNC"
-      - name: Activate and verify new Accounting plugin on STAGING only
-        if: ${{ matrix.slug == 'taxocommerce-accounting' }}
-        env:
-          TC_STAGING_WP_USER: ${{ secrets.TC_STAGING_WP_USER }}
-          TC_STAGING_WP_PASSWORD: ${{ secrets.TC_STAGING_WP_PASSWORD }}
-        run: python3 .github/scripts/activate_accounting_staging.py
 
   deploy-focazul:
     name: Focazul / ${{ matrix.slug }}
@@ -458,8 +580,9 @@ jobs:
           STAGING_FTP_PASSWORD: ${{ secrets.STAGING_FTP_PASSWORD }}
         run: python3 .github/scripts/audit_staging_mo.py
       - name: Read-only comparison of Core and both WordPress menus (no site writes)
-        # Audit findings stay visible in the summary/artifact; transient HTTP/FTPS
-        # failures must not invalidate the verified delivery baseline used by deploy.
+        # Audit only when Core changes. A no-op or an unrelated module must not
+        # hold the shared site delivery lock for minutes without uploading.
+        if: needs.plan.outputs.core == 'true'
         continue-on-error: true
         env:
           STAGING_FTP_SERVER: ${{ secrets.STAGING_FTP_SERVER }}
@@ -481,3 +604,79 @@ jobs:
           if-no-files-found: ignore
           retention-days: 30
 
+  ticketing-package:
+    name: Publish verified Ticketing ZIP to STAGING and Focazul package repositories
+    needs: verify
+    if: github.event_name == 'push' && needs.verify.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Select only Ticketing delivery changes
+        id: ticketing
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --name-only HEAD^ HEAD | grep -Eq '^(taxocommerce-ticketing/|docs/focazul-taxocommerce-ticketing.html|.github/scripts/publish_ticketing_)'; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Verify and publish Ticketing ZIP only (never PRO)
+        if: steps.ticketing.outputs.changed == 'true'
+        env:
+          STAGING_FTP_SERVER: ${{ secrets.STAGING_FTP_SERVER }}
+          STAGING_FTP_USERNAME: ${{ secrets.STAGING_FTP_USERNAME }}
+          STAGING_FTP_PASSWORD: ${{ secrets.STAGING_FTP_PASSWORD }}
+        run: python3 -u .github/scripts/publish_ticketing_package.py
+
+  ticketing-page:
+    name: Publish editable Ticketing information page to Focazul only
+    needs: [verify, ticketing-package]
+    if: github.event_name == 'push' && needs.verify.result == 'success' && needs.ticketing-package.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Update only if the Focazul Ticketing page content changed
+        shell: bash
+        env:
+          TC_FOCAZUL_WP_USER: ${{ secrets.TC_FOCAZUL_WP_USER }}
+          TC_FOCAZUL_WP_PASSWORD: ${{ secrets.TC_FOCAZUL_WP_PASSWORD }}
+        run: |
+          set -euo pipefail
+          if git diff --name-only HEAD^ HEAD | grep -Fxq 'docs/focazul-taxocommerce-ticketing.html'; then
+            python3 -u .github/scripts/publish_focazul_ticketing_page.py
+          else
+            echo "Focazul Ticketing page unchanged; no WordPress modification."
+          fi
+
+  mail-package:
+    name: Publish verified Mail ZIP to STAGING and Focazul package repositories
+    # Serialize FTP operations with the existing Ticketing release jobs.
+    needs: [verify, ticketing-page]
+    if: github.event_name == 'push' && needs.verify.result == 'success' && needs.ticketing-page.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Select only Mail changes
+        id: mail
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --name-only HEAD^ HEAD | grep -Eq '^(taxocommerce-mail/|\.github/scripts/publish_mail_package\.py)'; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Verify and publish Mail ZIP only (never PRO)
+        if: steps.mail.outputs.changed == 'true'
+        env:
+          STAGING_FTP_SERVER: ${{ secrets.STAGING_FTP_SERVER }}
+          STAGING_FTP_USERNAME: ${{ secrets.STAGING_FTP_USERNAME }}
+          STAGING_FTP_PASSWORD: ${{ secrets.STAGING_FTP_PASSWORD }}
+        run: python3 -u .github/scripts/publish_mail_package.py

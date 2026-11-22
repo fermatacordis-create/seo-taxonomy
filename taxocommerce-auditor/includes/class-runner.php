@@ -848,6 +848,10 @@ final class Runner {
                     : ( 'products' === $scope ? 'product'
                     : ( 'faqs' === $scope ? 'faq' : ( 'pages' === $scope ? 'page' : 'post' ) ) );
                 $title = $object instanceof \WP_Term ? (string) $object->name : (string) $object->post_title;
+                // Product similarity is not a reliable data-integrity finding.
+                // Run these historical signals only in an opt-in deep pass.
+                $deep_product_signals = 'products' !== $scope
+                    || (bool) apply_filters( 'taxocommerce_auditor_enable_deep_product_signals', false );
                 $key = (string) ( $analysis['title_key'] ?? '' );
                 $identity_duplicate = false;
                 $editorial_collision = false;
@@ -920,7 +924,7 @@ final class Runner {
                             $state['seen_faq_questions'][ $faq_key ] = $id;
                         }
                     }
-                } elseif ( '' !== $key ) {
+                } elseif ( $deep_product_signals && '' !== $key ) {
                     $identity_hash = md5( $key );
                     if ( isset( $state['seen_titles'][ $identity_hash ] )
                         && absint( $state['seen_titles'][ $identity_hash ] ) !== $id ) {
@@ -972,7 +976,7 @@ final class Runner {
                 }
 
                 $template = (string) ( $analysis['template_key'] ?? '' );
-                if ( '' !== $template && 'faqs' !== $scope ) {
+                if ( $deep_product_signals && '' !== $template && 'faqs' !== $scope ) {
                     $template_hash = md5( $template );
                     if ( isset( $state['seen_templates'][ $template_hash ] )
                         && absint( $state['seen_templates'][ $template_hash ] ) !== $id ) {

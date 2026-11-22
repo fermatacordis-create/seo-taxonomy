@@ -1,3 +1,6 @@
+= 0.3.24 (2026-11-20) =
+* Show full product titles next to their IDs in classifier proposals, using a bounded read; do not alter the classification job or review actions. Issue #2891.
+
 = 0.3.22 (2026-11-13) =
 * Code Check equiparado a Core 0.4.82: reglas autónomas PHP/WordPress/seguridad, clasificación por gravedad, detalles de archivos y recomendaciones, resumen y JSON; sin modificar el Autotest funcional. Issue #2626.
 

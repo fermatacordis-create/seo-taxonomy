@@ -3,8 +3,8 @@
  * Plugin Name: TaxoCommerce Insights
  * Plugin URI: https://asociacionfocazul.com/taxocommerce-google-bing/
  * Description: External connections, provider data downloads, and the restored legacy Analysis dashboard.
- * Version: 1.1.64
- * Release Date: 2026-11-15
+ * Version: 1.1.74
+ * Release Date: 2026-11-21
  * Requires at least: 5.8
  * Requires PHP: 7.4
  * Author: David Perez
@@ -19,7 +19,7 @@ require_once __DIR__ . '/includes/admin-branding.php';
 require_once __DIR__ . '/includes/class-taxocommerce-autotest-code.php';
 \TaxoCommerce_Insights_Autotest_Code::boot();
 
-define( 'TAXOCOMMERCE_GOOGLE_BING_VERSION', '1.1.64' );
+define( 'TAXOCOMMERCE_GOOGLE_BING_VERSION', '1.1.74' );
 define( 'TAXOCOMMERCE_GOOGLE_BING_FILE', __FILE__ );
 define( 'TAXOCOMMERCE_GOOGLE_BING_PATH', plugin_dir_path( __FILE__ ) );
 define( 'TAXOCOMMERCE_GOOGLE_BING_URL', plugin_dir_url( __FILE__ ) );
@@ -277,10 +277,11 @@ function taxocommerce_google_bing_analysis_screen() {
                 'ajaxUrl' => admin_url( 'admin-ajax.php' ),
                 'nonce'   => wp_create_nonce( 'taxocommerce_insights_analysis' ),
                 'chunkNonce' => wp_create_nonce( TaxoCommerce_Insights_Chunked_Export::NONCE ),
+                'gscSyncNonce' => wp_create_nonce( 'seo_google_sync' ),
                 'days'    => $days,
-                'planDownloadLabel' => __( 'Descargar JSON del plan de acción', 'taxocommerce-google-bing' ),
+                'planDownloadLabel' => __( 'Descargar JSON de indicadores', 'taxocommerce-google-bing' ),
                 'planDownloadUrl' => taxocommerce_insights_plan_json_download_url(),
-                'planOpenLabel' => __( 'Abrir JSON del plan (móvil)', 'taxocommerce-google-bing' ),
+                'planOpenLabel' => __( 'Abrir JSON de indicadores (móvil)', 'taxocommerce-google-bing' ),
             ), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT ) . ';',
             'before'
         );
@@ -288,7 +289,7 @@ function taxocommerce_google_bing_analysis_screen() {
     echo '<div class="seo-analista-wrap">';
     echo '<div class="seo-analista-toolbar">';
     echo '<div>' . '<h2 style="margin:0 0 4px">' . esc_html__( 'Analysis', 'taxocommerce-google-bing' ) . '</h2>';
-    echo '<p style="margin:0;color:#646970">' . esc_html__( 'El Plan de acción reúne recomendaciones y tareas priorizadas; el resto de informes sigue bajo demanda.', 'taxocommerce-google-bing' ) . '</p>' . '</div>';
+    echo '<p style="margin:0;color:#646970">' . esc_html__( 'Indicadores de demanda, tráfico y catálogo: recopila señales verificables sin decidir acciones. Los informes históricos mantienen su periodo propio.', 'taxocommerce-google-bing' ) . '</p>' . '</div>';
     echo '<form method="get" action="' . esc_url( admin_url( 'admin.php' ) ) . '">';
     echo '<input type="hidden" name="page" value="taxocommerce-google-bing">';
     echo '<input type="hidden" name="tgb_tab" value="analysis">';
@@ -306,7 +307,13 @@ function taxocommerce_google_bing_analysis_screen() {
     for ( $speed = 1; $speed <= 5; $speed++ ) {
         echo '<option value="' . esc_attr( (string) $speed ) . '"' . selected( $speed, 3, false ) . '>' . esc_html( (string) $speed ) . '</option>';
     }
-    echo '</select></form></div>';
+    echo '</select></form>';
+    echo '<div class="tgb-indicators-calendar-picker">';
+    echo '<label for="tgb-indicators-period"><strong>' . esc_html__( 'Periodo de Indicadores para la acción', 'taxocommerce-google-bing' ) . '</strong></label> ';
+    echo '<select id="tgb-indicators-period">';
+    echo '<option value="week">' . esc_html__( 'Semanas naturales completas (lunes-domingo)', 'taxocommerce-google-bing' ) . '</option>';
+    echo '<option value="month">' . esc_html__( 'Meses naturales completos', 'taxocommerce-google-bing' ) . '</option>';
+    echo '</select></div></div>';
 
     // Do not call seo_analista_lazy_render_shell: it would enqueue the same
     // click handler again and issue two AJAX requests per button click.

@@ -267,7 +267,8 @@ def existing_file_hash(ftp, name):
 
 
 def upload_plugin(ftp, target, slug, files, required):
-    # Issues #2290, #2644 and #2651 authorize first installation only to their named sites.
+    # Issues #2290, #2644, #2651, #2870 and #2880 authorize first installation only
+    # to their named test sites. Never create an absent plugin in production.
     # Accounting is allowed solely on STAGING, never Focazul or PRO.
     new_plugin_install = False
     try:
@@ -275,7 +276,7 @@ def upload_plugin(ftp, target, slug, files, required):
     except ftplib.error_perm as exc:
         if not str(exc).startswith("550"):
             raise
-        if (slug in ("taxocommerce-tasks", "taxocommerce-customers") and target in ("staging", "focazul")) or (
+        if (slug in ("taxocommerce-tasks", "taxocommerce-customers", "taxocommerce-ticketing", "taxocommerce-mail") and target in ("staging", "focazul")) or (
             slug == "taxocommerce-accounting" and target == "staging"
         ):
             plugin_parent = remote_plugin_dir(target, slug).rsplit(slug + "/", 1)[0]
@@ -283,7 +284,7 @@ def upload_plugin(ftp, target, slug, files, required):
             ftp.mkd(slug)
             ftp.cwd(slug)
             new_plugin_install = True
-            issue = {"taxocommerce-accounting": "#2644", "taxocommerce-tasks": "#2290", "taxocommerce-customers": "#2651"}[slug]
+            issue = {"taxocommerce-accounting": "#2644", "taxocommerce-tasks": "#2290", "taxocommerce-customers": "#2651", "taxocommerce-ticketing": "#2870", "taxocommerce-mail": "#2880"}[slug]
             print(f"INSTALL {target}/{slug}: explicitly authorized by Issue {issue}")
         elif not required:
             print(f"SKIP {slug}: plugin directory absent on this WordPress")
@@ -426,6 +427,12 @@ def selected_deploy_files(base, head, slug, full=False):
     changes = changed_files(base, head, selected_slug=slug)
     if slug not in changes:
         raise ValueError(f"No distributable changes selected for {slug}")
+    if slug == "taxocommerce-facturacion":
+        # Billing can fatally crash WordPress if a required PHP dependency is
+        # missing after a previous incremental delivery. Reconcile ONLY this
+        # installed plugin by SHA-256: upload_plugin transfers absent/different
+        # files and never installs Billing on a site where it is absent.
+        return plugin_source_files(slug)
     return changes[slug]
 
 

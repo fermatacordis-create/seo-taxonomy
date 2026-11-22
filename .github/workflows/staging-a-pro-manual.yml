@@ -1,0 +1,33 @@
+name: Copiar STAGING a PRO (manual)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: taxocommerce-site-delivery
+  cancel-in-progress: false
+jobs:
+  copiar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Obtener codigo de STAGING
+        uses: actions/checkout@v6
+        with:
+          ref: staging
+          fetch-depth: 0
+      - name: Seleccionar cambios para PRO
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python3 .github/scripts/select_pro_release_delta.py --all-changed --output pro-delta.json
+      - name: Copiar cambios por FTPS sin monolitico
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          set -euo pipefail
+          python3 .github/scripts/deploy_pro_ftps_native.py pro-delta.json

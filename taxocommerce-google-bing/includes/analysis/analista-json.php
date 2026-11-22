@@ -150,6 +150,8 @@ if (!function_exists('seo_analista_build_json_export')) {
                 'home_url' => home_url('/'),
                 'plugin_version' => defined('TAXOCOMMERCE_GOOGLE_BING_VERSION') ? TAXOCOMMERCE_GOOGLE_BING_VERSION : '',
                 'analista_version' => defined('SEO_ANALISTA_VERSION') ? SEO_ANALISTA_VERSION : '',
+                'gsc_data_health' => class_exists('TaxoCommerce_Insights_Chunked_Export', false)
+                    ? TaxoCommerce_Insights_Chunked_Export::gsc_freshness_state() : array(),
             ),
             'period' => (array) ($data['period'] ?? array()),
             'donde_estamos' => array(

@@ -28,6 +28,7 @@ function current_time( $format ) { return '2026-10-31 23:52:00'; }
 function wp_die( $message ) { throw new RuntimeException( $message ); }
 function esc_html__( $value, $domain ) { return $value; }
 function esc_html( $value ) { return htmlspecialchars( (string) $value, ENT_QUOTES, 'UTF-8' ); }
+function number_format_i18n( $number, $decimals = 0 ) { return number_format( (float) $number, $decimals, '.', ',' ); }
 function esc_attr( $value ) { return esc_html( $value ); }
 function esc_url( $value ) { return esc_html( $value ); }
 function admin_url( $path = '' ) { return '/wp-admin/' . $path; }
@@ -37,6 +38,14 @@ function esc_attr__( $message, $domain = '' ) { return esc_attr( $message ); }
 function wp_nonce_field( $action, $name = '_wpnonce' ) { echo '<input type="hidden" name="' . esc_html( $name ) . '" value="test">'; }
 function submit_button( $label, $type = 'primary', $name = 'submit', $wrap = true ) { echo '<button type="submit">' . esc_html( $label ) . '</button>'; }
 function sanitize_key( $s ) { return strtolower( preg_replace( '/[^a-z0-9_-]/i', '', (string) $s ) ); }
+function esc_sql( $value ) { return $value; }
+function get_post_meta( $post_id, $key, $single = false ) {
+    foreach ( $GLOBALS['wpdb']->schedule_rows as $row ) {
+        if ( (int) $row->post_id === (int) $post_id && $row->meta_key === $key ) return $row->meta_value;
+    }
+    return '';
+}
+function get_gmt_from_date( $date ) { return $date; }
 function wp_unslash( $s ) { return $s; }
 function wp_remote_get() { ++$GLOBALS['social_remote_calls']; throw new RuntimeException( 'Network forbidden' ); }
 function wp_remote_post() { ++$GLOBALS['social_remote_calls']; throw new RuntimeException( 'Network forbidden' ); }
@@ -104,15 +113,15 @@ foreach ( array( 'Descargar plantilla CSV', 'Exportar contenidos', 'Exportar age
 // without calling other init actions that install tables.
 tcsocial_network_register_auto_publish_hook();
 social_assert( has_action( 'transition_post_status' ), 'New-post auto publisher registered without monolith' );
-social_assert( count( TCSocial_Auto_Test::cases() ) === 21, 'Twenty-one functionality checks' );
+social_assert( count( TCSocial_Auto_Test::cases() ) === 22, 'Twenty-two functionality checks' );
 
 $report = TCSocial_Auto_Test::run_suite();
 if ( $report['totals']['fail'] ) {
     foreach ( $report['rows'] as $row ) if ( 'fail' === $row['status'] ) fwrite( STDERR, "CASE FAILED " . $row['id'] . ': ' . $row['message'] . "\n" );
 }
-social_assert( $report['totals'] === array( 'pass'=>15, 'fail'=>0, 'skip'=>6 ), '15 successful checks and 6 explicit local/remote skips without live fixtures' );
+social_assert( $report['totals'] === array( 'pass'=>15, 'fail'=>0, 'skip'=>7 ), '15 successful checks and 7 explicit local/remote skips without live fixtures' );
 social_assert( $report['version'] === TAXOCOMMERCE_SOCIAL_VERSION, 'report version' );
-social_assert( count( $report['rows'] ) === 21, 'all checks represented' );
+social_assert( count( $report['rows'] ) === 22, 'all checks represented' );
 social_assert( $GLOBALS['social_remote_calls'] === 0 && $GLOBALS['social_writes'] === 0, 'no outgoing requests or writes' );
 // A missed WP-Cron event must no longer return a false green Autocheck.
 $wpdb->schedule_rows = array( (object) array(
@@ -124,13 +133,14 @@ $wpdb->job_rows = array( (object) array(
 $wpdb->history_rows = array( (object) array(
     'provider' => 'pinterest', 'status' => 'failed',
     'error_message' => 'Missing: boards:write',
+    'created_at' => '2026-11-19 18:30:00', 'published_at' => null,
 ) );
 $failure_report = TCSocial_Auto_Test::run_suite();
 $failed_ids = array();
 foreach ( $failure_report['rows'] as $row ) {
     if ( 'fail' === $row['status'] ) $failed_ids[] = $row['id'];
 }
-foreach ( array( 'schedule_health', 'job_health', 'recent_outcomes' ) as $id ) {
+foreach ( array( 'schedule_health', 'delivery_health', 'job_health', 'recent_outcomes' ) as $id ) {
     social_assert( in_array( $id, $failed_ids, true ), 'Functional Autocheck flags ' . $id );
 }
 $wpdb->schedule_rows = array();
@@ -139,7 +149,7 @@ $wpdb->history_rows = array();
 foreach ( $wpdb->queries as $sql ) {
     social_assert( preg_match( '/^(SELECT|SHOW) /', $sql ) === 1, 'read-only query: ' . $sql );
     if ( strpos( $sql, ' FROM wp_' ) !== false ) {
-        social_assert( preg_match( '/LIMIT (1|100|150)$/', trim( $sql ) ) === 1, 'query bounded: ' . $sql );
+        social_assert( preg_match( '/LIMIT (1|100|150|200|250)$/', trim( $sql ) ) === 1, 'query bounded: ' . $sql );
     }
 }
 

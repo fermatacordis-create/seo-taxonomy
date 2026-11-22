@@ -1,3 +1,59 @@
+## [0.1.22] — 2026-11-21 — Safe gross-amount rectifying invoices (#2926)
+
+- Extend issued invoice rectification by substitution to corrected net product amounts, with server-calculated VAT and grand total, preserving the existing VAT-only mode.
+- Preserve original issued invoice/PDF and WooCommerce order; create a separately numbered RECT PDF linked to the original and display the change in gross. No automatic payment, refund, order edit or receipt duplication.
+- Validate every product line, uniform supported VAT rates, mandatory reason, original document and fiscal quarter; reject shipping/fees/discounts and ambiguous mixed VAT.
+- Notify optional Accounting consumers via the established filter and action; original payment remains linked and any additional due is tracked there.
+- Regression tests cover amount corrections, multiple lines, VAT-only and invalid amounts. STAGING and Focazul only; never PRO.
+
+### Entrega de emergencia — 2026-11-20 — #2864
+
+- STAGING y Asociación Focazul tenían una instalación incompleta de Billing: faltaba `includes/class-seo-facturas-special-rates.php` y fallaba el arranque de WordPress.
+- Una entrega de Billing reconcilia todos sus archivos instalables contra Git por SHA-256, subiendo solo los ausentes o diferentes; no instala plugins faltantes, no toca otros módulos ni despliega a producción.
+- Sin modificaciones funcionales en la facturación ni en los documentos emitidos.
+
+## [0.1.21] — 2026-11-20 — Immutable VAT rectifying invoices by substitution (#2860)
+
+- Issue independent numbered RECT fiscal documents with a mandatory justification, original invoice number/date, old and corrected base/VAT/total, and a permanently linked, downloadable PDF; unchanged gross means no extra charge to the customer.
+- Limit the initial correction workflow to a single applicable 0/4/10/21% VAT rate and unchanged gross; reject fees, charged shipping, discounts, and repeated rectifications rather than invent line-specific values. Preserve original PDF, order, payments and seller snapshot.
+- Add a nonce- and capability-guarded control in the issued invoice register, a separate rectification register, manual PDF retry and customer email. A read-only optional WordPress filter exposes the effective issued correction to other plugins without a hard dependency.
+- Add a separate rectifications table and upgrade DB schema to 0.2.0; first issue uses independent RECT numbering. Never auto-correct historic fiscal documents.
+
+## [0.1.20] — 2026-11-17 — Comunicación de factura emitida a contabilidad (#2778)
+
+- Tras completar el PDF y guardar el snapshot fiscal inmutable de una factura emitida, dispara la acción opcional `taxocommerce_billing_invoice_issued` con identificador de pedido y documento emitido.
+- Cualquier plugin puede suscribirse sin que Billing dependa de Accounting ni se modifiquen pedidos, PDFs o documentos históricos.
+- No duplica eventos para una factura previamente emitida; Accounting recibe la nueva emisión y conserva una revisión fiscal previa a la aprobación.
+
+## [0.1.19] — 2026-11-17 — Transporte calculado en presupuestos y proformas
+
+- Recalcula el transporte usando el destino introducido en el formulario de carrito, resuelve provincia española a codigo WooCommerce y restaura la direccion original de sesion.
+- Detecta envio calculado desde WC_Cart y la tarifa seleccionada, en lugar de confundirlo con el indicador de WC_Customer.
+- Muestra coste de transporte sin IVA y, cuando aplica, total del transporte con IVA incluido para evitar confusion con el total del documento.
+- Si un producto requiere envio y no hay tarifa para la direccion completa, impide emitir el PDF con coste ficticio. No modifica tarifas, pedidos ni pesos/dimensiones de productos.
+- Normaliza Stable tag de readme.txt a la version publicada.
+
+## [0.1.18] — 2026-11-17 — Catálogo completo IGIC e IPSI (#2762)
+
+- Añade tipos IGIC Canarias (0 / 3 / 7 / 9,5 / 15 / 20 %) y IPSI Ceuta/Melilla (0 / 0,5 / 1 / 2 / 4 / 8 / 10 %), editables.
+- Registra clases fiscales WooCommerce (`igic-*`, `ipsi-*`) y aplica el tipo según la clase del producto y el destino.
+- Sin clase específica en Canarias/Ceuta/Melilla se usa el tipo general. Sigue fuera del flujo VIES/ISP.
+- Los porcentajes son orientativos; el comercio/asesor debe confirmar la normativa vigente.
+
+## [0.1.17] — 2026-11-17 — B2B UE (VIES/ISP) + etiquetas IGIC/IPSI (#2761 #2762)
+
+- Añade validación VIES opcional e inversión del sujeto pasivo (IVA 0 %) para empresas de otro Estado UE, con mención legal en PDF y metadatos de pedido.
+- Canarias se etiqueta como IGIC y Ceuta/Melilla como IPSI (tipos configurables); quedan fuera del flujo VIES/ISP.
+- Accounting importa pedidos con régimen ISP como `treatment=intra` (draft) copiando el NIF-IVA.
+- Fuera de alcance: OSS, IOSS, SII/Verifactu, presentación oficial 303/349, catálogo completo de tipos IGIC/IPSI.
+
+## [0.1.16] — 2026-11-16 — IVA incluido en los tres documentos comerciales
+
+- Repara una sola vez la configuración fiscal para tiendas con PVP IVA incluido cuando WooCommerce no dispone de una tasa española aplicable, sin modificar precios ni pedidos previos.
+- Presupuesto y proforma del carrito calculan el IVA según la dirección introducida por el comprador; se restauran los datos de sesión después del cálculo.
+- Factura y proforma asociadas a pedidos se alimentan de los impuestos originales de WooCommerce. Si falta el IVA esperado para un producto ordinario sujeto a impuesto, se rechaza emitir un documento nuevo y se muestra un error explícito en vez de certificar una base falsa.
+- Conserva las clases fiscales especiales y los documentos ya emitidos. El transporte sigue las tasas configuradas en WooCommerce.
+
 ## [0.1.15] — 2026-11-13 — Code Check equiparado a Core 0.4.82 (#2626)
 
 - Code Check equiparado a Core 0.4.82: reglas autónomas PHP/WordPress/seguridad, clasificación por gravedad, detalles de archivos y recomendaciones, resumen y JSON; sin modificar el Autotest funcional. Issue #2626.

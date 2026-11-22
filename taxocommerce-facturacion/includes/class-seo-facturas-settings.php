@@ -54,10 +54,38 @@ final class SEO_Facturas_Settings {
             'tax_shipping' => 1,
             'tax_peninsula_rate' => 21.0,
             'tax_baleares_rate' => 21.0,
-            'tax_canarias_rate' => 0.0,
-            'tax_ceuta_rate' => 0.0,
-            'tax_melilla_rate' => 0.0,
-            'tax_special_note' => 'Canarias, Ceuta y Melilla pueden estar sujetos a impuestos, despacho, transporte u otros gastos en destino que no estan incluidos en este documento. Consultar condiciones especificas antes de formalizar la operacion.',
+            'tax_canarias_rate' => 7.0,
+            'tax_ceuta_rate' => 10.0,
+            'tax_melilla_rate' => 10.0,
+            'tax_special_note' => 'Canarias (IGIC), Ceuta y Melilla (IPSI) tienen regímenes fiscales propios, fuera del IVA peninsular y del IVA UE. Confirme tipos aplicables; despacho, transporte u otros gastos en destino pueden no estar incluidos.',
+            'tax_eu_b2b_enabled' => 0,
+            'tax_eu_block_if_vies_down' => 1,
+            'tax_eu_seller_vat' => '',
+            'tax_special_rates_enabled' => 1,
+            // IGIC Canarias (catálogo completo, editable).
+            'tax_igic_cero' => 0.0,
+            'tax_igic_reducido' => 3.0,
+            'tax_igic_general' => 7.0,
+            'tax_igic_incrementado' => 9.5,
+            'tax_igic_especial_15' => 15.0,
+            'tax_igic_especial_20' => 20.0,
+            // IPSI Ceuta.
+            'tax_ipsi_ceuta_cero' => 0.0,
+            'tax_ipsi_ceuta_r05' => 0.5,
+            'tax_ipsi_ceuta_r1' => 1.0,
+            'tax_ipsi_ceuta_r2' => 2.0,
+            'tax_ipsi_ceuta_r4' => 4.0,
+            'tax_ipsi_ceuta_r8' => 8.0,
+            'tax_ipsi_ceuta_general' => 10.0,
+            // IPSI Melilla.
+            'tax_ipsi_melilla_cero' => 0.0,
+            'tax_ipsi_melilla_r05' => 0.5,
+            'tax_ipsi_melilla_r1' => 1.0,
+            'tax_ipsi_melilla_r2' => 2.0,
+            'tax_ipsi_melilla_r4' => 4.0,
+            'tax_ipsi_melilla_r8' => 8.0,
+            'tax_ipsi_melilla_general' => 10.0,
+            'tax_eu_reverse_charge_note' => 'Operación intracomunitaria. Inversión del sujeto pasivo (art. 25 Ley 37/1992 del IVA y normativa UE aplicable). IVA 0 %.',
         );
     }
 
@@ -257,8 +285,38 @@ final class SEO_Facturas_Settings {
             'tax_ceuta_rate'       => self::sanitize_tax_rate($input['tax_ceuta_rate'] ?? $d['tax_ceuta_rate']),
             'tax_melilla_rate'     => self::sanitize_tax_rate($input['tax_melilla_rate'] ?? $d['tax_melilla_rate']),
             'tax_special_note'     => sanitize_textarea_field($input['tax_special_note'] ?? $d['tax_special_note']),
+            'tax_eu_b2b_enabled'   => empty($input['tax_eu_b2b_enabled']) ? 0 : 1,
+            'tax_eu_block_if_vies_down' => empty($input['tax_eu_block_if_vies_down']) ? 0 : 1,
+            'tax_eu_seller_vat'    => strtoupper(sanitize_text_field($input['tax_eu_seller_vat'] ?? $d['tax_eu_seller_vat'])),
+            'tax_eu_reverse_charge_note' => sanitize_textarea_field($input['tax_eu_reverse_charge_note'] ?? $d['tax_eu_reverse_charge_note']),
+            'tax_special_rates_enabled' => empty($input['tax_special_rates_enabled']) ? 0 : 1,
+            'tax_igic_cero' => self::sanitize_tax_rate($input['tax_igic_cero'] ?? $d['tax_igic_cero']),
+            'tax_igic_reducido' => self::sanitize_tax_rate($input['tax_igic_reducido'] ?? $d['tax_igic_reducido']),
+            'tax_igic_general' => self::sanitize_tax_rate($input['tax_igic_general'] ?? $d['tax_igic_general']),
+            'tax_igic_incrementado' => self::sanitize_tax_rate($input['tax_igic_incrementado'] ?? $d['tax_igic_incrementado']),
+            'tax_igic_especial_15' => self::sanitize_tax_rate($input['tax_igic_especial_15'] ?? $d['tax_igic_especial_15']),
+            'tax_igic_especial_20' => self::sanitize_tax_rate($input['tax_igic_especial_20'] ?? $d['tax_igic_especial_20']),
+            'tax_ipsi_ceuta_cero' => self::sanitize_tax_rate($input['tax_ipsi_ceuta_cero'] ?? $d['tax_ipsi_ceuta_cero']),
+            'tax_ipsi_ceuta_r05' => self::sanitize_tax_rate($input['tax_ipsi_ceuta_r05'] ?? $d['tax_ipsi_ceuta_r05']),
+            'tax_ipsi_ceuta_r1' => self::sanitize_tax_rate($input['tax_ipsi_ceuta_r1'] ?? $d['tax_ipsi_ceuta_r1']),
+            'tax_ipsi_ceuta_r2' => self::sanitize_tax_rate($input['tax_ipsi_ceuta_r2'] ?? $d['tax_ipsi_ceuta_r2']),
+            'tax_ipsi_ceuta_r4' => self::sanitize_tax_rate($input['tax_ipsi_ceuta_r4'] ?? $d['tax_ipsi_ceuta_r4']),
+            'tax_ipsi_ceuta_r8' => self::sanitize_tax_rate($input['tax_ipsi_ceuta_r8'] ?? $d['tax_ipsi_ceuta_r8']),
+            'tax_ipsi_ceuta_general' => self::sanitize_tax_rate($input['tax_ipsi_ceuta_general'] ?? $d['tax_ipsi_ceuta_general']),
+            'tax_ipsi_melilla_cero' => self::sanitize_tax_rate($input['tax_ipsi_melilla_cero'] ?? $d['tax_ipsi_melilla_cero']),
+            'tax_ipsi_melilla_r05' => self::sanitize_tax_rate($input['tax_ipsi_melilla_r05'] ?? $d['tax_ipsi_melilla_r05']),
+            'tax_ipsi_melilla_r1' => self::sanitize_tax_rate($input['tax_ipsi_melilla_r1'] ?? $d['tax_ipsi_melilla_r1']),
+            'tax_ipsi_melilla_r2' => self::sanitize_tax_rate($input['tax_ipsi_melilla_r2'] ?? $d['tax_ipsi_melilla_r2']),
+            'tax_ipsi_melilla_r4' => self::sanitize_tax_rate($input['tax_ipsi_melilla_r4'] ?? $d['tax_ipsi_melilla_r4']),
+            'tax_ipsi_melilla_r8' => self::sanitize_tax_rate($input['tax_ipsi_melilla_r8'] ?? $d['tax_ipsi_melilla_r8']),
+            'tax_ipsi_melilla_general' => self::sanitize_tax_rate($input['tax_ipsi_melilla_general'] ?? $d['tax_ipsi_melilla_general']),
         );
 
+        if (!empty($clean['tax_special_rates_enabled'])) {
+            $clean['tax_canarias_rate'] = $clean['tax_igic_general'];
+            $clean['tax_ceuta_rate'] = $clean['tax_ipsi_ceuta_general'];
+            $clean['tax_melilla_rate'] = $clean['tax_ipsi_melilla_general'];
+        }
         if (!empty($clean['tax_manager_enabled']) && class_exists('SEO_Facturas_Tax')) {
             $sync = SEO_Facturas_Tax::sync_managed_rates($clean);
             if (is_wp_error($sync)) {
@@ -433,6 +491,9 @@ final class SEO_Facturas_Settings {
 
     public static function padding_for_type($type) {
         $type = sanitize_key((string) $type);
+        if ('rectification' === $type) {
+            return 6;
+        }
         if ('invoice' === $type) {
             return self::sanitize_padding(self::get('invoice_padding', 6));
         }
@@ -444,6 +505,9 @@ final class SEO_Facturas_Settings {
 
     public static function series_for_type($type) {
         $type = sanitize_key((string) $type);
+        if ('rectification' === $type) {
+            return 'RECT';
+        }
         if ('invoice' === $type) {
             return self::sanitize_series(self::get('invoice_series', 'FAC'), 'FAC');
         }

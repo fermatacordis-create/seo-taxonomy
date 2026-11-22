@@ -26,6 +26,14 @@ tca_invoice_assert( TCA_Provider_Invoices::is_pdf( $pdf ), 'Accept genuine PDF s
 tca_invoice_assert( ! TCA_Provider_Invoices::is_pdf( "<script>php</script>" ), 'Reject non-PDF' );
 tca_invoice_assert( ! TCA_Provider_Invoices::is_pdf( " %PDF-1.7" ), 'Reject disguised PDF header' );
 tca_invoice_assert( TCA_Provider_Invoices::MAX_BYTES === 10485760, 'Enforce 10 MB limit' );
+$png = base64_decode( 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4//8/AwAI/AL+eWjK6QAAAABJRU5ErkJggg==' );
+tca_invoice_assert( 'image/png' === TCA_Provider_Invoices::document_mime( $png ), 'Recognise valid original PNG bytes' );
+tca_invoice_assert( '' === TCA_Provider_Invoices::document_mime( "\x89PNG\r\n\x1a\nnot-a-real-image" ), 'Reject forged PNG magic' );
+tca_invoice_assert( '' === TCA_Provider_Invoices::document_mime( '<script>alert(1)</script>' ), 'Reject HTML or scripts' );
+$encrypted_png = TCA_Provider_Invoices::encrypt( $png );
+tca_invoice_assert( ! is_wp_error( $encrypted_png ) && false === strpos( $encrypted_png, $png ), 'Image is encrypted, not publicly stored' );
+tca_invoice_assert( $png === TCA_Provider_Invoices::decrypt( $encrypted_png ), 'Archived image can be restored accurately' );
+
 $encrypted = TCA_Provider_Invoices::encrypt( $pdf );
 tca_invoice_assert( ! is_wp_error( $encrypted ), 'Encrypt works with OpenSSL' );
 tca_invoice_assert( false === strpos( $encrypted, $pdf ), 'Never store plaintext' );
@@ -50,3 +58,8 @@ tca_invoice_assert( false === strpos( $addon, "wp_insert_attachment(" ), 'Do not
 tca_invoice_assert( false === strpos( $addon, "wp_get_attachment_url(" ), 'No public file URLs' );
 tca_invoice_assert( false !== strpos( $addon, "hash_equals(" ), 'Check original content fingerprint on download' );
 echo "Accounting supplier PDF: crypto, upload/download hooks, access, size, and ledger contracts PASS\n";
+
+$archive_source = file_get_contents( dirname( __DIR__ ) . '/includes/class-tca-provider-invoices.php' );
+foreach ( array( "'jpg' => 'image/jpeg'", "'png' => 'image/png'", "'webp' => 'image/webp'", "'Content-Type: ' . \$mime", "'tca_invoice_download_' . \$id" ) as $required ) {
+    tca_invoice_assert( false !== strpos( $archive_source, $required ), 'Protected image upload/download contract: ' . $required );
+}

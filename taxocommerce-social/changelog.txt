@@ -1,3 +1,9 @@
+= 0.1.25 (2026-11-20) =
+* Add per-publication coloured delivery status labels and per-network failure rates to Reports and read-only Autocheck, distinguishing future schedules from unconfirmed remote outcomes. No posts are sent or retried. Issue #2840.
+
+= 0.1.24 (2026-11-19) =
+* Read-only provider delivery audit (last attempt/confirmation, overdue WP-Cron, missing schedule events and pending outcomes), clear error details and attempt timestamps in Reports/history CSV. Unexpected provider failures retain an unconfirmed state to prevent duplicate automatic retries. Issue #2829.
+
 = 0.1.18 =
 * Registro de automatización, conciliación segura de agenda futura, control de WP-Cron, permisos Pinterest y cinco pruebas operativas del Autocheck. Issue #2630.
 

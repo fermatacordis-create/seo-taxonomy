@@ -271,7 +271,14 @@ $taxocommerce_billing_valid_date = $taxocommerce_billing_valid_ts ? wp_date(get_
                 <?php if (!empty($taxocommerce_billing_totals['shipping_pending'])) : ?>
                     <strong>Pendiente de calcular</strong>
                 <?php else : ?>
-                    <?php echo esc_html($taxocommerce_billing_money($taxocommerce_billing_totals['shipping_total'] ?? 0)); ?>
+                    <?php
+                    $taxocommerce_billing_shipping_net = (float) ($taxocommerce_billing_totals['shipping_total'] ?? 0);
+                    $taxocommerce_billing_shipping_tax = (float) ($taxocommerce_billing_totals['shipping_tax'] ?? 0);
+                    echo esc_html($taxocommerce_billing_money($taxocommerce_billing_shipping_net));
+                    if ($taxocommerce_billing_shipping_tax > 0.0) {
+                        echo ' (' . esc_html($taxocommerce_billing_money($taxocommerce_billing_shipping_net + $taxocommerce_billing_shipping_tax)) . ' IVA incluido)';
+                    }
+                    ?>
                 <?php endif; ?>
             </td>
         </tr>
@@ -371,7 +378,12 @@ $taxocommerce_billing_commercial_items = array_values(array_filter($taxocommerce
 <?php endif; ?>
 
 <?php if (!empty($taxocommerce_billing_fiscal['enabled']) && !empty($taxocommerce_billing_fiscal['note'])) : ?>
-<div class="fiscal-note"><strong>Condiciones fiscales del destino:</strong><br><?php echo nl2br(esc_html($taxocommerce_billing_fiscal['note'])); ?></div>
+<?php
+$taxocommerce_billing_fiscal_heading = (!empty($taxocommerce_billing_fiscal['regime']) && 'intra_eu_reverse_charge' === $taxocommerce_billing_fiscal['regime'])
+    ? 'Inversión del sujeto pasivo (UE)'
+    : 'Condiciones fiscales del destino';
+?>
+<div class="fiscal-note"><strong><?php echo esc_html($taxocommerce_billing_fiscal_heading); ?>:</strong><br><?php echo nl2br(esc_html($taxocommerce_billing_fiscal['note'])); ?></div>
 <?php endif; ?>
 
 <?php if (!empty($taxocommerce_billing_document['terms_text'])) : ?>

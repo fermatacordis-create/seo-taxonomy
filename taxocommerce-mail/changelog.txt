@@ -1,0 +1,7 @@
+= 0.1.1 =
+* Add three-field hosting mailbox setup with optional advanced SMTP settings.
+* Offer a verified Mail ZIP through the local Core package catalogue on STAGING/Focazul only.
+
+= 0.1.0 =
+* Initial independent hosting mail client with multiple accounts, private IMAP reading and authenticated SMTP.
+* Admin-only account management, encrypted credentials, Autocheck and manuals.

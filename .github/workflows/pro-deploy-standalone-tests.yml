@@ -6,9 +6,11 @@ on:
       - staging
     paths:
       - '.github/scripts/deploy_pro_ftps_native.py'
+      - '.github/scripts/deploy_pro_simple.py'
       - '.github/scripts/pro_deploy_preflight.py'
       - '.github/scripts/pro_ftps_root_probe.py'
       - '.github/workflows/despliege_de_main_a_pro.yml'
+      - '.github/workflows/staging-a-pro-manual.yml'
       - '.github/workflows/pro-deploy-standalone-tests.yml'
       - '.github/tests/test_pro_historic_modular_workflow.py'
       - '.github/tests/test_pro_ftps_native.py'
@@ -18,8 +20,12 @@ on:
     paths:
       - '.github/scripts/deploy_pro_ftps_native.py'
       - '.github/scripts/pro_deploy_preflight.py'
+      - '.github/scripts/select_pro_release_delta.py'
       - '.github/workflows/despliege_de_main_a_pro.yml'
+      - '.github/workflows/staging-a-pro-manual.yml'
       - '.github/workflows/pro-deploy-standalone-tests.yml'
+      - '.github/tests/test_pro_historic_modular_workflow.py'
+      - '.github/tests/test_pro_ftps_native.py'
 
 permissions:
   contents: read

@@ -41,6 +41,61 @@ final class TaxoCommerce_Insights_Chunked_Export {
         );
     }
 
+    /**
+     * Validate the exact GSC source used by the full SQL-backed report.
+     * This preflight is read-only; the browser invokes the existing one-day
+     * importer only after an authenticated administrator clicks Run all.
+     */
+    public static function gsc_freshness_state() {
+        $state = array(
+            'property_configured' => false,
+            'can_sync' => false,
+            'needs_sync' => false,
+            'sql_date' => '',
+            'snapshot_date' => '',
+            'expected_date' => '',
+            'target_date' => '',
+            'warning' => '',
+        );
+        if ( ! function_exists( 'seo_analista_resolve_property_id' ) ) {
+            $state['warning'] = __( 'El motor de Search Console no está disponible.', 'taxocommerce-google-bing' );
+            return $state;
+        }
+        $property = (string) seo_analista_resolve_property_id();
+        if ( '' === $property ) {
+            $state['warning'] = __( 'Search Console no tiene una propiedad configurada. Se generará el informe con las demás fuentes.', 'taxocommerce-google-bing' );
+            return $state;
+        }
+        $state['property_configured'] = true;
+        if ( function_exists( 'taxocommerce_insights_gsc_trend_health' ) ) {
+            $health = taxocommerce_insights_gsc_trend_health( $property, 180 );
+            $state['sql_date'] = (string) ( $health['sql_date'] ?? '' );
+            $state['snapshot_date'] = (string) ( $health['snapshot_date'] ?? '' );
+            $state['expected_date'] = (string) ( $health['finalized_date'] ?? '' );
+        } else {
+            $state['sql_date'] = function_exists( 'seo_google_latest_data_date' )
+                ? (string) seo_google_latest_data_date( $property ) : '';
+            $state['expected_date'] = function_exists( 'seo_google_finalized_end_date' )
+                ? (string) seo_google_finalized_end_date() : '';
+        }
+        $state['target_date'] = max( $state['snapshot_date'], $state['expected_date'] );
+        $state['needs_sync'] = '' !== $state['target_date']
+            && $state['sql_date'] < $state['target_date'];
+        $state['can_sync'] = function_exists( 'seo_google_connection_status' )
+            && 'connected' === seo_google_connection_status()
+            && function_exists( 'seo_google_sync_start_handler' )
+            && function_exists( 'seo_google_sync_day_handler' );
+        if ( $state['needs_sync'] && ! $state['can_sync'] ) {
+            $state['warning'] = sprintf(
+                /* translators: 1: last SQL data date, 2: latest finalized GSC date. */
+                __( 'Google Search Console sin sincronizar: histórico hasta %1$s; fecha disponible hasta %2$s. La conexión de sincronización no está lista.', 'taxocommerce-google-bing' ),
+                $state['sql_date'] ?: __( 'sin datos', 'taxocommerce-google-bing' ),
+                $state['target_date']
+            );
+        }
+        return $state;
+    }
+
     private static function key() {
         return self::OPTION_PREFIX . get_current_user_id();
     }
@@ -110,6 +165,7 @@ final class TaxoCommerce_Insights_Chunked_Export {
             'memory_percent' => $memory,
             'elapsed_ms' => $elapsed,
             'download_url' => ! empty( $state['complete'] ) ? self::download_url( $state ) : '',
+            'gsc_warning' => (string) ( $state['gsc_warning'] ?? '' ),
         );
     }
 
@@ -146,7 +202,21 @@ final class TaxoCommerce_Insights_Chunked_Export {
         // Keep verification in the same entry point that reads POST fields.
         check_ajax_referer( self::NONCE, 'nonce' );
         $op = isset( $_POST['op'] ) ? sanitize_key( wp_unslash( $_POST['op'] ) ) : '';
+        if ( 'preflight' === $op ) {
+            wp_send_json_success( self::gsc_freshness_state() );
+        }
         if ( 'start' === $op ) {
+            $gsc_health = self::gsc_freshness_state();
+            if ( $gsc_health['needs_sync'] && $gsc_health['can_sync'] ) {
+                wp_send_json_error( array(
+                    'message' => sprintf(
+                        /* translators: 1: last SQL GSC date, 2: required GSC date. */
+                        __( 'Informe no iniciado: Search Console sigue hasta %1$s y debe actualizarse hasta %2$s. Completa primero la sincronización por bloques.', 'taxocommerce-google-bing' ),
+                        $gsc_health['sql_date'] ?: __( 'sin datos', 'taxocommerce-google-bing' ),
+                        $gsc_health['target_date']
+                    ),
+                ), 409 );
+            }
             $old = self::load();
             if ( $old && empty( $old['complete'] ) ) {
                 wp_send_json_success( self::response( $old ) );
@@ -167,6 +237,7 @@ final class TaxoCommerce_Insights_Chunked_Export {
                 'file' => $file,
                 'next' => 0,
                 'complete' => false,
+                'gsc_warning' => (string) $gsc_health['warning'],
             );
             update_option( self::key(), $state, false );
             wp_send_json_success( self::response( $state ) );

@@ -352,9 +352,17 @@ final class TaxoCommerce_Import_Export_Auto_Test {
     }
 
     private static function check_queue_worker() {
-        $missing = self::has_hooks( array( TaxoCommerce_Import_Export_Batch::WORKER_HOOK, 'init' ) );
-        if ( $missing ) { return self::fail( 'Falta el worker o el watchdog.' ); }
-        return self::pass( 'Worker y watchdog registrados; no se ha ejecutado ni reprogramado ningún lote.' );
+        // Since 0.4.29 there is intentionally no scheduled WORKER_HOOK.
+        // Check the live signed loopback endpoints and actual worker methods.
+        $missing = self::has_hooks( array(
+            'wp_ajax_taxocommerce_ie_batch_continue',
+            'wp_ajax_nopriv_taxocommerce_ie_batch_continue',
+        ) );
+        $batch = new TaxoCommerce_Import_Export_Batch( self::csv() );
+        if ( $missing || ! method_exists( $batch, 'worker' ) || ! method_exists( $batch, 'internal_continue' ) || ! method_exists( $batch, 'watchdog' ) ) {
+            return self::fail( 'Falta una ruta de continuación o el worker/watchdog de importación.' );
+        }
+        return self::pass( 'Worker de importación, autollamadas firmadas y watchdog disponibles; no requieren tareas programadas propias.' );
     }
 
     private static function check_queue_state() {
@@ -384,7 +392,7 @@ final class TaxoCommerce_Import_Export_Auto_Test {
             return self::fail( 'Estado de exportación ilegible: revisar antes de desplegar.' );
         }
         if ( is_array( $state ) && in_array( (string) ( $state['status'] ?? '' ),
-            array( 'running', 'processing', 'pending', 'active' ), true ) ) {
+            array( 'queued', 'running', 'processing', 'pending', 'active', 'cancelling' ), true ) ) {
             return self::fail( 'Exportación de este usuario activa; no desplegar todavía.' );
         }
         return self::pass( 'Sin exportación activa de este usuario; revisar otros administradores por separado.' );
@@ -419,19 +427,36 @@ final class TaxoCommerce_Import_Export_Auto_Test {
         $missing = self::has_hooks( array(
             'wp_ajax_taxocommerce_ie_export_start', 'wp_ajax_taxocommerce_ie_export_step',
             'wp_ajax_taxocommerce_ie_export_status', 'wp_ajax_taxocommerce_ie_export_cancel',
+            'wp_ajax_taxocommerce_ie_export_resume',
+            'wp_ajax_taxocommerce_ie_export_continue', 'wp_ajax_nopriv_taxocommerce_ie_export_continue',
             'admin_post_taxocommerce_ie_export_download',
         ) );
         return $missing ? self::fail( 'Faltan acciones de exportación: ' . implode( ', ', $missing ) )
-            : self::pass( 'Inicio, bloques, estado, cancelación y descarga registrados sin ejecutarlos.' );
+            : self::pass( 'Rutas de exportación, recuperación AJAX y descarga registradas; no demuestra una descarga HTTP real.' );
     }
 
     private static function check_export_state() {
         $state = get_transient( TaxoCommerce_Import_Export_Exporter::STATE_PREFIX . get_current_user_id() );
-        if ( false === $state ) { return self::skip( 'No hay exportación en curso para este usuario.' ); }
-        if ( ! is_array( $state ) || ! isset( $state['id'], $state['user_id'] ) ) {
-            return self::fail( 'El trabajo exportador guardado tiene formato inesperado.' );
+        if ( false === $state ) { return self::skip( 'No existe una exportación guardada de este administrador. No se ha probado la descarga.' ); }
+        if ( ! is_array( $state ) || ! isset( $state['id'], $state['user_id'], $state['type'] ) ||
+            absint( $state['user_id'] ) !== get_current_user_id() ) {
+            return self::fail( 'El trabajo exportador guardado tiene formato inesperado o no pertenece a este administrador.' );
         }
-        return self::pass( 'Estado de exportación disponible; no se accede a sus archivos ni se modifica.' );
+        if ( 'failed' === (string) ( $state['status'] ?? '' ) ) {
+            return self::fail( 'Exportación fallida: ' . sanitize_text_field( (string) ( $state['error'] ?? 'Consultar el servidor.' ) ) );
+        }
+        $file = TaxoCommerce_Import_Export_Exporter::validate_export_file( $state );
+        if ( is_wp_error( $file ) ) {
+            return self::fail( $file->get_error_message() );
+        }
+        if ( empty( $state['complete'] ) ) {
+            $age = time() - absint( $state['updated'] ?? 0 );
+            if ( $age > 60 && in_array( (string) ( $state['status'] ?? '' ), array( 'queued', 'running', 'cancelling' ), true ) ) {
+                return self::fail( 'La exportación lleva más de 60 segundos sin avanzar. Revisar el worker, las autollamadas o la asistencia AJAX.' );
+            }
+            return self::pass( 'Archivo parcial legible, con cabecera válida; la exportación todavía no ha terminado.' );
+        }
+        return self::pass( 'CSV terminado, legible y con cabecera válida. La descarga HTTP sigue pendiente de validación manual.' );
     }
 
     private static function check_export_headers() {

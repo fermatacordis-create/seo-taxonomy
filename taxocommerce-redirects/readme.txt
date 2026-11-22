@@ -11,18 +11,15 @@ Manage SEO redirects and assisted content deletion for WordPress and WooCommerce
 
 == Description ==
 
+Independent WordPress/WooCommerce 301/302 manager with assisted deletion.
+
+= Key Features =
+
 * Existing redirect chains are served as one HTTP hop to their terminal destination. Administrators can flatten individual stored chains after reviewing the target.
 * During assisted deletion of a published WooCommerce product, a populated specific product category is suggested as an optional destination. The administrator must confirm suitability; no blanket redirects from missing pages are created.
 
 
-* Admin header: plugin title, a single local `Description` with the static `Plugin URI` link below it (left); a wider collapsed `CHANGELOG.md` history (center); local version and release date (right). No duplicated information panel or external requests.
 
-* The admin header reads this plugin's local `Description` and links to `Plugin URI`, without external requests or caching. The version history is bundled in `CHANGELOG.md`.
-
-* One collapsible version-history control, without a duplicate plugin-information box.
-
-
-Independent WordPress/WooCommerce 301/302 manager with assisted deletion.
 
 * Administrators can enable or disable the TaxoCommerce redirect engine from a checkbox in Redirects. Existing sites default to enabled. Disabling stops TaxoCommerce-owned redirects and ownership claims, preserves saved rules and management features, and does not automatically enable another plugin.
 

@@ -16,8 +16,15 @@ import sys
 CANDIDATES = (
     ".",
     "./wp-content/plugins",
+    "./public/wp-content/plugins",
+    "./public/distribuidordeherramientas.es/wp-content/plugins",
     "./public_html/wp-content/plugins",
     "./httpdocs/wp-content/plugins",
+    "./distribuidordeherramientas.es/wp-content/plugins",
+    "./public_html/distribuidordeherramientas.es/wp-content/plugins",
+    "./www/wp-content/plugins",
+    "./domains/distribuidordeherramientas.es/public_html/wp-content/plugins",
+    "./web/wp-content/plugins",
     "..",
 )
 TARGETS = (
@@ -163,6 +170,69 @@ def find_verified_root(ftp: ftplib.FTP_TLS, expected: dict[str, str]):
     return next(iter(matches.values())), next(iter(matches.keys()))
 
 
+def diagnose_known_roots(ftp):
+    """Bounded read-only diagnostics. No site inventory, FTP writes or credentials."""
+    login_root = ftp.pwd()
+    # Print only plausible public WordPress site directory names, not private
+    # paths, credentials or arbitrary files. Useful for FTP-account chroots.
+    try:
+        candidates = sorted(
+            name for name, facts in ftp.mlsd()
+            if (facts.get("type") or "").lower() == "dir"
+            and name.lower().startswith(("distrib", "www", "public", "http", "pro", "web", "dom", "site", "wordpress"))
+        )[:25]
+        print("SITE ROOT FOLDERS: " + (", ".join(candidates) if candidates else "(none)"), flush=True)
+    except (ftplib.Error, OSError):
+        print("SITE ROOT FOLDERS: unavailable", flush=True)
+
+    for relative in CANDIDATES:
+        try:
+            ftp.cwd(login_root)
+            ftp.cwd(relative)
+            values = []
+            for file, label in (
+                ("taxocommerce-core/taxocommerce-core.php", "Core"),
+                ("woocommerce/woocommerce.php", "WooCommerce"),
+                ("taxocommerce-google-bing/taxocommerce-google-bing.php", "Insights"),
+            ):
+                try:
+                    values.append(label + "=" + read_plugin_version(ftp, file))
+                except (ftplib.Error, OSError, ValueError):
+                    values.append(label + "=absent")
+            print("CANDIDATE " + relative + " : " + " ".join(values), flush=True)
+        except (ftplib.Error, OSError, ValueError):
+            print("CANDIDATE " + relative + " : inaccessible", flush=True)
+        finally:
+            ftp.cwd(login_root)
+
+
+def diagnose_legacy_bridge(ftp):
+    """Read two fixed, public-source files only. Never print source or credentials."""
+    def read_limited(path):
+        chunks = bytearray()
+        try:
+            def append(block):
+                if len(chunks) + len(block) > 1048576:
+                    raise RuntimeError("Legacy source exceeds size limit")
+                chunks.extend(block)
+            ftp.retrbinary("RETR " + path, append)
+        except ftplib.error_perm as exc:
+            if str(exc).startswith("550"):
+                return None
+            raise
+        return bytes(chunks)
+
+    entry = read_limited("seo-taxonomy.php")
+    bridge = read_limited("includes/seo-deploy-status.php")
+    print("Legacy monolith entrypoint present: " + str(entry is not None), flush=True)
+    print("Legacy entrypoint loads deploy bridge: " +
+          str(entry is not None and b"includes/seo-deploy-status.php" in entry), flush=True)
+    print("Legacy REST deploy bridge source present: " + str(bridge is not None), flush=True)
+    print("Legacy REST route source registered: " +
+          str(bridge is not None and b"deploy-active-modules" in bridge and
+              b"register_rest_route" in bridge), flush=True)
+
+
 def main() -> int:
     required = ("FTP_SERVER", "FTP_USERNAME", "FTP_PASSWORD",
                 "PRO_CORE_EXPECTED_VERSION", "PRO_WOO_EXPECTED_VERSION")
@@ -183,6 +253,12 @@ def main() -> int:
         ftp.login(os.environ["FTP_USERNAME"], os.environ["FTP_PASSWORD"])
         ftp.prot_p()
         # This is a read-only diagnostic. No FTP upload/remove/mkdir is used.
+        if len(sys.argv) == 2 and sys.argv[1] == "--legacy-route-check":
+            diagnose_legacy_bridge(ftp)
+            return 0
+        if len(sys.argv) == 2 and sys.argv[1] == "--diagnose-known-roots":
+            diagnose_known_roots(ftp)
+            return 0
         if len(sys.argv) == 2 and sys.argv[1] == "--shared-account-pro-root":
             _candidate, _canonical = verify_pro_site_at_shared_account_root(ftp, expected)
         elif len(sys.argv) == 1:

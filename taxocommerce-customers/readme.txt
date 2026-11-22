@@ -4,7 +4,7 @@ Tags: woocommerce, crm, customers, contacts, csv
 Requires at least: 6.7
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.1.1
+Stable tag: 0.1.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,6 +14,8 @@ A private, modular CRM for WooCommerce purchasers and manual contacts, with bulk
 
 TaxoCommerce Customers is independent of other TaxoCommerce extensions.
 It reads paid orders through WooCommerce public APIs (HPOS compatible), including guests, and stores only minimal purchaser identities and CRM fields, not copies of WooCommerce orders. New paid orders update the CRM automatically; existing orders can be synchronized explicitly in small, resumable batches without WP-Cron.
+
+= Key Features =
 
 * Private directory: paid WooCommerce buyers and manually created contacts (email, phone or WhatsApp).
 * Customer records: name, company, contact and address details, preferred channel, labels and private notes.
@@ -50,6 +52,10 @@ No. Adding a manual contact does not create a WordPress user account.
 No. CSV import is purely administrative.
 
 == Changelog ==
+
+= 0.1.2 =
+* Avoid premature text-domain loading when TaxoCommerce Core registers its optional Customers module before the WordPress init hook. Preserves translated descriptions for later administrative requests. Issue #2750.
+
 
 = 0.1.1 =
 * CRM privacy erasure, granular role capabilities, manual resumable buyer sync and streamed private CSV exports.

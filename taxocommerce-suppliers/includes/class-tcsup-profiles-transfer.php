@@ -2,8 +2,9 @@
 /**
  * CPU-batched CSV import/export of PRIVATE supplier contact profiles.
  *
- * The product catalogue is the only supplier identity source. This class never
- * imports catalogue products, changes stock/prices or creates supplier names.
+ * Supplier names come from the catalogue or manually saved contact profiles.
+ * CSV changes only private contact fields, not products, prices or stock.
+ * Unknown supplier names are never created by a CSV upload.
  *
  * @package TaxoCommerceSuppliers
  */
@@ -52,7 +53,7 @@ final class TCSUP_Profiles_Transfer {
 			data-ajax="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>"
 			data-nonce="<?php echo esc_attr( $nonce ); ?>">
 			<h3><?php esc_html_e( 'Bulk import / export of supplier records', 'taxocommerce-suppliers' ); ?></h3>
-			<p><?php esc_html_e( 'Export all inventory suppliers as an editable CSV, including blank records. Import the same CSV to create or replace their private contact details; products, prices and orders never change.', 'taxocommerce-suppliers' ); ?></p>
+			<p><?php esc_html_e( 'Export imported and manually created suppliers as an editable CSV. Import it to update private contact details; products, prices and orders never change.', 'taxocommerce-suppliers' ); ?></p>
 			<div class="tcsup-history-controls">
 				<button type="button" id="tcsup-profiles-export" class="button button-primary"><?php esc_html_e( 'Export supplier records CSV', 'taxocommerce-suppliers' ); ?></button>
 				<form id="tcsup-profiles-import" enctype="multipart/form-data">
@@ -72,7 +73,7 @@ final class TCSUP_Profiles_Transfer {
 				</form>
 				<button type="button" class="button" id="tcsup-profiles-stop" hidden><?php esc_html_e( 'Cancel import', 'taxocommerce-suppliers' ); ?></button>
 			</div>
-			<p class="description"><?php esc_html_e( 'Only suppliers already present in Inventory can be imported. Blank CSV cells replace existing values. Export a backup first. Files up to 50 MB (or the server limit) are processed in small batches without cron.', 'taxocommerce-suppliers' ); ?></p>
+			<p class="description"><?php esc_html_e( 'CSV imports update only known suppliers (from Inventory or manual records). Unknown names are skipped. Blank cells replace existing values. Export a backup first.', 'taxocommerce-suppliers' ); ?></p>
 			<p id="tcsup-profiles-status" role="status" aria-live="polite"></p>
 			<progress id="tcsup-profiles-progress" max="100" value="0" hidden></progress>
 			<div id="tcsup-profiles-errors" role="status" aria-live="polite"></div>
@@ -81,33 +82,34 @@ final class TCSUP_Profiles_Transfer {
 	}
 
 	/**
-	 * Read only the next group of names from the real inventory, then enrich
-	 * them from the optional private profile table. Keyset pagination avoids
-	 * losing rows when intermediate batches run for a long time.
+	 * Export all distinct catalogue and manually saved supplier names.
+	 * Keyset pagination keeps long-running CSV exports stable.
 	 */
 	private static function export_rows( $cursor, $limit ) {
 		global $wpdb;
 		$limit = min( self::MAX_BATCH, max( 1, absint( $limit ) ) );
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Live, bounded read of unique suppliers from the current imported catalogue.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Live paginated supplier directory including manual records.
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT c.proveedor,p.nombre_comercial,p.razon_social,p.nif,p.telefono,
+				"SELECT s.proveedor,p.nombre_comercial,p.razon_social,p.nif,p.telefono,
 				 p.email,p.web,p.contacto_nombre,p.contacto_cargo,p.contacto_telefono,
 				 p.contacto_email,p.direccion,p.codigo_postal,p.localidad,
 				 p.provincia,p.pais,p.plazo_entrega,p.observaciones
 				 FROM (
-					SELECT DISTINCT proveedor FROM %i
-					WHERE proveedor<>%s AND (%s=%s OR proveedor>%s)
-					ORDER BY proveedor ASC LIMIT %d
-				 ) AS c LEFT JOIN %i AS p ON p.proveedor=c.proveedor
-				 ORDER BY c.proveedor ASC",
+					SELECT proveedor FROM %i WHERE proveedor<>%s
+					UNION SELECT proveedor FROM %i WHERE proveedor<>%s
+				 ) AS s LEFT JOIN %i AS p ON p.proveedor=s.proveedor
+				 WHERE (%s=%s OR s.proveedor>%s)
+				 ORDER BY s.proveedor ASC LIMIT %d",
 				TCSUP_Schema::catalog_table(),
 				'',
+				TCSUP_Schema::profiles_table(),
+				'',
+				TCSUP_Schema::profiles_table(),
 				$cursor,
 				'',
 				$cursor,
-				$limit,
-				TCSUP_Schema::profiles_table()
+				$limit
 			),
 			ARRAY_A
 		);
@@ -136,8 +138,10 @@ final class TCSUP_Profiles_Transfer {
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Report current supplier directory total for the progress display.
 			$total = absint( $wpdb->get_var(
 				$wpdb->prepare(
-					'SELECT COUNT(DISTINCT proveedor) FROM %i WHERE proveedor<>%s',
+					'SELECT COUNT(*) FROM (SELECT proveedor FROM %i WHERE proveedor<>%s UNION SELECT proveedor FROM %i WHERE proveedor<>%s) AS s',
 					TCSUP_Schema::catalog_table(),
+					'',
+					TCSUP_Schema::profiles_table(),
 					''
 				)
 			) );
@@ -297,7 +301,7 @@ final class TCSUP_Profiles_Transfer {
 		if ( '' === $supplier || self::char_length( $supplier ) > 190 ) {
 			return 'invalid';
 		}
-		$canonical = TCSUP_Profiles::supplier_in_catalogue( $supplier );
+		$canonical = TCSUP_Profiles::supplier_in_directory( $supplier );
 		if ( '' === $canonical || $supplier !== $canonical ) {
 			return 'unmatched';
 		}
@@ -340,7 +344,7 @@ final class TCSUP_Profiles_Transfer {
 			$payload['proveedor'] = $supplier;
 			$payload['creado'] = current_time( 'mysql' );
 			$payload['actualizado'] = current_time( 'mysql' );
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Only create private profiles for existing inventory suppliers.
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Only create private profiles for names already in the catalogue or manually registered.
 			return false !== $wpdb->insert( TCSUP_Schema::profiles_table(), $payload ) ? 'inserted' : 'invalid';
 		}
 		$same = true;

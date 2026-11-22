@@ -3,8 +3,8 @@
  * Plugin Name: TaxoCommerce Vocabulary
  * Plugin URI: https://asociacionfocazul.com/taxocommerce-vocabulary/
  * Description: Vocabulario semántico, atributos técnicos, clasificación asistida e importación/exportación para TaxoCommerce.
- * Version: 0.3.22
- * Release Date: 2026-11-13
+ * Version: 0.3.24
+ * Release Date: 2026-11-20
  * Requires at least: 6.7
  * Requires PHP: 7.4
  * Author: David Perez
@@ -20,13 +20,15 @@ require_once __DIR__ . '/includes/admin-branding.php';
 require_once __DIR__ . '/includes/class-taxocommerce-autotest-code.php';
 \TaxoCommerce_Vocabulary_Autotest_Code::boot();
 
-define( 'TAXOCOMMERCE_VOCABULARY_VERSION', '0.3.22' );
+define( 'TAXOCOMMERCE_VOCABULARY_VERSION', '0.3.24' );
 define( 'TAXOCOMMERCE_VOCABULARY_PATH', plugin_dir_path( __FILE__ ) );
 define( 'TAXOCOMMERCE_VOCABULARY_URL', plugin_dir_url( __FILE__ ) );
 
 require_once TAXOCOMMERCE_VOCABULARY_PATH . 'includes/class-tcv-schema.php';
 require_once TAXOCOMMERCE_VOCABULARY_PATH . 'includes/class-tcv-extractor.php';
 require_once TAXOCOMMERCE_VOCABULARY_PATH . 'includes/class-tcv-classifier.php';
+require_once TAXOCOMMERCE_VOCABULARY_PATH . 'includes/class-tcv-classifier-batch.php';
+TCV_Classifier_Batch::boot();
 require_once TAXOCOMMERCE_VOCABULARY_PATH . 'includes/class-tcv-io.php';
 require_once TAXOCOMMERCE_VOCABULARY_PATH . 'includes/class-tcv-portable.php';
 require_once TAXOCOMMERCE_VOCABULARY_PATH . 'includes/class-tcv-admin.php';

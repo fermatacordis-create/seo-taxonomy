@@ -39,7 +39,7 @@ msgid ""
 "foto fija, validación, escrituras en conocimiento, llamadas al motor "
 "semántico, locks, reprogramaciones, métricas y errores. El fichero activo "
 "rota automáticamente y nunca debe superar 1 MiB."
-msgstr ""
+msgstr "Traza detallada del aprendizaje. Registra lecturas de fuentes, creación de foto fija, validación, escrituras en conocimiento, llamadas al motor semántico, locks, reprogramaciones, métricas y errores. El fichero activo rota automáticamente y nunca debe superar 1 MiB."
 
 #: includes/class-tcd-admin.php:86
 msgid "Último lote:"
@@ -74,7 +74,7 @@ msgid ""
 "Resumen estructurado de los últimos eventos de Academia. Se mantiene aquí, "
 "junto al log bruto, para que toda la trazabilidad técnica de Dependiente "
 "esté centralizada en una sola pestaña."
-msgstr ""
+msgstr "Resumen estructurado de los últimos eventos de Academia. Se mantiene aquí, junto al log bruto, para que toda la trazabilidad técnica de Dependiente esté centralizada en una sola pestaña."
 
 #: includes/class-tcd-admin.php:125
 msgid "Fecha (UTC)"
@@ -101,13 +101,13 @@ msgid ""
 "Traza completa orientada a diagnóstico técnico y análisis por IA. Incluye "
 "más detalle que el resumen anterior: lecturas, escrituras, locks, "
 "reprogramaciones, consumo y errores."
-msgstr ""
+msgstr "Traza completa orientada a diagnóstico técnico y análisis por IA. Incluye más detalle que el resumen anterior: lecturas, escrituras, locks, reprogramaciones, consumo y errores."
 
 #: includes/class-tcd-admin.php:148
 msgid ""
 "El log es diagnóstico, no una copia del conocimiento. Los materiales "
 "completos y las fotos fijas siguen estando en los exports JSON de auditoría."
-msgstr ""
+msgstr "El log es diagnóstico, no una copia del conocimiento. Los materiales completos y las fotos fijas siguen estando en los exports JSON de auditoría."
 
 #: includes/class-tcd-admin.php:175
 msgid "La fuente sí se aprendió."
@@ -129,7 +129,7 @@ msgstr "este resultado no acredita el ranking actual."
 msgid ""
 "Actualiza el plugin en STAGING si procede y utiliza «Revisar correcciones y "
 "reevaluar»."
-msgstr ""
+msgstr "Actualiza el plugin en STAGING si procede y utiliza «Revisar correcciones y reevaluar»."
 
 #: includes/class-tcd-admin.php:187
 msgid "No reinicies las diez lecciones."
@@ -144,7 +144,7 @@ msgid ""
 "Se mantienen los datos aprendidos y el umbral del 88 %. Una pregunta "
 "genérica evalúa la familia; las necesidades con medidas o modelo evalúan la "
 "referencia concreta."
-msgstr ""
+msgstr "Se mantienen los datos aprendidos y el umbral del 88 %. Una pregunta genérica evalúa la familia; las necesidades con medidas o modelo evalúan la referencia concreta."
 
 #: includes/class-tcd-admin.php:220
 msgid ""
@@ -152,7 +152,7 @@ msgid ""
 "fallos internos de Dependiente, e incluye la deuda de datos detectada en "
 "toda la lección. Los CSV son vistas tabulares para revisión o corrección "
 "masiva."
-msgstr ""
+msgstr "El JSON separa lo que debes corregir en WordPress, las ambigüedades y los fallos internos de Dependiente, e incluye la deuda de datos detectada en toda la lección. Los CSV son vistas tabulares para revisión o corrección masiva."
 
 #: includes/class-tcd-admin.php:223 includes/class-tcd-admin.php:230
 msgid "Qué hacer"
@@ -191,20 +191,20 @@ msgid ""
 "Motor original: gramática, verbos, erratas, variantes, sinónimos, contexto, "
 "ambigüedad y evidencia validada. El Intérprete no busca productos ni "
 "pregunta: entrega una petición clara al Dependiente."
-msgstr ""
+msgstr "Motor original: gramática, verbos, erratas, variantes, sinónimos, contexto, ambigüedad y evidencia validada. El Intérprete no busca productos ni pregunta: entrega una petición clara al Dependiente."
 
 #: includes/class-tcd-admin.php:262
 msgid ""
 "Formación única con las fases internas y las reglas reales del Lingüista "
 "original. Trabajo por lotes en segundo plano, con avance y memoria "
 "persistente."
-msgstr ""
+msgstr "Formación única con las fases internas y las reglas reales del Lingüista original. Trabajo por lotes en segundo plano, con avance y memoria persistente."
 
 #: includes/class-tcd-admin.php:271
 msgid ""
 "forma y comprueba comprensión lingüística; no suspende por no encontrar un "
 "ID de producto que el comprador nunca especificó."
-msgstr ""
+msgstr "forma y comprueba comprensión lingüística; no suspende por no encontrar un ID de producto que el comprador nunca especificó."
 
 #: includes/class-tcd-admin.php:281
 msgid "TaxoCommerce Dependiente"
@@ -224,7 +224,7 @@ msgstr "para construir y validar el Intérprete y"
 
 #: includes/class-tcd-admin.php:330
 msgid "para mantener el conocimiento actualizado. Cada L1-L10 conserva una"
-msgstr ""
+msgstr "para mantener el conocimiento actualizado. Cada L1-L10 conserva una"
 
 #: includes/class-tcd-admin.php:330
 msgid "foto fija auditable"
@@ -234,14 +234,14 @@ msgstr "foto fija auditable"
 msgid ""
 "; toda la formación queda integrada en Dependiente, sin servicios auxiliares"
 " separados."
-msgstr ""
+msgstr "; toda la formación queda integrada en Dependiente, sin servicios auxiliares separados."
 
 #: includes/class-tcd-admin.php:335
 msgid ""
 "Este JSON sirve para auditar el aprendizaje de las diez lecciones. El "
 "conocimiento portable y el backup se gestionan únicamente desde sus pestañas"
 " específicas para evitar accesos duplicados."
-msgstr ""
+msgstr "Este JSON sirve para auditar el aprendizaje de las diez lecciones. El conocimiento portable y el backup se gestionan únicamente desde sus pestañas específicas para evitar accesos duplicados."
 
 #: includes/class-tcd-admin.php:342 includes/class-tcd-manual.php:323
 msgid "Umbrales de calidad por lección"
@@ -251,7 +251,7 @@ msgstr "Umbrales de calidad por lección"
 msgid ""
 "El responsable del catálogo decide el porcentaje mínimo de aciertos Top-8 de"
 " cada lección (0–100 %). Se mantienen los valores actuales si no se cambian."
-msgstr ""
+msgstr "El responsable del catálogo decide el porcentaje mínimo de aciertos Top-8 de cada lección (0–100 %). Se mantienen los valores actuales si no se cambian."
 
 #: includes/class-tcd-admin.php:350
 msgid "Guardar umbrales"
@@ -262,7 +262,7 @@ msgid ""
 "Guardar no aprueba automáticamente las lecciones suspendidas ni altera los "
 "exámenes. Para continuar una lección ya suspendida, revisa sus fallos y "
 "acepta expresamente el resultado cuando alcance el nuevo mínimo."
-msgstr ""
+msgstr "Guardar no aprueba automáticamente las lecciones suspendidas ni altera los exámenes. Para continuar una lección ya suspendida, revisa sus fallos y acepta expresamente el resultado cuando alcance el nuevo mínimo."
 
 #: includes/class-tcd-admin.php:359
 msgid "Prioridad de Dependiente"
@@ -281,7 +281,7 @@ msgid ""
 "1 trabaja suavemente a largo plazo; 3 es el equilibrio recomendado; 5 "
 "prioriza terminar cuanto antes. Dependiente ajusta automáticamente el tamaño"
 " del lote según el coste real de sus peticiones."
-msgstr ""
+msgstr "1 trabaja suavemente a largo plazo; 3 es el equilibrio recomendado; 5 prioriza terminar cuanto antes. Dependiente ajusta automáticamente el tamaño del lote según el coste real de sus peticiones."
 
 #: includes/class-tcd-admin.php:367
 msgid "Guardar prioridad"
@@ -293,7 +293,7 @@ msgstr "Detener"
 
 #: includes/class-tcd-admin.php:425
 msgid "conserva la foto fija y el progreso. Si una lección falla calidad,"
-msgstr ""
+msgstr "conserva la foto fija y el progreso. Si una lección falla calidad,"
 
 #: includes/class-tcd-admin.php:425
 msgid "Revisar correcciones y reevaluar"
@@ -303,7 +303,7 @@ msgstr "Revisar correcciones y reevaluar"
 msgid ""
 "vuelve a leer únicamente los casos fallidos y repite el examen, sin "
 "reiniciar L1-L10."
-msgstr ""
+msgstr "vuelve a leer únicamente los casos fallidos y repite el examen, sin reiniciar L1-L10."
 
 #: includes/class-tcd-admin.php:425
 msgid "Reiniciar"
@@ -313,7 +313,7 @@ msgstr "Reiniciar"
 msgid ""
 "borra únicamente las tablas de aprendizaje propias de Dependiente y crea un "
 "run nuevo; nunca modifica productos, categorías, FAQs o Vocabulary."
-msgstr ""
+msgstr "borra únicamente las tablas de aprendizaje propias de Dependiente y crea un run nuevo; nunca modifica productos, categorías, FAQs o Vocabulary."
 
 #: includes/class-tcd-admin.php:428
 msgid "Las diez lecciones"
@@ -351,17 +351,17 @@ msgstr "Auditoría"
 msgid ""
 "Completando la memoria de identidad de la foto fija antes de repetir el "
 "examen."
-msgstr ""
+msgstr "Completando la memoria de identidad de la foto fija antes de repetir el examen."
 
 #: includes/class-tcd-admin.php:485
 msgid "Resultado anterior debajo; se sustituirá al completar 180/180."
-msgstr ""
+msgstr "Resultado anterior debajo; se sustituirá al completar 180/180."
 
 #: includes/class-tcd-admin.php:520
 msgid ""
 "Aceptación manual: conserva la nota y los fallos; activa el aprendizaje y "
 "avanza a la siguiente lección."
-msgstr ""
+msgstr "Aceptación manual: conserva la nota y los fallos; activa el aprendizaje y avanza a la siguiente lección."
 
 #: includes/class-tcd-admin.php:548
 msgid "M11 · Intérprete original y M12 · Actualización"
@@ -387,7 +387,7 @@ msgstr "M11 · Lingüista original v1.2.0"
 msgid ""
 "El examen antiguo de 180 IDs era una prueba de búsqueda, no de "
 "interpretación lingüística, y ya no bloquea el curso."
-msgstr ""
+msgstr "El examen antiguo de 180 IDs era una prueba de búsqueda, no de interpretación lingüística, y ya no bloquea el curso."
 
 #: includes/class-tcd-admin.php:556
 msgid "L11 · Fases de comprensión lingüística y evolución"
@@ -397,7 +397,7 @@ msgstr "L11 · Fases de comprensión lingüística y evolución"
 msgid ""
 "Formación lingüística dentro de Dependiente. Prioridad de CPU compartida con"
 " L1–L10."
-msgstr ""
+msgstr "Formación lingüística dentro de Dependiente. Prioridad de CPU compartida con L1–L10."
 
 #: includes/class-tcd-admin.php:558
 msgid "Fase"
@@ -423,7 +423,7 @@ msgstr "M12 · Feedback de clientes"
 msgid ""
 "Un clic aislado no enseña una regla. Las aclaraciones pesan más, pero "
 "también necesitan repetición antes de activarse."
-msgstr ""
+msgstr "Un clic aislado no enseña una regla. Las aclaraciones pesan más, pero también necesitan repetición antes de activarse."
 
 #: includes/class-tcd-admin.php:585
 msgid "Asistente e integración"
@@ -439,7 +439,7 @@ msgid ""
 "ponderada, feedback validado de clics y aclaraciones, y catálogo publicado. "
 "Cuando la confianza es insuficiente puede hacer hasta dos preguntas cerradas"
 " antes de recomendar."
-msgstr ""
+msgstr "El Intérprete moderno usa reglas semánticas, Vocabulary, memoria L9 ponderada, feedback validado de clics y aclaraciones, y catálogo publicado. Cuando la confianza es insuficiente puede hacer hasta dos preguntas cerradas antes de recomendar."
 
 #: includes/class-tcd-auto-test.php:84
 msgid "No tienes permisos para ejecutar Auto Test."
@@ -457,7 +457,7 @@ msgstr "Autotest"
 msgid ""
 "Comprueba los principales contratos de Dependiente tras cada actualización, "
 "por grupos o en una sola pasada. No modifica el aprendizaje en curso."
-msgstr ""
+msgstr "Comprueba los principales contratos de Dependiente tras cada actualización, por grupos o en una sola pasada. No modifica el aprendizaje en curso."
 
 #: includes/class-tcd-auto-test.php:647
 msgid "Ejecutar Auto Test completo"
@@ -501,7 +501,7 @@ msgid ""
 "Gris: sin ejecutar o no aplicable. Las pruebas de lectura y las muestras no "
 "garantizan por sí solas el correcto funcionamiento de todas las operaciones "
 "de escritura ni la relevancia de todas las búsquedas."
-msgstr ""
+msgstr "Verde: comprobación superada. Rojo: regresión técnica o datos incoherentes. Gris: sin ejecutar o no aplicable. Las pruebas de lectura y las muestras no garantizan por sí solas el correcto funcionamiento de todas las operaciones de escritura ni la relevancia de todas las búsquedas."
 
 #: includes/class-tcd-backup.php:141
 msgid "Backup / Restaurar Dependiente"
@@ -513,7 +513,7 @@ msgid ""
 " Sirve como backup, traslado WordPress → WordPress o sustituto del antiguo "
 "clonador PRO → STAGING. La restauración conserva los IDs internos para no "
 "romper la relación entre snapshots, material estudiado y quality gates."
-msgstr ""
+msgstr "Copia funcional completa del estado persistente que pertenece a Dependiente. Sirve como backup, traslado WordPress → WordPress o sustituto del antiguo clonador PRO → STAGING. La restauración conserva los IDs internos para no romper la relación entre snapshots, material estudiado y quality gates."
 
 #: includes/class-tcd-backup.php:143
 msgid "Diferencia con Conocimiento / Importar–Exportar:"
@@ -524,7 +524,7 @@ msgid ""
 "el conocimiento portable fusiona reglas y memoria reutilizable; este backup "
 "restaura el estado completo de Dependiente y sustituye sus tablas propias "
 "por las de la copia."
-msgstr ""
+msgstr "el conocimiento portable fusiona reglas y memoria reutilizable; este backup restaura el estado completo de Dependiente y sustituye sus tablas propias por las de la copia."
 
 #: includes/class-tcd-backup.php:145
 msgid "Qué queda protegido por el backup"
@@ -580,7 +580,7 @@ msgstr "1. Analizar backup"
 msgid ""
 "Lee toda la copia sin escribir nada y muestra exactamente las tablas, "
 "opciones y número de filas que se restaurarían."
-msgstr ""
+msgstr "Lee toda la copia sin escribir nada y muestra exactamente las tablas, opciones y número de filas que se restaurarían."
 
 #: includes/class-tcd-backup.php:193
 msgid "Analizar backup sin modificar datos"
@@ -595,7 +595,7 @@ msgid ""
 "Sustituye únicamente las tablas y estados propios de Dependiente. No "
 "fusiona: para fusionar conocimiento utiliza la pestaña de conocimiento "
 "portable."
-msgstr ""
+msgstr "Sustituye únicamente las tablas y estados propios de Dependiente. No fusiona: para fusionar conocimiento utiliza la pestaña de conocimiento portable."
 
 #: includes/class-tcd-backup.php:200
 msgid ""
@@ -613,7 +613,7 @@ msgid ""
 "La restauración borra primero las 9 tablas propias incluidas en el backup y "
 "las repuebla conservando sus IDs. No toca datos fuente de "
 "WooCommerce/WordPress."
-msgstr ""
+msgstr "La restauración borra primero las 9 tablas propias incluidas en el backup y las repuebla conservando sus IDs. No toca datos fuente de WooCommerce/WordPress."
 
 #: includes/class-tcd-backup.php:208
 msgid "Restaurar backup completo"
@@ -688,7 +688,7 @@ msgid ""
 "feedback de clientes que ya haya superado los umbrales se transporta "
 "únicamente como regla semántica o señal L9 consolidada. Acepta tanto el "
 "export antiguo como el formato del plugin moderno."
-msgstr ""
+msgstr "Esta herramienta mueve el conocimiento consolidado de Dependiente sin copiar el índice del catálogo, sesiones, búsquedas ni clics individuales. El feedback de clientes que ya haya superado los umbrales se transporta únicamente como regla semántica o señal L9 consolidada. Acepta tanto el export antiguo como el formato del plugin moderno."
 
 #: includes/class-tcd-knowledge-transfer.php:312
 msgid "Conocimiento moderno"
@@ -750,7 +750,7 @@ msgstr "1. Analizar un export antes de importarlo"
 msgid ""
 "No escribe datos. Identifica el formato, cuenta reglas/lecciones/memoria y "
 "muestra cómo se transformaría."
-msgstr ""
+msgstr "No escribe datos. Identifica el formato, cuenta reglas/lecciones/memoria y muestra cómo se transformaría."
 
 #: includes/class-tcd-knowledge-transfer.php:361
 msgid "Analizar compatibilidad"
@@ -764,13 +764,13 @@ msgstr "2. Importar y fusionar"
 msgid ""
 "Añade lo que falta y conserva la versión local cuando detecta un conflicto. "
 "No elimina conocimiento existente."
-msgstr ""
+msgstr "Añade lo que falta y conserva la versión local cuando detecta un conflicto. No elimina conocimiento existente."
 
 #: includes/class-tcd-knowledge-transfer.php:368
 msgid ""
 "Dependiente está aprendiendo. Detén el proceso antes de importar para "
 "mantener una foto coherente."
-msgstr ""
+msgstr "Dependiente está aprendiendo. Detén el proceso antes de importar para mantener una foto coherente."
 
 #: includes/class-tcd-knowledge-transfer.php:374
 msgid "Confirmo que quiero fusionar este conocimiento con el existente."
@@ -1800,19 +1800,19 @@ msgstr ""
 
 #: includes/interpreter/class-tcd-interpreter-legacy.php:138
 msgid "No tienes permisos para acceder al Intérprete."
-msgstr ""
+msgstr "No tienes permisos para acceder al Intérprete."
 
 #: includes/interpreter/class-tcd-linguist.php:568
 msgid "No tienes permisos para exportar la formación Lingüista."
-msgstr ""
+msgstr "No tienes permisos para exportar la formación Lingüista."
 
 #: includes/interpreter/class-tcd-linguist.php:586
 msgid "Exportación Lingüista"
-msgstr ""
+msgstr "Exportación Lingüista"
 
 #: includes/interpreter/class-tcd-linguist.php:598
 msgid "No tienes permisos para controlar Lingüista."
-msgstr ""
+msgstr "No tienes permisos para controlar Lingüista."
 
 #. Dependiente Academy empty lesson status
 msgid "Sin material"

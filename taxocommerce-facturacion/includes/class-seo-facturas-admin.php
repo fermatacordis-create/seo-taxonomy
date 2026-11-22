@@ -179,6 +179,8 @@ final class SEO_Facturas_Admin {
             $messages = array(
                 'document_generated' => 'Documento generado correctamente.',
                 'document_emailed'   => 'Documento enviado por email correctamente.',
+                'rectification_issued' => __( 'Rectifying invoice issued. The original remains unchanged.', 'taxocommerce-facturacion' ),
+                'rectification_emailed' => __( 'Rectifying invoice sent to customer.', 'taxocommerce-facturacion' ),
             );
             if (isset($messages[$notice])) {
                 echo '<div class="notice notice-success is-dismissible"><p>' . esc_html($messages[$notice]) . '</p></div>';
@@ -348,30 +350,86 @@ final class SEO_Facturas_Admin {
             <h2>Fiscalidad de ventas en España</h2>
             <p>Estas reglas se aplican al cálculo fiscal de WooCommerce. Presupuestos, proformas y facturas copian después los importes calculados en el carrito o pedido, por lo que no existe un segundo cálculo distinto en el PDF.</p>
 
-            <div class="notice notice-info inline"><p><strong>Importante:</strong> esta versión distingue Península, Baleares, Canarias, Ceuta y Melilla. No calcula IGIC ni IPSI; para esos destinos especiales se puede aplicar IVA 0 % y mostrar una advertencia documental.</p></div>
+            <div class="notice notice-info inline"><p><strong>Importante:</strong> Península y Baleares usan <strong>IVA</strong>. Canarias se etiqueta como <strong>IGIC</strong> y Ceuta/Melilla como <strong>IPSI</strong> (configura el tipo aplicable; no es un catálogo oficial completo de tipos). El B2B UE (VIES) es opcional y queda fuera de Canarias/Ceuta/Melilla.</p></div>
 
             <table class="form-table" role="presentation">
                 <?php self::checkbox_row($option, 'tax_manager_enabled', 'Gestión fiscal desde Facturación', $s['tax_manager_enabled'], 'Activar estas reglas y utilizarlas en los cálculos de WooCommerce.'); ?>
-                <?php self::checkbox_row($option, 'tax_prices_include_tax', 'Los precios del catálogo ya incluyen IVA', $s['tax_prices_include_tax'], 'Actívalo si el PVP guardado en WooCommerce es el precio final con IVA. Evita que WooCommerce vuelva a sumar el impuesto sobre ese mismo PVP.'); ?>
-                <?php self::checkbox_row($option, 'tax_restrict_to_spain', 'Vender solo en España', $s['tax_restrict_to_spain'], 'Limitar los países de facturación y envío de WooCommerce a España mientras este gestor esté activo.'); ?>
-                <?php self::checkbox_row($option, 'tax_shipping', 'IVA sobre transporte', $s['tax_shipping'], 'Aplicar al transporte la misma tasa fiscal de la zona cuando WooCommerce calcule los portes.'); ?>
+                <?php self::checkbox_row($option, 'tax_prices_include_tax', 'Los precios del catálogo ya incluyen impuestos', $s['tax_prices_include_tax'], 'Actívalo si el PVP guardado en WooCommerce es el precio final con impuesto. Evita que WooCommerce vuelva a sumarlo sobre ese mismo PVP.'); ?>
+                <?php self::checkbox_row($option, 'tax_restrict_to_spain', 'Vender solo en España', $s['tax_restrict_to_spain'], 'Limitar los países de facturación y envío de WooCommerce a España mientras este gestor esté activo. Desactívalo si usas B2B UE.'); ?>
+                <?php self::checkbox_row($option, 'tax_shipping', 'Impuesto sobre transporte', $s['tax_shipping'], 'Aplicar al transporte la misma tasa fiscal de la zona cuando WooCommerce calcule los portes.'); ?>
             </table>
 
             <h3>Tipos por localización</h3>
             <table class="widefat striped" style="max-width:760px">
-                <thead><tr><th>Zona</th><th>Tipo IVA</th><th>Detección</th></tr></thead>
+                <thead><tr><th>Zona</th><th>Impuesto</th><th>Tipo %</th><th>Detección</th></tr></thead>
                 <tbody>
-                    <tr><td><strong>Península</strong></td><td><?php self::decimal_input($option, 'tax_peninsula_rate', $s['tax_peninsula_rate']); ?> %</td><td>España, excepto las zonas especiales indicadas abajo.</td></tr>
-                    <tr><td><strong>Islas Baleares</strong></td><td><?php self::decimal_input($option, 'tax_baleares_rate', $s['tax_baleares_rate']); ?> %</td><td>Provincia PM o código postal 07.</td></tr>
-                    <tr><td><strong>Canarias</strong></td><td><?php self::decimal_input($option, 'tax_canarias_rate', $s['tax_canarias_rate']); ?> %</td><td>Las Palmas / Santa Cruz de Tenerife o códigos 35 / 38.</td></tr>
-                    <tr><td><strong>Ceuta</strong></td><td><?php self::decimal_input($option, 'tax_ceuta_rate', $s['tax_ceuta_rate']); ?> %</td><td>Provincia CE o código postal 51.</td></tr>
-                    <tr><td><strong>Melilla</strong></td><td><?php self::decimal_input($option, 'tax_melilla_rate', $s['tax_melilla_rate']); ?> %</td><td>Provincia ML o código postal 52.</td></tr>
+                    <tr><td><strong>Península</strong></td><td>IVA</td><td><?php self::decimal_input($option, 'tax_peninsula_rate', $s['tax_peninsula_rate']); ?> %</td><td>España, excepto las zonas especiales indicadas abajo.</td></tr>
+                    <tr><td><strong>Islas Baleares</strong></td><td>IVA</td><td><?php self::decimal_input($option, 'tax_baleares_rate', $s['tax_baleares_rate']); ?> %</td><td>Provincia PM o código postal 07.</td></tr>
+                    <tr><td><strong>Canarias</strong></td><td>IGIC</td><td><?php self::decimal_input($option, 'tax_canarias_rate', $s['tax_canarias_rate']); ?> %</td><td>Las Palmas / Santa Cruz de Tenerife o códigos 35 / 38. Fuera del IVA UE.</td></tr>
+                    <tr><td><strong>Ceuta</strong></td><td>IPSI</td><td><?php self::decimal_input($option, 'tax_ceuta_rate', $s['tax_ceuta_rate']); ?> %</td><td>Provincia CE o código postal 51. Fuera del IVA UE.</td></tr>
+                    <tr><td><strong>Melilla</strong></td><td>IPSI</td><td><?php self::decimal_input($option, 'tax_melilla_rate', $s['tax_melilla_rate']); ?> %</td><td>Provincia ML o código postal 52. Fuera del IVA UE.</td></tr>
                 </tbody>
             </table>
 
-            <h3>Nota para destinos especiales</h3>
+            <h3>B2B intracomunitario (VIES)</h3>
             <table class="form-table" role="presentation">
-                <?php self::textarea_row($option, 'tax_special_note', 'Canarias, Ceuta y Melilla', $s['tax_special_note'], 'Se añade a los documentos de estos destinos. Puedes modificar el texto cuando definamos la fiscalidad definitiva de IGIC/IPSI.'); ?>
+                <?php self::checkbox_row($option, 'tax_eu_b2b_enabled', 'Habilitar B2B UE con VIES', $s['tax_eu_b2b_enabled'] ?? 0, 'Permite inversión del sujeto pasivo (IVA 0 %) para empresas de otro Estado UE con NIF-IVA válido. Requiere desactivar «Vender solo en España» para esos destinos.'); ?>
+                <?php self::checkbox_row($option, 'tax_eu_block_if_vies_down', 'Bloquear pedido si VIES no responde', $s['tax_eu_block_if_vies_down'] ?? 1, 'Recomendado: no emitir ISP si la validación no puede completarse.'); ?>
+                <tr>
+                    <th scope="row"><label for="sf-tax_eu_seller_vat">NIF-IVA del emisor</label></th>
+                    <td><input type="text" class="regular-text" id="sf-tax_eu_seller_vat" name="<?php echo esc_attr($option); ?>[tax_eu_seller_vat]" value="<?php echo esc_attr($s['tax_eu_seller_vat'] ?? ''); ?>" placeholder="ESB00000000"></td>
+                </tr>
+                <?php self::textarea_row($option, 'tax_eu_reverse_charge_note', 'Mención legal ISP', $s['tax_eu_reverse_charge_note'] ?? '', 'Se añade al PDF cuando aplica inversión del sujeto pasivo.'); ?>
+            </table>
+
+            <h3>Catálogo IGIC (Canarias)</h3>
+            <p class="description">Asigna la clase fiscal WooCommerce del producto (<code>igic-general</code>, <code>igic-reducido</code>, …). Sin clase específica se aplica el tipo general. Porcentajes orientativos y editables.</p>
+            <table class="form-table" role="presentation">
+                <?php self::checkbox_row($option, 'tax_special_rates_enabled', 'Usar catálogo completo IGIC/IPSI', $s['tax_special_rates_enabled'] ?? 1, 'Crea clases fiscales WooCommerce y tasas por tipo. Desactívalo solo si prefieres un único % por zona.'); ?>
+            </table>
+            <table class="widefat striped" style="max-width:760px">
+                <thead><tr><th>Tipo</th><th>Clase WC</th><th>%</th></tr></thead>
+                <tbody>
+                    <tr><td>Tipo cero</td><td><code>igic-cero</code></td><td><?php self::decimal_input($option, 'tax_igic_cero', $s['tax_igic_cero'] ?? 0); ?> %</td></tr>
+                    <tr><td>Reducido</td><td><code>igic-reducido</code></td><td><?php self::decimal_input($option, 'tax_igic_reducido', $s['tax_igic_reducido'] ?? 3); ?> %</td></tr>
+                    <tr><td>General</td><td><code>igic-general</code> / estándar</td><td><?php self::decimal_input($option, 'tax_igic_general', $s['tax_igic_general'] ?? 7); ?> %</td></tr>
+                    <tr><td>Incrementado</td><td><code>igic-incrementado</code></td><td><?php self::decimal_input($option, 'tax_igic_incrementado', $s['tax_igic_incrementado'] ?? 9.5); ?> %</td></tr>
+                    <tr><td>Especial 15%</td><td><code>igic-especial-15</code></td><td><?php self::decimal_input($option, 'tax_igic_especial_15', $s['tax_igic_especial_15'] ?? 15); ?> %</td></tr>
+                    <tr><td>Especial 20%</td><td><code>igic-especial-20</code></td><td><?php self::decimal_input($option, 'tax_igic_especial_20', $s['tax_igic_especial_20'] ?? 20); ?> %</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Catálogo IPSI (Ceuta)</h3>
+            <table class="widefat striped" style="max-width:760px">
+                <thead><tr><th>Tipo</th><th>Clase WC</th><th>%</th></tr></thead>
+                <tbody>
+                    <tr><td>Cero</td><td><code>ipsi-cero</code></td><td><?php self::decimal_input($option, 'tax_ipsi_ceuta_cero', $s['tax_ipsi_ceuta_cero'] ?? 0); ?> %</td></tr>
+                    <tr><td>0,5%</td><td><code>ipsi-05</code></td><td><?php self::decimal_input($option, 'tax_ipsi_ceuta_r05', $s['tax_ipsi_ceuta_r05'] ?? 0.5); ?> %</td></tr>
+                    <tr><td>1%</td><td><code>ipsi-1</code></td><td><?php self::decimal_input($option, 'tax_ipsi_ceuta_r1', $s['tax_ipsi_ceuta_r1'] ?? 1); ?> %</td></tr>
+                    <tr><td>2%</td><td><code>ipsi-2</code></td><td><?php self::decimal_input($option, 'tax_ipsi_ceuta_r2', $s['tax_ipsi_ceuta_r2'] ?? 2); ?> %</td></tr>
+                    <tr><td>4%</td><td><code>ipsi-4</code></td><td><?php self::decimal_input($option, 'tax_ipsi_ceuta_r4', $s['tax_ipsi_ceuta_r4'] ?? 4); ?> %</td></tr>
+                    <tr><td>8%</td><td><code>ipsi-8</code></td><td><?php self::decimal_input($option, 'tax_ipsi_ceuta_r8', $s['tax_ipsi_ceuta_r8'] ?? 8); ?> %</td></tr>
+                    <tr><td>General 10%</td><td><code>ipsi-general</code> / estándar</td><td><?php self::decimal_input($option, 'tax_ipsi_ceuta_general', $s['tax_ipsi_ceuta_general'] ?? 10); ?> %</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Catálogo IPSI (Melilla)</h3>
+            <table class="widefat striped" style="max-width:760px">
+                <thead><tr><th>Tipo</th><th>Clase WC</th><th>%</th></tr></thead>
+                <tbody>
+                    <tr><td>Cero</td><td><code>ipsi-cero</code></td><td><?php self::decimal_input($option, 'tax_ipsi_melilla_cero', $s['tax_ipsi_melilla_cero'] ?? 0); ?> %</td></tr>
+                    <tr><td>0,5%</td><td><code>ipsi-05</code></td><td><?php self::decimal_input($option, 'tax_ipsi_melilla_r05', $s['tax_ipsi_melilla_r05'] ?? 0.5); ?> %</td></tr>
+                    <tr><td>1%</td><td><code>ipsi-1</code></td><td><?php self::decimal_input($option, 'tax_ipsi_melilla_r1', $s['tax_ipsi_melilla_r1'] ?? 1); ?> %</td></tr>
+                    <tr><td>2%</td><td><code>ipsi-2</code></td><td><?php self::decimal_input($option, 'tax_ipsi_melilla_r2', $s['tax_ipsi_melilla_r2'] ?? 2); ?> %</td></tr>
+                    <tr><td>4%</td><td><code>ipsi-4</code></td><td><?php self::decimal_input($option, 'tax_ipsi_melilla_r4', $s['tax_ipsi_melilla_r4'] ?? 4); ?> %</td></tr>
+                    <tr><td>8%</td><td><code>ipsi-8</code></td><td><?php self::decimal_input($option, 'tax_ipsi_melilla_r8', $s['tax_ipsi_melilla_r8'] ?? 8); ?> %</td></tr>
+                    <tr><td>General 10%</td><td><code>ipsi-general</code> / estándar</td><td><?php self::decimal_input($option, 'tax_ipsi_melilla_general', $s['tax_ipsi_melilla_general'] ?? 10); ?> %</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Nota para destinos especiales (IGIC / IPSI)</h3>
+            <table class="form-table" role="presentation">
+                <?php self::textarea_row($option, 'tax_special_note', 'Canarias, Ceuta y Melilla', $s['tax_special_note'], 'Se añade a los documentos de estos destinos. No se mezclan con el flujo VIES/ISP.'); ?>
             </table>
 
             <p class="description">Estado actual de impuestos WooCommerce: <strong><?php echo esc_html($woo_tax_enabled ? 'activados' : 'desactivados'); ?></strong>. Precios introducidos con IVA: <strong><?php echo esc_html($woo_prices_include_tax ? 'sí' : 'no'); ?></strong>. Mostrar precios en tienda: <strong><?php echo esc_html('incl' === $woo_tax_display_shop ? 'con IVA' : 'sin IVA'); ?></strong>. Mostrar precios en carrito/checkout: <strong><?php echo esc_html('incl' === $woo_tax_display_cart ? 'con IVA' : 'sin IVA'); ?></strong>.</p>
@@ -523,6 +581,7 @@ final class SEO_Facturas_Admin {
             <?php endif; ?>
             </tbody>
         </table>
+        <?php SEO_Facturas_Rectifications::render_register(); ?>
         <?php
     }
 
@@ -580,6 +639,7 @@ final class SEO_Facturas_Admin {
             'seo_facturas_email_' . absint($document->id)
         );
         $parts[] = '<a class="button button-small" href="' . esc_url($email) . '">Reenviar</a>';
+        $parts[] = SEO_Facturas_Rectifications::render_action($document);
 
         return implode(' ', $parts);
     }

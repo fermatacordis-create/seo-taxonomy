@@ -335,11 +335,23 @@ if (!function_exists('seo_analista_render_where_we_are')) {
 
         $trend = (array) ($evolution['trend'] ?? array());
         if ($trend) {
+            $trend_health = (array) ($evolution['trend_health'] ?? array());
+            $last_trend_row = end($trend);
+            $last_trend_date = (string) ($last_trend_row['data_date'] ?? '');
+            $sql_trend_date = (string) ($trend_health['sql_date'] ?? '');
+            $snapshot_trend_date = (string) ($trend_health['snapshot_date'] ?? '');
+            $source_note = sprintf(
+                /* translators: 1: last chart date, 2: last SQL date, 3: last saved Search Console snapshot date. */
+                __('Último día representado: %1$s · Histórico SQL: %2$s · Informe guardado de Google Search: %3$s. La gráfica no descarga datos al abrirse.', 'taxocommerce-google-bing'),
+                $last_trend_date ?: __('sin datos', 'taxocommerce-google-bing'),
+                $sql_trend_date ?: __('sin datos', 'taxocommerce-google-bing'),
+                $snapshot_trend_date ?: __('sin datos compatibles', 'taxocommerce-google-bing')
+            );
             echo '<section class="seo-analista-section">' . '<div class="seo-analista-section-head">' . '<div>' . '<h2>' . esc_html__( 'Evolución en Google', 'taxocommerce-google-bing' ) . '</h2>' . '<p>' . esc_html__( 'Serie histórica para ver si el sitio está avanzando antes de que ese progreso se convierta en clics.', 'taxocommerce-google-bing' ) . '</p>' . '</div>' . '</div>' . '<div class="seo-analista-charts">';
             seo_analista_render_line_chart($trend, 'position', 'Posición media', 'La línea sube cuando mejora el ranking.', true);
             seo_analista_render_line_chart($trend, 'impressions', 'Impresiones', 'Cuántas veces aparecemos en resultados.', false);
             seo_analista_render_line_chart($trend, 'clicks', 'Clics', 'Tráfico orgánico capturado desde Google.', false);
-            echo '</div></section>';
+            echo '</div><p class="description">' . esc_html($source_note) . '</p></section>';
         }
 
         seo_analista_render_distribution((array) ($data['distribution'] ?? array()), (array) ($data['previous_distribution'] ?? array()));

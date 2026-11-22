@@ -1,3 +1,27 @@
+= 1.1.72 (2026-11-20) =
+* Localize ten Google Trends administration labels, links and information notices in five locales. Recompile PO/MO catalogs. Issue #2852.
+
+= 1.1.71 (2026-11-20) =
+* Translate 12 Merchant and Google Trends administration labels and feedback in five locales. Rebuild PO/MO catalogs. Issue #2849.
+
+= 1.1.70 (2026-11-20) =
+* Translate 16 Google Trends administration strings to five locales and rebuild compiled gettext catalogs. Issue #2783.
+
+= 1.1.69 (2026-11-20) =
+* Translate eight Autotest, Connections and Merchant administration labels in five languages and compile their MO catalogs. No business logic changes. Issue #2783.
+
+= 1.1.68 (2026-11-18) =
+* Translate 73 administration strings in ES/EN/FR/DE/NL: connection errors and success notices, Google OAuth fields, Search Console/GA4/Bing report labels and warnings. Rebuild five PO/MO catalogs and verify compiled values. No changes to connections or reports. Issue #2783.
+
+= 1.1.67 (2026-11-18) =
+* Restore the full read-only executive report: comparable GSC/GA4 business summary, product/category/page/post rankings, GA4 item/cart activity, visitor sources, confirmed period-over-period movement, supplier/Trends/competition and internal-search snapshots with explicit availability. Correct integer-zero-click detection. JSON v3 keeps earlier keys and adds structured executive evidence; no strategies or content changes. Issue #2801.
+
+= 1.1.66 (2026-11-17) =
+* Executive observations based on GSC evidence, confidence and sample size with no strategic or editorial prescriptions. JSON schema v2 retains historical keys and adds explanatory findings. Only sufficiently supported cases may suggest checking Search Console. Issue #2780.
+
+= 1.1.65 (2026-11-17) =
+* Evidence-only weekly (Monday-Sunday) or monthly calendar indicator report replaces the prescriptive action plan. Align GSC and GA4 date windows, preserve source coverage, and export a secure structured JSON without invented zeroes or tasks. Other report periods stay unchanged. Issue #2764.
+
 = 1.1.61 (2026-11-13) =
 * Independent competitive visibility selection: use verified Google taxonomy IDs even when Best Sellers products are not selected for display. Issue #2643.
 

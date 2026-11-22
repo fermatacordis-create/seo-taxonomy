@@ -26,6 +26,12 @@ jobs:
           php -l taxocommerce-system-check/taxocommerce-system-check.php
           php -l taxocommerce-system-check/includes/class-taxocommerce-system-check-family-runner.php
           php -l taxocommerce-system-check/tests/family-runner-pilot-smoke.php
+      - name: Individual plugin validation contract
+        run: |
+          php -l taxocommerce-system-check/includes/class-taxocommerce-system-check-module-audit.php
+          php -l taxocommerce-system-check/tests/module-audit-smoke.php
+          php taxocommerce-system-check/tests/module-audit-smoke.php
+          node --check taxocommerce-system-check/assets/module-audit.js
       - name: Pilot regression contract
         run: php taxocommerce-system-check/tests/family-runner-pilot-smoke.php
       - name: Partial FTPS delivery regression

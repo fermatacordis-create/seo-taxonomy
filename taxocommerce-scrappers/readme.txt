@@ -12,15 +12,11 @@ External research for TaxoCommerce using the proven Ojeador and Ingeniero engine
 
 == Description ==
 
-* Admin header: plugin title, a single local `Description` with the static `Plugin URI` link below it (left); a wider collapsed `CHANGELOG.md` history (center); local version and release date (right). No duplicated information panel or external requests.
-
-* The admin header shows the plugin's bundled `Description` and links to its `Plugin URI`, without network requests or caching. Version history uses the bundled `CHANGELOG.md`.
-
-
-
 TaxoCommerce Scrappers separates external market and technical research from the historical monolithic plugin.
 
 The plugin provides five administration areas:
+
+= Key Features =
 
 * Connections: shared SerpApi and ScraperAPI credentials, usage and connection test.
 * Ojeador: category-first Google Shopping market intelligence, price position, discovered products, Merchant comparison and operational logs.

@@ -6,6 +6,10 @@
 defined( 'ABSPATH' ) || exit;
 
 require_once __DIR__ . '/analista-mercado-ejecutivo.php';
+require_once __DIR__ . '/analista-direccion.php';
+if ( ! function_exists( 'taxocommerce_insights_indicators_build' ) ) {
+    require_once __DIR__ . '/analista-indicadores.php';
+}
 
 /**
  * The executive action and the detailed roadmap are one report in Insights.
@@ -20,8 +24,8 @@ function taxocommerce_google_bing_analysis_reports() {
     $reports = (array) seo_analista_lazy_reports();
     unset( $reports['trabajo'] );
     if ( isset( $reports['directrices'] ) ) {
-        $reports['directrices']['label'] = __( 'Plan de trabajo', 'taxocommerce-google-bing' );
-        $reports['directrices']['description'] = 'Ventas, mejoras SEO/GEO verificables y tareas priorizadas en un solo informe.';
+        $reports['directrices']['label'] = __( 'Indicadores para la acción', 'taxocommerce-google-bing' );
+        $reports['directrices']['description'] = __( 'Semanas o meses completos, comparativas de GSC y GA4 y patrones medibles. No prescribe decisiones.', 'taxocommerce-google-bing' );
     }
     return $reports;
 }
@@ -119,10 +123,17 @@ function taxocommerce_insights_action_plan_export( array $plan, $days ) {
  */
 function taxocommerce_insights_last_plan_export() {
     $export = get_option( 'taxocommerce_insights_last_plan_json', array() );
+    if ( ! is_array( $export ) ) {
+        return array();
+    }
+    $schema = (string) ( $export['schema']['name'] ?? '' );
+    $is_indicators = 'taxocommerce-insights-indicadores' === $schema
+        && isset( $export['periods'] ) && is_array( $export['periods'] );
+    $is_legacy = 'taxocommerce-insights-plan-accion' === $schema
+        && isset( $export['plan_accion'] ) && is_array( $export['plan_accion'] );
     if ( ! is_array( $export )
-        || 'taxocommerce-insights-plan-accion' !== ( $export['schema']['name'] ?? '' )
-        || ! isset( $export['generated_at'], $export['plan_accion'] )
-        || ! is_array( $export['plan_accion'] )
+        || ( ! $is_indicators && ! $is_legacy )
+        || empty( $export['generated_at'] )
         || false === strtotime( (string) $export['generated_at'] ) ) {
         return array();
     }
@@ -169,10 +180,12 @@ function taxocommerce_insights_plan_json_download() {
     }
 
     $stamp = gmdate( 'YmdHis', strtotime( (string) $export['generated_at'] ) );
+    $filename_prefix = 'taxocommerce-insights-indicadores' === ( $export['schema']['name'] ?? '' )
+        ? 'taxocommerce-indicadores-accion-' : 'taxocommerce-plan-de-accion-';
     nocache_headers();
     header( 'Content-Type: application/json; charset=utf-8' );
     header( 'X-Content-Type-Options: nosniff' );
-    header( 'Content-Disposition: attachment; filename="taxocommerce-plan-de-accion-' . $stamp . '.json"' );
+    header( 'Content-Disposition: attachment; filename="' . $filename_prefix . $stamp . '.json"' );
     // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- This is a JSON attachment, not HTML. All values use the existing sanitized export contract.
     echo $json;
     exit;
@@ -282,6 +295,8 @@ function taxocommerce_insights_analysis_ajax() {
         return;
     }
     $started = microtime( true );
+    $period_mode = isset( $_POST['period_mode'] ) && is_scalar( $_POST['period_mode'] )
+        ? sanitize_key( wp_unslash( (string) $_POST['period_mode'] ) ) : 'week';
     $plan_export = null;
     $competitive_export = null;
     ob_start();
@@ -296,21 +311,13 @@ function taxocommerce_insights_analysis_ajax() {
             $competitive_export = taxocommerce_insights_competitive_build_report( $days );
             taxocommerce_insights_competitive_save_report( $competitive_export );
             taxocommerce_insights_competitive_render_panel( $days );
+        } elseif ( 'directrices' === $report ) {
+            // The evidence report has its own calendar and JSON contract.
+            // Do not call the old editorial/market decision-plan engine.
+            $plan_export = taxocommerce_insights_indicators_build( $period_mode );
+            taxocommerce_insights_indicators_render( $plan_export );
         } else {
             seo_analista_lazy_render_partial( $report, $days );
-        }
-
-        if ( 'directrices' === $report ) {
-            // Market view: external demand, commercial outcomes and GA4 assistant
-            // referrals. Preserve the legacy editorial engine for specialist
-            // reports, but never run it as the executive action plan.
-            $google = function_exists( 'seo_analista_google_snapshot' )
-                ? (array) seo_analista_google_snapshot( $days, false )
-                : array();
-            $market = taxocommerce_insights_market_plan( $days, $google );
-            $plan = (array) ( $market['plan'] ?? array() );
-            taxocommerce_insights_market_render( $market );
-            $plan_export = taxocommerce_insights_action_plan_export( $plan, $days );
         }
         $html = ob_get_clean();
     } catch ( Throwable $error ) {

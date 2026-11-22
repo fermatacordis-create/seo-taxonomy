@@ -1,4 +1,4 @@
-"""Offline tests: compare changed files and copy without WordPress inventory."""
+"""Offline tests: upload the Git-selected delta without remote file downloads."""
 import importlib.util
 import os
 from pathlib import Path
@@ -19,6 +19,8 @@ class FakeFTP:
         self.files = {}
         self.uploads = 0
         self.fail_commit = False
+        self.truncated_upload = False
+        self.retrievals = 0
 
     def cwd(self, name):
         p = name if name.startswith("/") else self.folder + "/" + name
@@ -26,18 +28,26 @@ class FakeFTP:
             raise module.ftplib.error_perm("550 Not found")
         self.folder = p
 
+    def pwd(self):
+        return self.folder
+
     def mkd(self, name):
         self.dirs.add(self.folder + "/" + name)
 
-    def retrbinary(self, command, callback, blocksize=8192):
-        path = self.folder + "/" + command.split(" ", 1)[1]
+    def size(self, filename):
+        path = self.folder + "/" + filename
         if path not in self.files:
             raise module.ftplib.error_perm("550 Not found")
-        callback(self.files[path])
+        return len(self.files[path])
+
+    def retrbinary(self, command, callback, blocksize=8192):
+        self.retrievals += 1
+        raise AssertionError("The optimized deploy must not download remote files.")
 
     def storbinary(self, command, stream, blocksize=8192):
         self.uploads += 1
-        self.files[self.folder + "/" + command.split(" ", 1)[1]] = stream.read()
+        content = stream.read()
+        self.files[self.folder + "/" + command.split(" ", 1)[1]] = content[:-1] if self.truncated_upload else content
 
     def rename(self, old, new):
         if self.fail_commit and old.endswith(".tmp"):
@@ -71,18 +81,40 @@ class CopyTests(unittest.TestCase):
             self.assertFalse(module.valid_path("taxocommerce-social", path))
         self.assertFalse(module.valid_path("seo-taxonomy", "seo-taxonomy.php"))
 
+    def test_reject_wrong_chroot_without_woocommerce_before_any_write(self):
+        self.ftp.dirs.add("/plugins/wp-content/plugins")
+        self.ftp.files["/plugins/wp-content/plugins/taxocommerce-core/taxocommerce-core.php"] = b"0.4.85"
+        with self.assertRaisesRegex(RuntimeError, "Wrong production FTPS root"):
+            module.find_live_plugin_root(self.ftp)
+        self.assertEqual(0, self.ftp.uploads)
+
+    def test_correct_existing_plugin_root_is_accepted_without_inventory(self):
+        self.ftp.files["/plugins/woocommerce/woocommerce.php"] = b"woocommerce"
+        self.ftp.files["/plugins/taxocommerce-core/taxocommerce-core.php"] = b"core"
+        self.assertEqual("/plugins", module.find_live_plugin_root(self.ftp))
+        self.assertEqual(0, self.ftp.uploads)
+
+    def test_nested_real_wordpress_plugin_root_is_accepted(self):
+        nested = "/plugins/wp-content/plugins"
+        self.ftp.dirs.add(nested)
+        self.ftp.files[nested + "/woocommerce/woocommerce.php"] = b"woocommerce"
+        self.ftp.files[nested + "/taxocommerce-core/taxocommerce-core.php"] = b"core"
+        self.assertEqual(nested, module.find_live_plugin_root(self.ftp))
+        self.assertEqual(0, self.ftp.uploads)
+
     def test_new_plugin_or_file_can_be_copied_without_install_inventory(self):
         changed = module.copy_changed(self.ftp, "taxocommerce-social", "includes/core.php", "/plugins")
         self.assertTrue(changed)
         self.assertEqual(b"new", self.ftp.files[self.dest])
         self.assertEqual(1, self.ftp.uploads)
 
-    def test_identical_file_is_not_uploaded(self):
+    def test_git_selected_file_is_uploaded_without_remote_comparison(self):
         self.ftp.dirs.update({"/plugins/taxocommerce-social", "/plugins/taxocommerce-social/includes"})
         self.ftp.files[self.dest] = b"new"
         changed = module.copy_changed(self.ftp, "taxocommerce-social", "includes/core.php", "/plugins")
-        self.assertFalse(changed)
-        self.assertEqual(0, self.ftp.uploads)
+        self.assertTrue(changed)
+        self.assertEqual(1, self.ftp.uploads)
+        self.assertEqual(0, self.ftp.retrievals)
 
     def test_changed_file_replaces_previous_and_cleans_backup(self):
         self.ftp.dirs.update({"/plugins/taxocommerce-social", "/plugins/taxocommerce-social/includes"})
@@ -91,6 +123,16 @@ class CopyTests(unittest.TestCase):
         self.assertTrue(changed)
         self.assertEqual(b"new", self.ftp.files[self.dest])
         self.assertEqual({self.dest}, set(self.ftp.files))
+
+    def test_incomplete_upload_is_rejected_before_replacing_old_file(self):
+        self.ftp.dirs.update({"/plugins/taxocommerce-social", "/plugins/taxocommerce-social/includes"})
+        self.ftp.files[self.dest] = b"old"
+        self.ftp.truncated_upload = True
+        with self.assertRaisesRegex(RuntimeError, "Uploaded file size mismatch"):
+            module.copy_changed(self.ftp, "taxocommerce-social", "includes/core.php", "/plugins")
+        self.assertEqual(b"old", self.ftp.files[self.dest])
+        self.assertEqual({self.dest}, set(self.ftp.files))
+        self.assertEqual(0, self.ftp.retrievals)
 
     def test_failed_commit_restores_original_file(self):
         self.ftp.dirs.update({"/plugins/taxocommerce-social", "/plugins/taxocommerce-social/includes"})

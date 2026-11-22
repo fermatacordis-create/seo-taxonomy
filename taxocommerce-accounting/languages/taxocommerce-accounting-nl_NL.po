@@ -396,3 +396,1009 @@ msgstr "AEAT-XLSX-template downloaden — rechtspersonen"
 
 msgid "Download AEAT XLSX template — general"
 msgstr "AEAT-XLSX-template downloaden — algemeen"
+
+msgid "Expense CSV processed. Verify the new drafts in Expenses."
+msgstr "Uitgaven-CSV verwerkt. Controleer de nieuwe concepten bij Uitgaven."
+
+msgid "Select a valid CSV file smaller than 2 MB."
+msgstr "Selecteer een geldig CSV-bestand kleiner dan 2 MB."
+
+msgid "Invalid CSV headers. Download and use the exact template."
+msgstr "Ongeldige CSV-kolomkoppen. Download en gebruik het sjabloon ongewijzigd."
+
+msgid "CSV contains too many rows; maximum 500."
+msgstr "Het CSV-bestand overschrijdt de limiet van 500 rijen."
+
+msgid "CSV contains invalid expense data; nothing was imported."
+msgstr "Het CSV-bestand bevat ongeldige uitgaven; er is niets geïmporteerd."
+
+msgid "CSV contains no expense documents."
+msgstr "Het CSV-bestand bevat geen onkostendocumenten."
+
+msgid "Could not save the CSV batch; please retry."
+msgstr "Kan de CSV-batch niet opslaan; probeer opnieuw."
+
+msgid "Export limit exceeded; use a narrower reporting period."
+msgstr "Exportlimiet overschreden; kies een kortere periode."
+
+msgid "Expense documents: CSV import and export"
+msgstr "Onkostendocumenten: CSV importeren en exporteren"
+
+msgid "For domains, hosting, digital certificates, administrative fees, postal services, software and other association or business expenses. Imports go to Accounting > Expenses as unapproved drafts. They do not change bank/cash balances or automatically create a tax deduction."
+msgstr "Voor domeinen, hosting, digitale certificaten, heffingen, postdiensten, software en andere verenigings- of bedrijfsuitgaven. De import komt als concept terecht bij Boekhouding > Uitgaven. Bank- en kassaldi wijzigen niet en er wordt geen belastingaftrek automatisch toegepast."
+
+msgid "Download blank CSV template"
+msgstr "Leeg CSV-sjabloon downloaden"
+
+msgid "Export expense CSV for %d"
+msgstr "Uitgaven-CSV voor %d exporteren"
+
+msgid "Use UTF-8 CSV with semicolon or comma separators. Keep the template column names unchanged. Dates: YYYY-MM-DD; values: base and VAT in EUR; deductible_vat_pct is the percentage of VAT deductible, not the VAT rate (0 until verified). vat_treatment: review, domestic, intra, reverse, exempt. scope: review, association, commercial, shared."
+msgstr "Gebruik UTF-8-CSV met puntkomma of komma; wijzig de kolomnamen niet. Datum: JJJJ-MM-DD; grondslag en btw in EUR. deductible_vat_pct is het percentage aftrekbare btw, niet het btw-tarief (0 totdat dit is gecontroleerd). vat_treatment: review, domestic, intra, reverse, exempt. scope: review, association, commercial, shared."
+
+msgid "Expense CSV file"
+msgstr "CSV-bestand met uitgaven"
+
+msgid "Import expense drafts"
+msgstr "Conceptuitgaven importeren"
+
+msgid "Maximum 500 rows / 2 MB per import. Repeated documents are skipped. Attach original PDF receipts individually in Expenses, verify the legal tax treatment, then validate each entry."
+msgstr "Maximaal 500 rijen en 2 MB per import. Dubbele documenten worden overgeslagen. Voeg de oorspronkelijke pdf-bewijzen afzonderlijk toe bij Uitgaven, controleer de fiscale behandeling en valideer elke boeking."
+
+msgid "Imported: %1$d drafts. Existing/duplicate documents skipped: %2$d."
+msgstr "Geïmporteerd: %1$d concepten. Bestaande of dubbele documenten overgeslagen: %2$d."
+
+msgid "Cash"
+msgstr "Contant geld"
+
+msgid "Bank"
+msgstr "Bank"
+
+msgid "Treasury: cash, bank and loans"
+msgstr "Kasbeheer: contant geld, bank en leningen"
+
+msgid "Historical reconciliation: %1$d payments posted, %2$d skipped, %3$d errors. Review the bank balance before posting anything again."
+msgstr "Historische afstemming: %1$d betalingen geboekt, %2$d overgeslagen en %3$d fouten. Controleer het banksaldo voordat je opnieuw boekt."
+
+msgid "Balances use opening funds and confirmed payments/receipts (including invoice-linked settlements). An opening balance is not a monthly Cash in / Bank in. If it actually represents a contribution received this year, you can convert it to a dated receipt below without changing the balance. Unpaid invoices and future loan instalments never move money."
+msgstr "Saldi omvatten beginsaldi en bevestigde betalingen/ontvangsten (ook factuurafrekeningen). Een beginsaldo is geen maandelijkse ontvangst. Als het een daadwerkelijk dit jaar ontvangen inbreng is, kun je die als gedateerde ontvangst vastleggen zonder het saldo te wijzigen. Onbetaalde facturen en toekomstige leningtermijnen verplaatsen geen geld."
+
+msgid "Cash on hand"
+msgstr "Beschikbaar contant geld"
+
+msgid "Bank accounts"
+msgstr "Bankrekeningen"
+
+msgid "Total available funds"
+msgstr "Totaal beschikbare middelen"
+
+msgid "Loans outstanding (reported)"
+msgstr "Openstaande leningen (opgegeven)"
+
+msgid "Scheduled monthly loan instalments"
+msgstr "Geplande maandelijkse leningtermijnen"
+
+msgid "Cash and bank accounts"
+msgstr "Kas- en bankrekeningen"
+
+msgid "Account"
+msgstr "Rekening"
+
+msgid "Type"
+msgstr "Type"
+
+msgid "Opening balance"
+msgstr "Beginsaldo"
+
+msgid "Current balance"
+msgstr "Huidig saldo"
+
+msgid "Funding entry"
+msgstr "Inbrengregistratie"
+
+msgid "Actual contribution date"
+msgstr "Werkelijke datum van inbreng"
+
+msgid "Funding reference"
+msgstr "Referentie van inbreng"
+
+msgid "Initial loan / contribution"
+msgstr "Aanvankelijke lening / inbreng"
+
+msgid "Convert the opening balance, without adding funds twice"
+msgstr "Beginsaldo omzetten zonder middelen dubbel te tellen"
+
+msgid "Convert to receipt"
+msgstr "Omzetten naar ontvangst"
+
+msgid "Add your cash register or first bank account to start tracking funds."
+msgstr "Voeg een kas of eerste bankrekening toe om de geldmiddelen bij te houden."
+
+msgid "Add cash register / bank account"
+msgstr "Kas / bankrekening toevoegen"
+
+msgid "Name"
+msgstr "Naam"
+
+msgid "Opening date"
+msgstr "Openingsdatum"
+
+msgid "Opening balance (€)"
+msgstr "Beginsaldo (€)"
+
+msgid "Add account"
+msgstr "Rekening toevoegen"
+
+msgid "Record a payment or receipt"
+msgstr "Betaling of ontvangst vastleggen"
+
+msgid "Movement"
+msgstr "Mutatie"
+
+msgid "Money in"
+msgstr "Geld ontvangen"
+
+msgid "Money out"
+msgstr "Geld uitgegeven"
+
+msgid "Amount (€)"
+msgstr "Bedrag (€)"
+
+msgid "Reference / concept"
+msgstr "Referentie / omschrijving"
+
+msgid "Save movement"
+msgstr "Mutatie opslaan"
+
+msgid "Transfer between accounts"
+msgstr "Overboeken tussen rekeningen"
+
+msgid "From"
+msgstr "Van"
+
+msgid "To"
+msgstr "Naar"
+
+msgid "Transfer funds"
+msgstr "Geld overboeken"
+
+msgid "Monthly cash flow"
+msgstr "Maandelijkse kasstroom"
+
+msgid "Cash in"
+msgstr "Contante ontvangsten"
+
+msgid "Cash out"
+msgstr "Contante uitgaven"
+
+msgid "Bank in"
+msgstr "Bankontvangsten"
+
+msgid "Bank out"
+msgstr "Bankuitgaven"
+
+msgid "Cash balance"
+msgstr "Kassaldo"
+
+msgid "Bank balance"
+msgstr "Banksaldo"
+
+msgid "Recent cash and bank movements"
+msgstr "Recente kas- en bankmutaties"
+
+msgid "Amount"
+msgstr "Bedrag"
+
+msgid "Reference"
+msgstr "Referentie"
+
+msgid "No movements recorded yet."
+msgstr "Nog geen mutaties geregistreerd."
+
+msgid "Loans"
+msgstr "Leningen"
+
+msgid "New fixed-rate loans show monthly capital/interest forecasts. Interest on ordinary money loans is generally VAT-exempt; the schedule never changes model 303. Neither a future instalment nor an unconfirmed loan disbursement changes bank balances. Older manual loans retain their original update controls."
+msgstr "Nieuwe leningen met vaste rente tonen maandelijkse prognoses voor aflossing en rente. Rente op gewone geldleningen is doorgaans vrijgesteld van btw; het schema wijzigt formulier 303 niet. Toekomstige termijnen of onbevestigde uitbetalingen veranderen banksaldi niet. Oudere handmatige leningen behouden hun bestaande bediening."
+
+msgid "Loan"
+msgstr "Lening"
+
+msgid "Lender"
+msgstr "Geldverstrekker"
+
+msgid "Original loan"
+msgstr "Oorspronkelijke lening"
+
+msgid "Monthly payment"
+msgstr "Maandtermijn"
+
+msgid "Outstanding"
+msgstr "Openstaand"
+
+msgid "Next payment date"
+msgstr "Datum volgende betaling"
+
+msgid "Payment / updates"
+msgstr "Betalingen / wijzigingen"
+
+msgid "months; annual nominal rate"
+msgstr "maanden; nominale jaarrente"
+
+msgid "Down payment"
+msgstr "Aanbetaling"
+
+msgid "Interest already paid"
+msgstr "Reeds betaalde rente"
+
+msgid "Next instalment"
+msgstr "Volgende termijn"
+
+msgid "Capital"
+msgstr "Kapitaal"
+
+msgid "Interest"
+msgstr "Rente"
+
+msgid "Pay from"
+msgstr "Betalen vanaf"
+
+msgid "Actual payment date"
+msgstr "Werkelijke betaaldatum"
+
+msgid "I confirm this instalment was actually paid from this account."
+msgstr "Ik bevestig dat deze termijn daadwerkelijk vanaf deze rekening is betaald."
+
+msgid "Confirm instalment paid"
+msgstr "Betaling termijn bevestigen"
+
+msgid "Amortisation schedule"
+msgstr "Aflossingsschema"
+
+msgid "Due date"
+msgstr "Vervaldatum"
+
+msgid "Instalment"
+msgstr "Termijn"
+
+msgid "Paid"
+msgstr "Betaald"
+
+msgid "Forecast"
+msgstr "Prognose"
+
+msgid "Update loan"
+msgstr "Lening bijwerken"
+
+msgid "No loans entered."
+msgstr "Geen leningen geregistreerd."
+
+msgid "Add a loan"
+msgstr "Lening toevoegen"
+
+msgid "Enter the amount actually borrowed, excluding any down payment. Set TIN and term to calculate instalments; leave term zero and enter a manual monthly amount for an old-style loan. The optional final balloon is extra principal due with the last instalment."
+msgstr "Vul het werkelijk geleende bedrag in, exclusief aanbetaling. Stel nominale rente en looptijd in om termijnen te berekenen; zet de looptijd op nul en voer een handmatige maandtermijn in voor oudere leningen. De extra slotbetaling is aanvullend kapitaal bij de laatste termijn."
+
+msgid "Loan name"
+msgstr "Naam lening"
+
+msgid "Annual nominal interest (TIN %)"
+msgstr "Nominale jaarrente (TIN %)"
+
+msgid "Financed principal (€)"
+msgstr "Gefinancierde hoofdsom (€)"
+
+msgid "Term in months (0 = manual)"
+msgstr "Looptijd in maanden (0 = handmatig)"
+
+msgid "Down payment from own funds (€)"
+msgstr "Aanbetaling uit eigen middelen (€)"
+
+msgid "Extra principal on final instalment (€)"
+msgstr "Extra hoofdsom bij laatste termijn (€)"
+
+msgid "Manual monthly payment (€; only term 0)"
+msgstr "Handmatige maandtermijn (€; alleen looptijd 0)"
+
+msgid "Loan date"
+msgstr "Leningdatum"
+
+msgid "First instalment date"
+msgstr "Datum eerste termijn"
+
+msgid "Loan funds actually received in bank (confirmed)"
+msgstr "Leningbedrag daadwerkelijk op bankrekening ontvangen (bevestigd)"
+
+msgid "Bank receiving loan"
+msgstr "Bankrekening die lening ontvangt"
+
+msgid "Select bank"
+msgstr "Selecteer bank"
+
+msgid "Confirm funds received only if a real transfer into this bank account occurred. Saving the loan does not repeat the supplier payment; the down payment is informational and never moves cash automatically. Loan instalments are forecast until manually confirmed."
+msgstr "Bevestig de ontvangst alleen als er daadwerkelijk geld naar deze bankrekening is overgemaakt. Het opslaan van de lening herhaalt geen leveranciersbetaling; de aanbetaling is alleen informatief en verplaatst nooit automatisch geld. Termijnen blijven prognoses tot handmatige bevestiging."
+
+msgid "Save loan"
+msgstr "Lening opslaan"
+
+msgid "Treasury"
+msgstr "Kasbeheer"
+
+msgid "Expense type"
+msgstr "Soort uitgave"
+
+msgid "Current expense"
+msgstr "Lopende uitgave"
+
+msgid "Fixed asset (depreciable)"
+msgstr "Vast actief (afschrijfbaar)"
+
+msgid "Fixed asset"
+msgstr "Vast actief"
+
+msgid "Date put into service"
+msgstr "Datum ingebruikname"
+
+msgid "Useful life (years)"
+msgstr "Gebruiksduur (jaren)"
+
+msgid "Annual straight-line allocation starts when the asset is ready for use. The first and last years are prorated by days. Confirm the applicable accounting and tax rules separately."
+msgstr "De jaarlijkse lineaire afschrijving begint zodra het bedrijfsmiddel gebruiksklaar is. Het eerste en laatste jaar worden naar rato van het aantal dagen berekend. Controleer afzonderlijk de toepasselijke boekhoudkundige en fiscale regels."
+
+msgid "Error detected"
+msgstr "Fout vastgesteld"
+
+msgid "Pending"
+msgstr "In behandeling"
+
+msgid "Validated and linked to payment"
+msgstr "Gevalideerd en aan betaling gekoppeld"
+
+msgid "No records"
+msgstr "Geen boekingen"
+
+msgid "Payment not linked. Check Treasury before recording another payment."
+msgstr "Betaling niet gekoppeld. Controleer de kasadministratie voordat u nog een betaling vastlegt."
+
+msgid "Linked payments exceed the recorded amount. Review the settlement."
+msgstr "Gekoppelde betalingen zijn hoger dan het geboekte bedrag. Controleer de afstemming."
+
+msgid "Green: validated and payment linked"
+msgstr "Groen: gevalideerd en betaling gekoppeld"
+
+msgid "Amber: pending validation, payment link or repayment"
+msgstr "Oranje: goedkeuring, betalingskoppeling of aflossing staat open"
+
+msgid "Red: detected inconsistency"
+msgstr "Rood: afwijking vastgesteld"
+
+msgid "Recorded movement without an invoice or loan link. Check before adding another payment."
+msgstr "Boeking zonder koppeling aan factuur of lening. Controleer dit voordat u nog een betaling vastlegt."
+
+
+msgid "Incidents"
+msgstr "Incidenten"
+
+msgid "Showing the selected accounting record."
+msgstr "Geselecteerde boeking wordt weergegeven."
+
+msgid "Show all records"
+msgstr "Alle boekingen tonen"
+
+msgid "Review"
+msgstr "Controleren"
+
+msgid "Issued invoice and accounting totals disagree."
+msgstr "De bedragen van de uitgereikte factuur en de boekhouding komen niet overeen."
+
+msgid "Check the domestic sale with zero VAT."
+msgstr "Controleer de binnenlandse verkoop met 0% btw."
+
+msgid "Check the missing invoice reference."
+msgstr "Controleer de ontbrekende factuurreferentie."
+
+msgid "Tax treatment requires review."
+msgstr "De fiscale behandeling moet worden gecontroleerd."
+
+msgid "Pending validation."
+msgstr "Wacht op validatie."
+
+msgid "Incidents requiring review"
+msgstr "Incidenten die controle vereisen"
+
+msgid "No matching records remain for this month."
+msgstr "Er zijn geen overeenkomende boekingen meer voor deze maand."
+
+msgid "Correct entry"
+msgstr "Boeking corrigeren"
+
+msgid "History"
+msgstr "Geschiedenis"
+
+msgid "Correct accounting entry"
+msgstr "Boekhouding corrigeren"
+
+msgid "This accounting record cannot be corrected."
+msgstr "Deze boeking kan niet worden gecorrigeerd."
+
+msgid "Check the amounts, date, VAT deduction and correction reason."
+msgstr "Controleer bedragen, datum, btw-aftrek en reden van correctie."
+
+msgid "Amounts must match the sign of the sale or refund."
+msgstr "Bedragen moeten overeenkomen met het teken van de verkoop of terugbetaling."
+
+msgid "A valid invoice or credit note reference is required."
+msgstr "Een geldige factuur- of creditnotareferentie is vereist."
+
+msgid "Check the supplier or customer and tax identification."
+msgstr "Controleer leverancier of klant en fiscale identificatie."
+
+msgid "Check the asset category, in-service date and useful life."
+msgstr "Controleer activacategorie, datum ingebruikname en gebruiksduur."
+
+msgid "Fiscal date"
+msgstr "Fiscale datum"
+
+msgid "Invoice reference"
+msgstr "Factuurreferentie"
+
+msgid "Customer or supplier"
+msgstr "Klant of leverancier"
+
+msgid "VAT amount"
+msgstr "Btw-bedrag"
+
+msgid "Deductible VAT percentage"
+msgstr "Aftrekbaar btw-percentage"
+
+msgid "Notes"
+msgstr "Opmerkingen"
+
+msgid "Correction reason"
+msgstr "Reden van correctie"
+
+msgid "Save correction as draft"
+msgstr "Correctie als concept opslaan"
+
+msgid "Cancel"
+msgstr "Annuleren"
+
+msgid "Accounting correction history (latest 50)"
+msgstr "Geschiedenis boekhoudcorrecties (laatste 50)"
+
+msgid "No corrections recorded."
+msgstr "Geen correcties geregistreerd."
+
+msgid "Administrator ID"
+msgstr "Beheerder-ID"
+
+msgid "Reason"
+msgstr "Reden"
+
+msgid "Before: date / invoice / base / VAT / total"
+msgstr "Voor: datum / factuur / grondslag / btw / totaal"
+
+msgid "After: date / invoice / base / VAT / total"
+msgstr "Na: datum / factuur / grondslag / btw / totaal"
+
+msgid "Check payment date, account and amount."
+msgstr "Controleer betaaldatum, rekening en bedrag."
+
+msgid "Payment exceeds the outstanding amount or has invalid dates/account."
+msgstr "De betaling overschrijdt het openstaande bedrag of de datum/rekening is ongeldig."
+
+msgid "Payment could not be recorded."
+msgstr "Betaling kon niet worden geregistreerd."
+
+msgid "Paid/received:"
+msgstr "Betaald/ontvangen:"
+
+msgid "Add a bank or cash account in Treasury to record an actual payment."
+msgstr "Voeg een bank- of kasrekening toe in Kasbeheer om een echte betaling vast te leggen."
+
+msgid "Paid from / received into"
+msgstr "Betaald vanaf / ontvangen op"
+
+msgid "Payment date"
+msgstr "Betaaldatum"
+
+msgid "Record receipt"
+msgstr "Ontvangst registreren"
+
+msgid "Record payment"
+msgstr "Betaling registreren"
+
+msgid "Record only actual bank/cash payments. Importing or validating an invoice never assumes it was paid."
+msgstr "Registreer alleen echte bank- of contante betalingen. Een factuur importeren of valideren betekent niet dat deze is betaald."
+
+msgid "Bank or cash account"
+msgstr "Bank- of kasrekening"
+
+msgid "Select an account"
+msgstr "Selecteer een rekening"
+
+msgid "Paid amount"
+msgstr "Betaald bedrag"
+
+msgid "Invoice total including VAT"
+msgstr "Factuurtotaal inclusief btw"
+
+msgid "Financial overview (not sales or VAT)"
+msgstr "Financieel overzicht (geen omzet of btw)"
+
+msgid "Initial loan funding (already in opening balance)"
+msgstr "Aanvangsfinanciering via lening (al opgenomen in het beginsaldo)"
+
+msgid "Current bank balance"
+msgstr "Huidig banksaldo"
+
+msgid "The opening loan is shown as a bank inflow in its start month for reporting. It is already included in the opening bank balance: no second bank movement, sale or VAT is created."
+msgstr "De oorspronkelijke lening wordt alleen voor rapportagedoeleinden als bankontvangst in de startmaand getoond. Deze is al opgenomen in het beginsaldo van de bank: er wordt geen tweede banktransactie, verkoop of btw aangemaakt."
+
+msgid "Issued invoice totals differ from the WooCommerce order. Review the original invoice and order before approving this draft."
+msgstr "De totalen op de uitgereikte factuur verschillen van de WooCommerce-bestelling. Controleer beide voordat je het concept goedkeurt."
+
+msgid "Totals updated from rectifying invoice %s; review the VAT classification and approve the draft again."
+msgstr "Totalen bijgewerkt vanuit correctiefactuur %s; controleer de btw-indeling en keur het concept opnieuw goed."
+
+msgid "Issued invoice and accounting totals disagree. Check the original invoice and the order; validation is blocked until reconciled."
+msgstr "De uitgereikte factuur en de boekhouding komen niet overeen. Controleer factuur en bestelling; validatie is geblokkeerd."
+
+msgid "Validated sale has zero VAT. Check its original invoice and applicable tax regime."
+msgstr "De gevalideerde verkoop heeft 0% btw. Controleer de oorspronkelijke factuur en het toepasselijke belastingregime."
+
+msgid "(automatically linked to this WooCommerce order)"
+msgstr "(automatisch gekoppeld aan deze WooCommerce-bestelling)"
+
+msgid "WooCommerce imported this sale with zero VAT. Check its invoice and the correct fiscal treatment before approving."
+msgstr "WooCommerce heeft deze verkoop zonder btw geïmporteerd. Controleer factuur en fiscale behandeling vóór goedkeuring."
+
+msgid "I have checked the zero VAT amount and confirm its domestic tax treatment."
+msgstr "Ik heb het btw-bedrag van nul gecontroleerd en bevestig de binnenlandse fiscale behandeling."
+
+msgid "Deductible percentage of the VAT amount, NOT the invoice VAT rate. 0% means no deduction; 100% only when fully deductible."
+msgstr "Aftrekbaar percentage van de btw, NIET het btw-tarief op de factuur. 0%: niet aftrekbaar; 100%: volledig aftrekbaar."
+
+msgid "Enter the percentage of VAT legally deductible, NOT the VAT rate: 0% if not deductible, 100% only if fully deductible, or another applicable percentage. You must choose a value."
+msgstr "Voer het wettelijk aftrekbare btw-percentage in, NIET het btw-tarief: 0% bij geen aftrek, 100% bij volledige aftrek of een ander toepasselijk percentage. Een waarde is verplicht."
+
+msgid "Invoice amount checks"
+msgstr "Controle factuurbedragen"
+
+msgid "Total of supplier invoice (base + VAT):"
+msgstr "Totaal leveranciersfactuur (grondslag + btw):"
+
+msgid "Potential deductible VAT (VAT × deductible percentage):"
+msgstr "Mogelijk aftrekbare btw (btw × aftrekpercentage):"
+
+msgid "Compare these amounts with the supplier invoice. This preview is not a tax deduction decision."
+msgstr "Vergelijk deze bedragen met de leveranciersfactuur. Dit voorbeeld bepaalt geen fiscale aftrek."
+
+msgid "Original PDF or image securely archived with this accounting entry."
+msgstr "Oorspronkelijke pdf of afbeelding veilig bij deze boeking gearchiveerd."
+
+msgid "Select a valid original PDF, JPG, PNG or WEBP document smaller than 10 MB."
+msgstr "Selecteer een geldig origineel PDF-, JPG-, PNG- of WEBP-document kleiner dan 10 MB."
+
+msgid "Correction saved. This entry is now a draft and must be validated again."
+msgstr "Correctie opgeslagen. De boeking is weer een concept en moet opnieuw worden gevalideerd."
+
+msgid "Could not correct the entry. Check all fields and the mandatory reason."
+msgstr "De boeking kon niet worden gecorrigeerd. Controleer alle velden en de verplichte reden."
+
+msgid "No data changed; nothing was recorded."
+msgstr "Geen gegevens gewijzigd en niets geregistreerd."
+
+msgid "The correction failed. The previous ledger entry was retained."
+msgstr "De correctie is mislukt. De vorige boeking blijft behouden."
+
+msgid "This WooCommerce sale has zero VAT. Check its issued invoice and confirm the domestic VAT treatment before validating it."
+msgstr "Deze WooCommerce-verkoop heeft 0% btw. Controleer de uitgereikte factuur en bevestig de fiscale behandeling vóór validatie."
+
+msgid "Accounting totals do not match the immutable issued invoice. Validation was blocked; reconcile the original document and WooCommerce order."
+msgstr "De boekhoudtotalen komen niet overeen met de onveranderlijke uitgereikte factuur. Validatie geblokkeerd; stem factuur en WooCommerce-bestelling af."
+
+msgid "Actual payment/receipt recorded in Treasury."
+msgstr "Werkelijke betaling/ontvangst geregistreerd in Kasbeheer."
+
+msgid "Historical payment reconciliation processed; review the posted, skipped and error counts shown."
+msgstr "Historische betalingsafstemming verwerkt; controleer geboekte, overgeslagen en foutieve posten."
+
+msgid "Invoice draft saved, but the selected payment could not be recorded. Register it from the invoice row after checking account, date and amount."
+msgstr "Factuurconcept opgeslagen, maar de gekozen betaling kon niet worden vastgelegd. Registreer deze bij de factuur na controle van rekening, datum en bedrag."
+
+msgid "Invoice validated, but the selected payment could not be recorded. Register it from the invoice row."
+msgstr "Factuur gevalideerd, maar de gekozen betaling kon niet worden vastgelegd. Registreer deze bij de factuur."
+
+msgid "Payment amount, date or account is invalid or exceeds the outstanding balance."
+msgstr "Bedrag, datum of rekening van de betaling is ongeldig of overschrijdt het openstaande saldo."
+
+msgid "Payment could not be recorded; no money was moved."
+msgstr "Betaling kon niet worden vastgelegd; er is geen geld verplaatst."
+
+msgid "Treasury record saved."
+msgstr "Kasbeheerboeking opgeslagen."
+
+msgid "Could not save the treasury record."
+msgstr "Kasbeheerboeking kon niet worden opgeslagen."
+
+msgid "Check the treasury values and dates."
+msgstr "Controleer de bedragen en datums in Kasbeheer."
+
+msgid "Supplier purchase CSV processed. Check the drafts in Received invoices."
+msgstr "CSV met leveranciersinkopen verwerkt. Controleer de concepten bij Ontvangen facturen."
+
+msgid "Select a valid supplier purchase CSV smaller than 2 MB."
+msgstr "Selecteer een geldig CSV-bestand voor leveranciersinkopen kleiner dan 2 MB."
+
+msgid "Invalid purchase CSV headers; use the downloaded template."
+msgstr "Ongeldige CSV-kolommen voor inkopen; gebruik het gedownloade sjabloon."
+
+msgid "Purchase CSV contains more than 500 rows."
+msgstr "Het inkoop-CSV bevat meer dan 500 rijen."
+
+msgid "Invalid supplier purchase data; no rows imported."
+msgstr "Ongeldige leveranciersinkoopgegevens; geen rijen geïmporteerd."
+
+msgid "Supplier purchase CSV contains no documents."
+msgstr "Het CSV-bestand met leveranciersinkopen bevat geen documenten."
+
+msgid "Could not save the supplier purchase batch; please retry."
+msgstr "Batch met leveranciersinkopen kon niet worden opgeslagen; probeer opnieuw."
+
+msgid "%d validated domestic WooCommerce sales have positive values but zero VAT. Review the original invoice and the tax treatment; these entries still contribute zero output VAT to this summary."
+msgstr "%d gevalideerde binnenlandse WooCommerce-verkopen hebben positieve bedragen maar nul btw. Controleer de originele facturen en fiscale behandeling; ze dragen nog steeds nul verschuldigde btw bij aan het overzicht."
+
+msgid "Review sales"
+msgstr "Verkopen controleren"
+
+msgid "Import new paid WooCommerce orders automatically in small background batches"
+msgstr "Nieuwe betaalde WooCommerce-bestellingen automatisch in kleine achtergrondbatches importeren"
+
+msgid "Uses WordPress WP-Cron while the website receives visits. Imported sales and refunds remain drafts until invoice numbers, dates and tax treatment are verified. Does not import supplier bills or mark taxes as ready."
+msgstr "Gebruikt WordPress WP-Cron bij websitebezoeken. Geïmporteerde verkopen en terugbetalingen blijven concepten tot factuurnummers, datums en fiscale behandeling zijn gecontroleerd. Geen leveranciersfacturen of automatische fiscale goedkeuring."
+
+msgid "Bank receipts from paid WooCommerce orders"
+msgstr "Bankontvangsten van betaalde WooCommerce-bestellingen"
+
+msgid "Optional. Only WooCommerce orders with an actual payment date, an issued invoice number and matching totals are recorded. No tax validation or payment is inferred from an unpaid order. Existing unrelated bank movements must be reconciled first."
+msgstr "Optioneel. Alleen WooCommerce-bestellingen met werkelijke betaaldatum, uitgereikt factuurnummer en overeenkomende totalen worden geboekt. Geen automatische fiscale validatie of betaling bij onbetaalde bestellingen. Stem bestaande andere bankmutaties eerst af."
+
+msgid "Bank for confirmed WooCommerce payments"
+msgstr "Bankrekening voor bevestigde WooCommerce-ontvangsten"
+
+msgid "Do not record payments automatically"
+msgstr "Betalingen niet automatisch registreren"
+
+msgid "Only payments received since"
+msgstr "Alleen betalingen ontvangen sinds"
+
+msgid "When an eligible WooCommerce order is synchronised, post its confirmed receipt once to this bank. Earlier payments remain available for manual reconciliation in Treasury. Fees and bank net deposits may need separate entries."
+msgstr "Bij synchronisatie van een geschikte WooCommerce-bestelling wordt de bevestigde ontvangst eenmaal op deze bank geboekt. Oudere betalingen kunnen handmatig worden afgestemd in Kasbeheer. Kosten en netto bankstortingen kunnen aparte boekingen vereisen."
+
+msgid "Fixed asset depreciation"
+msgstr "Afschrijving vaste activa"
+
+msgid "Straight-line accounting allocation by actual days from the in-service date. Does not change VAT, supplier invoices, bank payments, or determine a statutory tax deduction."
+msgstr "Lineaire boekhoudkundige toerekening naar werkelijke dagen vanaf ingebruikname. Wijzigt geen btw, leveranciersfacturen of bankbetalingen en bepaalt geen wettelijke belastingaftrek."
+
+msgid "Asset"
+msgstr "Bedrijfsmiddel"
+
+msgid "In service"
+msgstr "In gebruik"
+
+msgid "Amortizable cost"
+msgstr "Afschrijfbare kosten"
+
+msgid "Annual depreciation"
+msgstr "Jaarlijkse afschrijving"
+
+msgid "Remaining book value"
+msgstr "Resterende boekwaarde"
+
+msgid "No validated fixed assets for this year."
+msgstr "Geen gevalideerde vaste activa voor dit jaar."
+
+msgid "Total annual depreciation:"
+msgstr "Totale jaarlijkse afschrijving:"
+
+msgid "Supplier purchases: CSV import and export"
+msgstr "Leveranciersinkopen: CSV importeren en exporteren"
+
+msgid "Import supplier invoices for merchandise bought for resale. All entries are draft purchases and require review. Upload the original PDF or image to each row after importing."
+msgstr "Importeer leveranciersfacturen voor goederen die voor wederverkoop zijn gekocht. Alle posten zijn te controleren inkoopconcepten. Voeg na import het originele PDF-bestand of de afbeelding aan elke rij toe."
+
+msgid "Export supplier purchases CSV for %d"
+msgstr "Leveranciersinkopen CSV exporteren voor %d"
+
+msgid "Supplier purchases CSV file"
+msgstr "CSV-bestand met leveranciersinkopen"
+
+msgid "Import supplier purchase drafts"
+msgstr "Conceptinkopen van leveranciers importeren"
+
+msgid "Maximum 500 rows / 2 MB per import. Repeated documents are skipped. Attach PDF, JPG, PNG or WEBP originals to each imported row, then verify VAT and approve. CSV imports never attach the original document or register a payment."
+msgstr "Maximaal 500 rijen of 2 MB per import. Dubbele documenten worden overgeslagen. Voeg originele PDF-, JPG-, PNG- of WEBP-bestanden toe aan elke geïmporteerde rij, controleer btw en keur goed. CSV-import voegt geen originele documenten toe en boekt geen betalingen."
+
+msgid "This changes only the accounting record, not the WooCommerce order, issued invoice, or supplier PDF. If an issued invoice is wrong, follow the required rectifying-invoice procedure before fiscal approval."
+msgstr "Dit wijzigt alleen de boeking, niet de WooCommerce-bestelling, uitgereikte factuur of leveranciers-pdf. Als een uitgereikte factuur onjuist is, volg dan vóór fiscale goedkeuring de correctiefactuurprocedure."
+
+msgid "Saving a correction moves this record back to draft and removes it from validated tax totals until it is reviewed and approved again."
+msgstr "Door een correctie op te slaan wordt de boeking weer een concept en telt deze niet mee in gevalideerde belastingtotalen tot nieuwe controle en goedkeuring."
+
+msgid "Configure a bank or cash account in Treasury before linking a payment."
+msgstr "Configureer een bank- of kasrekening in Kasbeheer voordat je een betaling koppelt."
+
+msgid "Payment received and verified"
+msgstr "Betaling ontvangen en gecontroleerd"
+
+msgid "Invoice already paid (confirmed)"
+msgstr "Factuur al betaald (bevestigd)"
+
+msgid "Select this only if the payment actually occurred. It immediately creates a linked cash/bank movement when this form is saved; leave unchecked for unpaid invoices."
+msgstr "Selecteer dit alleen als de betaling daadwerkelijk heeft plaatsgevonden. Bij opslaan wordt direct een gekoppelde bank- of kasmutatie gemaakt. Laat uitgevinkt voor onbetaalde facturen."
+
+msgid "Reconcile confirmed payments and receipts"
+msgstr "Bevestigde betalingen en ontvangsten afstemmen"
+
+msgid "Only for invoices paid or customer sales actually collected and not yet linked to Treasury. Review each item and its actual payment date. Purchases are bank/cash out; sales are bank/cash in. No movements are generated until confirmed."
+msgstr "Alleen voor werkelijk betaalde facturen of ontvangen verkopen die nog niet gekoppeld zijn aan Kasbeheer. Controleer elke post en de werkelijke betaaldatum. Inkopen zijn uitgaven, verkopen ontvangsten. Geen mutaties vóór bevestiging."
+
+msgid "Account used for the confirmed payments or receipts"
+msgstr "Rekening gebruikt voor bevestigde betalingen of ontvangsten"
+
+msgid "Select bank or cash account"
+msgstr "Selecteer bank- of kasrekening"
+
+msgid "Confirmed?"
+msgstr "Bevestigd?"
+
+msgid "Invoice"
+msgstr "Factuur"
+
+msgid "Actual bank payment date"
+msgstr "Werkelijke datum bankbetaling"
+
+msgid "Sale"
+msgstr "Verkoop"
+
+msgid "Refund"
+msgstr "Terugbetaling"
+
+msgid "Purchase / expense"
+msgstr "Inkoop / uitgave"
+
+msgid "I confirm each selected purchase was paid or sale was received using this account on the dates shown, with no matching Treasury movement already recorded."
+msgstr "Ik bevestig dat elke geselecteerde inkoop is betaald of verkoop is ontvangen via deze rekening op de getoonde datums, zonder reeds geboekte overeenkomende Kasbeheer-mutatie."
+
+msgid "Post confirmed historical payments"
+msgstr "Bevestigde historische betalingen boeken"
+
+msgid "At most 100 invoices are shown at once. Refresh to reconcile more. This does not change invoices, VAT deductions or financing/loan balances."
+msgstr "Er worden maximaal 100 facturen tegelijk getoond. Vernieuw om meer af te stemmen. Dit wijzigt geen facturen, btw-aftrek of financierings- en leningsaldi."
+
+msgid "Select a PDF, JPG, PNG or WEBP document smaller than 10 MB."
+msgstr "Selecteer een PDF-, JPG-, PNG- of WEBP-document kleiner dan 10 MB."
+
+msgid "Select a valid original PDF or image."
+msgstr "Selecteer een geldige originele pdf of afbeelding."
+
+msgid "Original invoice documents"
+msgstr "Originele factuurdocumenten"
+
+msgid "Attach original PDF or image (up to 10 MB)"
+msgstr "Originele pdf of afbeelding bijvoegen (max. 10 MB)"
+
+msgid "Archive document"
+msgstr "Document archiveren"
+
+msgid "Preparation checklist"
+msgstr "Voorbereidingschecklist"
+
+msgid "WooCommerce background sales import:"
+msgstr "WooCommerce-verkoopimport op de achtergrond:"
+
+msgid "Not enabled. Enable it under Accounting Settings to keep new paid orders available for review."
+msgstr "Niet ingeschakeld. Schakel dit in bij Boekhoudinstellingen om nieuwe betaalde bestellingen te kunnen controleren."
+
+msgid "Enabled but not executed yet. WP-Cron requires site traffic or an external scheduler."
+msgstr "Ingeschakeld, maar nog niet uitgevoerd. WP-Cron vereist websiteverkeer of een externe planner."
+
+msgid "Last check:"
+msgstr "Laatste controle:"
+
+msgid "Last full cycle:"
+msgstr "Laatste volledige cyclus:"
+
+msgid "Not completed yet"
+msgstr "Nog niet voltooid"
+
+msgid "Error:"
+msgstr "Fout:"
+
+msgid "Accounting entries in selected period:"
+msgstr "Boekingen in geselecteerde periode:"
+
+msgid "Pending validation:"
+msgstr "Wachten op validatie:"
+
+msgid "Operations outside standard domestic VAT:"
+msgstr "Transacties buiten de standaard binnenlandse btw:"
+
+msgid "Entries without a document number:"
+msgstr "Boekingen zonder documentnummer:"
+
+msgid "There are no recorded operations in this period. This does not establish that the tax return is zero: first check the WooCommerce import and supplier invoices."
+msgstr "Er zijn geen transacties geregistreerd in deze periode. Dit betekent niet dat de aangifte nul is: controleer eerst de WooCommerce-import en leveranciersfacturen."
+
+msgid "Review the outstanding records before using these figures. Non-domestic transactions and missing references need individual tax treatment."
+msgstr "Controleer openstaande boekingen voordat je deze cijfers gebruikt. Niet-binnenlandse transacties en ontbrekende referenties vereisen afzonderlijke fiscale behandeling."
+
+msgid "No pending status or missing document numbers were detected. This does NOT mean a tax return is complete, accurate or ready for filing."
+msgstr "Geen openstaande statussen of ontbrekende documentnummers gevonden. Dit betekent NIET dat een aangifte volledig, correct of klaar voor indiening is."
+
+msgid "Entries without tax identification (check only where legally required):"
+msgstr "Boekingen zonder fiscale identificatie (alleen controleren waar wettelijk vereist):"
+
+msgid "Review purchases and expenses"
+msgstr "Inkopen en uitgaven controleren"
+
+msgid "Verify that the fiscal start date includes the entire applicable reporting period. Imported WooCommerce orders are drafts until reviewed, and the ledger may omit transactions not entered manually."
+msgstr "Controleer of de fiscale begindatum de hele rapportageperiode omvat. Geïmporteerde WooCommerce-bestellingen blijven concepten tot controle; niet handmatig ingevoerde transacties kunnen ontbreken."
+
+msgid "Reporting period:"
+msgstr "Aangifteperiode:"
+
+msgid "Figures recalculate from the current register whenever you open this screen; you do not have to wait for the tax deadline."
+msgstr "De cijfers worden bij het openen van dit scherm opnieuw berekend uit het actuele register; je hoeft niet te wachten op de aangiftetermijn."
+
+msgid "The tax models shown are references, not a list of mandatory returns for this merchant. Applicability depends on tax registration and legal form; for example, Model 130 may apply to certain self-employed taxpayers under direct estimation, while Model 200 concerns corporate income tax. Check tax registration with the AEAT or your adviser before preparing a return."
+msgstr "De getoonde belastingmodellen zijn ter informatie, geen lijst verplichte aangiften. Toepassing hangt af van fiscale registratie en rechtsvorm; model 130 kan gelden voor bepaalde zelfstandigen en model 200 voor vennootschapsbelasting. Controleer dit bij AEAT of een adviseur."
+
+msgid "Official AEAT Model 130 information"
+msgstr "Officiële AEAT-informatie over model 130"
+
+msgid "Accumulated figures for the selected period"
+msgstr "Opgetelde bedragen voor geselecteerde periode"
+
+msgid "Domestic sales taxable base (validated)"
+msgstr "Belastbare grondslag binnenlandse verkopen (gevalideerd)"
+
+msgid "Domestic sales with VAT"
+msgstr "Binnenlandse verkopen met btw"
+
+msgid "Domestic purchases / expenses taxable base (validated)"
+msgstr "Belastbare grondslag binnenlandse inkopen/uitgaven (gevalideerd)"
+
+msgid "Domestic purchases / expenses with VAT"
+msgstr "Binnenlandse inkopen/uitgaven met btw"
+
+msgid "Accrued output VAT"
+msgstr "Verschuldigde btw op verkopen"
+
+msgid "Indicative domestic VAT balance (not final tax due)"
+msgstr "Indicatief binnenlands btw-saldo (niet de definitief verschuldigde belasting)"
+
+msgid "Operations pending review or special tax treatment"
+msgstr "Transacties die controle of bijzondere fiscale behandeling vereisen"
+
+msgid "These are live accounting totals, not official AEAT boxes. The current register does not retain an invoice-by-invoice split of VAT rates, prior period offsets, all tax adjustments or filing options. Do not copy the indicative balance directly as the amount to pay."
+msgstr "Dit zijn actuele boekhoudtotalen, geen officiële AEAT-vakken. Het register bewaart geen volledige btw-tariefverdeling per factuur, verrekeningen uit eerdere perioden, alle fiscale aanpassingen of aangifteopties. Neem het indicatieve saldo niet direct over als te betalen bedrag."
+
+msgid "Edit"
+msgstr "Bewerken"
+
+msgid "Linked to a repayable loan from"
+msgstr "Gekoppeld aan een terugbetaalbare lening van"
+
+msgid "The opening funds are already present. Conversion or cancellation is blocked while this loan is linked."
+msgstr "De beginsaldi zijn al aanwezig. Omzetten of annuleren is geblokkeerd zolang deze lening gekoppeld is."
+
+msgid "Opening amount entered in error"
+msgstr "Beginsaldo per vergissing ingevoerd"
+
+msgid "Confirm cancellation of this opening balance"
+msgstr "Annulering van dit beginsaldo bevestigen"
+
+msgid "Cancel incorrect opening balance"
+msgstr "Onjuist beginsaldo annuleren"
+
+msgid "Rename account"
+msgstr "Rekening hernoemen"
+
+msgid "Opening balance correction history"
+msgstr "Geschiedenis correcties beginsaldo"
+
+msgid "Create a new cash or bank account (not a receipt)"
+msgstr "Nieuwe kas- of bankrekening maken (geen ontvangst)"
+
+msgid "Use a descriptive account name, such as Main bank or Cash register. Record donations, initial contributions and customer receipts as movements into an existing account."
+msgstr "Gebruik een duidelijke rekeningnaam, zoals Hoofdbank of Kas. Boek donaties, begininbreng en klantontvangsten als stortingen op een bestaande rekening."
+
+msgid "Save changes"
+msgstr "Wijzigingen opslaan"
+
+msgid "Sponsor / lender"
+msgstr "Sponsor / geldverstrekker"
+
+msgid "Funded by existing opening balance; no duplicate receipt"
+msgstr "Gefinancierd uit bestaand beginsaldo; geen dubbele ontvangst"
+
+msgid "Repayment when agreed, without fixed instalments. Interest: 0%."
+msgstr "Terugbetaling volgens afspraak, zonder vaste termijnen. Rente: 0%."
+
+msgid "Capital already returned"
+msgstr "Al terugbetaalde hoofdsom"
+
+msgid "repayments"
+msgstr "aflossingen"
+
+msgid "Repay from"
+msgstr "Terugbetalen vanaf"
+
+msgid "Actual repayment date"
+msgstr "Werkelijke aflossingsdatum"
+
+msgid "Capital to repay (€)"
+msgstr "Terug te betalen hoofdsom (€)"
+
+msgid "I confirm that this amount was actually transferred to the lender."
+msgstr "Ik bevestig dat dit bedrag daadwerkelijk aan de geldverstrekker is overgemaakt."
+
+msgid "Record actual repayment"
+msgstr "Werkelijke aflossing vastleggen"
+
+msgid "Enter the amount borrowed. For a 0% sponsor loan repayable later without fixed instalments, choose 0 months, 0% interest, and leave the first repayment date empty. Record partial or total repayments only when actually made. For scheduled financing, specify term and first instalment date."
+msgstr "Voer het geleende bedrag in. Voor een sponsorlening van 0% die later zonder vaste termijnen wordt terugbetaald, kies 0 maanden, 0% rente en laat de datum van de eerste aflossing leeg. Registreer aflossingen alleen wanneer ze echt plaatsvinden. Voor een lening op termijn, vul de looptijd en eerste termijn in."
+
+msgid "Sponsor / lender name"
+msgstr "Naam sponsor / geldverstrekker"
+
+msgid "Sponsor / lender tax ID (optional)"
+msgstr "Fiscaal nummer sponsor / geldverstrekker (optioneel)"
+
+msgid "Lender relationship"
+msgstr "Relatie tot geldverstrekker"
+
+msgid "Sponsor (repayable loan)"
+msgstr "Sponsor (terugbetaalbare lening)"
+
+msgid "Other lender"
+msgstr "Andere geldverstrekker"
+
+msgid "Loan agreement reference"
+msgstr "Referentie leningsovereenkomst"
+
+msgid "Term in months (0 = repay later without fixed instalments)"
+msgstr "Looptijd in maanden (0 = later terugbetalen zonder vaste termijnen)"
+
+msgid "First instalment date (optional for flexible 0% loans)"
+msgstr "Datum eerste termijn (optioneel bij flexibele leningen van 0%)"
+
+msgid "Loan funds"
+msgstr "Leningmiddelen"
+
+msgid "Not received yet (do not change bank)"
+msgstr "Nog niet ontvangen (bank niet wijzigen)"
+
+msgid "Already included in bank opening balance (do not duplicate)"
+msgstr "Al opgenomen in beginsaldo bank (niet dupliceren)"
+
+msgid "New confirmed bank receipt"
+msgstr "Nieuwe bevestigde bankontvangst"
+
+msgid "Bank receiving or holding loan funds"
+msgstr "Bankrekening die leningmiddelen ontvangt of aanhoudt"
+
+msgid "opening"
+msgstr "begin"
+
+msgid "I confirm that the entire opening balance belongs to this loan and is already in this bank. Do not add money again."
+msgstr "Ik bevestig dat het volledige beginsaldo bij deze lening hoort en al op deze bankrekening staat. Voeg geen geld opnieuw toe."
+
+msgid "When linking an opening balance, the loan principal must equal that opening amount exactly. An opening balance can fund only one loan. No bank movement is created."
+msgstr "Bij koppeling van een beginsaldo moet de hoofdsom exact overeenkomen met dat bedrag. Eén beginsaldo kan slechts één lening financieren. Er wordt geen bankmutatie gemaakt."
+
+msgid "Select opening balance when funds from the lender are already included in the bank opening balance: no second receipt is created. Select new receipt only when funds have newly arrived. This is a repayable loan, not a donation or VAT sale. Instalments remain forecasts until confirmed."
+msgstr "Selecteer beginsaldo als het geld van de geldverstrekker al in het bankbeginsaldo zit: er wordt geen tweede ontvangst gemaakt. Kies een nieuwe ontvangst alleen voor nieuw ontvangen geld. Dit is een terugbetaalbare lening, geen donatie of btw-verkoop. Termijnen blijven prognoses tot bevestiging."

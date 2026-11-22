@@ -279,7 +279,12 @@ $taxocommerce_billing_document_footer = trim((string) ($taxocommerce_billing_doc
 <?php endif; ?>
 
 <?php if (!empty($taxocommerce_billing_fiscal['enabled']) && !empty($taxocommerce_billing_fiscal['note'])) : ?>
-    <div class="fiscal-note"><strong>Condiciones fiscales del destino:</strong><br><?php echo nl2br(esc_html($taxocommerce_billing_fiscal['note'])); ?></div>
+    <?php
+    $taxocommerce_billing_fiscal_heading = (!empty($taxocommerce_billing_fiscal['regime']) && 'intra_eu_reverse_charge' === $taxocommerce_billing_fiscal['regime'])
+        ? 'Inversión del sujeto pasivo (UE)'
+        : 'Condiciones fiscales del destino';
+    ?>
+    <div class="fiscal-note"><strong><?php echo esc_html($taxocommerce_billing_fiscal_heading); ?>:</strong><br><?php echo nl2br(esc_html($taxocommerce_billing_fiscal['note'])); ?></div>
 <?php endif; ?>
 
 <?php if (!$taxocommerce_billing_is_invoice && !empty($taxocommerce_billing_document['show_payment_info'])) : ?>

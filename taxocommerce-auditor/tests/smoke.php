@@ -16,8 +16,8 @@ function absint( $v ) { return abs( (int) $v ); }
 function sanitize_key( $v ) { return strtolower( preg_replace( '/[^a-z0-9_-]/i', '', (string) $v ) ); }
 function sanitize_title( $v ) { return strtolower( str_replace( ' ', '-', (string) $v ) ); }
 function is_wp_error( $v ) { return false; }
-function apply_filters( $name, $value ) { return $value; }
-function taxonomy_exists( $name ) { return in_array( $name, array( 'tc_semantic_tag', 'tc_tipo', 'product_cat' ), true ); }
+function apply_filters( $name, $value ) { return 'taxocommerce_auditor_enable_deep_product_signals' === $name ? ! empty( $GLOBALS['tc_deep_product_signals'] ) : $value; }
+function taxonomy_exists( $name ) { return in_array( $name, array( 'tc_semantic_tag', 'tc_tipo', 'product_cat', 'product_tag' ), true ); }
 function get_post_meta( $id, $key, $single = true ) {
     if ( '_taxocommerce_core_seo_role' === $key ) {
         $roles = array( 10 => 'hub_secondary', 12 => 'landing', 13 => 'landing' );
@@ -110,6 +110,9 @@ function wp_get_object_terms( $ids, $tax, $args = array() ) {
         }
         return $out;
     }
+    if ( 'product_tag' === $tax ) {
+        return isset( $GLOBALS['tc_product_tags'] ) ? $GLOBALS['tc_product_tags'] : array( 'Equipamiento' );
+    }
     return array();
 }
 class WP_Query {
@@ -132,8 +135,10 @@ class WC_Product_Attribute {
 }
 class Fake_WC_Product {
     public $attrs = array();
-    public function get_short_description() { return ''; }
-    public function get_description() { return 'Taladro profesional con bateria y velocidad regulable para trabajo en madera y acero.'; }
+    public $short_description = '';
+    public $description = 'Taladro profesional con bateria y velocidad regulable para trabajo en madera y acero.';
+    public function get_short_description() { return $this->short_description; }
+    public function get_description() { return $this->description; }
     public function get_category_ids() { return array( 11 ); }
     public function get_sku() { return 'SKU-TEST'; }
     public function get_image_id() { return 0; }
@@ -178,8 +183,35 @@ $product = Rules::inspect( 'products', get_post( 4 ) );
 $codes = array_column( $product['findings'], 'code' );
 verify( in_array( 'product_missing_excerpt', $codes, true ), 'Missing product excerpt' );
 verify( ! in_array( 'product_without_category', $codes, true ), 'No false missing category' );
+verify( ! in_array( 'product_tag_identity_drift', $codes, true ), 'Product classification terms do not require literal copy matches' );
 verify( isset( $product['quality']['score'] ), 'Internal quality exists' );
 verify( 'sku test' === $product['sku_key'], 'SKU used for duplicate candidates' );
+// Numeric taxonomy tags are checked only when both title and body confirm
+// one specific value of the same physical unit (Issue #2752).
+$GLOBALS['tc_wc']->description = 'Pila recargable de 1,2 V para dispositivos compatibles.';
+$GLOBALS['tc_wc']->short_description = 'Pila recargable con tension de 1,2 V.';
+$GLOBALS['tc_fake_posts'][4]->post_title = 'Pila recargable 1,2 V';
+$GLOBALS['tc_product_tags'] = array( '2 V', 'Equipamiento' );
+$tag_conflict = Rules::inspect( 'products', get_post( 4 ) );
+verify( in_array( 'product_tag_numeric_conflict', array_column( $tag_conflict['findings'], 'code' ), true ), 'Contradictory numeric tag confirmed by title and description is reported' );
+verify( empty( $tag_conflict['template_key'] ), 'Normal product audit does not calculate weak duplicate template signatures' );
+$GLOBALS['tc_product_tags'] = array( '1,2 V', 'Equipamiento', 'Repuesto' );
+$matching_tag = Rules::inspect( 'products', get_post( 4 ) );
+verify( ! in_array( 'product_tag_numeric_conflict', array_column( $matching_tag['findings'], 'code' ), true ), 'Matching technical tag and broad classification roles remain valid' );
+$GLOBALS['tc_product_tags'] = array( '2 V' );
+$GLOBALS['tc_wc']->description = 'Sin especificaciones contrastables de tension de salida.';
+$GLOBALS['tc_wc']->short_description = '';
+$unknown_tag = Rules::inspect( 'products', get_post( 4 ) );
+verify( ! in_array( 'product_tag_numeric_conflict', array_column( $unknown_tag['findings'], 'code' ), true ), 'Insufficient technical evidence does not produce a numeric tag conflict' );
+$GLOBALS['tc_deep_product_signals'] = true;
+$GLOBALS['tc_wc']->description = 'Pila recargable de 1,2 V que alimenta instrumentos y dispositivos compatibles mediante una reaccion electroquimica reversible y permite muchos ciclos de carga.';
+$deep_product = Rules::inspect( 'products', get_post( 4 ) );
+verify( ! empty( $deep_product['template_key'] ), 'Opt-in deep audit preserves historical product fingerprint' );
+$GLOBALS['tc_deep_product_signals'] = false;
+$GLOBALS['tc_wc']->description = 'Taladro profesional con bateria y velocidad regulable para trabajo en madera y acero.';
+$GLOBALS['tc_wc']->short_description = '';
+$GLOBALS['tc_fake_posts'][4]->post_title = 'Taladro profesional 18 V';
+$GLOBALS['tc_product_tags'] = array( 'Equipamiento' );
 $GLOBALS['tc_wc']->attrs = array( new WC_Product_Attribute( 'Tension', array( '12 V' ) ) );
 $conflict = Rules::inspect( 'products', get_post( 4 ) );
 verify( in_array( 'product_attribute_title_conflict', array_column( $conflict['findings'], 'code' ), true ), 'Legacy voltage conflict rule' );
@@ -293,6 +325,7 @@ verify( false !== strpos( $admin_source, "is_scalar( \$_POST['rows'] )" ), 'POST
 
 // Regression guards for the eight issues in the old Playground Plugin Check export.
 $runner_source = file_get_contents( dirname( __DIR__ ) . '/includes/class-runner.php' );
+verify( false !== strpos( $runner_source, "\$deep_product_signals && '' !== \$template" ), 'Similarity findings are gated behind deep product audit' );
 $editorial_source = file_get_contents( dirname( __DIR__ ) . '/includes/class-editorial-specialist.php' );
 $category_source = file_get_contents( dirname( __DIR__ ) . '/includes/class-category-review.php' );
 $readme_source = file_get_contents( dirname( __DIR__ ) . '/readme.txt' );

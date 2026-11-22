@@ -4,7 +4,7 @@ Tags: social-media, scheduling, pinterest, publishing, calendar
 Requires at least: 6.7
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.1.23
+Stable tag: 0.1.25
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,17 +12,18 @@ Manage authorized social connections, publication templates and a content calend
 
 == Description ==
 
-* Admin header: plugin title, a single local `Description` with the static `Plugin URI` link below it (left); a wider collapsed `CHANGELOG.md` history (center); local version and release date (right). No duplicated information panel or external requests.
+Version 0.1.25 adds visible green published, red failed and blue scheduled status badges beside social publication entries. Unconfirmed responses remain separate. Reports and read-only Autocheck show counts and failure percentages by network; the percentage excludes unconfirmed and future schedules. Calendar reads existing history without sending new posts or retrying overdue jobs.
 
-* The admin header shows the plugin's bundled `Description` and links to its `Plugin URI`, without network requests or caching. Version history uses the bundled `CHANGELOG.md`.
 
-* One collapsible version-history control, without a duplicate plugin-information box.
+From version 0.1.24, Social > Reports shows a read-only delivery status for each configured provider: last attempt, last confirmed publication, overdue schedules and overdue WP-Cron events. The CSV history includes attempted-at timestamps, and provider errors remain inspectable. No overdue publications are automatically resent.
 
 
 TaxoCommerce Social supports optional Facebook, Instagram, LinkedIn, Pinterest and X connections, manual publication planning, CSV-based scheduling and queue/history views.
 
+= Key Features =
+
 * Administration areas: Connections, Templates, Calendar, Auto Test and Manual.
-* Auto Test: 16 local checks of providers, routes, tables, scheduler and security, without remote requests, publishing or file operations. Two recent results per administrator are stored for 30 days.
+* Auto Test: read-only local and delivery health checks, including overdue WP-Cron events, pending attempts, and per-network publishing confirmations. No remote publishing or network probes; two recent results per administrator are stored for 30 days.
 * Two distinct, indexed in-plugin manuals: step-by-step user guide and detailed technical reference for future developers, including architecture, hooks, data models, security and CI.
 * Restores CSV import/export controls in Calendar: template, content, agenda and history exports; upload validation and explicit import confirmation. Existing manual publishing controls remain unchanged.
 * Existing social settings and publication/schedule tables are reused on migrating sites.

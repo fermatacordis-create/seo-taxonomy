@@ -1,0 +1,188 @@
+name: Publicar TaxoCommerce en WordPress.org (SVN)
+
+# Publication is never triggered by a Git push, merge, schedule or deployment.
+on:
+  workflow_dispatch:
+    inputs:
+      plugin:
+        description: 'Plugin aprobado por WordPress.org'
+        required: true
+        type: choice
+        options:
+          - taxocommerce-core
+        default: taxocommerce-core
+      confirm_publication:
+        description: 'Confirmo que deseo publicar esta version en WordPress.org (SVN)'
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: wordpress-org-svn-${{ inputs.plugin }}
+  cancel-in-progress: false
+
+jobs:
+  authorize:
+    name: Comprobar solicitud y revision de staging
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require manual confirmation, approved plugin and staging
+        env:
+          PLUGIN: ${{ inputs.plugin }}
+          CONFIRM: ${{ inputs.confirm_publication }}
+          SOURCE_REF: ${{ github.ref }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$SOURCE_REF" = 'refs/heads/staging' || {
+            echo '::error::Solo se puede publicar desde la rama staging.'
+            exit 1
+          }
+          test "$CONFIRM" = 'true' || {
+            echo '::error::La publicacion requiere confirmacion manual explicita.'
+            exit 1
+          }
+          case "$PLUGIN" in
+            taxocommerce-core) ;;
+            *)
+              echo '::error::Este plugin aun no esta autorizado para WordPress.org.'
+              exit 1
+              ;;
+          esac
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Reject superseded source commits
+        env:
+          SOURCE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          latest="$(git ls-remote origin refs/heads/staging | cut -f1)"
+          test -n "$latest"
+          test "$latest" = "$SOURCE_SHA" || {
+            echo '::error::staging cambio: ejecuta una nueva publicacion desde la revision actual.'
+            exit 1
+          }
+
+  official-plugin-check:
+    name: WordPress.org Plugin Check oficial (estricto)
+    needs: authorize
+    uses: ./.github/workflows/taxocommerce-plugin-check.yml
+    with:
+      plugin: ${{ inputs.plugin }}
+    permissions:
+      contents: read
+
+  publish:
+    name: Publicar unico plugin seleccionado en SVN
+    needs: [authorize, official-plugin-check]
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Preparar PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+      - name: Instalar y verificar el cliente Subversion
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! command -v svn >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install -y --no-install-recommends subversion
+          fi
+          command -v svn
+          svn --version --quiet
+      - name: Validar contrato de publicacion y preparar paquete
+        env:
+          PLUGIN: ${{ inputs.plugin }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s .github/tests -p test_wporg_svn_publish_workflow.py -v
+          test "$PLUGIN" = taxocommerce-core
+          test -f "$PLUGIN/$PLUGIN.php"
+          test -f "$PLUGIN/readme.txt"
+          mkdir -p "build/$PLUGIN"
+          rsync -a --exclude='tests/' --exclude='.*' --exclude='node_modules/' \
+            --exclude='uploads/' --exclude='*.bak' --exclude='*.log' \
+            --exclude='*.pyc' --exclude='*.pot' --include='/CHANGELOG.md' \
+            --exclude='*.md' "$PLUGIN/" "build/$PLUGIN/"
+          find "build/$PLUGIN/languages" -maxdepth 1 -type f \
+            -name 'taxocommerce-core-catalog-content-management-for-woocommerce-*' -delete
+          php "$PLUGIN/tests/slug-compatibility-smoke.php"
+          python3 -m unittest discover -s .github/tests -p test_package_core_wordpress_org.py -v
+          python3 .github/scripts/package_core_wordpress_org.py "build/$PLUGIN"
+          python3 .github/scripts/taxocommerce_family_readme_check.py "$PLUGIN" "build/$PLUGIN"
+          find "build/$PLUGIN" -type f -name '*.php' -print0 | xargs -0 -r -n1 php -l > /dev/null
+          python3 - "$PLUGIN" <<'PY' >> "$GITHUB_ENV"
+          import pathlib
+          import re
+          import sys
+
+          plugin = sys.argv[1]
+          root = pathlib.Path('build') / plugin
+          header = (root / (plugin + '.php')).read_text(encoding='utf-8')
+          readme = (root / 'readme.txt').read_text(encoding='utf-8')
+          main = re.search(r'(?m)^\s*\*\s*Version:\s*([0-9]+(?:\.[0-9]+)+)\s*$', header)
+          stable = re.search(r'(?mi)^Stable tag:\s*([^\s]+)\s*$', readme)
+          if not main or not stable or main.group(1) != stable.group(1):
+              raise SystemExit('Plugin Version and Stable tag do not match')
+          print('VERSION=' + main.group(1))
+          PY
+          echo 'Paquete validado; aun no se ha escrito en SVN.' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Publicar trunk y etiqueta de version en una unica transaccion SVN
+        env:
+          PLUGIN: ${{ inputs.plugin }}
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$SVN_USERNAME" && test -n "$SVN_PASSWORD" || {
+            echo '::error::Faltan SVN_USERNAME o SVN_PASSWORD en los secretos del repositorio.'
+            exit 1
+          }
+          test "$PLUGIN" = taxocommerce-core
+          test "$GITHUB_REF" = refs/heads/staging
+
+          SVN_URL="https://plugins.svn.wordpress.org/$PLUGIN"
+          SVN_WORK="$(mktemp -d)"
+          svn checkout "$SVN_URL" "$SVN_WORK" --non-interactive \
+            --username "$SVN_USERNAME" --password "$SVN_PASSWORD" --no-auth-cache
+
+          test -d "$SVN_WORK/trunk" && test -d "$SVN_WORK/tags" || {
+            echo '::error::El repositorio SVN carece de trunk o tags.'
+            exit 1
+          }
+          if [ -e "$SVN_WORK/tags/$VERSION" ]; then
+            echo "::error::La etiqueta $VERSION ya existe en SVN. No se sobrescribe."
+            exit 1
+          fi
+
+          # Copy only installable plugin files: SVN trunk must not contain a nested plugin folder.
+          rsync -a --delete --exclude='.svn' "build/$PLUGIN/" "$SVN_WORK/trunk/"
+          svn add --force "$SVN_WORK/trunk" > /dev/null
+
+          # Record deletions of obsolete tracked files in trunk.
+          while IFS= read -r line; do
+            if [ "${line:0:1}" = '!' ]; then
+              svn delete --force "${line:8}"
+            fi
+          done < <(svn status "$SVN_WORK/trunk")
+
+          # SVN copies the staged trunk, including its changes, preserving tag history.
+          svn copy "$SVN_WORK/trunk" "$SVN_WORK/tags/$VERSION"
+          svn commit "$SVN_WORK" -m "Release $PLUGIN $VERSION from GitHub $GITHUB_SHA" \
+            --non-interactive --username "$SVN_USERNAME" \
+            --password "$SVN_PASSWORD" --no-auth-cache
+
+          echo "Publicado: $PLUGIN $VERSION" >> "$GITHUB_STEP_SUMMARY"
+          echo "Origen GitHub: $GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
+          echo "Repositorio SVN: $SVN_URL" >> "$GITHUB_STEP_SUMMARY"

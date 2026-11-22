@@ -3,8 +3,8 @@
  * Plugin Name: TaxoCommerce Customers
  * Plugin URI: https://github.com/distribuidordeherramientases-wq/seo-taxonomy/tree/staging/taxocommerce-customers
  * Description: Private customer directory and CRM for WooCommerce buyers, guests and manually added contacts, with batch CSV import/export.
- * Version: 0.1.1
- * Release Date: 2026-11-14
+ * Version: 0.1.2
+ * Release Date: 2026-11-16
  * Requires at least: 6.7
  * Requires PHP: 7.4
  * Author: David Perez
@@ -15,7 +15,7 @@
  */
 defined( 'ABSPATH' ) || exit;
 
-define( 'TCCUST_VERSION', '0.1.1' );
+define( 'TCCUST_VERSION', '0.1.2' );
 define( 'TCCUST_DIR', plugin_dir_path( __FILE__ ) );
 define( 'TCCUST_URL', plugin_dir_url( __FILE__ ) );
 
@@ -78,7 +78,7 @@ add_filter( 'taxocommerce_core_family_extensions', static function ( $extensions
 		'org_slug' => 'taxocommerce-customers',
 		'wordpress_org' => false,
 		'admin_url' => admin_url( 'admin.php?page=taxocommerce-customers' ),
-		'description' => __( 'Private customer and purchaser management.', 'taxocommerce-customers' ),
+		'description' => TCCUST_Admin::description(),
 	);
 	return $extensions;
 } );

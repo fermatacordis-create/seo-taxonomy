@@ -4,7 +4,7 @@ Tags: analytics, search-console, bing, ecommerce, reporting
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.1.64
+Stable tag: 1.1.74
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,36 +12,15 @@ External connections, manual provider data downloads, and market intelligence fo
 
 == Description ==
 
-Version 1.1.64 unifies the complete Analysis action into one CPU-paced, sequential chunked report generation, with one Stop button and a downloadable JSON retained for 24 hours after completion. Fixes the signed AJAX download link to avoid the expired-file error; individual reports remain available.
+TaxoCommerce Insights keeps external service connections and manual data downloads in one place.
 
-
-Version 1.1.61 ensures Merchant competitive visibility remains available when Best Sellers is used internally to obtain official Google category IDs but is not selected for display in the report. The unselected indicator is marked clearly without hiding competitive visibility.
-
-
-Version 1.1.60 refreshes selected competitive-market sources in bounded sequential AJAX requests: one Merchant Best Sellers page, the existing cached/rate-limited Trends sync, and up to three separate Google-category visibility requests. Reports include source diagnostics and do not regenerate on display. External data remains subject to Merchant account permissions, eligibility and Google availability.
-
-
-Version 1.1.59 restores the Competition analysis panel after generating an official-source report or saving its configuration. The administrator returns to the saved report, keeping the chosen reporting period, without running Merchant or Trends requests again.
-
-
-Version 1.1.58 makes the Competition report configurable per store: market scope, WooCommerce category filters, explicit company/supplier lists, and selected official-source indicators. Selected supplier identities are not presented as verified commercial data; no competitor sites are crawled.
-
-
-Version 1.1.56 improves native translations for Connections and provider integrations across Spanish, English, French, German and Dutch. Settings, OAuth errors, connection checks and Merchant/Pinterest/Amazon/Bing buttons are translated. The entire Insights interface is not yet localized; further work remains under #2062.
-
-
-Version 1.1.54 adds five-language WordPress translations for 124 analyst dashboard strings: reports, keywords, competitor comparisons, positions, data quality, supplier tracking and export permissions. Untranslated messages continue to fall back to their original source text. Full translation of longer report guidance remains in progress under #2062.
-
-
-* Admin header: plugin title, a single local `Description` with the static `Plugin URI` link below it (left); a wider collapsed `CHANGELOG.md` history (center); local version and release date (right). No duplicated information panel or external requests.
+= Key Features =
 
 * Analysis: individual reports and full report generation via authenticated AJAX. The complete unified JSON is assembled from authenticated, sequential, bounded requests in a private temporary file and streamed after validation. No one-shot heavy export, cron or browser-side Blob.
 
-* The admin header shows the local bundled Description and Plugin URI metadata without external requests or excerpt caching. CHANGELOG.md provides independent version history.
 
 
 
-TaxoCommerce Insights keeps external service connections and manual data downloads in one place.
 
 * Connections: Google Search Console, Google Analytics, Google Merchant Center, Bing Webmaster, Amazon and Pinterest.
 * Google Search downloads and explicit day-by-day synchronization of the historical Search Console tables used by Analysis, authorized via current Connections OAuth or service-account credentials.
@@ -82,6 +61,22 @@ Only previously saved local information may be available. Live Google/Bing metri
 It is the continued plugin under the historical slug taxocommerce-google-bing, renamed to Insights and focused on unified connections and provider data downloads.
 
 == Changelog ==
+
+= 1.1.72 =
+* Translate ten Google Trends interface strings into five languages, retaining existing behavior.
+
+
+= 1.1.71 =
+* Localize Merchant and Google Trends administrative messages in five languages.
+
+
+= 1.1.70 =
+* Translate Google Trends controls and feedback in five locales; no behavior changes.
+
+
+= 1.1.69 =
+* Localize eight administration labels in ES/EN/FR/DE/NL; rebuild gettext catalogs. No behavior changes.
+
 
 = 1.1.63 =
 * Uniform functional AutoCheck report JSON fields and layout, retaining existing Code Check and historic report compatibility.

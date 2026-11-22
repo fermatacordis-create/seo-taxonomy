@@ -58,5 +58,6 @@ final class SEO_Facturas_Install {
         ) {$charset};";
 
         dbDelta($sql);
+        SEO_Facturas_Rectifications::install_schema();
     }
 }

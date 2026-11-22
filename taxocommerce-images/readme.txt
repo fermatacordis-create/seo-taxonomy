@@ -12,22 +12,15 @@ Image management for WordPress and WooCommerce with Media as the canonical sourc
 
 == Description ==
 
-* Admin header: plugin title, a single local `Description` with the static `Plugin URI` link below it (left); a wider collapsed `CHANGELOG.md` history (center); local version and release date (right). No duplicated information panel or external requests.
+TaxoCommerce Images manages WordPress Media and WooCommerce product images, including audits, image metadata, thumbnail regeneration and reversible image resizing.
 
-* The admin header shows the plugin's bundled `Description` and links to its `Plugin URI`, without network requests or caching. Version history uses the bundled `CHANGELOG.md`.
-
-* One collapsible version-history control, without a duplicate plugin-information box.
-
-
-TaxoCommerce Images is an independent member of the TaxoCommerce family.
-
-Core principles:
+= Design Principles =
 
 * WordPress Media is the source of truth.
 * No custom image tables or supplier image indexes are required.
 * WordPress and WooCommerce native APIs remain authoritative.
 
-Current functionality includes:
+= Key Features =
 
 * Media dashboard.
 * On-demand read-only Auto Test, 17 checks, user-specific temporary report (no new tables).

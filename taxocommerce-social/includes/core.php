@@ -744,7 +744,27 @@ function tcsocial_network_publish_content($content_id, $provider, $template_over
         'provider'       => $saved_provider,
     );
 
-    $result = call_user_func($provider_config['publish_callback'], $payload);
+    // An exception after an HTTP request may mean that the network accepted
+    // the publication. Keep the attempt pending for manual verification rather
+    // than automatically retrying and risking duplicate posts.
+    try {
+        $result = call_user_func($provider_config['publish_callback'], $payload);
+    } catch (Throwable $error) {
+        global $wpdb;
+        $table = esc_sql( tcsocial_network_publications_table() );
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Persist an uncertain remote delivery in this plugin's own audit table.
+        $wpdb->update(
+            $table,
+            array(
+                'error_message' => 'Resultado remoto no confirmado: excepción al ejecutar el conector. Revisar la red antes de reintentar.',
+                'updated_at'    => current_time('mysql'),
+            ),
+            array('id' => $publication_id),
+            array('%s', '%s'),
+            array('%d')
+        );
+        return new WP_Error('social_delivery_unconfirmed', 'La publicación no tiene confirmación: error en el conector. Revisa la red y el historial antes de reintentar.');
+    }
 
     global $wpdb;
     $table = esc_sql( tcsocial_network_publications_table() );
@@ -771,6 +791,24 @@ function tcsocial_network_publish_content($content_id, $provider, $template_over
 
     $remote_id = isset($result['remote_id']) ? sanitize_text_field((string) $result['remote_id']) : '';
     $remote_url = isset($result['remote_url']) ? esc_url_raw((string) $result['remote_url']) : '';
+
+    // Never mark a provider response as published without its remote ID.
+    // All current provider callbacks return remote_id on confirmed success.
+    if ('' === $remote_id) {
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Preserve an unconfirmed attempt until manually checked on the external network.
+        $wpdb->update(
+            $table,
+            array(
+                'error_message' => 'La red no devolvió un identificador; resultado no confirmado. Comprobar antes de reintentar.',
+                'updated_at'    => $now,
+            ),
+            array('id' => $publication_id),
+            array('%s', '%s'),
+            array('%d')
+        );
+        return new WP_Error('social_remote_id_missing', 'La publicación no se ha confirmado: falta el identificador remoto. Comprueba la red antes de reintentar.');
+    }
+
 
     // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Actualiza la publicacion/metricas en su tabla propia, con persistencia inmediata e invalidacion temporal implicita.
     $wpdb->update(
@@ -2050,6 +2088,7 @@ function tcsocial_network_scheduler_exportable_history_rows()
             (string) ($row->target_url ?: ''),
             (string) ($row->remote_url ?: ''),
             (string) ($row->error_message ?: ''),
+            (string) ($row->created_at ?: ''),
         );
     }
     return $result;
@@ -2095,7 +2134,7 @@ function tcsocial_network_handle_scheduler_export()
     if ('history' === $kind) {
         tcsocial_network_scheduler_send_csv(
             'historial-social-' . $stamp . '.csv',
-            array('publicacion_id', 'contenido_id', 'titulo', 'tipo', 'red', 'estado', 'fecha_publicacion', 'visitas_web', 'reacciones', 'comentarios', 'compartidos', 'url_medida', 'url_red_social', 'error'),
+            array('publicacion_id', 'contenido_id', 'titulo', 'tipo', 'red', 'estado', 'fecha_publicacion', 'visitas_web', 'reacciones', 'comentarios', 'compartidos', 'url_medida', 'url_red_social', 'error', 'fecha_intento'),
             tcsocial_network_scheduler_exportable_history_rows()
         );
     }
@@ -2965,7 +3004,7 @@ function tcsocial_network_render_styles()
     echo '<style>
         .seo-social-header{display:flex;justify-content:space-between;gap:24px;align-items:flex-start;margin:4px 0 18px;padding:20px;background:#fff;border:1px solid #dcdcde;border-radius:8px}.seo-social-header h2{margin:0 0 5px;font-size:22px}.seo-social-header p{margin:0;color:#646970;max-width:720px}.seo-social-provider-strip{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.seo-social-provider-pill{display:inline-flex;align-items:center;padding:5px 9px;border-radius:999px;background:#f0f0f1;color:#50575e;font-size:12px;font-weight:600}.seo-social-provider-pill.is-connected{background:#edfaef;color:#176b2c}.seo-social-provider-pill.is-planned{background:#f6f7f7;color:#787c82}
         .seo-social-subnav{display:flex;gap:8px;margin:0 0 18px;border-bottom:1px solid #c3c4c7;overflow:auto}.seo-social-subnav-link{display:inline-block;margin-bottom:-1px;padding:10px 14px;text-decoration:none;border:1px solid transparent;border-radius:6px 6px 0 0;font-weight:600;white-space:nowrap}.seo-social-subnav-link.is-active{background:#fff;border-color:#c3c4c7 #c3c4c7 #fff;color:#1d2327}
-        .seo-social-card{background:#fff;border:1px solid #dcdcde;border-radius:8px;padding:20px;margin:0 0 18px}.seo-social-card h2,.seo-social-card h3{margin-top:0}.seo-social-intro{display:flex;justify-content:space-between;gap:18px;align-items:flex-start}.seo-social-intro p{max-width:760px;margin-top:4px;color:#646970}.seo-social-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}.seo-social-field label{display:block;font-weight:600;margin:0 0 6px}.seo-social-field input[type=text],.seo-social-field input[type=password],.seo-social-field select,.seo-social-field textarea{width:100%}.seo-social-field textarea{min-height:120px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}.seo-social-help{color:#646970;font-size:12px;line-height:1.45}.seo-social-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:16px}.seo-social-state{display:inline-flex;padding:3px 7px;border-radius:999px;font-size:11px;font-weight:700;background:#f0f0f1;color:#50575e}.seo-social-state.is-published,.seo-social-state.is-ok{background:#edfaef;color:#176b2c}.seo-social-state.is-failed{background:#fcf0f1;color:#b32d2e}.seo-social-state.is-pending,.seo-social-state.is-scheduled{background:#fff8e5;color:#8a5500}
+        .seo-social-card{background:#fff;border:1px solid #dcdcde;border-radius:8px;padding:20px;margin:0 0 18px}.seo-social-card h2,.seo-social-card h3{margin-top:0}.seo-social-intro{display:flex;justify-content:space-between;gap:18px;align-items:flex-start}.seo-social-intro p{max-width:760px;margin-top:4px;color:#646970}.seo-social-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}.seo-social-field label{display:block;font-weight:600;margin:0 0 6px}.seo-social-field input[type=text],.seo-social-field input[type=password],.seo-social-field select,.seo-social-field textarea{width:100%}.seo-social-field textarea{min-height:120px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}.seo-social-help{color:#646970;font-size:12px;line-height:1.45}.seo-social-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:16px}.seo-social-state{display:inline-flex;padding:3px 7px;border-radius:999px;font-size:11px;font-weight:700;background:#f0f0f1;color:#50575e}.seo-social-state.is-published,.seo-social-state.is-ok{background:#edfaef;color:#176b2c}.seo-social-state.is-failed{background:#fcf0f1;color:#b32d2e}.seo-social-state.is-pending,.seo-social-state.is-scheduled{background:#e8f2ff;color:#1559a3}.seo-social-state.is-unconfirmed{background:#fff8e5;color:#8a5500}
         .seo-social-vars{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0}.seo-social-vars code{font-size:11px;padding:3px 6px;background:#f6f7f7}.seo-social-table-wrap{overflow:auto}.seo-social-table{width:100%;border-collapse:collapse}.seo-social-table th,.seo-social-table td{padding:12px 10px;border-bottom:1px solid #e2e4e7;text-align:left;vertical-align:top}.seo-social-table th{font-size:12px;text-transform:uppercase;letter-spacing:.03em;color:#50575e}.seo-social-content-title{min-width:250px}.seo-social-preview{white-space:pre-wrap;background:#f6f7f7;border:1px solid #dcdcde;border-radius:6px;padding:10px;max-height:170px;overflow:auto;font-size:12px;line-height:1.45}.seo-social-row-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}.seo-social-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}.seo-social-metric{background:#fff;border:1px solid #dcdcde;border-radius:8px;padding:16px}.seo-social-metric strong{display:block;font-size:24px;line-height:1.1}.seo-social-metric span{display:block;color:#646970;margin-top:5px;font-size:12px}.seo-social-provider-card{position:relative}.seo-social-provider-card .dashicons{font-size:32px;width:32px;height:32px;margin-bottom:8px}.seo-social-code-note{padding:10px 12px;background:#f6f7f7;border-left:4px solid #2271b1}.seo-social-filterbar{display:flex;gap:8px;flex-wrap:wrap;align-items:end}.seo-social-filterbar .seo-social-field{min-width:180px;flex:1}.seo-social-filterbar .seo-social-field.is-search{min-width:280px;flex:2}
         .seo-social-calendar-toolbar{display:flex;justify-content:space-between;gap:14px;align-items:flex-end;flex-wrap:wrap;margin-top:18px}.seo-social-calendar-nav{display:flex;gap:7px;flex-wrap:wrap}.seo-social-calendar-filter{display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap}.seo-social-calendar-filter label{display:flex;flex-direction:column;gap:5px;font-weight:600}.seo-social-calendar-filter select{min-width:180px}.seo-social-calendar-title-row{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-top:20px;flex-wrap:wrap}.seo-social-calendar-title-row h3{margin:0;font-size:20px}.seo-social-calendar-legend{display:flex;gap:7px;flex-wrap:wrap}.seo-social-calendar-legend-item{display:inline-flex;align-items:center;padding:4px 8px;border-radius:999px;font-size:11px;font-weight:700;border:1px solid transparent}.seo-social-calendar-legend-item.is-post{background:#e9f3ff;color:#135e96;border-color:#b9d7f3}.seo-social-calendar-legend-item.is-page{background:#f1e9fb;color:#65409a;border-color:#d7c2ed}.seo-social-calendar-legend-item.is-campaign{background:#fff1d6;color:#8a4b00;border-color:#f2cd8c}.seo-social-calendar-legend-item.is-collision{background:#fcf0f1;color:#b32d2e;border-color:#e7a8ae}.seo-social-calendar-metrics{display:grid;grid-template-columns:repeat(4,minmax(130px,1fr));gap:10px;margin-top:14px}.seo-social-calendar-metrics>div{border:1px solid #dcdcde;border-radius:8px;padding:12px;background:#fff}.seo-social-calendar-metrics>div.has-warning{border-color:#d63638;background:#fff8f8}.seo-social-calendar-metrics strong{display:block;font-size:22px;line-height:1.1}.seo-social-calendar-metrics span{display:block;margin-top:4px;color:#646970;font-size:11px}.seo-social-calendar-scroll{overflow:auto}.seo-social-calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(135px,1fr));min-width:945px;border-top:1px solid #dcdcde;border-left:1px solid #dcdcde}.seo-social-calendar-weekday{padding:9px 10px;background:#f6f7f7;border-right:1px solid #dcdcde;border-bottom:1px solid #dcdcde;font-size:11px;font-weight:800;text-transform:uppercase;color:#50575e}.seo-social-calendar-day{min-height:150px;padding:8px;border-right:1px solid #dcdcde;border-bottom:1px solid #dcdcde;background:#fff}.seo-social-calendar-day.is-outside{background:#f6f7f7;color:#a7aaad}.seo-social-calendar-day.is-past{background:#fbfbfc}.seo-social-calendar-day.is-today{box-shadow:inset 0 0 0 2px #2271b1}.seo-social-calendar-day.is-empty-future{background:#fafafa}.seo-social-calendar-day.has-collision{box-shadow:inset 0 0 0 2px #d63638}.seo-social-calendar-day-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}.seo-social-calendar-day-number{font-size:13px;font-weight:800}.seo-social-calendar-day-count{display:inline-flex;min-width:21px;height:21px;align-items:center;justify-content:center;border-radius:999px;background:#1d2327;color:#fff;font-size:10px;font-weight:800}.seo-social-calendar-empty-label{display:block;margin-top:26px;text-align:center;color:#a7aaad;font-size:11px}.seo-social-calendar-event{padding:7px 8px;margin-top:6px;border-radius:6px;border-left:4px solid #8c8f94;font-size:11px;line-height:1.25}.seo-social-calendar-event.is-post{background:#e9f3ff;border-left-color:#2271b1}.seo-social-calendar-event.is-page{background:#f1e9fb;border-left-color:#7e57c2}.seo-social-calendar-event.is-campaign{background:#fff1d6;border-left-color:#d98500}.seo-social-calendar-event-meta{display:flex;justify-content:space-between;gap:6px;margin-bottom:3px;font-size:10px;font-weight:700;color:#50575e}.seo-social-calendar-event a,.seo-social-calendar-event-title{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:#1d2327;text-decoration:none;font-weight:700}.seo-social-calendar-event a:hover{text-decoration:underline}.seo-social-calendar-event small{display:block;margin-top:3px;color:#646970}.seo-social-calendar-list{display:grid;gap:8px}.seo-social-calendar-list-day{display:grid;grid-template-columns:150px 1fr;border:1px solid #dcdcde;border-radius:8px;overflow:hidden;background:#fff}.seo-social-calendar-list-day.has-collision{border-color:#d63638}.seo-social-calendar-list-date{padding:12px;background:#f6f7f7}.seo-social-calendar-list-date strong,.seo-social-calendar-list-date span{display:block}.seo-social-calendar-list-date span{margin-top:3px;color:#646970;font-size:11px}.seo-social-calendar-list-events{padding:8px}.seo-social-calendar-list-event{display:grid;grid-template-columns:52px 90px minmax(180px,1fr) 115px minmax(230px,auto);gap:8px;align-items:center;position:relative;padding:7px 8px;border-radius:6px;margin:3px 0;border-left:4px solid #8c8f94}.seo-social-calendar-list-event.is-post{background:#e9f3ff;border-left-color:#2271b1}.seo-social-calendar-list-event.is-page{background:#f1e9fb;border-left-color:#7e57c2}.seo-social-calendar-list-event.is-campaign{background:#fff1d6;border-left-color:#d98500}.seo-social-calendar-list-event a{text-decoration:none;font-weight:600}.seo-social-calendar-list-provider{font-size:11px;font-weight:700}.seo-social-calendar-list-event small{color:#646970;text-align:right}
         @media(max-width:900px){.seo-social-calendar-metrics{grid-template-columns:repeat(2,minmax(130px,1fr))}.seo-social-calendar-list-day{grid-template-columns:1fr}.seo-social-calendar-list-event{grid-template-columns:50px 78px minmax(150px,1fr)}.seo-social-calendar-list-event small{display:none}}
@@ -3321,8 +3360,217 @@ function tcsocial_network_render_scheduler()
 /**
  * Subpestana Informes.
  */
+
+/**
+ * Read-only, bounded delivery audit. A connected provider and a registered
+ * WP-Cron hook are not evidence that a remote post was published.
+ *
+ * @return array Provider histories, overdue schedules and Cron mode.
+ */
+function tcsocial_network_delivery_health_snapshot()
+{
+    global $wpdb;
+
+    $settings = tcsocial_network_get_settings();
+    $networks = array();
+    foreach (tcsocial_network_get_providers() as $provider => $definition) {
+        $networks[$provider] = array(
+            'enabled'          => !empty($settings['providers'][$provider]['enabled']),
+            'last_status'      => '',
+            'last_attempt_at'  => '',
+            'last_success_at'  => '',
+            'last_error'       => '',
+            'overdue'          => 0,
+            'due_cron'         => 0,
+            'missing_cron'     => 0,
+            'stale_pending'    => 0,
+        );
+    }
+
+    $table = esc_sql(tcsocial_network_publications_table());
+    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,PluginCheck.Security.DirectDB.UnescapedDBParameter -- Private audit table: bounded read of recent results with prepared identifier.
+    $results = $wpdb->get_results(
+        $wpdb->prepare(
+            'SELECT provider, status, created_at, published_at, error_message FROM %i ORDER BY id DESC LIMIT %d',
+            $table, 250
+        )
+    );
+    foreach ((array) $results as $row) {
+        $provider = sanitize_key((string) $row->provider);
+        if (!isset($networks[$provider])) {
+            continue;
+        }
+        if ('' === $networks[$provider]['last_status']) {
+            $networks[$provider]['last_status'] = sanitize_key((string) $row->status);
+            $networks[$provider]['last_attempt_at'] = (string) $row->created_at;
+            $networks[$provider]['last_error'] = wp_strip_all_tags((string) $row->error_message);
+        }
+        if ('published' === $row->status && '' === $networks[$provider]['last_success_at']) {
+            $networks[$provider]['last_success_at'] = (string) $row->published_at;
+        }
+        if ('pending' === $row->status && !empty($row->created_at)) {
+            $created_gmt = get_gmt_from_date((string) $row->created_at);
+            if ($created_gmt && strtotime($created_gmt . ' UTC') < time() - 600) {
+                ++$networks[$provider]['stale_pending'];
+            }
+        }
+    }
+
+    // Count at most 200 overdue postmeta rows. Do not touch the agenda and
+    // never trigger these jobs as part of a health read.
+    $like = $wpdb->esc_like('_seo_social_schedule_') . '%';
+    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Read-only bounded schedule audit of native postmeta and posts.
+    $due = $wpdb->get_results(
+        $wpdb->prepare(
+            "SELECT pm.post_id, pm.meta_key, pm.meta_value FROM %i pm
+             INNER JOIN %i p ON p.ID = pm.post_id
+             WHERE pm.meta_key LIKE %s AND p.post_status = 'publish'
+               AND CAST(pm.meta_value AS UNSIGNED) > 0
+               AND CAST(pm.meta_value AS UNSIGNED) < %d
+             ORDER BY CAST(pm.meta_value AS UNSIGNED) DESC LIMIT %d",
+            $wpdb->postmeta, $wpdb->posts, $like, time() - 600, 200
+        )
+    );
+    foreach ((array) $due as $row) {
+        $provider = sanitize_key(substr((string) $row->meta_key, strlen('_seo_social_schedule_')));
+        $post_id = absint($row->post_id);
+        if (!$post_id || !isset($networks[$provider]) || 'pausada' === tcsocial_network_get_schedule_state($post_id, $provider)) {
+            continue;
+        }
+        ++$networks[$provider]['overdue'];
+        $args = array($post_id, $provider);
+        $own_event = wp_next_scheduled('tcsocial_network_publish_manual_scheduled', $args);
+        $old_event = wp_next_scheduled('seo_social_network_publish_manual_scheduled', $args);
+        if (($own_event && $own_event <= time() - 600) || ($old_event && $old_event <= time() - 600)) {
+            ++$networks[$provider]['due_cron'];
+        } elseif (!$own_event && !$old_event) {
+            ++$networks[$provider]['missing_cron'];
+        }
+    }
+
+    return array(
+        'networks' => $networks,
+        'cron_web_disabled' => defined('DISABLE_WP_CRON') && DISABLE_WP_CRON,
+    );
+}
+
+/**
+ * Surface missing deliveries even when the provider has never been called.
+ * This is an audit, not a network test or a trigger for publishing.
+ */
+/**
+ * Render a readable delivery state in reports. Provider confirmation requires
+ * a remote identifier; a pending/uncertain attempt is never labelled failed.
+ *
+ * @param string $status Canonical stored publication status.
+ * @return string Escaped HTML badge.
+ */
+function tcsocial_network_publication_status_badge($status)
+{
+    $status = sanitize_key((string) $status);
+    $types = array(
+        'published' => array('published', __('Publicado', 'taxocommerce-social')),
+        'failed'    => array('failed', __('No publicado', 'taxocommerce-social')),
+        'pending'   => array('unconfirmed', __('Sin confirmar', 'taxocommerce-social')),
+    );
+    $badge = isset($types[$status]) ? $types[$status] : array('unconfirmed', __('Sin confirmar', 'taxocommerce-social'));
+    return '<span class="seo-social-state is-' . esc_attr($badge[0]) . '">' . esc_html($badge[1]) . '</span>';
+}
+
+/**
+ * Read-only, per-network historical outcome totals, including an explicit
+ * denominator for meaningful failure rates (published + failed only).
+ *
+ * @return array<string,array<string,int|float>>
+ */
+function tcsocial_network_publication_outcome_totals()
+{
+    global $wpdb;
+    $table = esc_sql(tcsocial_network_publications_table());
+    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,PluginCheck.Security.DirectDB.UnescapedDBParameter -- Aggregated read-only stats from our own canonical publishing history.
+    $rows = $wpdb->get_results(
+        $wpdb->prepare(
+            "SELECT provider, status, COUNT(*) AS quantity FROM %i WHERE status IN ('published','failed','pending') GROUP BY provider, status",
+            $table
+        )
+    );
+    $totals = array();
+    foreach ((array) $rows as $row) {
+        $provider = sanitize_key((string) $row->provider);
+        $status   = sanitize_key((string) $row->status);
+        if ('' === $provider || !in_array($status, array('published', 'failed', 'pending'), true)) {
+            continue;
+        }
+        if (!isset($totals[$provider])) {
+            $totals[$provider] = array('published' => 0, 'failed' => 0, 'pending' => 0);
+        }
+        $totals[$provider][$status] = absint($row->quantity);
+    }
+    foreach ($totals as $provider => $counts) {
+        $confirmed = $counts['published'] + $counts['failed'];
+        $totals[$provider]['confirmed'] = $confirmed;
+        $totals[$provider]['error_rate'] = $confirmed ? round(100 * $counts['failed'] / $confirmed, 1) : null;
+    }
+    return $totals;
+}
+
+function tcsocial_network_render_delivery_diagnostics()
+{
+    $diagnostics = tcsocial_network_delivery_health_snapshot();
+    echo '<section class="seo-social-card">';
+    echo '<h2>' . esc_html__('Estado de entrega por red social', 'taxocommerce-social') . '</h2>';
+    echo '<p>' . esc_html__('Una conexión correcta o un evento WP-Cron registrado no confirma una publicación. Los datos siguientes proceden del historial local y de la agenda, sin reenviar publicaciones.', 'taxocommerce-social') . '</p>';
+    if ($diagnostics['cron_web_disabled']) {
+        echo '<p class="notice notice-warning" style="padding:10px">' .
+            esc_html__('WP-Cron automático está desactivado (DISABLE_WP_CRON). Comprueba que exista un ejecutor externo de wp-cron.php; no se puede confirmar desde esta pantalla.', 'taxocommerce-social') .
+            '</p>';
+    }
+    $outcomes = tcsocial_network_publication_outcome_totals();
+    echo '<div class="seo-social-table-wrap"><table class="seo-social-table"><thead><tr>';
+    foreach (array('Red', 'Publicadas', 'No publicadas', 'Sin confirmar', '% errores', 'Último intento', 'Última entrega confirmada', 'Vencidas sin confirmar', 'Cron vencidos', 'Problema detectado') as $column) {
+        echo '<th>' . esc_html($column) . '</th>';
+    }
+    echo '</tr></thead><tbody>';
+    foreach ($diagnostics['networks'] as $provider => $data) {
+        if (!$data['enabled'] && !$data['overdue'] && !$data['last_attempt_at']) {
+            continue;
+        }
+        $error = $data['last_error'];
+        if ($data['due_cron']) {
+            /* translators: %d: number of overdue WordPress cron events. */
+            $error = sprintf(__('Hay %d eventos WP-Cron vencidos; comprobar el ejecutor.', 'taxocommerce-social'), $data['due_cron']) . ' ' . $error;
+        } elseif ($data['missing_cron']) {
+            /* translators: %d: number of scheduled publications without a cron event. */
+            $error = sprintf(__('Hay %d registros vencidos sin evento WP-Cron.', 'taxocommerce-social'), $data['missing_cron']) . ' ' . $error;
+        } elseif ($data['overdue'] && '' === $error) {
+            $error = __('Agenda vencida sin confirmación. Comprobar informes y la red antes de reprogramar.', 'taxocommerce-social');
+        }
+        if ($data['stale_pending']) {
+            /* translators: %d: count of publication attempts without remote confirmation. */
+            $error .= ' ' . sprintf(__('%d intentos sin confirmación. No reintentar sin comprobar la red.', 'taxocommerce-social'), $data['stale_pending']);
+        }
+        echo '<tr><td>' . esc_html(ucfirst($provider)) . ($data['enabled'] ? '' : ' (' . esc_html__('desconectada', 'taxocommerce-social') . ')') . '</td>';
+        $counts = $outcomes[$provider] ?? array('published' => 0, 'failed' => 0, 'pending' => 0, 'confirmed' => 0, 'error_rate' => null);
+        echo '<td>' . esc_html(number_format_i18n($counts['published'])) . '</td>';
+        echo '<td>' . esc_html(number_format_i18n($counts['failed'])) . '</td>';
+        echo '<td>' . esc_html(number_format_i18n($counts['pending'])) . '</td>';
+        echo '<td>' . esc_html(null === $counts['error_rate'] ? __('Sin datos', 'taxocommerce-social') : number_format_i18n($counts['error_rate'], 1) . '%') . '</td>';
+        echo '<td>' . esc_html($data['last_attempt_at'] ? $data['last_attempt_at'] . ' (' . $data['last_status'] . ')' : __('Sin intentos registrados', 'taxocommerce-social')) . '</td>';
+        echo '<td>' . esc_html($data['last_success_at'] ?: __('Sin confirmación registrada', 'taxocommerce-social')) . '</td>';
+        echo '<td>' . esc_html((string) $data['overdue']) . '</td>';
+        echo '<td>' . esc_html((string) $data['due_cron']) . '</td>';
+        echo '<td>' . esc_html($error ?: __('Sin incidencias registradas; entrega externa no verificada', 'taxocommerce-social')) . '</td></tr>';
+    }
+    echo '</tbody></table></div>';
+    echo '<p>' . esc_html__('Porcentaje de errores = publicaciones fallidas / (publicadas + fallidas). Las pendientes y las programaciones vencidas se muestran aparte.', 'taxocommerce-social') . '</p>';
+    echo '<p>' . esc_html__('Los eventos vencidos y las publicaciones sin ID remoto requieren revisión: no se reenvían automáticamente para evitar duplicados.', 'taxocommerce-social') . '</p>';
+    echo '</section>';
+}
+
 function tcsocial_network_render_reports()
 {
+    tcsocial_network_render_delivery_diagnostics();
+
     global $wpdb;
     $table = esc_sql( tcsocial_network_publications_table() );
 
@@ -3388,12 +3636,12 @@ function tcsocial_network_render_reports()
         echo '<tr>';
         echo '<td><strong>' . esc_html($row->post_title ? $row->post_title : 'Contenido #' . $row->content_id) . '</strong><br><small>#' . esc_html((string) $row->content_id) . '</small></td>';
         echo '<td>' . esc_html(ucfirst($row->provider)) . '</td>';
-        echo '<td><span class="seo-social-state is-' . esc_attr($row->status) . '">' . esc_html(ucfirst($row->status)) . '</span>';
+        echo '<td>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Badge function escapes both status and label.\n        echo tcsocial_network_publication_status_badge($row->status); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped HTML badge.
         if (!empty($row->error_message)) {
-            echo '<br><small style="color:#b32d2e">' . esc_html(wp_trim_words($row->error_message, 14, '...')) . '</small>';
+            echo '<br><details><summary style="color:#b32d2e">' . esc_html(wp_trim_words($row->error_message, 14, '...')) . '</summary><small>' . esc_html($row->error_message) . '</small></details>';
         }
         echo '</td>';
-        echo '<td>' . esc_html($row->published_at ? mysql2date(get_option('date_format') . ' ' . get_option('time_format'), $row->published_at) : '-') . '</td>';
+        echo '<td>' . esc_html($row->published_at ? mysql2date(get_option('date_format') . ' ' . get_option('time_format'), $row->published_at) : (!empty($row->created_at) ? mysql2date(get_option('date_format') . ' ' . get_option('time_format'), $row->created_at) . ' (intento)' : '-')) . '</td>';
         echo '<td><strong>' . esc_html(number_format_i18n((int) $row->clicks)) . '</strong></td>';
         echo '<td>' . esc_html(number_format_i18n((int) $row->reactions)) . '</td>';
         echo '<td>' . esc_html(number_format_i18n((int) $row->comments)) . '</td>';

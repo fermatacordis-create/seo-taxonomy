@@ -5,7 +5,7 @@ Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 0.4.32
+Stable tag: 0.4.37
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,20 +13,12 @@ Import and export catalog, content and Media for WordPress/WooCommerce.
 
 == Description ==
 
-Version 0.4.31 adds five-language translations for Media Library ZIP import/export, error messages, forms and progress tracking. The 0.4.30 CSV queue and export controls remain translated. Longer instructions and some administration strings still need localization; the active WordPress language determines the interface.
+Version 0.4.37 adds more native fields to the basic CSV field mapper: WooCommerce product categories/tags, stock, dimensions and Media images; WordPress post categories/tags, page parents, publication dates and authors. Unmapped columns and empty cells remain unchanged. Import referenced terms, users and images into WordPress first; external images are not downloaded. WordPress pages do not have native categories.
 
 
-* CSV batch imports and exports continue through private internal HTTP requests with adaptive load limiting. This plugin no longer creates its own Action Scheduler or WP-Cron jobs. If a loopback fails, recovery requires a later WordPress request or an explicit administrator retry.
+TaxoCommerce Import-Export provides CSV imports and exports for WordPress content and WooCommerce catalogues, including resumable batch jobs and selective field updates.
 
-* Admin header: plugin title, a single local `Description` with the static `Plugin URI` link below it (left); a wider collapsed `CHANGELOG.md` history (center); local version and release date (right). No duplicated information panel or external requests.
-
-* The admin header shows the plugin's bundled `Description` and links to its `Plugin URI`, without network requests or caching. Version history uses the bundled `CHANGELOG.md`.
-
-
-
-TaxoCommerce Import-Export is an independent member of the TaxoCommerce family.
-
-Version 0.4.1 includes:
+= Key Features =
 
 * Dedicated Exportación tab with resumable block-based CSV generation.
 * Selectable exports for full products, reduced portable product inventory, product categories, posts and pages.
@@ -59,6 +51,12 @@ A Media export contains:
 * files/<old-attachment-id>/<original-file>
 
 The package transports original image files plus title, ALT, caption, description, post_parent and known image relationships.
+
+== Installation ==
+
+1. Install and activate WooCommerce.
+2. Upload the TaxoCommerce Import-Export ZIP from WordPress Plugins > Add New > Upload Plugin and activate it.
+3. Open the plugin administration, select a supported CSV import or export, and review the job settings before starting it.
 
 == Changelog ==
 

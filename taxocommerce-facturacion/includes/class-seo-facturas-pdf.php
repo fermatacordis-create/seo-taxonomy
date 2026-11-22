@@ -9,9 +9,11 @@ final class SEO_Facturas_PDF {
 
     public static function render_html(array $snapshot) {
         $type = sanitize_key((string) ($snapshot['document']['type'] ?? ''));
-        $template = (SEO_Facturas_Documents::TYPE_QUOTE === $type)
-            ? SEO_FACTURAS_PATH . 'templates/quote.php'
-            : SEO_FACTURAS_PATH . 'templates/document.php';
+        $template = (SEO_Facturas_Documents::TYPE_RECTIFICATION === $type)
+            ? SEO_FACTURAS_PATH . 'templates/rectification.php'
+            : ((SEO_Facturas_Documents::TYPE_QUOTE === $type)
+                ? SEO_FACTURAS_PATH . 'templates/quote.php'
+                : SEO_FACTURAS_PATH . 'templates/document.php');
 
         if (!is_readable($template)) {
             return new WP_Error('seo_facturas_template_missing', 'No se encuentra la plantilla del documento.');

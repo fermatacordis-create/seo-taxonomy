@@ -1,6 +1,6 @@
 <?php
 /**
- * Offline contract checks for inventory-backed supplier contacts.
+ * Offline contract checks for imported and manually created supplier contacts.
  *
  * @package TaxoCommerceSuppliers
  */
@@ -12,12 +12,18 @@ $main = file_get_contents( $root . '/taxocommerce-suppliers.php' );
 
 tcsup_assert( false !== strpos( $profiles, 'class TCSUP_Profiles' ), 'supplier profile service exists' );
 tcsup_assert( false !== strpos( $schema, 'seo_proveedores_fichas' ), 'separate private supplier profiles table' );
-tcsup_assert( false !== strpos( $schema, 'UNIQUE KEY proveedor (proveedor)' ), 'exactly one profile per catalogue supplier' );
+tcsup_assert( false !== strpos( $schema, 'UNIQUE KEY proveedor (proveedor)' ), 'exactly one private profile per supplier name' );
 tcsup_assert( false !== strpos( $schema, 'self::profiles_table()' ), 'profile installation and migration' );
 tcsup_assert( false !== strpos( $profiles, 'SELECT proveedor FROM %i WHERE proveedor=%s' ), 'supplier identity must be checked against inventory' );
-tcsup_assert( false !== strpos( $profiles, 'COUNT(DISTINCT proveedor)' ), 'dynamic inventory-based listing' );
-tcsup_assert( false !== strpos( $profiles, 'LEFT JOIN %i AS p ON p.proveedor=c.proveedor' ), 'missing records remain visible after imports/deletion' );
-tcsup_assert( false !== strpos( $profiles, 'GROUP BY proveedor' ), 'one directory entry per supplier' );
+tcsup_assert( false !== strpos( $profiles, 'UNION SELECT proveedor FROM %i' ), 'directory merges catalogue and manual contacts without duplicate names' );
+tcsup_assert( false !== strpos( $profiles, 'LEFT JOIN %i AS p ON p.proveedor=s.proveedor' ), 'catalogue names still show without private profiles' );
+tcsup_assert( false !== strpos( $profiles, 'GROUP BY proveedor' ), 'catalogue products counted per supplier' );
+tcsup_assert( false !== strpos( $profiles, 'COALESCE(i.productos,0) AS productos' ), 'manual supplier has zero products' );
+tcsup_assert( false !== strpos( $profiles, 'public static function supplier_in_directory( $name )' ), 'manual name resolution is independent of CSV catalogue' );
+tcsup_assert( false !== strpos( $profiles, "name=\"new_supplier\" value=\"1\"" ), 'explicit manual form opt-in' );
+tcsup_assert( false !== strpos( $profiles, 'Add supplier manually' ), 'manual create action is visible' );
+tcsup_assert( false !== strpos( $profiles, "if ( '' === \$supplier || \$length > 190 )" ), 'validate new supplier name length before writing' );
+tcsup_assert( false !== strpos( $profiles, "self::supplier_in_directory( \$supplier )" ), 'reject duplicate manual and imported names' );
 tcsup_assert( false !== strpos( $profiles, "check_admin_referer( 'tcsup_profile_save' )" ), 'profile update verifies nonce before reading payload' );
 tcsup_assert( false !== strpos( $profiles, "check_admin_referer( 'tcsup_profile_delete' )" ), 'profile deletion verifies nonce before reading payload' );
 tcsup_assert( false === strpos( $profiles, "private static function posted_supplier()" ), 'no unverified request in shared supplier helper' );

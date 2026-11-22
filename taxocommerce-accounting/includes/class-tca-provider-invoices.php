@@ -1,8 +1,8 @@
 <?php
 /**
- * Protected supplier invoice PDFs associated with manually entered purchases.
+ * Protected supplier invoice PDFs and images linked to manual purchases and expenses.
  *
- * The uploaded PDF is encrypted before it is stored in the uploads directory.
+ * The uploaded original is encrypted before it is stored in the uploads directory.
  * Only an authorised WordPress administrator can retrieve the original through
  * admin-post.php; no public media attachment or plaintext URL is created.
  *
@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) || exit;
  * Supplier invoice archive, independent of TaxoCommerce Suppliers and Billing.
  */
 final class TCA_Provider_Invoices {
-    const MAX_BYTES = 10485760; // 10 MiB per PDF.
+    const MAX_BYTES = 10485760; // 10 MiB per original document.
     const MAGIC = 'TCAPDF1';
 
     /**
@@ -109,7 +109,36 @@ final class TCA_Provider_Invoices {
     }
 
     /**
-     * Encrypt one whole bounded PDF using authenticated AES-256-GCM.
+     * Verify a safe original PDF or image using bytes, not only the extension.
+     *
+     * @param string $bytes File contents.
+     * @return string Verified MIME type, or empty string.
+     */
+    public static function document_mime( $bytes ) {
+        if ( self::is_pdf( $bytes ) ) {
+            return 'application/pdf';
+        }
+        if ( ! is_string( $bytes ) || strlen( $bytes ) < 12 || ! function_exists( 'getimagesizefromstring' ) ) {
+            return '';
+        }
+        $expected = '';
+        if ( "\x89PNG\r\n\x1a\n" === substr( $bytes, 0, 8 ) ) {
+            $expected = 'image/png';
+        } elseif ( "\xff\xd8\xff" === substr( $bytes, 0, 3 ) ) {
+            $expected = 'image/jpeg';
+        } elseif ( 'RIFF' === substr( $bytes, 0, 4 ) && 'WEBP' === substr( $bytes, 8, 4 ) ) {
+            $expected = 'image/webp';
+        }
+        if ( '' === $expected ) {
+            return '';
+        }
+        // Image decoding also rejects arbitrary bytes that only imitate a magic header.
+        $info = @getimagesizefromstring( $bytes ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Invalid untrusted image bytes must be rejected without emitting PHP warnings.
+        return is_array( $info ) && isset( $info['mime'] ) && $expected === $info['mime'] ? $expected : '';
+    }
+
+    /**
+     * Encrypt one whole bounded document using authenticated AES-256-GCM.
      *
      * @param string $bytes Original file content.
      * @return string|WP_Error
@@ -138,7 +167,7 @@ final class TCA_Provider_Invoices {
             return new WP_Error( 'tca_invoice_corrupt', __( 'Invoice cannot be decrypted or has been modified.', 'taxocommerce-accounting' ) );
         }
         $plaintext = openssl_decrypt( substr( $stored, 35 ), 'aes-256-gcm', self::key(), OPENSSL_RAW_DATA, substr( $stored, 7, 12 ), substr( $stored, 19, 16 ) );
-        if ( false === $plaintext || ! self::is_pdf( $plaintext ) ) {
+        if ( false === $plaintext || '' === self::document_mime( $plaintext ) ) {
             return new WP_Error( 'tca_invoice_corrupt', __( 'Invoice cannot be decrypted or has been modified.', 'taxocommerce-accounting' ) );
         }
         return $plaintext;
@@ -190,7 +219,7 @@ final class TCA_Provider_Invoices {
     }
 
     /**
-     * Validate and archive an uploaded PDF. No OCR or automatic VAT classification.
+     * Validate and archive an uploaded PDF or image. No OCR or VAT classification.
      *
      * @param int   $entry_id Existing supplier purchase row.
      * @param array $file     PHP upload array.
@@ -206,21 +235,29 @@ final class TCA_Provider_Invoices {
             || ! is_string( $file['name'] ) || ! is_string( $file['tmp_name'] )
             || ! is_numeric( $file['size'] ) || (int) $file['size'] < 5
             || (int) $file['size'] > self::MAX_BYTES ) {
-            return new WP_Error( 'invoice_invalid_upload', __( 'Select a PDF smaller than 10 MB.', 'taxocommerce-accounting' ) );
+            return new WP_Error( 'invoice_invalid_upload', __( 'Select a PDF, JPG, PNG or WEBP document smaller than 10 MB.', 'taxocommerce-accounting' ) );
         }
         $original = sanitize_file_name( wp_basename( $file['name'] ) );
-        if ( 'pdf' !== strtolower( (string) pathinfo( $original, PATHINFO_EXTENSION ) )
-            || ! is_uploaded_file( $file['tmp_name'] ) ) {
-            return new WP_Error( 'invoice_invalid_upload', __( 'Select a valid PDF invoice.', 'taxocommerce-accounting' ) );
+        if ( ! is_uploaded_file( $file['tmp_name'] ) ) {
+            return new WP_Error( 'invoice_invalid_upload', __( 'Select a valid original PDF or image.', 'taxocommerce-accounting' ) );
         }
-        $checked = wp_check_filetype_and_ext( $file['tmp_name'], $original, array( 'pdf' => 'application/pdf' ) );
-        if ( 'application/pdf' !== (string) ( $checked['type'] ?? '' ) ) {
-            return new WP_Error( 'invoice_invalid_upload', __( 'Select a valid PDF invoice.', 'taxocommerce-accounting' ) );
+        $allowed = array(
+            'pdf' => 'application/pdf', 'jpg' => 'image/jpeg',
+            'jpeg' => 'image/jpeg', 'png' => 'image/png', 'webp' => 'image/webp',
+        );
+        $extension = strtolower( (string) pathinfo( $original, PATHINFO_EXTENSION ) );
+        if ( ! isset( $allowed[ $extension ] ) ) {
+            return new WP_Error( 'invoice_invalid_upload', __( 'Select a valid original PDF or image.', 'taxocommerce-accounting' ) );
+        }
+        $checked = wp_check_filetype_and_ext( $file['tmp_name'], $original, $allowed );
+        if ( $allowed[ $extension ] !== (string) ( $checked['type'] ?? '' ) ) {
+            return new WP_Error( 'invoice_invalid_upload', __( 'Select a valid original PDF or image.', 'taxocommerce-accounting' ) );
         }
         // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- PHP-authenticated temporary upload, bounded at 10 MiB.
         $bytes = file_get_contents( $file['tmp_name'], false, null, 0, self::MAX_BYTES + 1 );
-        if ( false === $bytes || strlen( $bytes ) !== (int) $file['size'] || ! self::is_pdf( $bytes ) ) {
-            return new WP_Error( 'invoice_invalid_upload', __( 'Select a valid PDF invoice.', 'taxocommerce-accounting' ) );
+        if ( false === $bytes || strlen( $bytes ) !== (int) $file['size'] ||
+            $allowed[ $extension ] !== self::document_mime( $bytes ) ) {
+            return new WP_Error( 'invoice_invalid_upload', __( 'Select a valid original PDF or image.', 'taxocommerce-accounting' ) );
         }
         $directory = self::directory( true );
         if ( is_wp_error( $directory ) ) {
@@ -298,7 +335,7 @@ final class TCA_Provider_Invoices {
             return;
         }
         $files = isset( $documents[ (int) $row->id ] ) ? $documents[ (int) $row->id ] : array();
-        echo '<div class="tca-invoice-documents"><strong>' . esc_html__( 'Supplier invoice PDF', 'taxocommerce-accounting' ) . ':</strong> ';
+        echo '<div class="tca-invoice-documents"><strong>' . esc_html__( 'Original invoice documents', 'taxocommerce-accounting' ) . ':</strong> ';
         if ( ! $files ) {
             echo esc_html__( 'Document pending', 'taxocommerce-accounting' );
         }
@@ -313,9 +350,9 @@ final class TCA_Provider_Invoices {
         echo '<input type="hidden" name="action" value="tca_upload_provider_invoice">';
         echo '<input type="hidden" name="entry_id" value="' . esc_attr( (string) $row->id ) . '">';
         wp_nonce_field( 'tca_invoice_upload_' . (int) $row->id );
-        echo '<label for="tca-provider-invoice-' . esc_attr( (string) $row->id ) . '">' . esc_html__( 'Attach supplier PDF (up to 10 MB)', 'taxocommerce-accounting' ) . '</label>';
-        echo ' <input id="tca-provider-invoice-' . esc_attr( (string) $row->id ) . '" type="file" name="tca_invoice_pdf" accept="application/pdf,.pdf" required>';
-        echo ' <button class="button button-small" type="submit">' . esc_html__( 'Upload PDF', 'taxocommerce-accounting' ) . '</button></form></div>';
+        echo '<label for="tca-provider-invoice-' . esc_attr( (string) $row->id ) . '">' . esc_html__( 'Attach original PDF or image (up to 10 MB)', 'taxocommerce-accounting' ) . '</label>';
+        echo ' <input id="tca-provider-invoice-' . esc_attr( (string) $row->id ) . '" type="file" name="tca_invoice_pdf" accept="application/pdf,image/jpeg,image/png,image/webp,.pdf,.jpg,.jpeg,.png,.webp" required>';
+        echo ' <button class="button button-small" type="submit">' . esc_html__( 'Archive document', 'taxocommerce-accounting' ) . '</button></form></div>';
     }
 
     /**
@@ -353,19 +390,23 @@ final class TCA_Provider_Invoices {
         if ( false === $stored || strlen( $stored ) > self::MAX_BYTES + 35 ) {
             wp_die( esc_html__( 'Invoice document not found.', 'taxocommerce-accounting' ) );
         }
-        $pdf = self::decrypt( $stored );
-        if ( is_wp_error( $pdf ) || strlen( $pdf ) !== (int) $file->size_bytes
-            || ! hash_equals( (string) $file->sha256, hash( 'sha256', $pdf ) ) ) {
+        $original_bytes = self::decrypt( $stored );
+        if ( is_wp_error( $original_bytes ) || strlen( $original_bytes ) !== (int) $file->size_bytes
+            || ! hash_equals( (string) $file->sha256, hash( 'sha256', $original_bytes ) ) ) {
             wp_die( esc_html__( 'Invoice cannot be decrypted or has been modified.', 'taxocommerce-accounting' ) );
         }
         $filename = sanitize_file_name( wp_basename( $file->original_name ) );
+        $mime = self::document_mime( $original_bytes );
+        if ( '' === $mime ) {
+            wp_die( esc_html__( 'Invoice document not found.', 'taxocommerce-accounting' ) );
+        }
         nocache_headers();
-        header( 'Content-Type: application/pdf' );
+        header( 'Content-Type: ' . $mime );
         header( 'X-Content-Type-Options: nosniff' );
         header( 'Content-Disposition: attachment; filename="' . str_replace( '"', '', $filename ) . '"' );
-        header( 'Content-Length: ' . strlen( $pdf ) );
-        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Authenticated binary download, never HTML output.
-        echo $pdf;
+        header( 'Content-Length: ' . strlen( $original_bytes ) );
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Authenticated original binary download, never HTML output.
+        echo $original_bytes;
         exit;
     }
 }

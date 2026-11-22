@@ -160,6 +160,7 @@ final class TCV_Admin {
 
     // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
     private static function classifier() {
+        TCV_Classifier_Batch::render();
         // GET controls only which results are displayed; POST analysis is nonce-protected.
         // phpcs:disable WordPress.Security.NonceVerification.Recommended
         $filters = TCV_Classifier::sanitize_filters(
@@ -177,7 +178,7 @@ final class TCV_Admin {
             $categories = array();
         }
 
-        echo '<div class="tcv-panel">' . '<h2>' . esc_html__( 'Clasificador', 'taxocommerce-vocabulary' ) . '</h2>' . '<p>' . esc_html__( 'El análisis es correctivo y limitado. No recorre todo el catálogo: primero filtra y después analiza como máximo el número de filas seleccionado.', 'taxocommerce-vocabulary' ) . '</p>';
+        echo '<div class="tcv-panel">' . '<h2>' . esc_html__( 'Clasificador', 'taxocommerce-vocabulary' ) . '</h2>' . '<p>' . esc_html__( 'El análisis filtrado es puntual y limitado. Para recorrer el catálogo completo utiliza el control por bloques de la sección anterior.', 'taxocommerce-vocabulary' ) . '</p>';
         echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" class="tcv-filter">';
         echo '<input type="hidden" name="action" value="tcv_analyze_filtered">';
         wp_nonce_field( 'tcv_analyze_filtered' );
@@ -224,12 +225,67 @@ final class TCV_Admin {
         }
 
         $rows = TCV_Classifier::recent_proposals( 100 );
-        echo '<div class="tcv-panel">' . '<h2>' . esc_html__( 'Propuestas recientes', 'taxocommerce-vocabulary' ) . '</h2>' . '<table class="widefat striped">' . '<thead>' . '<tr>' . '<th>' . esc_html__( 'Producto', 'taxocommerce-vocabulary' ) . '</th>' . '<th>' . esc_html__( 'Grupo', 'taxocommerce-vocabulary' ) . '</th>' . '<th>' . esc_html__( 'Propuesta', 'taxocommerce-vocabulary' ) . '</th>' . '<th>' . esc_html__( 'Estado', 'taxocommerce-vocabulary' ) . '</th>' . '<th>' . esc_html__( 'Confianza', 'taxocommerce-vocabulary' ) . '</th>' . '<th>' . esc_html__( 'Actualizado', 'taxocommerce-vocabulary' ) . '</th>' . '</tr>' . '</thead>' . '<tbody>';
+        // Load titles in a single bounded WordPress query instead of one query
+        // per proposal. No product data or classifier jobs are modified.
+        $titles = array();
+        $product_ids = array_values( array_unique( array_filter( array_map( 'absint', array_column( $rows, 'product_id' ) ) ) ) );
+        if ( $product_ids ) {
+            $products = get_posts( array(
+                'post_type' => 'product',
+                'post_status' => 'any',
+                'post__in' => $product_ids,
+                'posts_per_page' => count( $product_ids ),
+                'orderby' => 'post__in',
+                'no_found_rows' => true,
+                'update_post_meta_cache' => false,
+                'update_post_term_cache' => false,
+            ) );
+            foreach ( $products as $product ) {
+                $titles[ (int) $product->ID ] = (string) $product->post_title;
+            }
+        }
+        echo '<div class="tcv-panel">' . '<h2>' . esc_html__( 'Propuestas recientes', 'taxocommerce-vocabulary' ) . '</h2>' . '<table class="widefat striped">' . '<thead>' . '<tr>' . '<th>' . esc_html__( 'Producto', 'taxocommerce-vocabulary' ) . '</th>' . '<th>' . esc_html__( 'Título', 'taxocommerce-vocabulary' ) . '</th>' . '<th>' . esc_html__( 'Grupo', 'taxocommerce-vocabulary' ) . '</th>' . '<th>' . esc_html__( 'Propuesta', 'taxocommerce-vocabulary' ) . '</th>' . '<th>' . esc_html__( 'Estado', 'taxocommerce-vocabulary' ) . '</th>' . '<th>' . esc_html__( 'Confianza', 'taxocommerce-vocabulary' ) . '</th>' . '<th>' . esc_html__( 'Actualizado', 'taxocommerce-vocabulary' ) . '</th>' . '<th>' . esc_html__( 'Revisión', 'taxocommerce-vocabulary' ) . '</th>' . '</tr>' . '</thead>' . '<tbody>';
         foreach ( $rows as $r ) {
-            $edit = get_edit_post_link( absint( $r['product_id'] ) );
-            echo '<tr><td><a href="' . esc_url( $edit ) . '">#' . esc_html( $r['product_id'] ) . '</a></td><td>' . esc_html( $r['semantic_group'] ) . '</td><td>' . esc_html( $r['label'] ) . '</td><td>' . esc_html( $r['state'] ) . '</td><td>' . esc_html( number_format_i18n( (float) $r['confidence'] * 100, 1 ) ) . '%</td><td>' . esc_html( $r['updated_at'] ) . '</td></tr>';
+            $product_id = absint( $r['product_id'] );
+            $edit = get_edit_post_link( $product_id );
+            $title = ! empty( $titles[ $product_id ] ) ? $titles[ $product_id ] : __( '(Producto sin título o no disponible)', 'taxocommerce-vocabulary' );
+            echo '<tr><td><a href="' . esc_url( $edit ) . '">#' . esc_html( $r['product_id'] ) . '</a></td><td style="min-width:260px;max-width:480px;white-space:normal;">' . esc_html( $title ) . '</td><td>' . esc_html( $r['semantic_group'] ) . '</td><td>' . esc_html( $r['label'] ) . '</td><td>' . esc_html( $r['state'] ) . '</td><td>' . esc_html( number_format_i18n( (float) $r['confidence'] * 100, 1 ) ) . '%</td><td>' . esc_html( $r['updated_at'] ) . '</td>';
+            $payload = json_decode( (string) ( $r['payload_json'] ?? '' ), true );
+            $conflict = is_array( $payload ) && 'conflicts_with_existing_value' === ( $payload['evidence']['reason'] ?? '' );
+            $can_approve = ! $conflict && in_array( $r['state'], array( 'safe', 'review', 'derived' ), true )
+                && ( absint( $r['vocabulary_id'] ) > 0 || 0 === strpos( (string) $r['semantic_group'], 'attribute:' ) );
+            echo '<td>';
+            if ( $can_approve ) {
+                echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
+                echo '<input type="hidden" name="action" value="tcv_classifier_approve">';
+                echo '<input type="hidden" name="proposal_id" value="' . esc_attr( (string) absint( $r['id'] ) ) . '">';
+                wp_nonce_field( 'tcv_classifier_approve_' . absint( $r['id'] ) );
+                echo '<button type="submit" class="button button-small">' . esc_html__( 'Aprobar y aplicar', 'taxocommerce-vocabulary' ) . '</button></form>';
+            } elseif ( $conflict ) {
+                echo esc_html__( 'Conflicto con etiqueta actual: revisar manualmente', 'taxocommerce-vocabulary' );
+            } elseif ( empty( $r['vocabulary_id'] ) && ! in_array( $r['state'], array( 'applied', 'unresolved' ), true ) ) {
+                echo esc_html__( 'Revisar el vocabulario', 'taxocommerce-vocabulary' );
+            } else {
+                echo '—';
+            }
+            echo '</td></tr>';
         }
         echo '</tbody></table></div>';
+
+        $novel = TCV_Classifier::unmapped_terms( 25 );
+        if ( $novel ) {
+            echo '<div class="tcv-panel"><h2>' . esc_html__( 'Conceptos nuevos para normalizar', 'taxocommerce-vocabulary' ) . '</h2>';
+            echo '<p>' . esc_html__( 'Agrupación orientativa de las últimas 500 propuestas. Al aprobar se crea únicamente el término maestro; para clasificar productos se vuelve a analizar el catálogo. Nunca se da de alta automáticamente.', 'taxocommerce-vocabulary' ) . '</p>';
+            echo '<table class="widefat striped"><thead><tr><th>' . esc_html__( 'Grupo', 'taxocommerce-vocabulary' ) . '</th><th>' . esc_html__( 'Candidato', 'taxocommerce-vocabulary' ) . '</th><th>' . esc_html__( 'Productos', 'taxocommerce-vocabulary' ) . '</th><th>' . esc_html__( 'Decisión', 'taxocommerce-vocabulary' ) . '</th></tr></thead><tbody>';
+            foreach ( $novel as $item ) {
+                echo '<tr><td>' . esc_html( $item['group'] ) . '</td><td>' . esc_html( $item['label'] ) . '</td><td>' . esc_html( number_format_i18n( $item['count'] ) ) . '</td><td>';
+                echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '"><input type="hidden" name="action" value="tcv_create_term">';
+                echo '<input type="hidden" name="group" value="' . esc_attr( $item['group'] ) . '"><input type="hidden" name="label" value="' . esc_attr( $item['label'] ) . '">';
+                wp_nonce_field( 'tcv_create_term' );
+                echo '<button class="button button-small" type="submit">' . esc_html__( 'Incorporar al maestro', 'taxocommerce-vocabulary' ) . '</button></form></td></tr>';
+            }
+            echo '</tbody></table></div>';
+        }
 
         echo '<div class="tcv-panel"><h2>' . esc_html__( 'Análisis puntual de categoría', 'taxocommerce-vocabulary' ) . '</h2><p>' . esc_html__( 'Para revisar una categoría concreta sin recorrer el catálogo completo.', 'taxocommerce-vocabulary' ) . '</p><form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '"><input type="hidden" name="action" value="tcv_analyze_category">';
         wp_nonce_field( 'tcv_analyze_category' );
