@@ -1,3 +1,7 @@
+= 0.4.87 (2026-11-24) =
+* El historial de versiones queda en una tarjeta desplegable debajo del hero.
+* Cada extensión explica para qué sirve.
+
 = 0.4.86 (2026-11-15) =
 * Register Customers and Accounting in the built-in family catalog so both cards appear on the Core extensions screen without waiting for install/discovery. Connections remains retired. Suite alignment with current TaxoCommerce family (21 extension cards + Core).
 

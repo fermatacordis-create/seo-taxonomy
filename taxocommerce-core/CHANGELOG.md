@@ -1,3 +1,8 @@
+## [0.4.87] — 2026-11-24 — Historial fuera del hero y uso de cada extensión
+
+- El historial de versiones es una tarjeta cerrada debajo del hero, no una columna dentro de él.
+- Cada tarjeta de Extensiones explica en una frase para qué sirve ese plugin.
+
 ## [0.4.86] — 2026-11-15 — Catálogo familiar con Accounting y Customers
 
 - El catálogo fijo de Core incluye **TaxoCommerce Customers** y **TaxoCommerce Accounting**, alineado con el estado actual de la familia (22 standalone; Connections retirado).
