@@ -1072,6 +1072,73 @@ final class TaxoCommerce_Core {
 	 * Uses WordPress's installed plugin list and the same protected POST
 	 * handlers as the former standalone Extensions table.
 	 */
+	/**
+	 * Plain-language purpose for a family card. Spanish admin sees Spanish
+	 * even before the catalog .po is regenerated.
+	 *
+	 * @param string $id       Extension id.
+	 * @param string $fallback Catalog description.
+	 * @return string
+	 */
+	private function extension_purpose( $id, $fallback ) {
+		$en = array(
+			'import_export' => 'Use it to export or import the catalog, the texts and the images as a file, instead of copying them by hand.',
+			'suppliers'     => 'Use it to keep suppliers, compare their prices, place purchase orders and bring in their product photos.',
+			'database'      => 'Use it to inspect the store database, see its tables, make a backup and run only the maintenance you choose.',
+			'images'        => 'Use it to review product photos, thumbnails, image data and file size so the catalog stays light.',
+			'system_check'  => 'Use it to check that the server, WordPress and the plugins are healthy, and to email you if something fails.',
+			'templates'     => 'Use it to assign the right product and content templates, including automatic assignment by type.',
+			'dependiente'   => 'Use it as a catalog assistant with a ten-lesson academy. It does not delete or recycle anything on its own.',
+			'faqs'          => 'Use it to write, sort and import frequently asked questions, including from a CSV file.',
+			'vocabulary'    => 'Use it to see every tag and attribute in the catalog in one place and classify them.',
+			'distribution'  => 'Use it to publish commercial feeds and XML sitemaps in blocks, without releasing the whole catalog at once.',
+			'social'        => 'Use it to connect social networks, prepare posts, keep a queue and see them on a calendar.',
+			'campaigns'     => 'Use it to create offers, promotional prices and banners, and to publish those offers on social networks.',
+			'google_bing'   => 'Use it to read Search, Analytics, Bing and trends, and to turn that into opportunity reports.',
+			'scrappers'     => 'Use it to research the market and the technical sheet with Ojeador and Ingeniero, through SerpApi or ScraperAPI.',
+			'logistica'     => 'Use it to set weight and size on orders and to calculate the shipping cost.',
+			'facturacion'   => 'Use it to issue invoices, proformas and PDF quotes from WooCommerce orders.',
+			'redirects'     => 'Use it to send an old address to a new one (301 or 302) and to delete content with a guided step.',
+			'tasks'         => 'Use it as a private task list, with a calendar, categories and simple counters.',
+			'auditor'       => 'Use it to review the quality of catalog texts and product sheets.',
+			'customers'     => 'Use it as a private customer book for buyers, guests and contacts you add yourself, including CSV import and export.',
+			'accounting'    => 'Use it to record sales and purchase expenses, see the monthly VAT and export that data.',
+		);
+		$es = array(
+			'import_export' => 'Sirve para exportar o importar el catálogo, los textos y las imágenes en un archivo, sin copiarlos a mano.',
+			'suppliers'     => 'Sirve para guardar proveedores, comparar sus precios, hacer pedidos de compra y traer las fotos de sus productos.',
+			'database'      => 'Sirve para revisar la base de datos de la tienda, ver sus tablas, hacer una copia y un mantenimiento solo cuando tú lo pides.',
+			'images'        => 'Sirve para revisar las fotos de producto, las miniaturas, los datos de la imagen y el peso del archivo.',
+			'system_check'  => 'Sirve para comprobar que el servidor, WordPress y los plugins están bien, y avisarte por correo si algo falla.',
+			'templates'     => 'Sirve para asignar la plantilla de ficha y de contenido que toca, también de forma automática según el tipo.',
+			'dependiente'   => 'Sirve como asistente del catálogo, con una academia de diez lecciones. No borra ni recicla nada por su cuenta.',
+			'faqs'          => 'Sirve para escribir, ordenar e importar preguntas frecuentes, también desde un CSV.',
+			'vocabulary'    => 'Sirve para ver en un solo sitio las etiquetas y los atributos del catálogo y clasificarlos.',
+			'distribution'  => 'Sirve para publicar feeds comerciales y sitemaps XML por bloques, sin soltar todo el catálogo de golpe.',
+			'social'        => 'Sirve para conectar las redes, preparar publicaciones, guardar la cola y verlas en un calendario.',
+			'campaigns'     => 'Sirve para crear ofertas, precios promocionales y banners, y publicar esas ofertas en las redes.',
+			'google_bing'   => 'Sirve para leer Search, Analytics, Bing y las tendencias, y convertirlos en informes de oportunidades.',
+			'scrappers'     => 'Sirve para investigar el mercado y la ficha técnica con Ojeador e Ingeniero, usando SerpApi o ScraperAPI.',
+			'logistica'     => 'Sirve para indicar peso y medidas en los pedidos y calcular el coste de envío.',
+			'facturacion'   => 'Sirve para emitir facturas, proformas y presupuestos en PDF a partir de los pedidos de WooCommerce.',
+			'redirects'     => 'Sirve para enviar una dirección antigua a una nueva (301 o 302) y borrar contenido con un paso guiado.',
+			'tasks'         => 'Sirve como agenda privada de tareas, con calendario, categorías y contadores sencillos.',
+			'auditor'       => 'Sirve para revisar la calidad de los textos y de las fichas del catálogo.',
+			'customers'     => 'Sirve como libro privado de clientes: compradores, invitados y contactos que añades tú, con importación y exportación CSV.',
+			'accounting'    => 'Sirve para anotar ventas y gastos de compra, ver el IVA del mes y exportar esos datos.',
+		);
+		$id = sanitize_key( (string) $id );
+		if ( ! isset( $en[ $id ] ) ) {
+			return $fallback;
+		}
+		$shown = __( $en[ $id ], 'taxocommerce-core' );
+		$locale = strtolower( substr( determine_locale(), 0, 2 ) );
+		if ( 'es' === $locale && $shown === $en[ $id ] ) {
+			return $es[ $id ];
+		}
+		return $shown;
+	}
+
 	public function render_extension_catalog() {
 		$this->guard();
 
@@ -1104,7 +1171,7 @@ final class TaxoCommerce_Core {
 			$items[] = array(
 				'id' => sanitize_key( (string) $extension_id ),
 				'name' => (string) ( $extension['name'] ?? $extension_id ),
-				'description' => (string) ( $extension['description'] ?? '' ),
+				'description' => $this->extension_purpose( (string) $extension_id, (string) ( $extension['description'] ?? '' ) ),
 				'version' => $version,
 				'installed' => $installed,
 				'active' => $active,
