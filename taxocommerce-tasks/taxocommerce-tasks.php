@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name: TaxoCommerce Tasks
+ * Plugin Name: TaxoCommerce Tasks Pro
  * Plugin URI: https://asociacionfocazul.com/taxocommerce-tasks/
- * Description: Private, standalone WordPress task agenda with calendar and dashboard.
+ * Description: Pro edition of the private, standalone WordPress task agenda with calendar and dashboard.
  * Version: 0.1.18
  * Release Date: 2026-11-13
  * Requires at least: 6.7
@@ -315,7 +315,7 @@ function tctasks_register_core_module( $core ) {
     $core->register_module(
         'tasks',
         array(
-            'name'        => 'TaxoCommerce Tasks',
+            'name'        => 'TaxoCommerce Tasks Pro',
             'version'     => TAXOCOMMERCE_TASKS_VERSION,
             'status'      => 'active',
             'description' => 'Private task agenda, calendar, categories and indicators.',
@@ -335,7 +335,7 @@ function tctasks_register_family_extension( $extensions ) {
     $extensions = is_array( $extensions ) ? $extensions : array();
     $extensions['tasks'] = array(
         'id'            => 'tasks',
-        'name'          => 'TaxoCommerce Tasks',
+        'name'          => 'TaxoCommerce Tasks Pro',
         'plugin_file'   => 'taxocommerce-tasks/taxocommerce-tasks.php',
         'org_slug'      => 'taxocommerce-tasks',
         'search_term'   => 'TaxoCommerce Tasks',

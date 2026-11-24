@@ -18,7 +18,7 @@ final class TCSUP_Autotest {
 		$woo = class_exists( 'WooCommerce', false ) && function_exists( 'wc_get_orders' ) && function_exists( 'wc_get_product' );
 		self::check( $rows, __( 'Sistema', 'taxocommerce-suppliers' ), 'WooCommerce', $woo ? 'ok' : 'error', $woo ? __( 'API de pedidos y productos disponible.', 'taxocommerce-suppliers' ) : __( 'WooCommerce no está disponible para productos o compras.', 'taxocommerce-suppliers' ) );
 
-		$classes = array( 'TCSUP_Schema', 'TCSUP_Price_History', 'TCSUP_CSV', 'TCSUP_Products', 'TCSUP_Purchasing', 'TCSUP_Admin', 'TCSUP_Manual' );
+		$classes = array( 'TCSUP_Schema', 'TCSUP_Price_History', 'TCSUP_CSV', 'TCSUP_Products', 'TCSUP_Source_Safety', 'TCSUP_Purchasing', 'TCSUP_Admin', 'TCSUP_Manual' );
 		$missing = array();
 		foreach ( $classes as $class ) {
 			if ( ! class_exists( $class, false ) ) {
@@ -47,6 +47,15 @@ final class TCSUP_Autotest {
 		}
 		self::check( $rows, __( 'Administración', 'taxocommerce-suppliers' ), __( 'Controladores registrados', 'taxocommerce-suppliers' ), $missing ? 'error' : 'ok', $missing ? __( 'No registrados: ', 'taxocommerce-suppliers' ) . implode( ', ', $missing ) : __( 'Los 10 controladores están registrados; ninguno se ejecuta.', 'taxocommerce-suppliers' ) );
 		self::check( $rows, __( 'Servicios', 'taxocommerce-suppliers' ), __( 'Funciones públicas', 'taxocommerce-suppliers' ), function_exists( 'taxocommerce_suppliers_get_sources' ) && function_exists( 'taxocommerce_suppliers_get_external_images' ) ? 'ok' : 'error', __( 'Consulta de fuentes e imágenes de proveedor (sin invocar operaciones).', 'taxocommerce-suppliers' ) );
+		$safety_filters = false !== has_filter( 'woocommerce_is_purchasable', array( 'TCSUP_Source_Safety', 'purchasable' ) ) &&
+			false !== has_filter( 'woocommerce_product_is_visible', array( 'TCSUP_Source_Safety', 'visible' ) );
+		self::check(
+			$rows,
+			__( 'Servicios', 'taxocommerce-suppliers' ),
+			__( 'Supplier availability protection', 'taxocommerce-suppliers' ),
+			$safety_filters ? 'ok' : 'error',
+			$safety_filters ? __( 'Supplier discard guards are registered for WooCommerce visibility and purchasing.', 'taxocommerce-suppliers' ) : __( 'Missing purchase or visibility filter for discarded supplier sources.', 'taxocommerce-suppliers' )
+		);
 		$templates = get_option( 'taxocommerce_suppliers_csv_templates', array() );
 		self::check( $rows, __( 'Configuración', 'taxocommerce-suppliers' ), __( 'Plantillas CSV personalizadas', 'taxocommerce-suppliers' ), is_array( $templates ) ? 'ok' : 'error', is_array( $templates ) ? __( 'Estructura válida; ', 'taxocommerce-suppliers' ) . count( $templates ) . __( ' plantillas almacenadas.', 'taxocommerce-suppliers' ) : __( 'La opción no contiene un array.', 'taxocommerce-suppliers' ) );
 		$builtin = class_exists( 'TCSUP_CSV', false ) ? TCSUP_CSV::builtin_templates() : array();

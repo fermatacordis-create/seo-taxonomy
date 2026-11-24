@@ -1,3 +1,10 @@
+## [0.2.29] — 2026-11-22 — Protección de ventas cuando se descarta la última fuente de suministro (#2935)
+
+- La decisión «Descartar» ahora retira de publicación un producto WooCommerce solo cuando su vinculación al proveedor está verificada y no existen otras fuentes aceptadas para ese producto. Nunca elimina artículos, modifica stock, pedidos ni precios; la reaceptación no republica automáticamente.
+- Los filtros de WooCommerce impiden comprar o mostrar en el catálogo productos inequívocamente vinculados a una única fuente descartada, incluso cuando el descarte se realizó antes de esta versión.
+- Para referencias heredadas sin vínculo verificable pero con SKU coincidente, muestra un aviso y enlace al producto público en Inventario; evita despublicaciones peligrosas por simple coincidencia de SKU o título y no interfiere con otros proveedores o mercados.
+- Añade prueba de regresión para vínculos exactos, otras fuentes, mercados, compras e inventario heredado, y prueba funcional de registro de filtros. Despliegue únicamente de pruebas, nunca producción.
+
 ## [0.2.28] — 2026-11-16 — Alta manual de proveedores sin catálogo (#2743)
 
 - «Gestión de proveedores» permite añadir una ficha privada manual por nombre y completar los datos comerciales, de contacto y logística sin importar ningún producto; el proveedor aparece en el listado con cero productos.

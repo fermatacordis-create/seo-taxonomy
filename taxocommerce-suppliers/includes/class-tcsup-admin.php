@@ -719,8 +719,21 @@ final class TCSUP_Admin {
 							<td><?php echo esc_html( ( '' !== (string) $row['precio_con_iva'] ? $row['precio_con_iva'] : $row['precio_sin_iva'] ) . ' ' . $row['moneda'] ); ?></td>
 							<td><?php echo esc_html( '' !== (string) $row['stock_cantidad'] ? $row['stock_cantidad'] : $row['stock_estado'] ); ?></td>
 							<td><strong><?php echo esc_html( self::selection_label( $row['estado_seleccion'] ) ); ?></strong></td>
-							<td><?php echo esc_html( self::sync_label( $row['estado_sincronizacion'] ) ); ?><?php echo $row['cambios_detectados'] ? '<br><small>' . esc_html( $row['cambios_detectados'] ) . '</small>' : ''; ?></td>
-							<td><?php echo $row['object_id'] ? '<a href="' . esc_url( get_edit_post_link( absint( $row['object_id'] ) ) ) . '">#' . esc_html( $row['object_id'] ) . '</a>' : '—'; ?></td>
+							<td><?php echo esc_html( self::sync_label( $row['estado_sincronizacion'] ) ); ?><?php echo $row['cambios_detectados'] ? '<br><small>' . esc_html( $row['cambios_detectados'] ) . '</small>' : ''; ?><?php if ( ! empty( $row['ultimo_error_sync'] ) ) : ?><br><small style="color:#b32d2e"><?php echo esc_html( $row['ultimo_error_sync'] ); ?></small><?php endif; ?></td>
+							<td>
+								<?php if ( ! empty( $row['object_id'] ) ) : ?>
+									<a href="<?php echo esc_url( get_edit_post_link( absint( $row['object_id'] ) ) ); ?>">#<?php echo esc_html( $row['object_id'] ); ?></a>
+								<?php else : ?>
+									—
+									<?php $possible_id = TCSUP_Source_Safety::possible_orphan( $row ); ?>
+									<?php if ( $possible_id ) : ?>
+										<p class="description" style="color:#b32d2e">
+											<?php esc_html_e( 'Possible published WooCommerce product without a verified supplier link. Review before selling.', 'taxocommerce-suppliers' ); ?>
+											<a href="<?php echo esc_url( get_edit_post_link( $possible_id ) ); ?>">#<?php echo esc_html( $possible_id ); ?></a>
+										</p>
+									<?php endif; ?>
+								<?php endif; ?>
+							</td>
 							<td class="tcsup-row-actions">
 								<button class="button button-small button-primary" name="row_action" value="accept:<?php echo esc_attr( $row['id'] ); ?>"><?php esc_html_e( 'Accept', 'taxocommerce-suppliers' ); ?></button>
 								<button class="button button-small" name="row_action" value="review:<?php echo esc_attr( $row['id'] ); ?>"><?php esc_html_e( 'Review', 'taxocommerce-suppliers' ); ?></button>

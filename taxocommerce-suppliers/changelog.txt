@@ -1,3 +1,6 @@
+= 0.2.29 (2026-11-22) =
+* Rechazar una fuente inequívocamente vinculada deja el producto WooCommerce fuera de venta si es la última fuente aceptada, sin tocar stock ni pedidos. Los productos antiguos con fuente descartada quedan no comprables mediante filtros WooCommerce. Las coincidencias de SKU no verificadas muestran una alerta en Inventario y no despublican de forma automática. Autocheck y pruebas de regresión. Issue #2935.
+
 = 0.2.26 (2026-11-13) =
 * Inventory-backed provider management and private editable contact records. Import adds supplier identity automatically; deleting the record never deletes products.
 

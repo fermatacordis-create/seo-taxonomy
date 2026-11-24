@@ -31,10 +31,11 @@ final class TCMAIL_Admin {
 
     public static function menu() {
         $parent = function_exists( 'taxocommerce_core' ) || defined( 'TAXOCOMMERCE_CORE_VERSION' ) ? 'taxocommerce-core' : '';
+        $menu_label = __( 'Mail', 'taxocommerce-mail' ) . ' Lite';
         if ( $parent ) {
-            add_submenu_page( $parent, __( 'Mail', 'taxocommerce-mail' ), __( 'Mail', 'taxocommerce-mail' ), self::CAP, 'taxocommerce-mail', array( __CLASS__, 'render' ) );
+            add_submenu_page( $parent, $menu_label, $menu_label, self::CAP, 'taxocommerce-mail', array( __CLASS__, 'render' ) );
         } else {
-            add_menu_page( __( 'Mail', 'taxocommerce-mail' ), __( 'Mail', 'taxocommerce-mail' ), self::CAP, 'taxocommerce-mail', array( __CLASS__, 'render' ), 'dashicons-email-alt', 55 );
+            add_menu_page( $menu_label, $menu_label, self::CAP, 'taxocommerce-mail', array( __CLASS__, 'render' ), 'dashicons-email-alt', 55 );
         }
     }
 
@@ -274,6 +275,17 @@ final class TCMAIL_Admin {
         echo '</form>';
     }
 
+    /**
+     * Informational comparison only; Pro is a separate future add-on, not
+     * functionality hidden or remotely activated in the free Lite package.
+     */
+    private static function pro_information() {
+        echo '<div style="max-width:920px"><h2>TaxoCommerce Mail Pro</h2>';
+        echo '<p>' . esc_html__( 'The Pro edition is planned as an optional separate add-on. Lite is free and fully functional as described in its manuals; no purchase or activation is required.', 'taxocommerce-mail' ) . '</p>';
+        echo '<p>' . esc_html__( 'Pro roadmap: manage sent messages, create and organize folders, move messages, bulk selection and move-to-Trash/restore. These functions are not included in Lite.', 'taxocommerce-mail' ) . '</p>';
+        echo '</div>';
+    }
+
     public static function render() {
         if ( ! current_user_can( self::CAP ) ) {
             wp_die( esc_html__( 'Permission denied.', 'taxocommerce-mail' ), '', array( 'response' => 403 ) );
@@ -282,8 +294,9 @@ final class TCMAIL_Admin {
         $tab = isset( $_GET['tab'] ) && is_string( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : 'inbox';
         $notice = isset( $_GET['tcmail_notice'] ) && is_string( $_GET['tcmail_notice'] ) ? sanitize_key( wp_unslash( $_GET['tcmail_notice'] ) ) : '';
         // phpcs:enable WordPress.Security.NonceVerification.Recommended
-        echo '<div class="wrap"><h1>' . esc_html__( 'TaxoCommerce Mail', 'taxocommerce-mail' ) . '</h1>';
-        $tabs = array( 'inbox' => __( 'Inbox', 'taxocommerce-mail' ), 'compose' => __( 'Compose', 'taxocommerce-mail' ), 'accounts' => __( 'Accounts', 'taxocommerce-mail' ), 'autocheck' => __( 'Autocheck', 'taxocommerce-mail' ), 'manual' => __( 'User manual', 'taxocommerce-mail' ), 'technical' => __( 'Technical manual', 'taxocommerce-mail' ) );
+        // The standalone three-zone family header already renders the full Lite name.
+        echo '<div class="wrap">';
+        $tabs = array( 'inbox' => __( 'Inbox', 'taxocommerce-mail' ), 'compose' => __( 'Compose', 'taxocommerce-mail' ), 'accounts' => __( 'Accounts', 'taxocommerce-mail' ), 'autocheck' => __( 'Autocheck', 'taxocommerce-mail' ), 'manual' => __( 'User manual', 'taxocommerce-mail' ), 'technical' => __( 'Technical manual', 'taxocommerce-mail' ), 'pro' => 'Pro' );
         echo '<nav class="nav-tab-wrapper" aria-label="' . esc_attr__( 'Mail sections', 'taxocommerce-mail' ) . '">';
         foreach ( $tabs as $key => $label ) {
             echo '<a href="' . esc_url( add_query_arg( array( 'page' => 'taxocommerce-mail', 'tab' => $key ), admin_url( 'admin.php' ) ) ) . '" class="nav-tab' . ( $key === $tab ? ' nav-tab-active' : '' ) . '">' . esc_html( $label ) . '</a>';
@@ -309,6 +322,8 @@ final class TCMAIL_Admin {
             TCMAIL_Autocheck::render();
         } elseif ( 'manual' === $tab || 'technical' === $tab ) {
             TCMAIL_Autocheck::manual( 'technical' === $tab );
+        } elseif ( 'pro' === $tab ) {
+            self::pro_information();
         } else {
             self::inbox();
         }

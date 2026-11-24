@@ -404,6 +404,11 @@ final class TCSUP_Products {
 			array( 'id' => absint( $row['id'] ) )
 		);
 
+		// Re-acceptance makes the product eligible again; it does not publish
+		// products automatically after a previous supplier-source withdrawal.
+		if ( absint( get_post_meta( $product_id, '_tcsup_supplier_discarded_catalog_id', true ) ) === absint( $row['id'] ) ) {
+			delete_post_meta( $product_id, '_tcsup_supplier_discarded_catalog_id' );
+		}
 		TCSUP_Price_History::capture( absint( $row['id'] ), 'sync' );
 		return array( 'product_id' => $product_id, 'created' => $is_new );
 	}
@@ -416,7 +421,7 @@ final class TCSUP_Products {
 		}
 		global $wpdb;
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Synchronous write to Suppliers-owned inventory/lock state; caching writes is not applicable.
-		return false !== $wpdb->update(
+		$updated = $wpdb->update(
 			TCSUP_Schema::catalog_table(),
 			array(
 				'estado_seleccion'      => $selection,
@@ -425,6 +430,22 @@ final class TCSUP_Products {
 			),
 			array( 'id' => absint( $id ) )
 		);
+		if ( false === $updated ) {
+			return false;
+		}
+		if ( 'descartado' === $selection ) {
+			$row = self::row( $id );
+			if ( $row && ! TCSUP_Source_Safety::unpublish_discarded( $row ) ) {
+				// The runtime purchase guard remains active for verified identities.
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Record failed publication withdrawal in the same catalogue row.
+				$wpdb->update(
+					TCSUP_Schema::catalog_table(),
+					array( 'ultimo_error_sync' => __( 'WooCommerce product could not be unpublished. Check its supplier association and publication status.', 'taxocommerce-suppliers' ) ),
+					array( 'id' => absint( $id ) )
+				);
+			}
+		}
+		return true;
 	}
 
 	private static function deactivate_external_images( $row ) {

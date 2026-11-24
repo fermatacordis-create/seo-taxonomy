@@ -1,3 +1,11 @@
+= 0.1.3 =
+* Rename visible edition to Mail Lite in header, family listings and documentation, retaining plugin slug and stored data.
+* Align manual and independent check layout with Tasks; add informational Pro roadmap only.
+* All existing inbox, SMTP, reply, account and JSON check features retained.
+
+= 0.1.2 (2026-11-22) =
+* Translate the full Mail administration and manuals to ES/EN/FR/DE/NL; bundle .po/.mo and .pot files, with WordPress language-pack priority. Issue #2932.
+
 = 0.1.1 =
 * Add three-field hosting mailbox setup with optional advanced SMTP settings.
 * Offer a verified Mail ZIP through the local Core package catalogue on STAGING/Focazul only.

@@ -3,8 +3,8 @@
  * Plugin Name: TaxoCommerce Suppliers
  * Plugin URI: https://asociacionfocazul.com/taxocommerce-suppliers/
  * Description: Supplier catalogue intake, purchasing, product decisions, supplier prices, WooCommerce linking, and external image references.
- * Version: 0.2.28
- * Release Date: 2026-11-16
+ * Version: 0.2.29
+ * Release Date: 2026-11-22
  * Requires at least: 6.5
  * Requires PHP: 7.4
  * Requires Plugins: woocommerce
@@ -21,7 +21,7 @@ require_once __DIR__ . '/includes/admin-branding.php';
 require_once __DIR__ . '/includes/class-taxocommerce-autotest-code.php';
 \TaxoCommerce_Suppliers_Autotest_Code::boot();
 
-define( 'TAXOCOMMERCE_SUPPLIERS_VERSION', '0.2.28' );
+define( 'TAXOCOMMERCE_SUPPLIERS_VERSION', '0.2.29' );
 define( 'TAXOCOMMERCE_SUPPLIERS_FILE', __FILE__ );
 define( 'TAXOCOMMERCE_SUPPLIERS_DIR', plugin_dir_path( __FILE__ ) );
 define( 'TAXOCOMMERCE_SUPPLIERS_URL', plugin_dir_url( __FILE__ ) );
@@ -31,6 +31,7 @@ require_once TAXOCOMMERCE_SUPPLIERS_DIR . 'includes/class-tcsup-price-history.ph
 require_once TAXOCOMMERCE_SUPPLIERS_DIR . 'includes/class-tcsup-history-transfer.php';
 require_once TAXOCOMMERCE_SUPPLIERS_DIR . 'includes/class-tcsup-csv.php';
 require_once TAXOCOMMERCE_SUPPLIERS_DIR . 'includes/class-tcsup-products.php';
+require_once TAXOCOMMERCE_SUPPLIERS_DIR . 'includes/class-tcsup-source-safety.php';
 require_once TAXOCOMMERCE_SUPPLIERS_DIR . 'includes/class-tcsup-purchasing.php';
 require_once TAXOCOMMERCE_SUPPLIERS_DIR . 'includes/class-tcsup-admin.php';
 require_once TAXOCOMMERCE_SUPPLIERS_DIR . 'includes/class-tcsup-profiles.php';
@@ -55,6 +56,8 @@ function taxocommerce_suppliers_boot() {
 }
 add_action( 'plugins_loaded', 'taxocommerce_suppliers_boot', 30 );
 add_action( 'woocommerce_after_product_object_save', array( 'TCSUP_Price_History', 'on_product_save' ), 20, 1 );
+add_filter( 'woocommerce_is_purchasable', array( 'TCSUP_Source_Safety', 'purchasable' ), 20, 2 );
+add_filter( 'woocommerce_product_is_visible', array( 'TCSUP_Source_Safety', 'visible' ), 20, 2 );
 
 function taxocommerce_suppliers_register_core( $core ) {
 	if ( ! is_object( $core ) || ! method_exists( $core, 'register_module' ) ) {

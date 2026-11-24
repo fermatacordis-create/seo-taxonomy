@@ -267,7 +267,7 @@ def existing_file_hash(ftp, name):
 
 
 def upload_plugin(ftp, target, slug, files, required):
-    # Issues #2290, #2644, #2651, #2870 and #2880 authorize first installation only
+    # Issues #2290, #2644, #2651, #2870, #2880 and #2944 authorize first installation only
     # to their named test sites. Never create an absent plugin in production.
     # Accounting is allowed solely on STAGING, never Focazul or PRO.
     new_plugin_install = False
@@ -276,7 +276,7 @@ def upload_plugin(ftp, target, slug, files, required):
     except ftplib.error_perm as exc:
         if not str(exc).startswith("550"):
             raise
-        if (slug in ("taxocommerce-tasks", "taxocommerce-customers", "taxocommerce-ticketing", "taxocommerce-mail") and target in ("staging", "focazul")) or (
+        if (slug in ("taxocommerce-tasks", "taxocommerce-customers", "taxocommerce-ticketing", "taxocommerce-mail", "taxocommerce-mail-pro") and target in ("staging", "focazul")) or (
             slug == "taxocommerce-accounting" and target == "staging"
         ):
             plugin_parent = remote_plugin_dir(target, slug).rsplit(slug + "/", 1)[0]
@@ -284,7 +284,7 @@ def upload_plugin(ftp, target, slug, files, required):
             ftp.mkd(slug)
             ftp.cwd(slug)
             new_plugin_install = True
-            issue = {"taxocommerce-accounting": "#2644", "taxocommerce-tasks": "#2290", "taxocommerce-customers": "#2651", "taxocommerce-ticketing": "#2870", "taxocommerce-mail": "#2880"}[slug]
+            issue = {"taxocommerce-accounting": "#2644", "taxocommerce-tasks": "#2290", "taxocommerce-customers": "#2651", "taxocommerce-ticketing": "#2870", "taxocommerce-mail": "#2880", "taxocommerce-mail-pro": "#2944"}[slug]
             print(f"INSTALL {target}/{slug}: explicitly authorized by Issue {issue}")
         elif not required:
             print(f"SKIP {slug}: plugin directory absent on this WordPress")

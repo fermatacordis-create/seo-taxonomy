@@ -92,6 +92,9 @@ jobs:
             if [ "$slug" = "taxocommerce-mail" ]; then
               php "$slug/tests/smoke.php"
             fi
+            if [ "$slug" = "taxocommerce-mail-pro" ]; then
+              php "$slug/tests/smoke.php"
+            fi
             if [ "$slug" = "taxocommerce-google-bing" ]; then
               php "$slug/tests/gsc-freshness-smoke.php"
               php "$slug/tests/analysis-full-refresh-smoke.php"
@@ -102,6 +105,11 @@ jobs:
               php "$slug/tests/classifier-extraction-smoke.php"
               php -l "$slug/tests/classifier-cpu-smoke.php"
               php "$slug/tests/classifier-cpu-smoke.php"
+            fi
+            if [ "$slug" = "taxocommerce-suppliers" ]; then
+              php -l "$slug/tests/source-safety-smoke.php"
+              php "$slug/tests/source-safety-smoke.php"
+              php "$slug/tests/smoke.php"
             fi
             if [ "$slug" = "taxocommerce-accounting" ]; then
               php -l "$slug/tests/depreciation-smoke.php"
@@ -115,6 +123,8 @@ jobs:
           python3 -m py_compile .github/scripts/deploy_staging_delta.py
           python3 -m py_compile .github/scripts/publish_ticketing_package.py .github/scripts/publish_focazul_ticketing_page.py
           python3 -m py_compile .github/scripts/publish_mail_package.py
+          python3 -m py_compile .github/scripts/publish_mail_pro_package.py
+          python3 -m unittest discover -s .github/tests -p test_mail_pro_package.py -v
           python3 -m unittest discover -s .github/tests -p test_mail_package.py -v
           python3 -m unittest discover -s .github/tests -p test_ticketing_delivery.py -v
           python3 -m unittest discover -s .github/tests -p test_deploy_staging_delta.py -v
@@ -680,3 +690,30 @@ jobs:
           STAGING_FTP_USERNAME: ${{ secrets.STAGING_FTP_USERNAME }}
           STAGING_FTP_PASSWORD: ${{ secrets.STAGING_FTP_PASSWORD }}
         run: python3 -u .github/scripts/publish_mail_package.py
+
+  mail-pro-package:
+    name: Publish independent Mail Pro ZIP to STAGING and Focazul package repositories
+    needs: [verify, mail-package]
+    if: github.event_name == 'push' && needs.verify.result == 'success' && needs.mail-package.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Select only Mail Pro changes
+        id: mailpro
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --name-only HEAD^ HEAD | grep -Eq '^(taxocommerce-mail-pro/|\.github/scripts/publish_mail_pro_package\.py)'; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Verify and publish Mail Pro ZIP only (never production)
+        if: steps.mailpro.outputs.changed == 'true'
+        env:
+          STAGING_FTP_SERVER: ${{ secrets.STAGING_FTP_SERVER }}
+          STAGING_FTP_USERNAME: ${{ secrets.STAGING_FTP_USERNAME }}
+          STAGING_FTP_PASSWORD: ${{ secrets.STAGING_FTP_PASSWORD }}
+        run: python3 -u .github/scripts/publish_mail_pro_package.py

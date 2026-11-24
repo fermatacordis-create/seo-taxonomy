@@ -1,4 +1,4 @@
-=== TaxoCommerce Tasks ===
+=== TaxoCommerce Tasks Pro ===
 Contributors: davidperezmartorell
 Tags: tasks, calendar, productivity, dashboard, admin
 Requires at least: 6.7
@@ -8,11 +8,11 @@ Stable tag: 0.1.18
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-A private task agenda with categories, priorities, assignments, calendar and indicators. Independent of WooCommerce.
+Pro edition: a private task agenda with categories, priorities, assignments, calendar and indicators. Independent of WooCommerce.
 
 == Description ==
 
-TaxoCommerce Tasks provides a standalone task management area in the WordPress administrator.
+TaxoCommerce Tasks Pro provides a standalone task management area in the WordPress administrator.
 
 = Key Features =
 

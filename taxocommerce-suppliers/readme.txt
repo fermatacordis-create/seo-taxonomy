@@ -4,7 +4,7 @@ Tags: woocommerce, suppliers, csv, inventory, prices
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.2.28
+Stable tag: 0.2.29
 License: GPLv2 or later
 
 Supplier catalogue management and a private directory with manual supplier records, even without imported products.
@@ -14,6 +14,9 @@ Supplier catalogue management and a private directory with manual supplier recor
 TaxoCommerce Suppliers owns the supplier intake and intermediate supplier catalogue workflow.
 
 = Key Features =
+
+* **Supplier withdrawal protection:** Discarding a clearly linked supplier record removes a WooCommerce product from sale only when it has no other accepted supplier source. Existing rejected sources also prevent purchases and catalog visibility for positively identified products. Existing orders, own stock quantities and prices remain untouched; accepting a supplier record never republishes automatically. Legacy SKU-only matches are flagged for manual identity review, not automatically removed.
+
 
 * Supplier management with manually created and imported supplier names, including providers with zero catalogue products, private business/contact/address/lead-time records and free-form notes.
 * Bulk CSV import/export of private supplier contact profiles for imported and manually created suppliers, including providers with zero products, with CPU-batched processing and error reporting. Unknown CSV supplier names are not created automatically; deleting a private profile never removes catalogue products.

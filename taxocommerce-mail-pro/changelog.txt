@@ -1,0 +1,5 @@
+= 0.1.0 =
+* Standalone Pro account setup; Inbox, Sent, folders, search and pages.
+* Nonce-protected bulk move, Trash and restore (IMAP MOVE required); Sent archive via IMAP APPEND.
+* User and technical manuals, functionality and PHP checks, JSON export.
+* No changes to Mail Lite, WooCommerce or production.

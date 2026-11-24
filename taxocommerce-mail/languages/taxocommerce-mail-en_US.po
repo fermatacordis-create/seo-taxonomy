@@ -1,0 +1,332 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: en_US\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Settings"
+msgstr "Settings"
+
+msgid "Mail"
+msgstr "Mail"
+
+msgid "Permission denied."
+msgstr "Permission denied."
+
+msgid "Mailbox"
+msgstr "Mailbox"
+
+msgid "Open"
+msgstr "Open"
+
+msgid "Mail accounts"
+msgstr "Mail accounts"
+
+msgid "Add existing hosting mailboxes. Mailbox creation and passwords are managed by your provider, not WordPress. Enter the exact secure hosts from your provider settings."
+msgstr "Add existing hosting mailboxes. Mailbox creation and passwords are managed by your provider, not WordPress. Enter the exact secure hosts from your provider settings."
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Address"
+msgstr "Address"
+
+msgid "IMAP server"
+msgstr "IMAP server"
+
+msgid "SMTP server"
+msgstr "SMTP server"
+
+msgid "Actions"
+msgstr "Actions"
+
+msgid "Edit"
+msgstr "Edit"
+
+msgid "Inbox"
+msgstr "Inbox"
+
+msgid "Test IMAP"
+msgstr "Test IMAP"
+
+msgid "Remove this account from WordPress? Messages remain on the mail server."
+msgstr "Remove this account from WordPress? Messages remain on the mail server."
+
+msgid "Remove"
+msgstr "Remove"
+
+msgid "No mailboxes configured."
+msgstr "No mailboxes configured."
+
+msgid "Edit mailbox"
+msgstr "Edit mailbox"
+
+msgid "Add mailbox"
+msgstr "Add mailbox"
+
+msgid "OpenSSL AES-256-GCM is required for encrypted credential storage. No account can be saved."
+msgstr "OpenSSL AES-256-GCM is required for encrypted credential storage. No account can be saved."
+
+msgid "Quick setup: enter your full mailbox email address, password and the secure IMAP server from your hosting provider."
+msgstr "Quick setup: enter your full mailbox email address, password and the secure IMAP server from your hosting provider."
+
+msgid "Email / username"
+msgstr "Email / username"
+
+msgid "Mailbox password"
+msgstr "Mailbox password"
+
+msgid "The password remains hidden. Leave blank when editing to keep the saved encrypted password."
+msgstr "The password remains hidden. Leave blank when editing to keep the saved encrypted password."
+
+msgid "Incoming mail server (IMAP SSL 993)"
+msgstr "Incoming mail server (IMAP SSL 993)"
+
+msgid "Copy the SSL/TLS host name exactly as shown by your mail hosting provider. Do not include https:// or a port."
+msgstr "Copy the SSL/TLS host name exactly as shown by your mail hosting provider. Do not include https:// or a port."
+
+msgid "Advanced details (optional)"
+msgstr "Advanced details (optional)"
+
+msgid "These values are optional for receiving messages. SMTP defaults to the same server, port 465. Change them only if your provider gives different settings."
+msgstr "These values are optional for receiving messages. SMTP defaults to the same server, port 465. Change them only if your provider gives different settings."
+
+msgid "Display name"
+msgstr "Display name"
+
+msgid "Sender email (defaults to username)"
+msgstr "Sender email (defaults to username)"
+
+msgid "Outgoing mail server (SMTP)"
+msgstr "Outgoing mail server (SMTP)"
+
+msgid "SMTP encrypted port"
+msgstr "SMTP encrypted port"
+
+msgid "Update mailbox"
+msgstr "Update mailbox"
+
+msgid "Add and select a mailbox first."
+msgstr "Add and select a mailbox first."
+
+msgid "Showing the latest 12 messages without changing their read status. Emails remain on your provider server."
+msgstr "Showing the latest 12 messages without changing their read status. Emails remain on your provider server."
+
+msgid "Back to inbox"
+msgstr "Back to inbox"
+
+msgid "From"
+msgstr "From"
+
+msgid "Reply"
+msgstr "Reply"
+
+msgid "Subject"
+msgstr "Subject"
+
+msgid "Date"
+msgstr "Date"
+
+msgid "No messages found."
+msgstr "No messages found."
+
+msgid "Unable to read this inbox. Check the server, credentials and TLS certificate using Test IMAP. Message details are not stored."
+msgstr "Unable to read this inbox. Check the server, credentials and TLS certificate using Test IMAP. Message details are not stored."
+
+msgid "Compose email"
+msgstr "Compose email"
+
+msgid "Sending from:"
+msgstr "Sending from:"
+
+msgid "To"
+msgstr "To"
+
+msgid "Message (plain text)"
+msgstr "Message (plain text)"
+
+msgid "Send email"
+msgstr "Send email"
+
+msgid "TaxoCommerce Mail Lite"
+msgstr "TaxoCommerce Mail Lite"
+
+msgid "Compose"
+msgstr "Compose"
+
+msgid "Accounts"
+msgstr "Accounts"
+
+msgid "Autocheck"
+msgstr "Autocheck"
+
+msgid "User manual"
+msgstr "User manual"
+
+msgid "Technical manual"
+msgstr "Technical manual"
+
+msgid "Mail sections"
+msgstr "Mail sections"
+
+msgid "Mailbox settings saved."
+msgstr "Mailbox settings saved."
+
+msgid "Mailbox disconnected from WordPress. Server messages were not deleted."
+msgstr "Mailbox disconnected from WordPress. Server messages were not deleted."
+
+msgid "Invalid data, missing password or encryption unavailable. Account was not saved."
+msgstr "Invalid data, missing password or encryption unavailable. Account was not saved."
+
+msgid "IMAP connection succeeded. SMTP delivery has not been tested."
+msgstr "IMAP connection succeeded. SMTP delivery has not been tested."
+
+msgid "IMAP connection failed. Check your host, credentials, certificate and server access."
+msgstr "IMAP connection failed. Check your host, credentials, certificate and server access."
+
+msgid "SMTP server accepted the message. Delivery to the recipient cannot be guaranteed."
+msgstr "SMTP server accepted the message. Delivery to the recipient cannot be guaranteed."
+
+msgid "SMTP send failed. Check account settings and SMTP restrictions."
+msgstr "SMTP send failed. Check account settings and SMTP restrictions."
+
+msgid "Run the check before exporting."
+msgstr "Run the check before exporting."
+
+msgid "Unable to create JSON."
+msgstr "Unable to create JSON."
+
+msgid "Functionality Check"
+msgstr "Functionality Check"
+
+msgid "Code Check"
+msgstr "Code Check"
+
+msgid "Checks do not access your inbox or send messages. Each connection must be tested separately."
+msgstr "Checks do not access your inbox or send messages. Each connection must be tested separately."
+
+msgid "Run Code Check"
+msgstr "Run Code Check"
+
+msgid "Run Functionality Check"
+msgstr "Run Functionality Check"
+
+msgid "Fecha de ejecución:"
+msgstr "Execution date:"
+
+msgid "Check"
+msgstr "Check"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Details"
+msgstr "Details"
+
+msgid "Download JSON report"
+msgstr "Download JSON report"
+
+msgid "Architecture"
+msgstr "Architecture"
+
+msgid "Accounts and encrypted credentials are kept as a non-autoloaded WordPress option; no message copies or mail attachments are saved. Only manage_options can access mail."
+msgstr "Accounts and encrypted credentials are kept as a non-autoloaded WordPress option; no message copies or mail attachments are saved. Only manage_options can access mail."
+
+msgid "Security"
+msgstr "Security"
+
+msgid "Credential encryption uses AES-256-GCM and keys derived from WordPress authentication salts. Changing salts invalidates stored passwords. IMAP uses port 993 with TLS peer verification. SMTP uses only 465/587 and authenticates directly with the selected account."
+msgstr "Credential encryption uses AES-256-GCM and keys derived from WordPress authentication salts. Changing salts invalidates stored passwords. IMAP uses port 993 with TLS peer verification. SMTP uses only 465/587 and authenticates directly with the selected account."
+
+msgid "Supported protocol"
+msgstr "Supported protocol"
+
+msgid "Uses read-only IMAP LOGIN, EXAMINE, UID SEARCH and BODY.PEEK; does not mark mail as read. Message size is limited to 2 MB for on-demand viewing. Supports basic plain-text and HTML MIME; complex encrypted/signed messages may not display."
+msgstr "Uses read-only IMAP LOGIN, EXAMINE, UID SEARCH and BODY.PEEK; does not mark mail as read. Message size is limited to 2 MB for on-demand viewing. Supports basic plain-text and HTML MIME; complex encrypted/signed messages may not display."
+
+msgid "SMTP"
+msgstr "SMTP"
+
+msgid "Uses a new WordPress-bundled PHPMailer instance, never changes wp_mail(), WooCommerce notifications or global mail filters. SMTP accepted does not guarantee delivery."
+msgstr "Uses a new WordPress-bundled PHPMailer instance, never changes wp_mail(), WooCommerce notifications or global mail filters. SMTP accepted does not guarantee delivery."
+
+msgid "Diagnostics"
+msgstr "Diagnostics"
+
+msgid "Autocheck functionality checks local capabilities and configuration. Code Check parses plugin PHP files only. Live IMAP authentication and SMTP delivery are explicit administrator actions and are not falsely claimed by Autocheck."
+msgstr "Autocheck functionality checks local capabilities and configuration. Code Check parses plugin PHP files only. Live IMAP authentication and SMTP delivery are explicit administrator actions and are not falsely claimed by Autocheck."
+
+msgid "Add accounts"
+msgstr "Add accounts"
+
+msgid "Create the email address at your hosting provider, then open Mail > Accounts in WordPress. Enter only the complete email address as username, masked password and secure IMAP hostname. Additional accounts can be configured separately. SMTP name, host and encrypted port are optional advanced settings for sending."
+msgstr "Create the email address at your hosting provider, then open Mail > Accounts in WordPress. Enter only the complete email address as username, masked password and secure IMAP hostname. Additional accounts can be configured separately. SMTP name, host and encrypted port are optional advanced settings for sending."
+
+msgid "Webempresa settings"
+msgstr "Webempresa settings"
+
+msgid "Open WePanel > Email > Mail clients (or the equivalent configuration section). Copy the exact SSL server hostnames and ports. IMAP TLS uses port 993; SMTP TLS uses 465 or STARTTLS 587."
+msgstr "Open WePanel > Email > Mail clients (or the equivalent configuration section). Copy the exact SSL server hostnames and ports. IMAP TLS uses port 993; SMTP TLS uses 465 or STARTTLS 587."
+
+msgid "Read mail"
+msgstr "Read mail"
+
+msgid "Select Mail > Inbox, choose a configured account and open a message. The plugin reads up to 12 recent messages from INBOX without marking them read. Messages remain on the mail server."
+msgstr "Select Mail > Inbox, choose a configured account and open a message. The plugin reads up to 12 recent messages from INBOX without marking them read. Messages remain on the mail server."
+
+msgid "Send and reply"
+msgstr "Send and reply"
+
+msgid "Use Compose to send plain-text mail from the selected account. Reply prefills the sender and subject. One recipient per message; no attachments in this initial version."
+msgstr "Use Compose to send plain-text mail from the selected account. Reply prefills the sender and subject. One recipient per message; no attachments in this initial version."
+
+msgid "Check accounts"
+msgstr "Check accounts"
+
+msgid "Use Test IMAP per account to verify inbound access. Send a test SMTP message to an address you control and verify it arrived. Autocheck alone cannot confirm external delivery."
+msgstr "Use Test IMAP per account to verify inbound access. Send a test SMTP message to an address you control and verify it arrived. Autocheck alone cannot confirm external delivery."
+
+msgid "Manage several hosting email accounts inside WordPress through secure IMAP and SMTP."
+msgstr "Gérez plusieurs comptes de messagerie depuis WordPress avec IMAP et SMTP sécurisés."
+
+msgid "Private hosting email client."
+msgstr "Client de messagerie privé de l’hébergeur."
+
+msgid "Version"
+msgstr "Version"
+
+msgid "Last updated"
+msgstr "Dernière mise à jour"
+
+msgid "Version history and improvements"
+msgstr "Historique des versions et améliorations"
+
+msgid "Official plugin page"
+msgstr "Page officielle du plugin"
+
+msgid "The Pro edition is planned as an optional separate add-on. Lite is free and fully functional as described in its manuals; no purchase or activation is required."
+msgstr "The Pro edition is planned as an optional separate add-on. Lite is free and fully functional as described in its manuals; no purchase or activation is required."
+
+msgid "Pro roadmap: manage sent messages, create and organize folders, move messages, bulk selection and move-to-Trash/restore. These functions are not included in Lite."
+msgstr "Pro roadmap: manage sent messages, create and organize folders, move messages, bulk selection and move-to-Trash/restore. These functions are not included in Lite."
+
+msgid "Last executed"
+msgstr "Last executed"
+
+msgid "Optional extensions"
+msgstr "Optional extensions"
+
+msgid "The Pro page is informational only. Lite includes no premium feature gates, licensing checks, external Pro code or mandatory connections to TaxoCommerce Core. The plugin basename, text domain and saved options remain unchanged."
+msgstr "The Pro page is informational only. Lite includes no premium feature gates, licensing checks, external Pro code or mandatory connections to TaxoCommerce Core. The plugin basename, text domain and saved options remain unchanged."
+
+msgid "Lite and Pro editions"
+msgstr "Lite and Pro editions"
+
+msgid "Mail Lite is the free standalone edition. It can configure multiple accounts, read the 12 newest inbox messages, compose and reply; it does not provide folders, a Sent view or message deletion. Pro is a future separate add-on, not required to use Lite."
+msgstr "Mail Lite is the free standalone edition. It can configure multiple accounts, read the 12 newest inbox messages, compose and reply; it does not provide folders, a Sent view or message deletion. Pro is a future separate add-on, not required to use Lite."
+
+msgid "Hosting provider settings"
+msgstr "Hosting provider settings"
+
+msgid "In your hosting control panel, find email client connection details. Use the exact SSL/TLS host and ports provided: IMAP 993, SMTP 465 or STARTTLS 587."
+msgstr "In your hosting control panel, find email client connection details. Use the exact SSL/TLS host and ports provided: IMAP 993, SMTP 465 or STARTTLS 587."
