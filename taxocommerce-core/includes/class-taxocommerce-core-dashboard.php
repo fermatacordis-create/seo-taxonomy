@@ -45,20 +45,6 @@ final class TaxoCommerce_Core_Dashboard {
         $tc_official_info = require __DIR__ . '/official-excerpt.php';
         $tc_plugin_headers = get_file_data( dirname( __DIR__ ) . '/taxocommerce-core.php', array( 'description' => 'Description' ), 'plugin' );
         $tc_plugin_description = trim( wp_strip_all_tags( (string) ( $tc_plugin_headers['description'] ?? '' ) ) );
-        // The version history is bundled with this plugin, not fetched from GitHub.
-        $tc_history_file = dirname( __DIR__ ) . '/CHANGELOG.md';
-        $tc_history = is_readable( $tc_history_file ) ? file_get_contents( $tc_history_file ) : '';
-        $tc_history_names = array(
-            'es' => 'Historial de versiones y mejoras',
-            'en' => 'Version history and improvements',
-            'fr' => 'Historique des versions et améliorations',
-            'de' => 'Versionsverlauf und Verbesserungen',
-            'nl' => 'Versiegeschiedenis en verbeteringen',
-        );
-        $tc_history_label = __( 'Version history and improvements', 'taxocommerce-core' );
-        if ( 'Version history and improvements' === $tc_history_label && isset( $tc_history_names[ $tc_locale ] ) ) {
-            $tc_history_label = $tc_history_names[ $tc_locale ];
-        }
 		?>
 			<header class="tcc-hero" aria-labelledby="tcc-dashboard-title">
 				<div class="tcc-hero__identity">
@@ -70,20 +56,13 @@ final class TaxoCommerce_Core_Dashboard {
                         <?php $tc_official_info->render( 'taxocommerce-core', $tc_locale ); ?>
 					</div>
 				</div>
-                        <div class="tcc-hero__history-zone">
-                        <?php if ( is_string( $tc_history ) && '' !== trim( $tc_history ) ) : ?>
-                            <details class="tcc-hero__history">
-                                <summary><?php echo esc_html( $tc_history_label ); ?></summary>
-                                <div class="tcc-hero__history-content"><?php echo esc_html( $tc_history ); ?></div>
-                            </details>
-                        <?php endif; ?>
-                        </div>
 				<div class="tcc-hero__metadata">
                     <span><?php echo esc_html( $tc_version_label . ' ' . TAXOCOMMERCE_CORE_VERSION ); ?></span>
                     <span><?php echo esc_html( $tc_updated_label . ': ' . TAXOCOMMERCE_CORE_RELEASE_DATE ); ?></span>
                 </div>
 				<div class="tcc-hero__art" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
 			</header>
+			<?php self::render_history_panel(); ?>
 
 			<nav class="nav-tab-wrapper" aria-label="<?php esc_attr_e( 'Navegación de TaxoCommerce Core', 'taxocommerce-core' ); ?>">
 				<a class="<?php echo esc_attr( 'nav-tab' . ( 'overview' === $active_tab ? ' nav-tab-active' : '' ) ); ?>"<?php if ( 'overview' === $active_tab ) : ?> aria-current="page"<?php endif; ?> href="<?php echo esc_url( admin_url( 'admin.php?page=taxocommerce-core' ) ); ?>"><?php esc_html_e( 'Overview', 'taxocommerce-core' ); ?></a>
@@ -187,52 +166,6 @@ final class TaxoCommerce_Core_Dashboard {
             // Description header in the admin language (as on the Plugins screen).
             $tc_plugin_description = translate( $tc_plugin_description, 'taxocommerce-core' ); // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText,WordPress.WP.I18n.LowLevelTranslationFunction
         }
-        // The version history is bundled with this plugin, not fetched from GitHub.
-        $tc_history_file = dirname( __DIR__ ) . '/CHANGELOG.md';
-        $tc_history = is_readable( $tc_history_file ) ? file_get_contents( $tc_history_file ) : '';
-        $tc_history_names = array(
-            'es' => 'Historial de versiones y mejoras',
-            'en' => 'Version history and improvements',
-            'fr' => 'Historique des versions et améliorations',
-            'de' => 'Versionsverlauf und Verbesserungen',
-            'nl' => 'Versiegeschiedenis en verbeteringen',
-        );
-        $tc_history_label = __( 'Version history and improvements', 'taxocommerce-core' );
-        if ( 'Version history and improvements' === $tc_history_label && isset( $tc_history_names[ $tc_locale ] ) ) {
-            $tc_history_label = $tc_history_names[ $tc_locale ];
-        }
-    // CHANGELOG.md as headings and lists. Every piece of text is escaped first.
-        $tc_md = static function ( $md ) {
-            $html = '';
-            $list = false;
-            $inline = static function ( $text ) {
-                $text = esc_html( $text );
-                $text = preg_replace( '/`([^`]+)`/', '<code>$1</code>', $text );
-                return preg_replace( '/\*\*([^*]+)\*\*/', '<strong>$1</strong>', $text );
-            };
-            foreach ( preg_split( '/\r\n|\r|\n/', (string) $md ) as $line ) {
-                $line = rtrim( $line );
-                if ( preg_match( '/^\s*[-*]\s+(.*)$/', $line, $m ) ) {
-                    $html .= ( $list ? '' : '<ul>' ) . '<li>' . $inline( $m[1] ) . '</li>';
-                    $list = true;
-                    continue;
-                }
-                if ( $list ) {
-                    $html .= '</ul>';
-                    $list = false;
-                }
-                if ( '' === trim( $line ) || preg_match( '/^#\s/', $line ) ) {
-                    continue;
-                }
-                if ( preg_match( '/^#{2,3}\s+(.*)$/', $line, $m ) ) {
-                    $html .= '<h3>' . $inline( $m[1] ) . '</h3>';
-                } else {
-                    $html .= '<p>' . $inline( $line ) . '</p>';
-                }
-            }
-            return $list ? $html . '</ul>' : $html;
-        };
-
 		?>
 		<div class="wrap tcc-dashboard" id="taxocommerce-core-dashboard">
 			<header class="tcc-hero" aria-labelledby="tcc-dashboard-title">
@@ -251,9 +184,7 @@ final class TaxoCommerce_Core_Dashboard {
                 </div>
 				<div class="tcc-hero__art" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
 			</header>
-			<?php if ( is_string( $tc_history ) && '' !== trim( $tc_history ) ) : ?>
-			<details class="tc-family-history-panel" open><summary class="tc-family-history-panel__header"><span class="tc-family-history-panel__title"><span class="dashicons dashicons-backup" aria-hidden="true"></span><?php echo esc_html( $tc_history_label ); ?></span><span class="tc-family-history-panel__chevron" aria-hidden="true"></span></summary><div class="tc-family-history-panel__body"><div class="tc-family-history-panel__content"><?php echo $tc_md( $tc_history ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Built from esc_html() text in $tc_md. ?></div></div></details>
-			<?php endif; ?>
+			<?php self::render_history_panel(); ?>
 			<hr class="wp-header-end">
 
 			<nav class="nav-tab-wrapper" aria-label="<?php esc_attr_e( 'Navegación de TaxoCommerce Core', 'taxocommerce-core' ); ?>">
@@ -307,6 +238,71 @@ final class TaxoCommerce_Core_Dashboard {
 				<?php call_user_func( $extensions_renderer ); ?>
 			<?php endif; ?>
 		</div>
+		<?php
+	}
+
+	/**
+	 * Changelog as a collapsible card under the hero, same role as OPNV Información.
+	 * Closed until the header is clicked. Not part of the hero grid.
+	 *
+	 * @return void
+	 */
+	private static function render_history_panel() {
+		$file = dirname( __DIR__ ) . '/CHANGELOG.md';
+		$history = is_readable( $file ) ? file_get_contents( $file ) : '';
+		if ( ! is_string( $history ) || '' === trim( $history ) ) {
+			return;
+		}
+		$names = array(
+			'es' => 'Historial de versiones y mejoras',
+			'en' => 'Version history and improvements',
+			'fr' => 'Historique des versions et améliorations',
+			'de' => 'Versionsverlauf und Verbesserungen',
+			'nl' => 'Versiegeschiedenis en verbeteringen',
+		);
+		$locale = strtolower( substr( determine_locale(), 0, 2 ) );
+		$label = __( 'Version history and improvements', 'taxocommerce-core' );
+		if ( 'Version history and improvements' === $label && isset( $names[ $locale ] ) ) {
+			$label = $names[ $locale ];
+		}
+		$html = '';
+		$list = false;
+		$inline = static function ( $text ) {
+			$text = esc_html( $text );
+			$text = preg_replace( '/`([^`]+)`/', '<code>$1</code>', $text );
+			return preg_replace( '/\*\*([^*]+)\*\*/', '<strong>$1</strong>', $text );
+		};
+		foreach ( preg_split( '/\r\n|\r|\n/', $history ) as $line ) {
+			$line = rtrim( $line );
+			if ( preg_match( '/^\s*[-*]\s+(.*)$/', $line, $m ) ) {
+				$html .= ( $list ? '' : '<ul>' ) . '<li>' . $inline( $m[1] ) . '</li>';
+				$list = true;
+				continue;
+			}
+			if ( $list ) {
+				$html .= '</ul>';
+				$list = false;
+			}
+			if ( '' === trim( $line ) || preg_match( '/^#\s/', $line ) ) {
+				continue;
+			}
+			if ( preg_match( '/^#{2,3}\s+(.*)$/', $line, $m ) ) {
+				$html .= '<h3>' . $inline( $m[1] ) . '</h3>';
+			} else {
+				$html .= '<p>' . $inline( $line ) . '</p>';
+			}
+		}
+		if ( $list ) {
+			$html .= '</ul>';
+		}
+		?>
+		<details class="tc-family-history-panel">
+			<summary class="tc-family-history-panel__header">
+				<span class="tc-family-history-panel__title"><span class="dashicons dashicons-info" aria-hidden="true"></span><?php echo esc_html( $label ); ?></span>
+				<span class="tc-family-history-panel__chevron" aria-hidden="true"></span>
+			</summary>
+			<div class="tc-family-history-panel__body"><div class="tc-family-history-panel__content"><?php echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Built from esc_html() pieces. ?></div></div>
+		</details>
 		<?php
 	}
 }

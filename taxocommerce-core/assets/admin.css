@@ -230,8 +230,8 @@ body.tcc-family-admin .tcc-guide-article h3{font-size:17px;line-height:1.35;marg
 .tcc-guide-code code{color:inherit;white-space:pre}
 @media(max-width:600px){.tcc-guide-manual-tabs{gap:7px}.tcc-guide-manual-tab{flex:1;text-align:center;padding:11px 8px}.tcc-guide-table th,.tcc-guide-table td{padding:9px 10px}}
 
-/* Three header zones: plugin identity + static link, wide history, release metadata. */
-.tcc-hero{display:grid;grid-template-columns:minmax(270px,1.05fr) minmax(370px,1.7fr) max-content;align-items:center;gap:20px}
+/* Hero: identity and release metadata. History is a card below, not a column. */
+.tcc-hero{display:grid;grid-template-columns:minmax(0,1fr) max-content;align-items:center;gap:20px}
 .tcc-hero__identity{min-width:0;max-width:none;width:100%}
 .tcc-hero__copy{min-width:0}
 .tcc-hero__copy .tc-family-hero__link{display:inline-block;margin-top:8px;font-size:13px;color:#145fc5;text-decoration:underline;text-underline-offset:2px}
